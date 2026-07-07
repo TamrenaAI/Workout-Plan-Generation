@@ -1,0 +1,19 @@
+# ── LLM & Agent Framework ─────────────────────────────────────
+langchain-openai
+langchain
+deepagents
+python-dotenv
+
+# ── Exercise Database ─────────────────────────────────────────
+pymongo
+
+# ── API Layer ─────────────────────────────────────────────────
+fastapi
+uvicorn[standard]
+python-multipart
+
+# ── Monitoring ────────────────────────────────────────────────
+langsmith
+
+# ── Notebook / Dev ────────────────────────────────────────────
+ipykernel
