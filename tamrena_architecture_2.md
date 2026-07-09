@@ -83,7 +83,7 @@ InBody data, asymmetries, experience, and constraints.
 
 | Field | Type | Options |
 |---|---|---|
-| goal | enum | hypertrophy / strength / fat_loss / general_fitness |
+| goal | free text | User-stated goal in any phrasing. Supervisor classifies to a programming paradigm before planning begins (see Section 4e). Closed enum removed — an unrecognized goal no longer crashes the pipeline. |
 | days_per_week | int | 2 / 3 / 4 / 5 / 6 |
 | experience | enum | beginner (<1yr) / intermediate (1-3yr) / advanced (3yr+) |
 | session_duration | enum | 45min / 60min / 90min |
@@ -175,11 +175,20 @@ Memory: reads/writes shared MD session file
 ```
 
 Responsibilities:
+0. Classify goal to programming paradigm (see Section 4e) — FIRST action, before
+   calling parse_inbody. Map the user's raw goal text to one of 7 paradigms:
+   hypertrophy / strength / fat_loss / general_fitness / athletic_performance /
+   endurance_complement / rehabilitation.
+   If goal is ambiguous or unrecognized → default to general_fitness and write
+   a note in the plan header: "Paradigm: general_fitness (original goal: '{text}'
+   — defaulted to general fitness paradigm)".
+   Write the classified paradigm to the User Profile section of the plan file.
+   All subsequent steps use the paradigm, not the raw goal string.
 1. Call parse_inbody → get structured InBody data
 2. Read user intake form
-3. Decide split type based on days_per_week + experience + goal
-4. Decide intensity per muscle group based on InBody + stated priority
-5. Calculate weekly volume per muscle group based on experience + recovery factors
+3. Decide split type based on days_per_week + experience + paradigm
+4. Decide intensity zone per muscle group based on paradigm rules (Section 4e) + InBody + stated priority
+5. Calculate weekly volume per muscle group based on paradigm rules (Section 4e) + experience + recovery factors
 5b. Compute DAY MAP — assign each muscle group to a day slot + calculate per-day
     set budget from session_duration. Write DAY MAP to shared MD memory file.
     This must happen BEFORE the first exercise-recommender is dispatched.
@@ -206,9 +215,14 @@ Responsibilities:
 - poor sleep → -20% volume
 - heavy physical job → -20% volume
 - InBody asymmetry flag → affected group gets unilateral focus, not extra volume
-- beginner → 10-12 sets/week per group
-- intermediate → 14-18 sets/week per group
-- advanced → 18-22 sets/week per group
+
+Volume base targets, intensity zones, rep windows, and rest periods are all
+defined per-paradigm in Section 4e. Apply the correct paradigm table first,
+then apply the reduction factors above on top of it.
+
+Hypertrophy sets/week reference (default paradigm):
+- beginner: 10-12 | intermediate: 14-18 | advanced: 18-22
+All other paradigms: see Section 4e for their specific volume metrics.
 
 **DAY MAP computation:**
 
@@ -219,10 +233,22 @@ Set budget formula:
 ```
 Parse session_duration to minutes (e.g. "75min" → 75)
 Subtract 10 minutes for warmup
-Divide by average time per set based on intensity:
-  hard  (RPE 8+): 3.5 min per set (set work ~45s + rest 2-3 min)
-  medium (RPE 7): 2.5 min per set (set work ~45s + rest 90s)
-  mixed session:  3.0 min per set
+Divide by average time per set based on paradigm + intensity zone:
+
+  hypertrophy / fat_loss / general_fitness / endurance_complement:
+    hard   (RPE 8+): 3.5 min per set (set ~45s + rest 2-3 min)
+    medium (RPE 7):  2.5 min per set (set ~45s + rest 90s)
+    mixed session:   3.0 min per set
+
+  strength / athletic_performance:
+    heavy zone:      6.0 min per set (set ~30-45s + rest 4-5 min)
+    volume zone:     4.0 min per set (set ~45s + rest 3 min)
+    speed zone:      3.5 min per set (set ~30s + rest 3 min)
+    mixed session:   5.0 min per set average
+
+  rehabilitation:
+    all sessions:    3.0 min per set (slower, controlled execution)
+
 Round down (floor)
 
 Example — 4-day Upper/Lower, 75 min sessions:
@@ -285,13 +311,61 @@ Process (in order):
     before returning. See Section 5d.
 10. Return prescription to supervisor
 
-**Intensity prescription rules:**
+**Intensity prescription rules (paradigm-conditional):**
 
-| Intensity | Sets | Reps | Rest | RPE | Focus |
-|---|---|---|---|---|---|
-| hard | 4-5 | 6-8 | 2-3 min | 8-9 | heavy compound first |
-| medium | 3-4 | 10-12 | 90s | 7 | compound + isolation |
-| soft | 3 | 15+ | 60s | 5-6 | corrective / unilateral |
+Read the `Paradigm:` field from the plan file (written by Supervisor step 0)
+before applying any intensity rule. Use the matching table below.
+
+*Paradigm: hypertrophy (default)*
+| Zone   | Sets | Reps  | Rest    | RPE | Focus |
+|--------|------|-------|---------|-----|-------|
+| hard   | 4-5  | 6-8   | 2-3 min | 8-9 | heavy compound first |
+| medium | 3-4  | 10-12 | 90s     | 7   | compound + isolation |
+| soft   | 3    | 15+   | 60s     | 5-6 | corrective / unilateral |
+
+*Paradigm: strength*
+| Zone   | Sets | Reps       | Rest    | RPE  | Focus |
+|--------|------|------------|---------|------|-------|
+| heavy  | 4-5  | 1-5 main   | 4-8 min | 9+   | primary movement anchor, named explicitly |
+| volume | 3-5  | 3-8 suppl  | 3-5 min | 7-8  | same movement pattern, reduced load |
+| speed  | 3-4  | 2-4        | 3 min   | 6-7  | 60-70% 1RM, technique / bar speed focus |
+Primary movement must be named in the DAY MAP and placed first. Rep windows:
+main 1-5 / supplemental 3-8 / accessories 6-12.
+
+*Paradigm: fat_loss*
+| Zone     | Sets | Reps  | Rest  | RPE | Focus |
+|----------|------|-------|-------|-----|-------|
+| circuit  | 3-4  | 15-20 | 45s   | 7-8 | density, superset-friendly |
+| moderate | 3    | 12-15 | 60-75s| 6-7 | compound movements, full ROM |
+| low      | 2-3  | 15+   | 45s   | 5-6 | corrective / finisher |
+
+*Paradigm: general_fitness*
+| Zone     | Sets | Reps  | Rest    | RPE | Focus |
+|----------|------|-------|---------|-----|-------|
+| moderate | 3-4  | 8-15  | 60-120s | 6-8 | movement pattern coverage |
+Session anchor is movement pattern (push/pull/hinge/squat/carry), not isolated
+muscle group. All days use moderate zone — no hard or soft distinction needed.
+
+*Paradigm: athletic_performance*
+| Zone         | Sets | Reps  | Rest    | RPE | Focus |
+|--------------|------|-------|---------|-----|-------|
+| power        | 3-5  | 3-6   | 2-4 min | 8-9 | explosive, sport-relevant movement |
+| strength     | 3-4  | 5-10  | 2-3 min | 7-8 | compound patterns |
+| conditioning | 3-4  | 12-20 | 60-90s  | 6-7 | muscular endurance, sport carry-over |
+
+*Paradigm: endurance_complement*
+| Zone  | Sets | Reps  | Rest  | RPE | Focus |
+|-------|------|-------|-------|-----|-------|
+| light | 2-3  | 15-25 | 30-60s| 5-7 | muscular endurance, no heavy loading |
+Leg volume is conservatively capped — running/cycling already loads legs.
+Total external fatigue (weekly cardio km/hours) must be noted in plan header.
+
+*Paradigm: rehabilitation*
+| Zone        | Sets | Reps  | Rest    | RPE | Focus |
+|-------------|------|-------|---------|-----|-------|
+| corrective  | 2-3  | 10-15 | 60-90s  | 4-6 | pain-free ROM only, slow tempo |
+| progressive | 3    | 10-20 | 60-90s  | 5-7 | gradual load increase, movement quality |
+No hard zone permitted. Session anchor is injury site / movement pattern.
 
 **Asymmetry rule:** if the Supervisor included an asymmetry flag for this muscle
 group in the task prompt, at least one exercise must be unilateral.
@@ -346,6 +420,124 @@ Process:
 5. Write final weekly plan to shared MD memory file
 6. Return structured plan to supervisor
 
+### 4e. Programming Paradigms
+
+The paradigm is the ruleset the agents operate under. It is derived from the
+user's raw goal text by the Supervisor (step 0) and written to the plan file
+before any other planning work begins. All downstream agents read the paradigm
+field from the plan file — they never re-derive it from the raw goal string.
+
+**Why this abstraction exists:**
+Mapping goal directly to agent behavior means every new or unexpected goal
+type crashes the pipeline or silently applies hypertrophy defaults. The
+paradigm layer decouples user language from agent rules. An unrecognized goal
+gets classified as general_fitness and continues without error. New goal phrasings
+require no code change — only the classification mapping below is updated.
+See Section 13 for the full design rationale.
+
+---
+
+**Goal → Paradigm classification mapping (Supervisor step 0):**
+
+```
+"hypertrophy / muscle / mass / bulk / size / get bigger"      → hypertrophy
+"strength / powerlifting / 1RM / big 3 / get stronger"        → strength
+"fat loss / weight loss / cutting / lean / burn / lose weight" → fat_loss
+"fitness / health / general / maintain / active / wellness"    → general_fitness
+"sport / explosive / power / athletic / speed / performance"   → athletic_performance
+"endurance / marathon / running / cycling / cardio complement" → endurance_complement
+"rehab / corrective / recovery / post-surgery / injury"        → rehabilitation
+
+Ambiguous or unrecognized → general_fitness (default, never crash)
+```
+
+---
+
+**Paradigm 1 — hypertrophy** *(current default)*
+```
+Volume metric:    sets/week per muscle group (MEV/MAV/MRV landmarks)
+                  beginner: 10-12 | intermediate: 14-18 | advanced: 18-22
+Rep window:       6-20 (majority 8-15)
+Rest:             60-180s
+Session anchor:   muscle group
+DAY MAP time/set: hard 3.5 min | medium 2.5 min | mixed 3.0 min
+Intensity zones:  hard / medium / soft
+```
+
+**Paradigm 2 — strength**
+```
+Volume metric:    primary lift frequency (2-3x/week per Big 3 movement)
+                  NOT sets/week per muscle group
+Rep window:       main 1-5 | supplemental 3-8 | accessories 6-12
+Rest:             main 4-8 min | accessories 2-3 min
+Session anchor:   primary movement — must be named explicitly in DAY MAP
+                  (e.g. "barbell squat", "bench press", "conventional deadlift")
+DAY MAP time/set: heavy 6.0 min | volume 4.0 min | speed 3.5 min | avg 5.0 min
+Intensity zones:  heavy / volume / speed (NOT hard/medium/soft)
+Day types must vary — do not assign the same zone to all days.
+```
+
+**Paradigm 3 — fat_loss**
+```
+Volume metric:    sets/week per muscle group, density-optimised
+                  (superset pairing preferred, shorter rest drives caloric expenditure)
+                  beginner: 10-14 | intermediate: 14-18 | advanced: 16-20
+Rep window:       12-20 (metabolic stimulus)
+Rest:             45-75s
+Session anchor:   muscle group
+DAY MAP time/set: circuit 1.75 min | moderate 2.0 min
+Intensity zones:  circuit / moderate / low
+```
+
+**Paradigm 4 — general_fitness**
+```
+Volume metric:    movement pattern coverage per week
+                  (push / pull / hinge / squat / carry — at least 2x each)
+Rep window:       8-15 (mixed, accessible)
+Rest:             60-120s
+Session anchor:   movement pattern (NOT isolated muscle group)
+DAY MAP time/set: 2.5 min (all sessions moderate)
+Intensity zones:  moderate only — no heavy/soft split needed
+Fallback for:     any unrecognized or ambiguous goal
+```
+
+**Paradigm 5 — athletic_performance**
+```
+Volume metric:    power exposure frequency + movement quality sessions per week
+Rep window:       power 3-6 | strength-endurance 8-15
+Rest:             power 2-4 min | conditioning 60-90s
+Session anchor:   sport-relevant movement pattern
+DAY MAP time/set: power session 4.0 min | conditioning 2.0 min | mixed 3.5 min
+Intensity zones:  power / strength / conditioning
+Exercise selection prioritises multi-joint, sport-transferable movements.
+```
+
+**Paradigm 6 — endurance_complement**
+```
+Volume metric:    session frequency + total external fatigue budget
+                  External fatigue (weekly run/cycle km) reduces lifting volume:
+                  <30km/week: standard volume | 30-60km/week: -20% | 60km+: -35%
+Rep window:       15-25 (muscular endurance)
+Rest:             30-60s
+Session anchor:   muscle group (bias toward posterior chain + injury prevention)
+DAY MAP time/set: 1.75 min
+Intensity zones:  light only — no heavy loading on top of cardio base
+Leg volume capped conservatively — running already provides leg stimulus.
+Total weekly cardio load must be written to plan header for all agents to read.
+```
+
+**Paradigm 7 — rehabilitation**
+```
+Volume metric:    ROM progression + movement quality (not sets/week)
+Rep window:       10-20 (controlled, pain-free range only)
+Rest:             60-90s
+Session anchor:   injury site / movement pattern
+DAY MAP time/set: 3.0 min (slower, controlled execution)
+Intensity zones:  corrective / progressive (hard zone never permitted)
+Exercise selection requires contraindication check on every exercise.
+Pain-free ROM is the primary constraint — load is secondary.
+```
+
 ---
 
 ## 5. Shared MD Memory File
@@ -363,6 +555,7 @@ Generated: {timestamp}
 
 ## User Profile
 Goal: {goal}
+Paradigm: {classified_paradigm}   ← written by Supervisor step 0, read by all agents
 Experience: {experience}
 Days per week: {days}
 Session duration: {duration}
@@ -1823,6 +2016,28 @@ only what's relevant. This also prevents the bug where ARM_ASYMMETRY gets
 applied to leg exercises — the recommender never sees that flag if it is
 not in its task prompt.
 
+**Why a paradigm abstraction layer instead of expanding the goal enum:**
+Mapping goal directly to agent behavior is whack-a-mole — every new phrasing
+or goal type requires a code change, and an unrecognized goal silently applies
+hypertrophy defaults (or crashes). The paradigm layer decouples user language
+from agent rules. The Supervisor translates the raw goal into one of 7 paradigms
+at step 0, writes the paradigm to the plan file, and all downstream agents read
+that field. An unknown goal defaults to general_fitness with a logged note —
+no crash, no silent wrong output. Adding support for a new goal phrasing
+requires only updating the classification mapping in supervisor.md; the agent
+logic, tools, and plan structure are unchanged. The paradigm is also a first-
+class audit field in the plan file — LangSmith traces show misclassifications
+across sessions, making it easy to tune the mapping over time.
+
+**Why strength sessions use different DAY MAP time-per-set values:**
+The 3.5 min/set formula for "hard" sessions assumes 2-3 min rest between sets —
+correct for hypertrophy. Strength training at 85-95% 1RM requires 4-5 min rest
+between primary movement sets. Using 3.5 min gives a set budget of 22 for a
+90-min session, which is a hypertrophy number. A realistic strength session at
+90 min produces 12-15 working sets. Using the correct 6.0 min/set for heavy
+zones and 5.0 min average prevents the exercise-recommender receiving an
+inflated budget that it cannot fill with meaningful strength work.
+
 **Why BF% elevated is a soft hint and not a fixed rep override:**
 Rep ranges for hypertrophy are determined by mechanical tension, metabolic
 stress, and load — not by body fat percentage. The original design used
@@ -1984,3 +2199,52 @@ Progress tracking is an additive, separate file (`progress.json`) alongside
 5. Confirm the final `plan.md` has a `##` prescription section for every muscle
    group named in the Training Plan Decisions section — no muscle group with a
    stated intensity/volume target should ever end up with 0 scheduled sets
+
+### v1.3 — Programming paradigm abstraction layer
+
+**Problem diagnosed:**
+Case 03 test (advanced, strength goal, 5-day PPL+Upper+Lower) produced a plan
+that applied hypertrophy logic throughout — MEV/MAV/MRV sets/week volume metric,
+hard/medium/soft intensity zones with 6-8 rep ranges, 2-3 min rest, and a DAY
+MAP budget of 22 sets/session calculated at 3.5 min/set. For a strength goal,
+the correct metrics are: primary lift frequency (not sets/week), intensity zones
+of heavy/volume/speed (not hard/medium/soft), rep windows of 1-5 main / 3-8
+supplemental / 6-12 accessories, rest of 4-8 min for primary movements, and a
+realistic session budget of 12-15 sets at ~5.0 min/set average. Additionally,
+any unrecognized goal (e.g. athletic performance, endurance complement,
+rehabilitation) would silently default to hypertrophy or crash — the closed enum
+provided no fallback.
+
+**Root cause:**
+The goal field mapped directly to agent behavior with no translation layer.
+The Supervisor had one volume/intensity framework (hypertrophy) and applied it
+regardless of the goal field value. No goal-switching logic existed in any prompt.
+
+**Files changed:**
+
+| File | Change |
+|---|---|
+| `prompts/supervisor.md` | Added step 0 (goal → paradigm classification before parse_inbody); updated steps 3-5 to reference paradigm; updated volume table to be paradigm-conditional; updated DAY MAP time/set values to be paradigm-conditional |
+| `prompts/exercise_recommender.md` | Replaced single intensity table with paradigm-conditional tables (7 paradigms × their zones) |
+| `tamrena_architecture_2.md` | Added Section 4e (7 programming paradigms with full rule tables); updated Section 3a (goal field now free text); updated Section 5a (plan.md template adds Paradigm field); updated Section 13 (two new design decisions) |
+
+**What did NOT change:**
+All tool functions (memory.py, rag.py, database.py), all agent definitions
+(supervisor.py, subagents.py), all API routes, all environment variables,
+Qdrant setup, MongoDB setup, progress tracking. The paradigm layer is a
+prompt-only change plus a new written field in the plan.md file — zero
+code changes required.
+
+**How to verify the fix works:**
+1. Run /plan with goal="I want to get stronger" and days_per_week=5
+2. Open sessions/{session_id}/plan.md — confirm "Paradigm: strength" appears
+   in the User Profile section (written by Supervisor step 0)
+3. Confirm DAY MAP shows heavy/volume/speed zones (not hard/medium/soft)
+4. Confirm DAY MAP max_sets is 12-15 range (not 22) for 90-min sessions
+5. Confirm primary movement is named explicitly in each day's DAY MAP entry
+6. Run /plan with goal="I want to run a marathon and complement my training"
+7. Confirm "Paradigm: endurance_complement" appears in plan header
+8. Confirm leg volume is capped and cardio load is noted in plan header
+9. Run /plan with goal="xyzabc123" (nonsense goal)
+10. Confirm "Paradigm: general_fitness" with the original goal text logged —
+    pipeline completes without error

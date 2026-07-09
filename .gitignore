@@ -3,3 +3,4 @@ database/
 sessions/
 .env
 data/
+tests/__pycache__/
