@@ -1,0 +1,40 @@
+:root {
+  --bg-primary:     #0F0F14;
+  --bg-card:        #1A1628;
+  --bg-card-alt:    #1E1A2E;
+  --bg-input:       #13101F;
+  --bg-overlay:     #0A0812;
+
+  --purple-deep:    #26215C;
+  --purple-mid:     #534AB7;
+  --purple-primary: #7F77DD;
+  --purple-light:   #AFA9EC;
+  --purple-pale:    #EEEDFE;
+
+  --text-primary:   #F0EEFF;
+  --text-secondary: #AFA9EC;
+  --text-muted:     #7070A0;
+  --text-disabled:  #3D3A5C;
+
+  --border-subtle:  #1E1A2E;
+  --border-default: #2A2A3A;
+  --border-accent:  #7F77DD;
+
+  --success:        #1D9E75;
+  --warning:        #EF9F27;
+  --danger:         #E24B4A;
+  --streak-fire:    #FF6B35;
+
+  --xp-start:       #5C3DB5;
+  --xp-end:         #AFA9EC;
+
+  --radius-card:    16px;
+  --radius-badge:   20px;
+  --radius-button:  12px;
+  --radius-tile:    10px;
+
+  --screen-pad:     20px;
+  --card-pad:       18px;
+  --gap-cards:      12px;
+  --gap-inner:      8px;
+}

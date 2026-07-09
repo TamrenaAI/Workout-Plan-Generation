@@ -4,23 +4,23 @@ langchain
 deepagents
 python-dotenv
 
-# ── Exercise Database ─────────────────────────────────────────
-pymongo
-
 # ── API Layer ─────────────────────────────────────────────────
 fastapi
 uvicorn[standard]
 python-multipart
 
+# ── InBody VLM pipeline ───────────────────────────────────────
+opencv-python
+pymupdf
+numpy
+pydantic
+
 # ── Monitoring ────────────────────────────────────────────────
 langsmith
 
-# ── Notebook / Dev ────────────────────────────────────────────
-ipykernel
-
-python-dotenv
-langchain-openai
-pydantic
-opencv-python
-pymupdf
-ipywidgets
+# Exercise database is SQLite (stdlib sqlite3) at this stage — no MongoDB
+# driver needed yet. RAG is a hardcoded stub (tools/rag.py) — no Qdrant /
+# sentence-transformers / pinecone-text dependency yet either.
+#
+# Dev/notebook-only extras (ipykernel, ipywidgets, ...) are in
+# requirements-dev.txt, not here.

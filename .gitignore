@@ -4,3 +4,4 @@ sessions/
 .env
 data/
 tests/__pycache__/
+__pycache__/

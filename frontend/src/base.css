@@ -1,0 +1,202 @@
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  font-size: 15px;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+/* ── Layout ── */
+.t-screen {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 32px var(--screen-pad) 48px;
+}
+
+.t-section-title {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+/* ── Card ── */
+.t-card {
+  background: var(--bg-card);
+  border: 0.5px solid var(--border-default);
+  border-radius: var(--radius-card);
+  padding: var(--card-pad);
+}
+
+/* ── Buttons ── */
+.t-btn-primary {
+  display: block;
+  width: 100%;
+  height: 52px;
+  background: var(--purple-primary);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-button);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.t-btn-primary:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+.t-btn-ghost {
+  display: block;
+  width: 100%;
+  height: 48px;
+  background: var(--bg-card-alt);
+  color: var(--purple-light);
+  border: 1px solid var(--purple-mid);
+  border-radius: var(--radius-button);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+/* ── Badge ── */
+.t-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border-radius: var(--radius-badge);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  background: var(--bg-card-alt);
+  border: 1px solid var(--purple-mid);
+  color: var(--purple-light);
+}
+.t-badge.success { border-color: var(--success); color: var(--success); }
+.t-badge.danger  { border-color: var(--danger);  color: var(--danger);  }
+.t-badge.warning { border-color: var(--warning); color: var(--warning); }
+
+/* ── Stat tile ── */
+.t-stat-tile {
+  background: var(--bg-card-alt);
+  border: 0.5px solid var(--border-subtle);
+  border-radius: var(--radius-tile);
+  padding: 12px 8px;
+  text-align: center;
+}
+.t-stat-tile .value {
+  display: block;
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--purple-light);
+}
+.t-stat-tile .label {
+  display: block;
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ── Pill selector ── */
+.pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.pill {
+  padding: 8px 16px;
+  border-radius: var(--radius-badge);
+  border: 1px solid var(--border-default);
+  background: var(--bg-input);
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.pill.active {
+  border-color: var(--purple-primary);
+  background: var(--purple-deep);
+  color: var(--text-primary);
+}
+
+/* ── Form label ── */
+.t-label {
+  display: block;
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+/* ── Divider ── */
+.t-divider {
+  height: 0.5px;
+  background: var(--border-default);
+  margin: 20px 0;
+}
+
+/* ── Step tracker (used on processing page) ── */
+.step-list { display: flex; flex-direction: column; gap: 16px; }
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: 14px;
+}
+.step-item.done    { color: var(--success); }
+.step-item.active  { color: var(--text-primary); font-weight: 600; }
+.step-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 1.5px solid currentColor;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  flex-shrink: 0;
+}
+.step-item.done .step-icon  { background: var(--success); border-color: var(--success); color: #fff; }
+.step-item.active .step-icon { border-color: var(--purple-primary); color: var(--purple-primary); }
+
+/* ── Spinner ── */
+@keyframes spin { to { transform: rotate(360deg); } }
+.t-spinner {
+  width: 48px;
+  height: 48px;
+  border: 3px solid var(--border-default);
+  border-top-color: var(--purple-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 24px;
+}
+
+/* ── Exercise table ── */
+.exercise-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.exercise-table th {
+  text-align: left;
+  color: var(--text-muted);
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  padding: 8px 0;
+  border-bottom: 0.5px solid var(--border-default);
+}
+.exercise-table td {
+  padding: 10px 0;
+  color: var(--text-primary);
+  border-bottom: 0.5px solid var(--border-subtle);
+  vertical-align: top;
+}
+.exercise-table td:first-child { font-weight: 500; }

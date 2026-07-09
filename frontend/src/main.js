@@ -1,0 +1,32 @@
+// ── Global session state ──────────────────────────────────────────────────────
+window.tamrena = {
+  intake: {},           // filled by intake.js
+  capturedBlob: null,   // set by CameraCapture after VALID state
+  result: null,         // set after /generate-plan response
+};
+
+// ── Pages registry ────────────────────────────────────────────────────────────
+const PAGES = {
+  '':           renderHome,
+  'home':       renderHome,
+  'intake':     renderIntake,
+  'capture':    renderCapture,
+  'processing': renderProcessing,
+  'plan':       renderPlan,
+};
+
+// ── Router ────────────────────────────────────────────────────────────────────
+function navigate(hash) {
+  window.location.hash = hash;
+}
+
+function mount() {
+  const hash = window.location.hash.replace('#', '').split('?')[0];
+  const render = PAGES[hash] || renderHome;
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  render(app);
+}
+
+window.addEventListener('hashchange', mount);
+window.addEventListener('DOMContentLoaded', mount);
