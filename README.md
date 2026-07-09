@@ -7,8 +7,6 @@ body composition data (InBody scan) plus their goals and constraints,
 and generates a plan unique to them — split, muscle emphasis, exercise
 selection, and set/rep prescription all decided per individual.
 
-Full architecture reference: [`tamrena_architecture_2.md`](./tamrena_architecture_2.md).
-
 ---
 
 ## How a plan gets built
