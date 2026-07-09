@@ -17,3 +17,10 @@ langsmith
 
 # ── Notebook / Dev ────────────────────────────────────────────
 ipykernel
+
+python-dotenv
+langchain-openai
+pydantic
+opencv-python
+pymupdf
+ipywidgets
