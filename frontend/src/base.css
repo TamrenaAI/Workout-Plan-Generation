@@ -196,6 +196,41 @@ body {
   margin: 0 auto 24px;
 }
 
+/* ── Plan content (parsed from agent markdown, see plan.js) ── */
+.plan-card { margin-bottom: 12px; }
+.plan-card-title {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--purple-light);
+  margin-bottom: 12px;
+}
+.plan-note {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 8px 0;
+  line-height: 1.6;
+}
+.plan-note-label {
+  font-weight: 700;
+  color: var(--purple-light);
+}
+.plan-list {
+  margin: 8px 0 8px 20px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.7;
+}
+.plan-paragraph {
+  color: var(--text-secondary);
+  font-size: 13px;
+  line-height: 1.7;
+  margin: 6px 0;
+}
+
+/* ── Print-only helper (hidden on screen, shown only in print/PDF output) ── */
+.print-only { display: none; }
+
 /* ── Exercise table ── */
 .exercise-table { width: 100%; border-collapse: collapse; font-size: 13px; }
 .exercise-table th {
@@ -215,3 +250,44 @@ body {
   vertical-align: top;
 }
 .exercise-table td:first-child { font-weight: 500; }
+
+/* ── Print / PDF export ──────────────────────────────────────────────────────
+   Triggered by window.print() (see plan.js "Download PDF" button). The dark
+   theme is unusable on paper — this repaints everything light-on-dark ink,
+   hides UI chrome that has no place in a printed document, shows the
+   .print-only generation date, and stops day/table cards from splitting
+   awkwardly across page breaks. */
+@media print {
+  body { background: #ffffff !important; color: #111111 !important; }
+  .no-print { display: none !important; }
+  .print-only { display: block !important; }
+
+  .t-screen { max-width: 100%; padding: 0; margin: 0; }
+
+  .t-card, .plan-card {
+    background: #ffffff !important;
+    border: 1px solid #ccc !important;
+    box-shadow: none !important;
+    page-break-inside: avoid;
+    break-inside: avoid;
+    margin-bottom: 16px;
+  }
+
+  h1, h2, .t-section-title, .plan-card-title { color: #2A2560 !important; }
+  .plan-note-label { color: #2A2560 !important; }
+  .plan-note, .plan-list, .plan-paragraph { color: #222 !important; }
+
+  .t-badge {
+    border-color: #999 !important;
+    color: #333 !important;
+    background: #f2f2f2 !important;
+  }
+
+  .t-stat-tile { background: #f7f7f7 !important; border-color: #ddd !important; }
+  .t-stat-tile .value { color: #2A2560 !important; }
+  .t-stat-tile .label { color: #666 !important; }
+
+  .exercise-table th { color: #666 !important; border-bottom-color: #ccc !important; }
+  .exercise-table td { color: #111 !important; border-bottom-color: #eee !important; }
+  .exercise-table tr { page-break-inside: avoid; break-inside: avoid; }
+}

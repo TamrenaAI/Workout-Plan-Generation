@@ -7,7 +7,7 @@ function renderPlan(container) {
         <div style="font-size:32px;margin-bottom:16px;">⚠️</div>
         <h2 style="color:var(--danger);margin-bottom:8px;">Generation Failed</h2>
         <p style="color:var(--text-muted);">${result?.error || 'Unknown error'}</p>
-        <button class="t-btn-ghost" style="margin-top:32px;" onclick="navigate('capture')">Try Again</button>
+        <button class="t-btn-ghost no-print" style="margin-top:32px;" onclick="navigate('capture')">Try Again</button>
       </div>
     `;
     return;
@@ -27,9 +27,12 @@ function renderPlan(container) {
         <div>
           <h1 style="font-size:28px;font-weight:700;margin-bottom:4px;">Training Protocol</h1>
           <span class="t-badge">${formatGoal(window.tamrena.intake.goal)}</span>
+          <div class="print-only" style="font-size:11px;color:#666;margin-top:6px;">
+            Generated ${formatDate(result.generated_at)}
+          </div>
         </div>
-        <button onclick="downloadPlan()" class="t-btn-ghost"
-          style="width:auto;height:36px;padding:0 16px;font-size:13px;">Download</button>
+        <button onclick="window.print()" class="t-btn-ghost no-print"
+          style="width:auto;height:36px;padding:0 16px;font-size:13px;">Download PDF</button>
       </div>
 
       <!-- InBody summary -->
@@ -65,7 +68,7 @@ function renderPlan(container) {
       </div>
 
       <div id="plan-content">
-        ${renderPlanMarkdown(result.plan)}
+        ${parsePlanToHtml(result.plan)}
       </div>
 
     </div>
@@ -88,33 +91,109 @@ function renderFlags(flags) {
   `;
 }
 
-// Renders the plain-text/markdown plan returned by the API into styled cards
-function renderPlanMarkdown(markdown) {
+// ── Plan markdown → structured HTML ───────────────────────────────────────────
+// The agents write a fairly consistent markdown subset (### headings, **bold**
+// labels, pipe tables, "- " bullet lists — see prompts/plan_assembler.md). This
+// walks it line-by-line and renders each piece as real HTML — proper <table>
+// elements for the sets/reps/rest/RPE data instead of dumping raw pipe-text
+// into a <pre> block. That's what actually makes it print/PDF-friendly: browser
+// print handles structured HTML far better than preformatted text, which tends
+// to clip or overflow awkwardly on a page.
+function parsePlanToHtml(markdown) {
   if (!markdown) return `<p style="color:var(--text-muted);">No plan generated.</p>`;
 
-  // Split into day sections (lines starting with "Day" or "## Day")
-  const sections = markdown
-    .split(/\n(?=#{1,2} Day|\nDay \d)/i)
-    .filter(s => s.trim());
+  const lines = markdown.split('\n');
+  let html = '';
+  let cardOpen = false;
+  let i = 0;
 
-  if (sections.length <= 1) {
-    // Fallback: render as pre-formatted text if structure not recognised
-    return `<pre style="white-space:pre-wrap;color:var(--text-secondary);font-size:13px;line-height:1.7;">${markdown}</pre>`;
+  const closeCard = () => { if (cardOpen) { html += '</div>'; cardOpen = false; } };
+
+  while (i < lines.length) {
+    const line = lines[i];
+
+    // Heading — "### Day 1 — Upper: Chest Focus" or "### Weekly Volume Summary"
+    const heading = line.match(/^#{2,3}\s+(.*)/);
+    if (heading) {
+      closeCard();
+      html += `<div class="t-card plan-card">`;
+      html += `<div class="plan-card-title">${escapeHtml(heading[1].trim())}</div>`;
+      cardOpen = true;
+      i++;
+      continue;
+    }
+
+    // Pipe table — consume every consecutive "|"-prefixed line as one table
+    if (line.trim().startsWith('|')) {
+      const tableLines = [];
+      while (i < lines.length && lines[i].trim().startsWith('|')) {
+        tableLines.push(lines[i]);
+        i++;
+      }
+      html += renderPlanTable(tableLines);
+      continue;
+    }
+
+    // "**Label:** text" — e.g. "**Warm-up:** ..." / "**Coaching notes:** ..."
+    const boldLine = line.match(/^\*\*(.+?):\*\*\s*(.*)/);
+    if (boldLine) {
+      html += `<div class="plan-note"><span class="plan-note-label">${escapeHtml(boldLine[1])}:</span> ${escapeHtml(boldLine[2])}</div>`;
+      i++;
+      continue;
+    }
+
+    // Bullet list
+    if (/^\s*[-*]\s+/.test(line)) {
+      const items = [];
+      while (i < lines.length && /^\s*[-*]\s+/.test(lines[i])) {
+        items.push(lines[i].replace(/^\s*[-*]\s+/, ''));
+        i++;
+      }
+      html += `<ul class="plan-list">${items.map(it => `<li>${escapeHtml(it)}</li>`).join('')}</ul>`;
+      continue;
+    }
+
+    // Horizontal rule / blank line — just section separators, no visible output
+    if (/^-{3,}\s*$/.test(line.trim()) || !line.trim()) {
+      i++;
+      continue;
+    }
+
+    // Plain paragraph
+    html += `<p class="plan-paragraph">${escapeHtml(line.trim())}</p>`;
+    i++;
   }
 
-  return sections.map(section => {
-    const lines = section.trim().split('\n');
-    const title = lines[0].replace(/^#+\s*/, '');
-    const body  = lines.slice(1).join('\n').trim();
-    return `
-      <div class="t-card" style="margin-bottom:12px;">
-        <div style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;
-                    color:var(--purple-light);margin-bottom:12px;">${title}</div>
-        <pre style="white-space:pre-wrap;color:var(--text-secondary);font-size:13px;line-height:1.7;
-                    font-family:'Inter',sans-serif;">${body}</pre>
-      </div>
-    `;
-  }).join('');
+  closeCard();
+  return html || `<pre style="white-space:pre-wrap;color:var(--text-secondary);font-size:13px;line-height:1.7;">${escapeHtml(markdown)}</pre>`;
+}
+
+function renderPlanTable(tableLines) {
+  const rows = tableLines
+    .filter(l => !/^\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?$/.test(l)) // drop the "|---|---|" separator row
+    .map(l => {
+      const cells = l.split('|').map(c => c.trim());
+      // drop the empty leading/trailing cells produced by a leading/trailing "|"
+      if (cells[0] === '') cells.shift();
+      if (cells[cells.length - 1] === '') cells.pop();
+      return cells;
+    });
+
+  if (rows.length === 0) return '';
+  const [header, ...body] = rows;
+
+  return `
+    <table class="exercise-table">
+      <thead><tr>${header.map(h => `<th>${escapeHtml(h)}</th>`).join('')}</tr></thead>
+      <tbody>${body.map(r => `<tr>${r.map(c => `<td>${escapeHtml(c)}</td>`).join('')}</tr>`).join('')}</tbody>
+    </table>
+  `;
+}
+
+function escapeHtml(str) {
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
 }
 
 function formatGoal(goal) {
@@ -127,13 +206,13 @@ function formatGoal(goal) {
   return map[goal] || goal || 'Protocol';
 }
 
-function downloadPlan() {
-  const plan = window.tamrena.result?.plan || 'No plan';
-  const blob = new Blob([plan], { type: 'text/markdown' });
-  const url  = URL.createObjectURL(blob);
-  const a    = document.createElement('a');
-  a.href = url;
-  a.download = 'tamrena_protocol.md';
-  a.click();
-  URL.revokeObjectURL(url);
+function formatDate(iso) {
+  if (!iso) return '';
+  try {
+    return new Date(iso).toLocaleString(undefined, {
+      year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+    });
+  } catch {
+    return iso;
+  }
 }
