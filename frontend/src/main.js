@@ -7,12 +7,14 @@ window.tamrena = {
 
 // ── Pages registry ────────────────────────────────────────────────────────────
 const PAGES = {
-  '':           renderHome,
-  'home':       renderHome,
-  'intake':     renderIntake,
-  'capture':    renderCapture,
-  'processing': renderProcessing,
-  'plan':       renderPlan,
+  '':               renderHome,
+  'home':           renderHome,
+  'intake':         renderIntake,
+  'intake-step2':   renderIntakeStep2,
+  'intake-optional':renderIntakeOptional,
+  'capture':        renderCapture,
+  'processing':     renderProcessing,
+  'plan':           renderPlan,
 };
 
 // ── Router ────────────────────────────────────────────────────────────────────

@@ -4,7 +4,7 @@ function renderCapture(container) {
   container.innerHTML = `
     <div class="t-screen">
       <div style="margin-bottom:24px;">
-        <div style="font-size:12px;color:var(--purple-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Step 2 of 2</div>
+        <div style="font-size:12px;color:var(--purple-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Step 4 of 4</div>
         <h1 style="font-size:28px;font-weight:700;">Scan InBody</h1>
         <p style="color:var(--text-muted);font-size:14px;margin-top:6px;">Position the InBody result sheet inside the frame.</p>
       </div>
@@ -141,26 +141,13 @@ function switchMode(mode) {
 }
 
 // ── Submit ────────────────────────────────────────────────────────────────────
-async function startGeneration() {
+// The actual /generate-plan call happens on the processing page (see
+// processing.js) so it can own the real request lifecycle and only mark its
+// final step done when the pipeline actually finishes.
+function startGeneration() {
   if (!window.tamrena.capturedBlob) return;
   stopCamera();
   navigate('processing');
-
-  const form = new FormData();
-  form.append('inbody_file', window.tamrena.capturedBlob, 'scan.jpg');
-  Object.entries(window.tamrena.intake).forEach(([k, v]) => {
-    if (v !== undefined && v !== '') form.append(k, v);
-  });
-
-  try {
-    const res  = await fetch('/generate-plan', { method: 'POST', body: form });
-    const data = await res.json();
-    window.tamrena.result = data;
-    navigate('plan');
-  } catch (err) {
-    window.tamrena.result = { error: err.message };
-    navigate('plan');
-  }
 }
 
 // ── Shared feedback renderer (used by CameraCapture too) ─────────────────────
