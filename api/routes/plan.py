@@ -1,14 +1,27 @@
 """
-POST /plan — main product endpoint.
+POST /generate-plan — kicks off plan generation.
 
-Runs the InBody image pipeline (tools/inbody.py: quality check ->
-authenticity check -> structured extraction -> deterministic flags) to turn
-the uploaded scan into the same "INBODY ANALYSIS ... FLAGS" text block the
-Supervisor's parse_inbody_text tool expects, then invokes the full agent
-pipeline synchronously. Typically takes 30-90 seconds — the caller should
-show a loading state, not poll.
+Runs the InBody image pipeline synchronously (fast: a few seconds), then
+launches the agent pipeline as a background asyncio task instead of blocking
+the request on it. Returns {session_id, inbody} immediately so the frontend
+can start rendering InBody data right away and open the live progress stream.
+
+GET /generate-plan/stream/{session_id} — Server-Sent Events. Streams real
+progress events (agents/streaming.py, translating deepagents' astream_events()
+output) as the background task runs, ending with a `{"type": "done", ...}`
+event carrying the final plan text. A full run dispatches the Exercise
+Recommender once per muscle group (5-6 sequential dispatches, more with a
+legs_a/legs_b split) plus the Plan Assembler — each a multi-step LLM
+conversation of its own — so this can genuinely take several minutes,
+not seconds.
+
+/ingest (RAG document ingestion) from tamrena_architecture_2.md Section 12c
+is not built — RAG is a hardcoded stub (tools/rag.py) pending the RAG team's
+real pipeline.
 """
 
+import asyncio
+import json
 import os
 import re
 import uuid
@@ -16,17 +29,15 @@ from datetime import datetime, timezone
 from typing import Optional
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from fastapi.concurrency import run_in_threadpool
+from fastapi.responses import StreamingResponse
 
+from agents.streaming import run_and_stream
 from agents.subagents import EXERCISE_RECOMMENDER, PLAN_ASSEMBLER
 from agents.supervisor import build_supervisor
 from config import SESSION_DIR
-from tools.inbody import (
-    check_image_quality,
-    format_inbody_result,
-    pdf_to_image_bytes,
-    run_inbody_pipeline_from_bytes,
-    validate_inbody_scan,
-)
+from services import live_progress
+from tools.inbody import check_image_quality, format_inbody_result, pdf_to_image_bytes, run_inbody_pipeline_from_bytes, validate_inbody_scan
 
 router = APIRouter()
 
@@ -51,7 +62,7 @@ async def _read_as_image(file: UploadFile) -> tuple[bytes, str]:
 
     file_bytes = await file.read()
     if content_type == "application/pdf":
-        file_bytes = pdf_to_image_bytes(file_bytes)
+        file_bytes = await run_in_threadpool(pdf_to_image_bytes, file_bytes)
         content_type = "image/png"
     return file_bytes, content_type
 
@@ -63,11 +74,11 @@ async def validate_image(file: UploadFile = File(...)):
     (slower, LLM-extraction) /generate-plan call."""
     image_bytes, content_type = await _read_as_image(file)
 
-    quality = check_image_quality(image_bytes)
+    quality = await run_in_threadpool(check_image_quality, image_bytes)
     if not quality["pass"]:
         return {"valid": False, "stage": "blur", "issue": quality["issue"]}
 
-    validation = validate_inbody_scan(image_bytes, content_type)
+    validation = await run_in_threadpool(validate_inbody_scan, image_bytes, content_type)
     if not validation.is_inbody_scan:
         return {
             "valid": False,
@@ -76,6 +87,20 @@ async def validate_image(file: UploadFile = File(...)):
         }
 
     return {"valid": True, "stage": None, "issue": None}
+
+
+async def _run_pipeline(session_id: str, user_message: str) -> None:
+    """Background task — runs the full Supervisor pipeline, narrating progress
+    into services.live_progress as it goes, then publishes the final result."""
+    supervisor = build_supervisor(sub_agents=[EXERCISE_RECOMMENDER, PLAN_ASSEMBLER])
+    try:
+        final_plan = await run_and_stream(supervisor, user_message, session_id)
+        await live_progress.publish_done(session_id, {
+            "plan": final_plan,
+            "generated_at": datetime.now(timezone.utc).isoformat(),
+        })
+    except Exception as exc:
+        await live_progress.publish_done(session_id, {"error": str(exc)})
 
 
 @router.post("/plan")
@@ -102,7 +127,7 @@ async def generate_plan(
 
     inbody_bytes, content_type = await _read_as_image(inbody_file)
 
-    pipeline_result = run_inbody_pipeline_from_bytes(inbody_bytes, content_type)
+    pipeline_result = await run_in_threadpool(run_inbody_pipeline_from_bytes, inbody_bytes, content_type)
     if isinstance(pipeline_result, dict):
         raise HTTPException(
             422,
@@ -126,8 +151,6 @@ async def generate_plan(
     session_id = str(uuid.uuid4())
     os.makedirs(os.path.join(SESSION_DIR, session_id), exist_ok=True)
 
-    supervisor = build_supervisor(sub_agents=[EXERCISE_RECOMMENDER, PLAN_ASSEMBLER])
-
     user_message = f"""SESSION_ID: {session_id}
 
 {user_query}
@@ -137,16 +160,36 @@ INBODY RAW TEXT:
 
 Generate a full personalised workout plan for this user."""
 
-    result = supervisor.invoke({"messages": [{"role": "user", "content": user_message}]})
-    final_plan = result["messages"][-1].content
+    stream = live_progress.create_stream(session_id)
+    stream.task = asyncio.create_task(_run_pipeline(session_id, user_message))
 
     return {
         "session_id": session_id,
         "inbody": pipeline_result.model_dump(),
-        "plan": final_plan,
-        "generated_at": datetime.now(timezone.utc).isoformat(),
-        "session_file": f"sessions/{session_id}/plan.md",
     }
+
+
+@router.get("/generate-plan/stream/{session_id}")
+async def stream_plan(session_id: str):
+    stream = live_progress.get_stream(session_id)
+    if not stream:
+        raise HTTPException(404, "Unknown session_id, or this stream already finished.")
+
+    async def event_generator():
+        try:
+            while True:
+                event = await stream.queue.get()
+                yield f"data: {json.dumps(event)}\n\n"
+                if event.get("type") == "done":
+                    return
+        finally:
+            live_progress.cleanup(session_id)
+
+    return StreamingResponse(
+        event_generator(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
+    )
 
 
 def _build_user_query(**fields) -> str:

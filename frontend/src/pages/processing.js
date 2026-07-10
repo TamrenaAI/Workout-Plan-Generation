@@ -1,46 +1,29 @@
-// First 3 steps are a quick cosmetic animation (validation already happened
-// on the capture page; extraction + flag computation are genuinely fast).
-// The 4th step ("agents") is NOT timer-based — it stays active, cycling
-// through what the backend agents are actually doing, until the real
-// /generate-plan request resolves. This is the part that actually takes
-// 30-90 seconds, so it's the one step that must reflect real completion,
-// not a guessed delay — otherwise it either finishes "done" while the
-// server is still working, or sits there with no explanation for a long
-// stretch and looks like the site froze.
+// First 3 steps are still a quick cosmetic animation — image validation
+// already happened on the capture page, and extraction/flag computation
+// really are fast (a couple seconds), so there's nothing real to stream for
+// them. The 4th step ("agents") is now REAL: it's driven by a Server-Sent
+// Events connection to the backend (see api/routes/plan.py's
+// /generate-plan/stream/{session_id}, fed by agents/streaming.py translating
+// deepagents' astream_events() output), showing exactly which agent is
+// running and what it's doing, live, until the pipeline actually finishes.
 const STEPS = [
   { id: 'validate', label: 'Image validated' },
   { id: 'extract', label: 'Analysing body composition' },
   { id: 'flags', label: 'Computing training flags' },
   { id: 'agents', label: 'Starting agent pipeline...' },
 ];
-const FAKE_DELAYS = [0, 2500, 5000]; // one per step EXCEPT 'agents', which waits for the real fetch
+const FAKE_DELAYS = [0, 2500, 5000]; // one per step EXCEPT 'agents', which is driven by real SSE events
 
-// Rough narration of the real pipeline (Supervisor -> Exercise Recommender
-// per muscle group -> Plan Assembler) so the user sees continuous, plausible
-// progress instead of a static spinner for the ~30-90s this stage can take.
-const AGENT_MESSAGES = [
-  'Supervisor: classifying your goal...',
-  'Supervisor: reading InBody analysis...',
-  'Supervisor: building your weekly split...',
-  'Exercise Recommender: chest...',
-  'Exercise Recommender: back...',
-  'Exercise Recommender: shoulders...',
-  'Exercise Recommender: arms...',
-  'Exercise Recommender: legs...',
-  'Plan Assembler: scheduling sessions...',
-  'Plan Assembler: checking recovery rules...',
-];
-
-let _agentTickerId = null;
+let _eventSource = null;
 
 function renderProcessing(container) {
   container.innerHTML = `
     <div class="t-screen" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;">
       <div class="t-spinner"></div>
       <h2 style="font-size:20px;font-weight:600;margin-bottom:8px;">Building your protocol...</h2>
-      <p style="color:var(--text-muted);font-size:13px;margin-bottom:40px;">This can take up to a minute or two — the agents are doing real work.</p>
+      <p style="color:var(--text-muted);font-size:13px;margin-bottom:40px;">This can take several minutes — six agent dispatches run one after another, each doing real reasoning.</p>
 
-      <div class="step-list" style="text-align:left;width:100%;max-width:280px;" id="steps">
+      <div class="step-list" style="text-align:left;width:100%;max-width:320px;" id="steps">
         ${STEPS.map((s, i) => `
           <div class="step-item ${i === 0 ? 'active' : ''}" id="step-${s.id}">
             <div class="step-icon">${i === 0 ? '⟳' : ''}</div>
@@ -52,7 +35,6 @@ function renderProcessing(container) {
   `;
 
   animateFakeSteps();
-  startAgentTicker();
   runGeneration();
 }
 
@@ -79,30 +61,24 @@ function animateFakeSteps() {
   });
 }
 
-// Cycles the 'agents' step's label through AGENT_MESSAGES on a fixed
-// interval. Purely cosmetic — there's no real progress channel from the
-// backend (the whole pipeline runs inside one synchronous request) — but it
-// keeps the screen visibly alive instead of a silent spinner for a minute+.
-function startAgentTicker() {
-  let i = 0;
-  _agentTickerId = setInterval(() => {
-    i = (i + 1) % AGENT_MESSAGES.length;
-    const el = document.getElementById('agent-label');
-    if (el) el.textContent = AGENT_MESSAGES[i];
-  }, 2200);
-}
-
-function stopAgentTicker() {
-  if (_agentTickerId) {
-    clearInterval(_agentTickerId);
-    _agentTickerId = null;
-  }
+function setAgentLabel(text) {
+  const el = document.getElementById('agent-label');
+  if (el) el.textContent = text;
 }
 
 function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function closeStream() {
+  if (_eventSource) {
+    _eventSource.close();
+    _eventSource = null;
+  }
+}
+
+// Kicks off generation, then opens a real-time SSE connection to watch the
+// actual agent pipeline run — no guessing, no fixed timers past this point.
 async function runGeneration() {
   const form = new FormData();
   form.append('inbody_file', window.tamrena.capturedBlob, 'scan.jpg');
@@ -110,18 +86,68 @@ async function runGeneration() {
     if (v !== undefined && v !== '') form.append(k, v);
   });
 
+  let started;
   try {
     const res = await fetch('/generate-plan', { method: 'POST', body: form });
-    const data = await res.json();
-    window.tamrena.result = data;
+    if (!res.ok) throw new Error(`Server returned ${res.status}`);
+    started = await res.json();
   } catch (err) {
     window.tamrena.result = { error: err.message };
-  } finally {
-    stopAgentTicker();
-    markDone('agents');
-    const label = document.getElementById('agent-label');
-    if (label) label.textContent = 'Training protocol generated';
-    await sleep(500); // let the user actually see the final checkmark before navigating away
+    await sleep(300);
     navigate('plan');
+    return;
   }
+
+  window.tamrena.result = { session_id: started.session_id, inbody: started.inbody };
+
+  await streamProgress(started.session_id);
+}
+
+function streamProgress(sessionId) {
+  return new Promise(resolve => {
+    _eventSource = new EventSource(`/generate-plan/stream/${sessionId}`);
+
+    _eventSource.onmessage = async (msg) => {
+      let event;
+      try {
+        event = JSON.parse(msg.data);
+      } catch {
+        return;
+      }
+
+      if (event.type === 'progress') {
+        setAgentLabel(`${event.agent}: ${event.label}`);
+        return;
+      }
+
+      if (event.type === 'done') {
+        closeStream();
+
+        if (event.error) {
+          window.tamrena.result = { ...window.tamrena.result, error: event.error };
+        } else {
+          window.tamrena.result = {
+            ...window.tamrena.result,
+            plan: event.plan,
+            generated_at: event.generated_at,
+          };
+          markDone('agents');
+          setAgentLabel('Training protocol generated');
+          await sleep(500); // let the user actually see the final checkmark before navigating away
+        }
+
+        navigate('plan');
+        resolve();
+      }
+    };
+
+    _eventSource.onerror = async () => {
+      closeStream();
+      if (!window.tamrena.result?.plan) {
+        window.tamrena.result = { ...window.tamrena.result, error: 'Lost connection to the server while generating your plan.' };
+        navigate('plan');
+      }
+      resolve();
+    };
+  });
 }

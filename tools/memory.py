@@ -16,10 +16,24 @@ re-read its own dispatch history or regex the MD file.
 import json
 import os
 import re
+import threading
 
 from langchain_core.tools import tool
 
 from config import SESSION_DIR
+
+# Guards progress.json's read-modify-write cycle. deepagents can execute
+# multiple task() dispatches concurrently (a ThreadPoolExecutor within this
+# same process) when the Supervisor emits more than one tool call in a
+# single turn. Without this lock, two exercise-recommenders finishing at
+# nearly the same moment can each read a stale copy of progress.json and
+# clobber each other's mark_step_done write — the Supervisor then sees a
+# muscle group as "missing" and re-dispatches it, even though it actually
+# completed. See prompts/supervisor.md's dispatch rule for the other half of
+# this fix (only one task() call per turn, so this race shouldn't occur in
+# practice) — this lock is the belt-and-suspenders guarantee against data
+# corruption regardless of whether that rule is ever violated.
+_progress_lock = threading.Lock()
 
 
 def _plan_path(session_id: str) -> str:
@@ -113,9 +127,10 @@ def init_plan_progress(session_id: str, muscle_groups: list[str]) -> str:
     authoritative list of muscle-group ids this plan requires (e.g. including separate
     ids like 'legs_a'/'legs_b' when there are two leg days)."""
     path = _progress_path(session_id)
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump({"expected": muscle_groups, "completed": []}, f)
+    with _progress_lock:
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump({"expected": muscle_groups, "completed": []}, f)
     return f"Progress tracker initialized: {len(muscle_groups)} muscle groups expected: {muscle_groups}"
 
 
@@ -124,21 +139,22 @@ def mark_step_done(session_id: str, muscle_group: str) -> str:
     """Exercise-recommender calls this as its LAST action, immediately after write_plan_memory,
     using the exact muscle_group id it was given in its task prompt."""
     path = _progress_path(session_id)
-    if not os.path.exists(path):
-        return "WARNING: progress tracker not initialized for this session."
-    with open(path, "r", encoding="utf-8") as f:
-        progress = json.load(f)
+    with _progress_lock:
+        if not os.path.exists(path):
+            return "WARNING: progress tracker not initialized for this session."
+        with open(path, "r", encoding="utf-8") as f:
+            progress = json.load(f)
 
-    if muscle_group not in progress["expected"]:
-        return f"WARNING: '{muscle_group}' is not in the expected list {progress['expected']}. Not recorded."
-    if muscle_group in progress["completed"]:
-        return f"WARNING: '{muscle_group}' was already marked done — possible duplicate dispatch."
+        if muscle_group not in progress["expected"]:
+            return f"WARNING: '{muscle_group}' is not in the expected list {progress['expected']}. Not recorded."
+        if muscle_group in progress["completed"]:
+            return f"WARNING: '{muscle_group}' was already marked done — possible duplicate dispatch."
 
-    progress["completed"].append(muscle_group)
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(progress, f)
+        progress["completed"].append(muscle_group)
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(progress, f)
 
-    remaining = [g for g in progress["expected"] if g not in progress["completed"]]
+        remaining = [g for g in progress["expected"] if g not in progress["completed"]]
     return f"Marked done: {muscle_group}. Remaining: {remaining or 'none — all groups complete'}"
 
 
@@ -148,10 +164,11 @@ def get_plan_progress(session_id: str) -> str:
     dispatched actually got marked done before deciding what to dispatch next. Also call
     before dispatching the plan-assembler — only proceed if all_done is true."""
     path = _progress_path(session_id)
-    if not os.path.exists(path):
-        return json.dumps({"error": "progress tracker not initialized"})
-    with open(path, "r", encoding="utf-8") as f:
-        progress = json.load(f)
+    with _progress_lock:
+        if not os.path.exists(path):
+            return json.dumps({"error": "progress tracker not initialized"})
+        with open(path, "r", encoding="utf-8") as f:
+            progress = json.load(f)
     remaining = [g for g in progress["expected"] if g not in progress["completed"]]
     return json.dumps({
         "expected": progress["expected"],

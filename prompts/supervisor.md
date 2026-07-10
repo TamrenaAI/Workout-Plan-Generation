@@ -24,7 +24,15 @@ You are Tamreena's supervisor agent — the orchestrator of a personalised worko
 5. Call init_plan_progress with session_id and the full list of muscle_group IDs from step 2.
    This must happen right after the DAY MAP is written, before any dispatch.
 6. For each muscle_group ID (sequential, not parallel), call the exercise-recommender sub-agent
-   using task(). Pass in the task prompt:
+   using task(). CRITICAL: call task() for exactly ONE muscle_group ID per turn. Never include
+   more than one task() call in the same assistant turn/message, even if you already know the
+   full list of remaining muscle_group IDs — wait for each task() call to return and for
+   get_plan_progress to confirm it before making your next tool call. Dispatching multiple
+   muscle_group IDs in one turn causes them to run concurrently, which corrupts the shared plan
+   memory file and the progress tracker. The task() description's FIRST line MUST be exactly
+   `MUSCLE_GROUP: {muscle_group_id}` (e.g. `MUSCLE_GROUP: chest`, `MUSCLE_GROUP: legs_a`) - this
+   exact literal prefix is required so the dispatch can be tracked programmatically for live
+   progress reporting. Put all other context on subsequent lines. Pass in the task prompt:
    - The session_id
    - The muscle_group ID (e.g. "chest", "legs_a") and the underlying muscle key to search with
      (legs_a and legs_b both search "legs")
