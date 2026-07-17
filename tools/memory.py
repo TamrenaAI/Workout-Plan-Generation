@@ -82,7 +82,10 @@ def validate_session_duration(session_id: str) -> str:
     for line in content.splitlines():
         stripped = line.strip()
         if stripped.startswith("Day ") and "max_sets:" in stripped:
-            day_label = stripped.split("—")[0].strip()
+            day_match = re.match(r"Day \d+", stripped)
+            if not day_match:
+                continue
+            day_label = day_match.group(0)
             try:
                 max_sets = int(stripped.split("max_sets:")[1].split("|")[0].strip())
                 day_budgets[day_label] = max_sets
@@ -98,7 +101,10 @@ def validate_session_duration(session_id: str) -> str:
     for line in content.splitlines():
         stripped = line.strip()
         if stripped.startswith("### Day"):
-            current_day = stripped.split("—")[0].replace("###", "").strip()
+            day_match = re.match(r"Day \d+", stripped.replace("###", "").strip())
+            if not day_match:
+                continue
+            current_day = day_match.group(0)
             day_set_counts[current_day] = 0
         elif current_day and stripped.startswith("|"):
             for part in stripped.split("|"):

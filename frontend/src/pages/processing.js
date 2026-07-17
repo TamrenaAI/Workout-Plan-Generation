@@ -21,7 +21,7 @@ function renderProcessing(container) {
     <div class="t-screen" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;">
       <div class="t-spinner"></div>
       <h2 style="font-size:20px;font-weight:600;margin-bottom:8px;">Building your protocol...</h2>
-      <p style="color:var(--text-muted);font-size:13px;margin-bottom:40px;">This can take several minutes — six agent dispatches run one after another, each doing real reasoning.</p>
+      <p style="color:var(--text-muted);font-size:13px;margin-bottom:40px;">This can take several minutes — Multiple agents dispatched run one after another.</p>
 
       <div class="step-list" style="text-align:left;width:100%;max-width:320px;" id="steps">
         ${STEPS.map((s, i) => `
