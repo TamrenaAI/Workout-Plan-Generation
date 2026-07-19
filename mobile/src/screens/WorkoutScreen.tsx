@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { ApiError } from '../api/client';
+import { fetchSessions, PlanSession } from '../api/sessions';
 import { Card } from '../components/Card';
-import { GhostButton, PrimaryButton } from '../components/Buttons';
+import { PrimaryButton } from '../components/Buttons';
 import { colors, spacing } from '../theme';
 
 const DAYS = [
@@ -14,8 +16,9 @@ const DAYS = [
   { label: 'Fri', focus: 'Push', today: false },
 ];
 
-// Mock exercise list matching the approved mockup — real data comes from
-// the session's plan.md via a future GET /sessions/{id}/plan endpoint.
+// Still mock — there's no GET /sessions/{id}/plan endpoint yet to fetch a
+// specific day's real prescribed exercises out of plan.md. The day strip
+// and this list stay illustrative until that's built.
 const EXERCISES = [
   { name: 'Pull-Up', sets: '4×8', rest: '2 min', rpe: 8 },
   { name: 'Barbell Row', sets: '4×10', rest: '90s', rpe: 7 },
@@ -23,7 +26,20 @@ const EXERCISES = [
   { name: 'Face Pull', sets: '3×15', rest: '60s', rpe: 6 },
 ];
 
+function formatDate(iso: string): string {
+  return new Date(iso.replace(' ', 'T') + 'Z').toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+}
+
 export function WorkoutScreen() {
+  const [sessions, setSessions] = useState<PlanSession[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchSessions()
+      .then(setSessions)
+      .catch((err) => setError(err instanceof ApiError ? err.message : 'Could not load workout history.'));
+  }, []);
+
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView contentContainerStyle={styles.content}>
@@ -49,7 +65,25 @@ export function WorkoutScreen() {
           </Card>
         ))}
 
-        <GhostButton label="Workout History" style={{ marginTop: spacing.gapCards }} />
+        <Text style={styles.sectionTitle}>Workout History</Text>
+        {error ? (
+          <Card>
+            <Text style={styles.error}>{error}</Text>
+          </Card>
+        ) : sessions && sessions.length > 0 ? (
+          sessions.map((s) => (
+            <Card key={s.session_id}>
+              <View style={styles.rowBetween}>
+                <Text style={styles.historyGoal}>{s.goal ?? 'Untitled plan'}</Text>
+                <Text style={styles.historyDate}>{formatDate(s.created_at)}</Text>
+              </View>
+            </Card>
+          ))
+        ) : sessions ? (
+          <Card>
+            <Text style={styles.emptyText}>No past plans yet.</Text>
+          </Card>
+        ) : null}
       </ScrollView>
     </SafeAreaView>
   );
@@ -74,7 +108,12 @@ const styles = StyleSheet.create({
   dayLabel: { fontSize: 12, fontWeight: '600', color: colors.textSecondary },
   dayFocus: { fontSize: 11, color: colors.textMuted, marginTop: 2 },
   dayLabelActive: { color: '#fff' },
-  sectionTitle: { fontSize: 18, fontWeight: '700', color: colors.textPrimary, marginBottom: 12 },
+  sectionTitle: { fontSize: 18, fontWeight: '700', color: colors.textPrimary, marginBottom: 12, marginTop: 8 },
   exerciseName: { fontSize: 16, fontWeight: '600', color: colors.textPrimary },
   exerciseDetail: { fontSize: 13, color: colors.textSecondary, marginTop: 4 },
+  rowBetween: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  historyGoal: { fontSize: 14, fontWeight: '600', color: colors.textPrimary, textTransform: 'capitalize' },
+  historyDate: { fontSize: 12, color: colors.textMuted },
+  emptyText: { fontSize: 13, color: colors.textMuted },
+  error: { fontSize: 13, color: colors.danger },
 });

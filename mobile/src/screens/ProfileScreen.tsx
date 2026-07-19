@@ -1,24 +1,31 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { useAuth } from '../auth/AuthContext';
 import { Card } from '../components/Card';
 import { GhostButton, PrimaryButton } from '../components/Buttons';
 import { colors, spacing } from '../theme';
 
-// Mock content — real user/subscription data comes from GET /auth/me and
-// the (not-yet-built) Subscriptions/IAP integration.
+// Subscription status is still mock — the Subscriptions/IAP integration
+// isn't built yet (blocked on a RevenueCat account + store setup).
 const SETTINGS_ROWS = ['Language — English', 'Units — kg', 'Notifications'];
 
 export function ProfileScreen() {
+  const { user, signOut } = useAuth();
+
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView contentContainerStyle={styles.content}>
         <View style={styles.header}>
-          <View style={styles.avatar} />
+          {user?.picture_url ? (
+            <Image source={{ uri: user.picture_url }} style={styles.avatar} />
+          ) : (
+            <View style={styles.avatar} />
+          )}
           <View>
-            <Text style={styles.name}>Abdullah</Text>
-            <Text style={styles.email}>abdullah@example.com</Text>
+            <Text style={styles.name}>{user?.name ?? 'Signed-in user'}</Text>
+            <Text style={styles.email}>{user?.email}</Text>
           </View>
         </View>
 
@@ -45,7 +52,7 @@ export function ProfileScreen() {
           </TouchableOpacity>
         </Card>
 
-        <GhostButton label="Log Out" style={{ marginTop: spacing.gapCards }} />
+        <GhostButton label="Log Out" onPress={signOut} style={{ marginTop: spacing.gapCards }} />
       </ScrollView>
     </SafeAreaView>
   );

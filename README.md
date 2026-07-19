@@ -128,15 +128,34 @@ mobile/                          ← React Native (Expo + TypeScript) app — th
                                     forward. See mobile/README (Expo default) for run instructions and
                                     docs/superpowers/specs/2026-07-20-mobile-app-navigation-design.md
                                     for the design this implements.
-  App.tsx                        ← NavigationContainer + TabNavigator entry point
+  App.tsx                        ← AuthProvider + NavigationContainer; shows LoginScreen or
+                                    TabNavigator depending on auth state
+  src/config.ts                  ← API_BASE_URL / GOOGLE_WEB_CLIENT_ID (see .env.example)
+  src/api/client.ts               ← apiFetch() — attaches the session JWT, throws ApiError on failure
+  src/api/{auth,sessions,progress}.ts ← typed wrappers per backend resource
+  src/auth/AuthContext.tsx        ← Google Sign-In (native, NOT Expo Go-compatible — see below),
+                                    session persistence via expo-secure-store
   src/theme.ts                   ← design tokens ported from frontend/src/theme.css / design-system.md
   src/components/                ← Card, Badge, PrimaryButton/GhostButton, StatTile, ChatButton —
                                     mirror the web app's .t-card/.t-badge/etc. classes
   src/navigation/TabNavigator.tsx ← bottom tabs (Home/Workout/Nutrition/Progress/Profile) + floating
                                     ChatButton overlay
-  src/screens/                   ← one screen per tab, currently mock data — not yet wired to the
-                                    real API (auth, /sessions, /progress/*, /workouts/*)
+  src/screens/                   ← LoginScreen (real), Profile (real user + logout), Progress (real
+                                    scan history/comparison via /progress/*), Workout (real session
+                                    history via /sessions; today's exercise list still mock — no
+                                    GET /sessions/{id}/plan endpoint exists yet), Home/Nutrition
+                                    (still mock — Nutrition Agent integration is on hold)
 ```
+
+**Mobile auth note:** `@react-native-google-signin/google-signin` requires custom native
+code and does NOT run in Expo Go. Testing the actual "Sign in with Google" button needs a
+dev-client build (`eas build --profile development`, or a local `expo run:android`/`expo
+run:ios` if you set up Android Studio/Xcode) plus real Google Cloud OAuth credentials — a
+"Web application" client ID for `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` / the backend's
+`GOOGLE_OAUTH_CLIENT_ID` (same value, both must match), and platform-specific client IDs
+(with Android SHA-1 fingerprints) wired into the `@react-native-google-signin/google-signin`
+config plugin in `app.json`. `tsc --noEmit` and `expo export` are verified clean, but the
+sign-in flow itself is unverified until that build exists.
 
 ## Why a shared markdown file instead of a database
 

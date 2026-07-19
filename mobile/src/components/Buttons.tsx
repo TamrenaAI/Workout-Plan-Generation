@@ -6,9 +6,14 @@ import { colors, radii } from '../theme';
 type ButtonProps = TouchableOpacityProps & { label: string };
 
 /** Mirrors the web app's .t-btn-primary class. */
-export function PrimaryButton({ label, style, ...rest }: ButtonProps) {
+export function PrimaryButton({ label, style, disabled, ...rest }: ButtonProps) {
   return (
-    <TouchableOpacity style={[styles.primary, style]} activeOpacity={0.8} {...rest}>
+    <TouchableOpacity
+      style={[styles.primary, disabled && styles.disabled, style]}
+      activeOpacity={0.8}
+      disabled={disabled}
+      {...rest}
+    >
       <Text style={styles.primaryText}>{label}</Text>
     </TouchableOpacity>
   );
@@ -32,6 +37,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   primaryText: { color: '#fff', fontSize: 15, fontWeight: '600' },
+  disabled: { opacity: 0.4 },
   ghost: {
     height: 48,
     borderRadius: radii.button,
