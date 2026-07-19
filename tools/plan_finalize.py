@@ -1,0 +1,255 @@
+"""
+Deterministic post-processing for the assembled Weekly Schedule.
+
+prompts/plan_assembler.md step 4 asks the LLM to call validate_session_duration
+and trim any day over its max_sets budget itself, by rewriting the table. In
+practice this doesn't reliably happen:
+
+- The assembler sometimes writes "Sets x Reps" cells without the required
+  "x" separator (e.g. "5 8" collapsed to "58"), which silently breaks
+  validate_session_duration's regex-based set counting — an over-budget day
+  reads as 0 scheduled sets and passes.
+- Even when formatted correctly and clearly over budget, the LLM has been
+  observed to not actually rewrite the day (see sessions/c597aeb5-...: Day 1
+  scheduled 35 sets against a 10-set budget, survived untouched through two
+  assembler passes).
+
+enforce_volume_budget() re-parses whatever schedule the assembler actually
+wrote, trims any day still over budget using the same priority rule already
+documented in plan_assembler.md ("never remove the primary compound lift for
+any muscle group"), and appends the corrected schedule as a fresh
+'## Weekly Schedule' section. tools.memory.read_weekly_schedule() already
+returns the LAST such section, so the corrected version becomes what's shown
+to the user with no other wiring changes needed.
+
+Exercises this can't confidently classify (couldn't be matched back to a
+muscle group's numbered prescription list) are never auto-removed — being
+conservative about what we delete matters more than hitting the budget
+exactly.
+"""
+
+import re
+
+from tools.memory import _plan_path, write_plan_memory
+
+_SETS_X_REPS = re.compile(r"(\d+)\s*[×xX]\s*(\d+(?:-\d+)?)")
+_SETS_CONCAT = re.compile(r"^(\d)(\d+(?:-\d+)?)$")  # malformed "58" -> sets=5, reps=8
+
+_DAY_MAP_LINE = re.compile(
+    r"^Day\s+(\d+)\s*-.*?muscles\s*\[([^\]]+)\]\s*\|\s*max_sets:\s*(\d+)\s*\|\s*intensity:\s*(\S+)",
+    re.IGNORECASE,
+)
+_GROUP_HEADING = re.compile(r"^##\s+(\S+)\s*-\s*(\S+)\s*$")
+_NUMBERED_EXERCISE = re.compile(r"^(\d+)\.\s+(.+?)\s+\d+\s*[×xX]\s*\d+")
+_DAY_HEADING = re.compile(r"^###\s+Day\s+(\d+)\b")
+_VOLUME_ROW = re.compile(r"^\|\s*([A-Za-z_]+)\s*\|\s*(\d+)\s*\|\s*([\d]+-[\d]+|\S+)\s*\|\s*(\S+)\s*\|$")
+
+
+def _parse_day_map(content: str) -> dict:
+    """Day number -> {"budget": int, "muscles": [str,...], "zone": str}."""
+    day_map = {}
+    for line in content.splitlines():
+        match = _DAY_MAP_LINE.match(line.strip())
+        if not match:
+            continue
+        day_num, muscles_raw, budget, zone = match.groups()
+        muscles = [m.strip() for m in muscles_raw.split(",") if m.strip()]
+        day_map[int(day_num)] = {"budget": int(budget), "muscles": muscles, "zone": zone}
+    return day_map
+
+
+def _parse_group_ordinals(content: str, muscle: str, zone: str) -> dict:
+    """Last '## {muscle} - {zone}' section -> {exercise_name_lower: ordinal}."""
+    heading = f"## {muscle} - {zone}"
+    idx = content.rfind(heading)
+    if idx == -1:
+        return {}
+    section = content[idx:]
+    end = section.find("\n---")
+    if end != -1:
+        section = section[:end]
+
+    ordinals = {}
+    for line in section.splitlines():
+        match = _NUMBERED_EXERCISE.match(line.strip())
+        if match:
+            ordinal, name = match.groups()
+            ordinals[name.strip().lower()] = int(ordinal)
+    return ordinals
+
+
+def _extract_sets(cell: str) -> "int | None":
+    match = _SETS_X_REPS.search(cell)
+    if match:
+        return int(match.group(1))
+    match = _SETS_CONCAT.match(cell.strip())
+    if match:
+        return int(match.group(1))
+    return None
+
+
+def _split_row(line: str) -> list:
+    cells = [c.strip() for c in line.split("|")]
+    if cells and cells[0] == "":
+        cells.pop(0)
+    if cells and cells[-1] == "":
+        cells.pop()
+    return cells
+
+
+def _parse_target_range(cell: str) -> "tuple[int, int] | None":
+    match = re.match(r"^(\d+)-(\d+)$", cell.strip())
+    if not match:
+        return None
+    return int(match.group(1)), int(match.group(2))
+
+
+def enforce_volume_budget(session_id: str) -> bool:
+    """Trims any day of the LAST '## Weekly Schedule' section that exceeds its
+    DAY MAP max_sets budget, and recomputes the Weekly Volume Summary from the
+    trimmed days. Appends the corrected schedule as a new section if any
+    changes were made. Returns True if a correction was written, False if the
+    schedule was already within budget (or couldn't be parsed) and nothing
+    needed to change."""
+    path = _plan_path(session_id)
+    try:
+        with open(path, "r", encoding="utf-8") as f:
+            content = f.read()
+    except FileNotFoundError:
+        return False
+
+    day_map = _parse_day_map(content)
+    schedule_idx = content.rfind("## Weekly Schedule")
+    if not day_map or schedule_idx == -1:
+        return False
+
+    schedule_section = content[schedule_idx:]
+    lines = schedule_section.splitlines()
+
+    # Everything from "### Weekly Volume Summary" (or "### Recovery Notes" if no
+    # summary present) to the end of the section is preserved/rewritten separately;
+    # day blocks are only parsed from the lines before that marker.
+    tail_marker_idx = None
+    for i, line in enumerate(lines):
+        if line.strip().startswith("### Weekly Volume Summary") or line.strip().startswith("### Recovery Notes"):
+            tail_marker_idx = i
+            break
+    tail_lines = lines[tail_marker_idx:] if tail_marker_idx is not None else []
+    day_lines_all = lines[1:tail_marker_idx] if tail_marker_idx is not None else lines[1:]
+
+    day_blocks = []  # (day_num, [lines])
+    current = None
+    for line in day_lines_all:
+        heading = _DAY_HEADING.match(line.strip())
+        if heading:
+            current = (int(heading.group(1)), [line])
+            day_blocks.append(current)
+        elif current is not None:
+            current[1].append(line)
+
+    if not day_blocks:
+        return False
+
+    changed = False
+    muscle_week_totals: dict = {}
+    rebuilt_days = []
+
+    for day_num, day_lines in day_blocks:
+        day_info = day_map.get(day_num)
+        if not day_info:
+            rebuilt_days.append(day_lines)
+            continue
+
+        ordinal_lookup = {}
+        for muscle in day_info["muscles"]:
+            for name, ordinal in _parse_group_ordinals(content, muscle, day_info["zone"]).items():
+                if name not in ordinal_lookup:
+                    ordinal_lookup[name] = (ordinal, muscle)
+
+        table_start = None
+        table_end = None
+        for i, line in enumerate(day_lines):
+            if line.strip().startswith("|"):
+                if table_start is None:
+                    table_start = i
+                table_end = i
+        if table_start is None:
+            rebuilt_days.append(day_lines)
+            continue
+
+        header_row = day_lines[table_start]
+        separator_row = day_lines[table_start + 1]
+        data_rows = day_lines[table_start + 2: table_end + 1]
+
+        rows = []
+        for row_line in data_rows:
+            cells = _split_row(row_line)
+            if len(cells) < 5:
+                continue
+            exercise_name = cells[1]
+            sets = _extract_sets(cells[2])
+            lookup = ordinal_lookup.get(exercise_name.strip().lower())
+            ordinal, muscle = lookup if lookup else (None, None)
+            rows.append({
+                "cells": cells, "sets": sets, "ordinal": ordinal, "muscle": muscle,
+            })
+
+        total = sum(r["sets"] or 0 for r in rows)
+        budget = day_info["budget"]
+
+        if total > budget:
+            changed = True
+            while total > budget:
+                candidates = [r for r in rows if r["ordinal"] is not None and r["ordinal"] > 1]
+                if not candidates:
+                    break
+                worst = max(candidates, key=lambda r: (r["ordinal"], r["sets"] or 0))
+                rows.remove(worst)
+                total -= worst["sets"] or 0
+
+        for r in rows:
+            if r["muscle"] and r["sets"]:
+                muscle_week_totals[r["muscle"]] = muscle_week_totals.get(r["muscle"], 0) + r["sets"]
+
+        rebuilt_row_lines = []
+        for idx, r in enumerate(rows, start=1):
+            cells = list(r["cells"])
+            cells[0] = str(idx)
+            rebuilt_row_lines.append("| " + " | ".join(cells) + " |")
+
+        rebuilt_days.append(
+            day_lines[:table_start] + [header_row, separator_row] + rebuilt_row_lines + day_lines[table_end + 1:]
+        )
+
+    if not changed:
+        return False
+
+    rebuilt_tail = []
+    for line in tail_lines:
+        vol_match = _VOLUME_ROW.match(line.strip())
+        if vol_match and muscle_week_totals:
+            muscle, _old_sets, target, _old_status = vol_match.groups()
+            if muscle in muscle_week_totals:
+                new_sets = muscle_week_totals[muscle]
+                target_range = _parse_target_range(target)
+                if target_range:
+                    low, high = target_range
+                    status = "under" if new_sets < low else "over" if new_sets > high else "met"
+                else:
+                    status = _old_status
+                rebuilt_tail.append(f"| {muscle} | {new_sets} | {target} | {status} |")
+                continue
+        rebuilt_tail.append(line)
+
+    body_lines = []
+    for day_lines in rebuilt_days:
+        body_lines.extend(day_lines)
+    body_lines.extend(rebuilt_tail)
+
+    corrected_body = "\n".join(body_lines).strip()
+    write_plan_memory.invoke({
+        "session_id": session_id,
+        "section_title": "Weekly Schedule",
+        "content": corrected_body,
+    })
+    return True
