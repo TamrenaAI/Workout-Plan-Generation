@@ -44,9 +44,33 @@ def _progress_path(session_id: str) -> str:
     return os.path.join(SESSION_DIR, session_id, "progress.json")
 
 
+# prompts/plan_assembler.md only ever instructs writing under "Weekly
+# Schedule" (step 3), but the assembler has been observed to also
+# independently write a second, later copy of the same days under a
+# different self-chosen heading as part of its own step 5 "return the plan"
+# behavior (see sessions/dfd4454f-...: a full second copy under "## Full
+# Workout Plan", with the Weekly Volume Summary / Recovery Notes only
+# attached to that second copy). Recognizing both lets us find whichever one
+# the assembler actually finished on.
+_SCHEDULE_HEADINGS = ("## Weekly Schedule", "## Full Workout Plan")
+
+
+def find_last_schedule_marker(content: str) -> "tuple[int, str] | None":
+    """Returns (index, heading) of whichever known schedule heading occurs
+    LAST in the file, or None if neither is present. Whichever heading was
+    written last is the assembler's actual final version — see
+    _SCHEDULE_HEADINGS."""
+    best = None
+    for heading in _SCHEDULE_HEADINGS:
+        idx = content.rfind(heading)
+        if idx != -1 and (best is None or idx > best[0]):
+            best = (idx, heading)
+    return best
+
+
 def read_weekly_schedule(session_id: str) -> str | None:
-    """Reads the LAST '## Weekly Schedule' section written to plan.md by the
-    Plan Assembler's write_plan_memory call — the deterministic, tool-written
+    """Reads the LAST schedule section written to plan.md by the Plan
+    Assembler's write_plan_memory call — the deterministic, tool-written
     source of truth for the assembled exercises.
 
     Used as the text actually returned to the user instead of the
@@ -55,9 +79,9 @@ def read_weekly_schedule(session_id: str) -> str | None:
     a tool call is a second, independent generation with no fidelity
     guarantee, and it has been observed to summarize or drop exercise rows
     that plan.md has intact. A retried/re-dispatched session can have more
-    than one '## Weekly Schedule' section (see mark_step_done's duplicate-
-    dispatch guard) — the last one written is the current, authoritative
-    plan, hence rfind rather than find.
+    than one schedule section (see mark_step_done's duplicate-dispatch guard,
+    and _SCHEDULE_HEADINGS above) — the last one written is the current,
+    authoritative plan, hence find_last_schedule_marker rather than find.
 
     Returns None if the plan file doesn't exist yet or the Assembler hasn't
     written a schedule yet (e.g. the pipeline failed before that step) —
@@ -68,10 +92,10 @@ def read_weekly_schedule(session_id: str) -> str | None:
         return None
     with open(path, "r", encoding="utf-8") as f:
         content = f.read()
-    marker = "## Weekly Schedule"
-    idx = content.rfind(marker)
-    if idx == -1:
+    marker = find_last_schedule_marker(content)
+    if marker is None:
         return None
+    idx, _heading = marker
     section = content[idx:].rstrip()
     if section.endswith("---"):
         section = section[: -len("---")].rstrip()

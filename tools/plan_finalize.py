@@ -30,7 +30,7 @@ exactly.
 
 import re
 
-from tools.memory import _plan_path, write_plan_memory
+from tools.memory import _plan_path, find_last_schedule_marker, write_plan_memory
 
 _SETS_X_REPS = re.compile(r"(\d+)\s*[×xX]\s*(\d+(?:-\d+)?)")
 _SETS_CONCAT = re.compile(r"^(\d)(\d+(?:-\d+)?)$")  # malformed "58" -> sets=5, reps=8
@@ -119,9 +119,10 @@ def enforce_volume_budget(session_id: str) -> bool:
         return False
 
     day_map = _parse_day_map(content)
-    schedule_idx = content.rfind("## Weekly Schedule")
-    if not day_map or schedule_idx == -1:
+    marker = find_last_schedule_marker(content)
+    if not day_map or marker is None:
         return False
+    schedule_idx, _heading = marker
 
     schedule_section = content[schedule_idx:]
     lines = schedule_section.splitlines()
