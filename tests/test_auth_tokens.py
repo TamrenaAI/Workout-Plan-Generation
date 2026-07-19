@@ -32,7 +32,14 @@ def test_round_trip_returns_same_user_id():
 
 def test_tampered_token_is_rejected():
     token = tokens.create_access_token(user_id=1)
-    tampered = token[:-1] + ("A" if token[-1] != "A" else "B")
+    # Flip a character in the payload segment (not the very last character
+    # of the signature) — the last base64 character before padding can
+    # encode as few as 2 meaningful bits depending on byte-length
+    # alignment, so occasionally flipping it doesn't change the decoded
+    # bytes at all and the tamper is a no-op. A middle character always
+    # changes the decoded payload, guaranteeing the signature won't match.
+    mid = len(token) // 2
+    tampered = token[:mid] + ("A" if token[mid] != "A" else "B") + token[mid + 1:]
     with pytest.raises(InvalidSessionToken):
         tokens.decode_access_token(tampered)
 
