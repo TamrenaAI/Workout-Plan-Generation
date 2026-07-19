@@ -4,7 +4,7 @@ function renderCapture(container) {
   container.innerHTML = `
     <div class="t-screen">
       <div style="margin-bottom:24px;">
-        <div style="font-size:12px;color:var(--purple-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Step 4 of 4</div>
+        <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">Step 4 of 4</div>
         <h1 style="font-size:28px;font-weight:700;">Scan InBody</h1>
         <p style="color:var(--text-muted);font-size:14px;margin-top:6px;">Position the InBody result sheet inside the frame.</p>
       </div>
@@ -32,11 +32,11 @@ function renderCapture(container) {
       <!-- PDF upload mode -->
       <div id="mode-pdf" style="display:none;">
         <div id="drop-zone"
-          style="border:2px dashed var(--purple-mid);border-radius:var(--radius-card);
+          style="border:2px dashed var(--border-default);border-radius:var(--radius-card);
                  padding:48px 24px;text-align:center;cursor:pointer;transition:border-color 0.2s;"
           onclick="document.getElementById('file-input').click()"
-          ondragover="event.preventDefault();this.style.borderColor='var(--purple-primary)'"
-          ondragleave="this.style.borderColor='var(--purple-mid)'"
+          ondragover="event.preventDefault();this.style.borderColor='var(--accent-primary)'"
+          ondragleave="this.style.borderColor='var(--border-default)'"
           ondrop="handleDrop(event)">
           <div style="font-size:32px;margin-bottom:12px;">📄</div>
           <div style="color:var(--text-primary);font-weight:600;">Drop your InBody PDF or image here</div>
@@ -93,7 +93,7 @@ function handleFileSelect(event) {
 
 function handleDrop(event) {
   event.preventDefault();
-  event.currentTarget.style.borderColor = 'var(--purple-mid)';
+  event.currentTarget.style.borderColor = 'var(--border-default)';
   const file = event.dataTransfer.files[0];
   if (file) processFile(file);
 }
@@ -153,7 +153,7 @@ function startGeneration() {
 // ── Shared feedback renderer (used by CameraCapture too) ─────────────────────
 function renderFeedback(el, state, message) {
   const colorMap = {
-    IDLE:        'var(--purple-light)',
+    IDLE:        'var(--accent-primary)',
     CHECKING:    'var(--warning)',
     VALID:       'var(--success)',
     FAIL:        'var(--danger)',

@@ -112,14 +112,21 @@ function parsePlanToHtml(markdown) {
   while (i < lines.length) {
     const line = lines[i];
 
-    // Heading — "### Day 1 — Upper: Chest Focus" or "### Weekly Volume Summary"
+    // Heading — "### Day 1 — Upper: Chest Focus" or "### Weekly Volume Summary".
+    // The backend's memory file starts the schedule with its own "## Weekly
+    // Schedule" (or "## Full Workout Plan") section marker — skip that one,
+    // since the "Weekly Schedule" .t-section-title above is already rendered
+    // by renderPlan() itself; rendering it again here would produce a
+    // redundant, empty card.
     const heading = line.match(/^#{2,3}\s+(.*)/);
     if (heading) {
+      const title = heading[1].trim();
+      i++;
+      if (/^(weekly schedule|full workout plan)$/i.test(title)) continue;
       closeCard();
       html += `<div class="t-card plan-card">`;
-      html += `<div class="plan-card-title">${escapeHtml(heading[1].trim())}</div>`;
+      html += `<div class="plan-card-title">${escapeHtml(title)}</div>`;
       cardOpen = true;
-      i++;
       continue;
     }
 

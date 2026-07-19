@@ -5,3 +5,5 @@ sessions/
 data/
 tests/__pycache__/
 __pycache__/
+.superdesign
+.pytest_cache

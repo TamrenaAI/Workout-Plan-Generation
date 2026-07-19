@@ -2,8 +2,8 @@ function renderHome(container) {
   container.innerHTML = `
     <div class="t-screen" style="display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;text-align:center;">
       <div style="margin-bottom:48px;">
-        <div style="font-family:'Rajdhani',sans-serif;font-size:42px;font-weight:700;color:var(--purple-primary);letter-spacing:2px;">TAMRENA</div>
-        <div style="font-size:13px;color:var(--purple-light);letter-spacing:6px;text-transform:uppercase;margin-top:4px;">AI Training System</div>
+        <div style="font-size:42px;font-weight:700;color:var(--accent-primary);letter-spacing:2px;">TAMRENA</div>
+        <div style="font-size:13px;color:var(--text-muted);letter-spacing:6px;text-transform:uppercase;margin-top:4px;">AI Training System</div>
       </div>
 
       <p style="color:var(--text-secondary);font-size:16px;max-width:300px;line-height:1.6;margin-bottom:48px;">

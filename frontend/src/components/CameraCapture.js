@@ -11,13 +11,13 @@ class CameraCapture {
   };
 
   static COLORS = {
-    IDLE:        '#7F77DD',
+    IDLE:        '#008CFF',
     CHECKING:    '#EF9F27',
     BLUR_FAIL:   '#E24B4A',
     DARK_FAIL:   '#E24B4A',
     OVEREXPOSED: '#E24B4A',
     NOT_INBODY:  '#E24B4A',
-    VALID:       '#1D9E75',
+    VALID:       '#16A34A',
   };
 
   constructor(videoEl, canvasEl, feedbackEl) {
@@ -116,7 +116,7 @@ class CameraCapture {
   }
 
   _drawFrame() {
-    const color = CameraCapture.COLORS[this.state] || '#7F77DD';
+    const color = CameraCapture.COLORS[this.state] || '#008CFF';
     const w = this.canvas.width, h = this.canvas.height;
     const x1 = w * 0.05, y1 = h * 0.05;
     const x2 = w * 0.95, y2 = h * 0.95;

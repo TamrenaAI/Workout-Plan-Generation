@@ -36,7 +36,7 @@ body {
   display: block;
   width: 100%;
   height: 52px;
-  background: var(--purple-primary);
+  background: var(--accent-primary);
   color: #fff;
   border: none;
   border-radius: var(--radius-button);
@@ -54,8 +54,8 @@ body {
   width: 100%;
   height: 48px;
   background: var(--bg-card-alt);
-  color: var(--purple-light);
-  border: 1px solid var(--purple-mid);
+  color: var(--text-primary);
+  border: 1px solid var(--border-default);
   border-radius: var(--radius-button);
   font-size: 14px;
   font-weight: 500;
@@ -74,8 +74,8 @@ body {
   letter-spacing: 0.5px;
   text-transform: uppercase;
   background: var(--bg-card-alt);
-  border: 1px solid var(--purple-mid);
-  color: var(--purple-light);
+  border: 1px solid var(--border-default);
+  color: var(--text-secondary);
 }
 .t-badge.success { border-color: var(--success); color: var(--success); }
 .t-badge.danger  { border-color: var(--danger);  color: var(--danger);  }
@@ -91,10 +91,9 @@ body {
 }
 .t-stat-tile .value {
   display: block;
-  font-family: 'Rajdhani', sans-serif;
   font-size: 22px;
   font-weight: 700;
-  color: var(--purple-light);
+  color: var(--text-primary);
 }
 .t-stat-tile .label {
   display: block;
@@ -121,8 +120,8 @@ body {
   transition: all 0.15s;
 }
 .pill.active {
-  border-color: var(--purple-primary);
-  background: var(--purple-deep);
+  border-color: var(--accent-primary);
+  background: var(--accent-tint);
   color: var(--text-primary);
 }
 
@@ -139,7 +138,7 @@ body {
   outline: none;
 }
 .t-select { appearance: none; cursor: pointer; }
-.t-select:focus, .t-input:focus { border-color: var(--purple-primary); }
+.t-select:focus, .t-input:focus { border-color: var(--accent-primary); }
 
 /* ── Form label ── */
 .t-label {
@@ -182,7 +181,7 @@ body {
   flex-shrink: 0;
 }
 .step-item.done .step-icon  { background: var(--success); border-color: var(--success); color: #fff; }
-.step-item.active .step-icon { border-color: var(--purple-primary); color: var(--purple-primary); }
+.step-item.active .step-icon { border-color: var(--accent-primary); color: var(--accent-primary); }
 
 /* ── Spinner ── */
 @keyframes spin { to { transform: rotate(360deg); } }
@@ -190,7 +189,7 @@ body {
   width: 48px;
   height: 48px;
   border: 3px solid var(--border-default);
-  border-top-color: var(--purple-primary);
+  border-top-color: var(--accent-primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
   margin: 0 auto 24px;
@@ -199,10 +198,9 @@ body {
 /* ── Plan content (parsed from agent markdown, see plan.js) ── */
 .plan-card { margin-bottom: 12px; }
 .plan-card-title {
-  font-family: 'Rajdhani', sans-serif;
   font-size: 18px;
   font-weight: 700;
-  color: var(--purple-light);
+  color: var(--text-primary);
   margin-bottom: 12px;
 }
 .plan-note {
@@ -213,7 +211,7 @@ body {
 }
 .plan-note-label {
   font-weight: 700;
-  color: var(--purple-light);
+  color: var(--text-primary);
 }
 .plan-list {
   margin: 8px 0 8px 20px;
@@ -252,11 +250,10 @@ body {
 .exercise-table td:first-child { font-weight: 500; }
 
 /* ── Print / PDF export ──────────────────────────────────────────────────────
-   Triggered by window.print() (see plan.js "Download PDF" button). The dark
-   theme is unusable on paper — this repaints everything light-on-dark ink,
-   hides UI chrome that has no place in a printed document, shows the
-   .print-only generation date, and stops day/table cards from splitting
-   awkwardly across page breaks. */
+   Triggered by window.print() (see plan.js "Download PDF" button). The theme
+   is already light, so this mostly just hides UI chrome that has no place in
+   a printed document, shows the .print-only generation date, and stops
+   day/table cards from splitting awkwardly across page breaks. */
 @media print {
   body { background: #ffffff !important; color: #111111 !important; }
   .no-print { display: none !important; }
@@ -273,8 +270,8 @@ body {
     margin-bottom: 16px;
   }
 
-  h1, h2, .t-section-title, .plan-card-title { color: #2A2560 !important; }
-  .plan-note-label { color: #2A2560 !important; }
+  h1, h2, .t-section-title, .plan-card-title { color: #008CFF !important; }
+  .plan-note-label { color: #191A1B !important; }
   .plan-note, .plan-list, .plan-paragraph { color: #222 !important; }
 
   .t-badge {
@@ -284,7 +281,7 @@ body {
   }
 
   .t-stat-tile { background: #f7f7f7 !important; border-color: #ddd !important; }
-  .t-stat-tile .value { color: #2A2560 !important; }
+  .t-stat-tile .value { color: #191A1B !important; }
   .t-stat-tile .label { color: #666 !important; }
 
   .exercise-table th { color: #666 !important; border-bottom-color: #ccc !important; }

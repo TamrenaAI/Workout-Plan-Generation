@@ -3,7 +3,7 @@
 function stepHeader(step, total, title, subtitle) {
   return `
     <div style="margin-bottom:32px;">
-      <div style="font-size:12px;color:var(--purple-light);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">
+      <div style="font-size:12px;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">
         Step ${step} of ${total}${subtitle ? ' · ' + subtitle : ''}
       </div>
       <h1 style="font-size:28px;font-weight:700;">${title}</h1>
