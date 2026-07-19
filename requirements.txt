@@ -18,6 +18,10 @@ pydantic
 # ── Monitoring ────────────────────────────────────────────────
 langsmith
 
+# ── Auth ──────────────────────────────────────────────────────
+google-auth
+pyjwt
+
 # Exercise database is SQLite (stdlib sqlite3) at this stage — no MongoDB
 # driver needed yet. RAG is a hardcoded stub (tools/rag.py) — no Qdrant /
 # sentence-transformers / pinecone-text dependency yet either.

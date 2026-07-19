@@ -70,6 +70,13 @@ pipeline/
   plan_finalize.py           ← enforce_volume_budget — deterministic post-processing run by the
                                 API route after the agent pipeline finishes, not an agent tool
 
+auth/
+  models.py                  ← users table (SQLite, same data/tamreena.db) + get_or_create_user_by_google
+  google_oauth.py             ← verifies Google ID tokens from the mobile app's native sign-in
+  tokens.py                   ← issues/verifies this backend's own session JWTs
+  dependencies.py              ← get_current_user — FastAPI dependency protecting a route
+  ownership.py                 ← plan_sessions table: which user owns which generated-plan session_id
+
 prompts/
   supervisor.md
   exercise_recommender.md
@@ -80,7 +87,10 @@ See docs/CODE_MAP.md for the layer diagram and the checklist for adding a new ag
 api/
   main.py                    ← FastAPI app
   routes/health.py            ← GET /health
-  routes/plan.py               ← POST /validate-image, POST /plan (aliased as /generate-plan)
+  routes/auth.py               ← POST /auth/google, GET /auth/me
+  routes/plan.py               ← POST /validate-image, POST /plan (aliased as /generate-plan, requires
+                                  login), GET /generate-plan/stream/{id} (ownership-checked),
+                                  GET /sessions (current user's past sessions)
   schemas/response.py          ← response models
 
 database/

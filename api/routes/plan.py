@@ -28,7 +28,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import Optional
 
-from fastapi import APIRouter, File, Form, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import StreamingResponse
 
@@ -36,6 +36,8 @@ from agents.exercise_recommender import EXERCISE_RECOMMENDER
 from agents.plan_assembler import PLAN_ASSEMBLER
 from agents.streaming import run_and_stream
 from agents.supervisor import build_supervisor
+from auth.dependencies import get_current_user
+from auth.ownership import create_session, list_sessions_for_user, user_owns_session
 from config import SESSION_DIR
 from pipeline.plan_finalize import enforce_volume_budget
 from services import live_progress
@@ -131,6 +133,7 @@ async def generate_plan(
     sleep_quality: Optional[str] = Form(None),
     job_type: Optional[str] = Form(None),
     current_program: Optional[str] = Form(None),
+    user: dict = Depends(get_current_user),
 ):
     if not (2 <= days_per_week <= 6):
         raise HTTPException(422, "days_per_week must be between 2 and 6")
@@ -164,6 +167,7 @@ async def generate_plan(
 
     session_id = str(uuid.uuid4())
     os.makedirs(os.path.join(SESSION_DIR, session_id), exist_ok=True)
+    create_session(session_id, user["id"], goal)
 
     user_message = f"""SESSION_ID: {session_id}
 
@@ -184,7 +188,13 @@ Generate a full personalised workout plan for this user."""
 
 
 @router.get("/generate-plan/stream/{session_id}")
-async def stream_plan(session_id: str):
+async def stream_plan(session_id: str, user: dict = Depends(get_current_user)):
+    # 404 (not 403) for a session_id that exists but belongs to someone else —
+    # otherwise the response itself would confirm the session_id is valid to
+    # whoever's probing it.
+    if not user_owns_session(session_id, user["id"]):
+        raise HTTPException(404, "Unknown session_id, or this stream already finished.")
+
     stream = live_progress.get_stream(session_id)
     if not stream:
         raise HTTPException(404, "Unknown session_id, or this stream already finished.")
@@ -204,6 +214,13 @@ async def stream_plan(session_id: str):
         media_type="text/event-stream",
         headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
+
+
+@router.get("/sessions")
+async def list_my_sessions(user: dict = Depends(get_current_user)):
+    """Sessions the current user has generated a plan for, most recent
+    first. Foundation for the mobile app's Workout History list."""
+    return {"sessions": list_sessions_for_user(user["id"])}
 
 
 def _build_user_query(**fields) -> str:

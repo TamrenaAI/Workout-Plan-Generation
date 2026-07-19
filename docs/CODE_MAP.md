@@ -29,6 +29,12 @@ pipeline/   Deterministic post-processing that runs AFTER the agent
 database/   One-off scripts (seeding).
 services/   Cross-cutting infra that isn't business logic (the in-memory
             SSE progress event bus).
+auth/       User accounts, Google Sign-In verification, this backend's own
+            session JWTs, and session ownership (which user owns which
+            generated-plan session_id). Not agent tools and not
+            post-pipeline processing — foundational request-auth/authz
+            infrastructure that api/ routes depend on directly via
+            Depends(auth.dependencies.get_current_user).
 prompts/    One .md system prompt per agent, same base name as its file
             in agents/ (supervisor.py ↔ supervisor.md, etc).
 ```
