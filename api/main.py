@@ -17,7 +17,7 @@ from pathlib import Path
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from api.routes import auth, health, plan
+from api.routes import auth, health, plan, progress
 
 app = FastAPI(
     title="Tamreena AI",
@@ -28,6 +28,7 @@ app = FastAPI(
 app.include_router(health.router, tags=["health"])
 app.include_router(auth.router, tags=["auth"])
 app.include_router(plan.router, tags=["plan"])
+app.include_router(progress.router, tags=["progress"])
 
 FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
 if FRONTEND_DIR.is_dir():

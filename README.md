@@ -69,6 +69,8 @@ tools/
 pipeline/
   plan_finalize.py           ← enforce_volume_budget — deterministic post-processing run by the
                                 API route after the agent pipeline finishes, not an agent tool
+  inbody_history.py           ← per-user InBody scan history (SQLite) + latest-vs-previous comparison,
+                                recorded by the API route right after each InBody pipeline run
 
 auth/
   models.py                  ← users table (SQLite, same data/tamreena.db) + get_or_create_user_by_google
@@ -91,6 +93,7 @@ api/
   routes/plan.py               ← POST /validate-image, POST /plan (aliased as /generate-plan, requires
                                   login), GET /generate-plan/stream/{id} (ownership-checked),
                                   GET /sessions (current user's past sessions)
+  routes/progress.py            ← GET /progress/scans, GET /progress/comparison (latest vs previous InBody scan)
   schemas/response.py          ← response models
 
 database/

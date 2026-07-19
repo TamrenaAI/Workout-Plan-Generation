@@ -39,6 +39,7 @@ from agents.supervisor import build_supervisor
 from auth.dependencies import get_current_user
 from auth.ownership import create_session, list_sessions_for_user, user_owns_session
 from config import SESSION_DIR
+from pipeline.inbody_history import record_scan
 from pipeline.plan_finalize import enforce_volume_budget
 from services import live_progress
 from tools.inbody import check_image_quality, format_inbody_result, pdf_to_image_bytes, run_inbody_pipeline_from_bytes, validate_inbody_scan
@@ -168,6 +169,7 @@ async def generate_plan(
     session_id = str(uuid.uuid4())
     os.makedirs(os.path.join(SESSION_DIR, session_id), exist_ok=True)
     create_session(session_id, user["id"], goal)
+    record_scan(user["id"], session_id, pipeline_result)
 
     user_message = f"""SESSION_ID: {session_id}
 

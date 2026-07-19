@@ -24,7 +24,9 @@ tools/      LangChain @tool-decorated functions that agents call during a
               ▼
 pipeline/   Deterministic post-processing that runs AFTER the agent
             pipeline finishes. Not a tool any agent calls — called
-            directly by the API route.
+            directly by the API route. Also holds per-user historical
+            records the API route reads/writes around a pipeline run
+            (e.g. inbody_history.py) — not agent tools either.
 
 database/   One-off scripts (seeding).
 services/   Cross-cutting infra that isn't business logic (the in-memory
