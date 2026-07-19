@@ -251,3 +251,23 @@ def validate_plan_completeness(session_id: str) -> str:
     if result.get("all_done"):
         return "PASS — all expected muscle groups have prescriptions."
     return f"INCOMPLETE — missing prescriptions for: {result.get('remaining')}. Do not assemble the plan."
+
+
+def _feedback_path(session_id: str) -> str:
+    # Mirrors pipeline/workout_feedback.py's feedback_path() — duplicated
+    # rather than imported so tools/ never depends on pipeline/ (the
+    # dependency runs the other way: pipeline/plan_finalize.py already
+    # imports from this file).
+    return os.path.join(SESSION_DIR, session_id, "feedback.json")
+
+
+@tool
+def read_workout_feedback(session_id: str) -> str:
+    """Plan Adjuster calls this to see every post-workout feedback submission recorded for
+    this session so far, most recent last. Feedback is written by the API route (via
+    pipeline/workout_feedback.py), not by any agent — this is the read side only."""
+    path = _feedback_path(session_id)
+    if not os.path.exists(path):
+        return "(no feedback submitted yet for this session)"
+    with open(path, "r", encoding="utf-8") as f:
+        return f.read()

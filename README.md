@@ -58,10 +58,12 @@ agents/
   supervisor.py               ← build_supervisor()
   exercise_recommender.py     ← EXERCISE_RECOMMENDER definition
   plan_assembler.py           ← PLAN_ASSEMBLER definition
+  plan_adjuster.py             ← build_plan_adjuster() — standalone agent invoked on demand from
+                                 post-workout feedback, not a Supervisor sub-agent
   streaming.py                 ← translates deepagents' event stream into live progress events
 
 tools/
-  memory.py                 ← shared MD memory file + progress tracking tools
+  memory.py                 ← shared MD memory file + progress tracking tools + read_workout_feedback
   rag.py                    ← search_rag — HARDCODED STUB, see below
   database.py                ← search_exercise_db — SQLite
   inbody.py                  ← InBody VLM pipeline (quality/auth/extraction/flags) + parse_inbody_text
@@ -71,6 +73,8 @@ pipeline/
                                 API route after the agent pipeline finishes, not an agent tool
   inbody_history.py           ← per-user InBody scan history (SQLite) + latest-vs-previous comparison,
                                 recorded by the API route right after each InBody pipeline run
+  workout_feedback.py          ← records post-workout feedback (JSON, not plan.md prose) + decides
+                                 whether it needs the Plan Adjuster agent dispatched at all
 
 auth/
   models.py                  ← users table (SQLite, same data/tamreena.db) + get_or_create_user_by_google
@@ -83,6 +87,7 @@ prompts/
   supervisor.md
   exercise_recommender.md
   plan_assembler.md
+  plan_adjuster.md
 
 See docs/CODE_MAP.md for the layer diagram and the checklist for adding a new agent.
 
@@ -94,6 +99,8 @@ api/
                                   login), GET /generate-plan/stream/{id} (ownership-checked),
                                   GET /sessions (current user's past sessions)
   routes/progress.py            ← GET /progress/scans, GET /progress/comparison (latest vs previous InBody scan)
+  routes/workouts.py             ← POST /workouts/{id}/feedback — records feedback, dispatches the
+                                   Plan Adjuster agent only if an exercise was flagged
   schemas/response.py          ← response models
 
 database/

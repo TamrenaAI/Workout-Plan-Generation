@@ -14,7 +14,11 @@ api/        FastAPI routes, request/response schemas. HTTP-facing only —
               ▼
 agents/     One file per agent (model + tools + system prompt + name),
             plus the shared LLM client factory and the event-stream
-            translator used to narrate live progress.
+            translator used to narrate live progress. Most are Supervisor
+            sub-agents dispatched during plan generation, but not all —
+            plan_adjuster.py is a standalone agent invoked directly by an
+            API route on demand (post-workout feedback), not part of the
+            main pipeline.
               │
               ▼
 tools/      LangChain @tool-decorated functions that agents call during a
@@ -26,7 +30,11 @@ pipeline/   Deterministic post-processing that runs AFTER the agent
             pipeline finishes. Not a tool any agent calls — called
             directly by the API route. Also holds per-user historical
             records the API route reads/writes around a pipeline run
-            (e.g. inbody_history.py) — not agent tools either.
+            (e.g. inbody_history.py), and the WRITE side of anything an
+            agent later reads back (e.g. workout_feedback.py — the API
+            route records feedback here, but agents/plan_adjuster.py
+            reads it back via tools/memory.py's read_workout_feedback,
+            not this module directly).
 
 database/   One-off scripts (seeding).
 services/   Cross-cutting infra that isn't business logic (the in-memory
