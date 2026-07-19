@@ -26,11 +26,12 @@ import os
 import re
 import uuid
 from datetime import datetime, timezone
-from typing import Optional
+from typing import Literal, Optional
 
 from fastapi import APIRouter, Depends, File, Form, HTTPException, UploadFile
 from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import StreamingResponse
+from pydantic import BaseModel
 
 from agents.exercise_recommender import EXERCISE_RECOMMENDER
 from agents.plan_assembler import PLAN_ASSEMBLER
@@ -223,6 +224,35 @@ async def list_my_sessions(user: dict = Depends(get_current_user)):
     """Sessions the current user has generated a plan for, most recent
     first. Foundation for the mobile app's Workout History list."""
     return {"sessions": list_sessions_for_user(user["id"])}
+
+
+class SessionPlanResponse(BaseModel):
+    status: Literal["ready", "pending"]
+    plan: Optional[str] = None
+
+
+@router.get("/sessions/{session_id}/plan", response_model=SessionPlanResponse)
+async def get_session_plan(session_id: str, user: dict = Depends(get_current_user)):
+    """The persisted weekly schedule for a session, fetchable any time after
+    generation finishes — not just live during the SSE stream. Reads the
+    same source of truth _run_pipeline() already prefers over the
+    Supervisor's own free-text reply (tools/memory.py's read_weekly_schedule,
+    the last '## Weekly Schedule' section the Plan Assembler actually wrote).
+
+    Known gap: "pending" covers both "still generating" and "generation
+    failed before the Assembler wrote a schedule" — plan.md records neither
+    a start marker nor a failure marker today, only successful writes, so
+    this endpoint can't yet tell those two apart. Live progress (the SSE
+    stream) is the only place failure is currently surfaced, and only to a
+    client connected at the moment it happens.
+    """
+    if not user_owns_session(session_id, user["id"]):
+        raise HTTPException(404, "Unknown session_id.")
+
+    schedule = read_weekly_schedule(session_id)
+    if schedule is None:
+        return SessionPlanResponse(status="pending", plan=None)
+    return SessionPlanResponse(status="ready", plan=schedule)
 
 
 def _build_user_query(**fields) -> str:

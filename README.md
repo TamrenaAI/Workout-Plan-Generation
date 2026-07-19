@@ -97,7 +97,9 @@ api/
   routes/auth.py               ← POST /auth/google, GET /auth/me
   routes/plan.py               ← POST /validate-image, POST /plan (aliased as /generate-plan, requires
                                   login), GET /generate-plan/stream/{id} (ownership-checked),
-                                  GET /sessions (current user's past sessions)
+                                  GET /sessions (current user's past sessions),
+                                  GET /sessions/{id}/plan (persisted weekly schedule, fetchable any
+                                  time after generation — not just live via the SSE stream)
   routes/progress.py            ← GET /progress/scans, GET /progress/comparison (latest vs previous InBody scan)
   routes/workouts.py             ← POST /workouts/{id}/feedback — records feedback, dispatches the
                                    Plan Adjuster agent only if an exercise was flagged
