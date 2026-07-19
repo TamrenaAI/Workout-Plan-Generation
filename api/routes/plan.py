@@ -38,6 +38,7 @@ from agents.supervisor import build_supervisor
 from config import SESSION_DIR
 from services import live_progress
 from tools.inbody import check_image_quality, format_inbody_result, pdf_to_image_bytes, run_inbody_pipeline_from_bytes, validate_inbody_scan
+from tools.memory import read_weekly_schedule
 
 router = APIRouter()
 
@@ -95,6 +96,12 @@ async def _run_pipeline(session_id: str, user_message: str) -> None:
     supervisor = build_supervisor(sub_agents=[EXERCISE_RECOMMENDER, PLAN_ASSEMBLER])
     try:
         final_plan = await run_and_stream(supervisor, user_message, session_id)
+        # The Supervisor's own reply above is a free-text re-synthesis of the
+        # plan and isn't guaranteed to reproduce every exercise faithfully —
+        # prefer the schedule the Plan Assembler actually wrote to memory.
+        schedule = read_weekly_schedule(session_id)
+        if schedule:
+            final_plan = schedule
         await live_progress.publish_done(session_id, {
             "plan": final_plan,
             "generated_at": datetime.now(timezone.utc).isoformat(),

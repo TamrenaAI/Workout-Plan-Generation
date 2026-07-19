@@ -44,6 +44,40 @@ def _progress_path(session_id: str) -> str:
     return os.path.join(SESSION_DIR, session_id, "progress.json")
 
 
+def read_weekly_schedule(session_id: str) -> str | None:
+    """Reads the LAST '## Weekly Schedule' section written to plan.md by the
+    Plan Assembler's write_plan_memory call — the deterministic, tool-written
+    source of truth for the assembled exercises.
+
+    Used as the text actually returned to the user instead of the
+    Supervisor's own free-text final chat reply: asking the model to
+    "synthesise and return" a long multi-table plan it already produced via
+    a tool call is a second, independent generation with no fidelity
+    guarantee, and it has been observed to summarize or drop exercise rows
+    that plan.md has intact. A retried/re-dispatched session can have more
+    than one '## Weekly Schedule' section (see mark_step_done's duplicate-
+    dispatch guard) — the last one written is the current, authoritative
+    plan, hence rfind rather than find.
+
+    Returns None if the plan file doesn't exist yet or the Assembler hasn't
+    written a schedule yet (e.g. the pipeline failed before that step) —
+    callers should fall back to the Supervisor's own reply in that case.
+    """
+    path = _plan_path(session_id)
+    if not os.path.exists(path):
+        return None
+    with open(path, "r", encoding="utf-8") as f:
+        content = f.read()
+    marker = "## Weekly Schedule"
+    idx = content.rfind(marker)
+    if idx == -1:
+        return None
+    section = content[idx:].rstrip()
+    if section.endswith("---"):
+        section = section[: -len("---")].rstrip()
+    return section
+
+
 @tool
 def read_plan_memory(session_id: str) -> str:
     """Read the full shared plan memory file for this session. Call this first before doing any work."""
