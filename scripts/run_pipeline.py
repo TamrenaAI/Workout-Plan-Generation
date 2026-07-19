@@ -17,7 +17,8 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from agents.subagents import EXERCISE_RECOMMENDER, PLAN_ASSEMBLER
+from agents.exercise_recommender import EXERCISE_RECOMMENDER
+from agents.plan_assembler import PLAN_ASSEMBLER
 from agents.supervisor import build_supervisor
 from tests import test_cases as tc
 

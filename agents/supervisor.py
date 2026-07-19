@@ -21,7 +21,8 @@ SUPERVISOR_TOOLS = [
 
 
 def build_supervisor(sub_agents):
-    """sub_agents: typically [EXERCISE_RECOMMENDER, PLAN_ASSEMBLER] from agents/subagents.py.
+    """sub_agents: typically [EXERCISE_RECOMMENDER, PLAN_ASSEMBLER] from
+    agents/exercise_recommender.py and agents/plan_assembler.py.
 
     recursion_limit is raised from LangGraph's default of 25 — each muscle-group
     dispatch cycle (decide to dispatch -> task() -> check progress -> decide next)

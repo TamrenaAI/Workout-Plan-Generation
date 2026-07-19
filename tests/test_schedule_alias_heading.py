@@ -21,8 +21,8 @@ import uuid
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import SESSION_DIR
+from pipeline.plan_finalize import enforce_volume_budget
 from tools.memory import read_weekly_schedule
-from tools.plan_finalize import enforce_volume_budget
 
 # Trimmed down from the real session file: same DAY MAP, same double-write
 # under two different headings, same tail only on the second copy.

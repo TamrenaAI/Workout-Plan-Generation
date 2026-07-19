@@ -19,7 +19,7 @@ import uuid
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from config import SESSION_DIR
-from tools.plan_finalize import enforce_volume_budget
+from pipeline.plan_finalize import enforce_volume_budget
 from tools.memory import read_weekly_schedule
 
 REAL_BROKEN_SESSION = """

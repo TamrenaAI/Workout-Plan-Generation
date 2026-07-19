@@ -54,9 +54,11 @@ main.py                    ← single entry point: python main.py starts the API
 config.py                  ← env loading, shared paths (SESSION_DIR, DB_PATH, PROMPTS_DIR)
 
 agents/
-  llm.py                   ← shared Azure OpenAI client factory
-  supervisor.py             ← build_supervisor()
-  subagents.py              ← EXERCISE_RECOMMENDER, PLAN_ASSEMBLER definitions
+  llm.py                     ← shared Azure OpenAI client factory
+  supervisor.py               ← build_supervisor()
+  exercise_recommender.py     ← EXERCISE_RECOMMENDER definition
+  plan_assembler.py           ← PLAN_ASSEMBLER definition
+  streaming.py                 ← translates deepagents' event stream into live progress events
 
 tools/
   memory.py                 ← shared MD memory file + progress tracking tools
@@ -64,10 +66,16 @@ tools/
   database.py                ← search_exercise_db — SQLite
   inbody.py                  ← InBody VLM pipeline (quality/auth/extraction/flags) + parse_inbody_text
 
+pipeline/
+  plan_finalize.py           ← enforce_volume_budget — deterministic post-processing run by the
+                                API route after the agent pipeline finishes, not an agent tool
+
 prompts/
   supervisor.md
   exercise_recommender.md
   plan_assembler.md
+
+See docs/CODE_MAP.md for the layer diagram and the checklist for adding a new agent.
 
 api/
   main.py                    ← FastAPI app

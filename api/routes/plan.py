@@ -32,14 +32,15 @@ from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 from fastapi.concurrency import run_in_threadpool
 from fastapi.responses import StreamingResponse
 
+from agents.exercise_recommender import EXERCISE_RECOMMENDER
+from agents.plan_assembler import PLAN_ASSEMBLER
 from agents.streaming import run_and_stream
-from agents.subagents import EXERCISE_RECOMMENDER, PLAN_ASSEMBLER
 from agents.supervisor import build_supervisor
 from config import SESSION_DIR
+from pipeline.plan_finalize import enforce_volume_budget
 from services import live_progress
 from tools.inbody import check_image_quality, format_inbody_result, pdf_to_image_bytes, run_inbody_pipeline_from_bytes, validate_inbody_scan
 from tools.memory import read_weekly_schedule
-from tools.plan_finalize import enforce_volume_budget
 
 router = APIRouter()
 
