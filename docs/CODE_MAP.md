@@ -5,6 +5,12 @@ and features get added. For the full pipeline design (paradigms, DAY MAP,
 RAG schema, etc.) see `tamrena_architecture_2.md` — this doc is just the
 "what goes where" reference.
 
+This doc covers the Python backend only. `mobile/` (React Native + Expo,
+TypeScript) is a separate codebase with its own conventions — see
+`mobile/src/` and `docs/superpowers/specs/2026-07-20-mobile-app-navigation-design.md`.
+`frontend/` (the original vanilla-JS web UI) has no login flow and is
+superseded by `mobile/` now that `/generate-plan` requires auth.
+
 ## Layers
 
 ```

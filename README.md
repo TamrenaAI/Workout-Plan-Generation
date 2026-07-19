@@ -115,12 +115,27 @@ data/tamreena.db                ← SQLite exercise database
 tests/test_cases.py              ← 13 reference user profiles used by scripts/run_pipeline.py
 notebooks/                       ← original exploration notebooks, kept as reference/history
 
-frontend/                        ← vanilla JS/CSS UI (see FRONTEND.md), mounted by api/main.py at "/"
+frontend/                        ← vanilla JS/CSS web UI (see FRONTEND.md), mounted by api/main.py at "/".
+                                    No login flow — since /generate-plan now requires auth, this is
+                                    superseded by the mobile app rather than actively developed further.
   index.html
   src/theme.css, base.css        ← design tokens + shared component classes
   src/main.js                    ← hash router
   src/pages/                     ← home, intake, capture, processing, plan
   src/components/CameraCapture.js ← live camera feed + quality/authenticity state machine
+
+mobile/                          ← React Native (Expo + TypeScript) app — the actual product going
+                                    forward. See mobile/README (Expo default) for run instructions and
+                                    docs/superpowers/specs/2026-07-20-mobile-app-navigation-design.md
+                                    for the design this implements.
+  App.tsx                        ← NavigationContainer + TabNavigator entry point
+  src/theme.ts                   ← design tokens ported from frontend/src/theme.css / design-system.md
+  src/components/                ← Card, Badge, PrimaryButton/GhostButton, StatTile, ChatButton —
+                                    mirror the web app's .t-card/.t-badge/etc. classes
+  src/navigation/TabNavigator.tsx ← bottom tabs (Home/Workout/Nutrition/Progress/Profile) + floating
+                                    ChatButton overlay
+  src/screens/                   ← one screen per tab, currently mock data — not yet wired to the
+                                    real API (auth, /sessions, /progress/*, /workouts/*)
 ```
 
 ## Why a shared markdown file instead of a database
