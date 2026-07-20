@@ -1,10 +1,10 @@
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import * as SecureStore from 'expo-secure-store';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
 import { fetchMe, signInWithGoogleIdToken, User } from '../api/auth';
 import { setAuthToken } from '../api/client';
 import { GOOGLE_WEB_CLIENT_ID } from '../config';
+import { deleteSecureItem, getSecureItem, setSecureItem } from '../lib/storage';
 
 // GoogleSignin requires custom native code and does NOT run in Expo Go —
 // this only works in a dev-client/standalone build. See mobile/README's
@@ -50,7 +50,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function restoreSession() {
     try {
-      const storedToken = await SecureStore.getItemAsync(TOKEN_STORAGE_KEY);
+      const storedToken = await getSecureItem(TOKEN_STORAGE_KEY);
       if (!storedToken) return;
       setAuthToken(storedToken);
       const me = await fetchMe();
@@ -58,7 +58,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } catch {
       // Stored token is missing/expired/invalid — fall through to the
       // login screen rather than surfacing an error on launch.
-      await SecureStore.deleteItemAsync(TOKEN_STORAGE_KEY);
+      await deleteSecureItem(TOKEN_STORAGE_KEY);
       setAuthToken(null);
     } finally {
       setIsLoading(false);
@@ -77,7 +77,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
 
       const session = await signInWithGoogleIdToken(idToken);
-      await SecureStore.setItemAsync(TOKEN_STORAGE_KEY, session.access_token);
+      await setSecureItem(TOKEN_STORAGE_KEY, session.access_token);
       setAuthToken(session.access_token);
       setUser(session.user);
     } catch (err) {
@@ -88,7 +88,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   async function signOut() {
-    await SecureStore.deleteItemAsync(TOKEN_STORAGE_KEY);
+    await deleteSecureItem(TOKEN_STORAGE_KEY);
     setAuthToken(null);
     setUser(null);
     try {

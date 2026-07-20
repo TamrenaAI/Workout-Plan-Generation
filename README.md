@@ -148,7 +148,9 @@ mobile/                          ← React Native (Expo + TypeScript) app — th
     steps/ProcessingStep.tsx        ← POST /generate-plan then live progress via react-native-sse
                                     (pure-JS EventSource polyfill — RN has no built-in EventSource)
   src/auth/AuthContext.tsx        ← Google Sign-In (native, NOT Expo Go-compatible — see below),
-                                    session persistence via expo-secure-store
+                                    session persistence via src/lib/storage.ts
+  src/lib/storage.ts               ← wraps expo-secure-store with a localStorage fallback on web
+                                    (SecureStore has no web implementation) — see auth note below
   src/lib/parsePlan.ts            ← ports frontend/src/pages/plan.js's markdown parser (headings/
                                     tables/notes/lists) to a typed block structure — RN has no raw-
                                     HTML rendering. Groups blocks by heading into PlanSections; a
@@ -179,6 +181,17 @@ run:ios` if you set up Android Studio/Xcode) plus real Google Cloud OAuth creden
 (with Android SHA-1 fingerprints) wired into the `@react-native-google-signin/google-signin`
 config plugin in `app.json`. `tsc --noEmit` and `expo export` are verified clean, but the
 sign-in flow itself is unverified until that build exists.
+
+**Previewing without a phone or a build:** `cd mobile && npx expo start --web` opens the
+app in a regular browser tab on the dev machine — no phone, no Expo Go, no EAS build.
+Everything renders (react-native-web + react-dom + @expo/metro-runtime are installed);
+the only thing that won't work is "Sign in with Google" (shows a clean error, same as in
+Expo Go — no native module on web either). `src/lib/storage.ts` exists specifically to
+make this possible: `expo-secure-store` (used to persist the session token) has no web
+implementation at all — confirmed against Expo's own SDK 57 docs, not assumed — so this
+wraps it with a `localStorage` fallback on `Platform.OS === 'web'`. Session persistence
+via this fallback is real on web too, just less protected than the native OS keychain
+(acceptable — that's inherent to any web app's storage, not a downgrade this introduced).
 
 ## Why a shared markdown file instead of a database
 
