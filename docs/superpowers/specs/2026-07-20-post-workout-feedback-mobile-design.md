@@ -56,32 +56,53 @@ mobile interaction in front of it.
 
 ## Flow
 
-Per-exercise flagging is inline and optional; finishing the day is the one
-mandatory action, and it always submits — defaulting to "everything was
-fine" for anything the user didn't touch.
+The exercise-browsing view (`WorkoutScreen.tsx`, today) never carries any
+feedback UI — no icons, no per-row forms. The entire form lives on one
+dedicated feedback screen, reached only via "Finish Workout." Per-exercise
+flagging on that screen is optional; submitting is the one mandatory action,
+and it always sends something — defaulting to "everything was fine" for any
+exercise the user didn't touch.
+
+This was a deliberate revision from an earlier version of this design that
+put a flag affordance + inline expanding panel directly on each exercise
+card in `WorkoutScreen.tsx`. That made the primary browsing list double as
+a form, which is why it's called out here explicitly rather than left as
+silent history.
 
 ```
-WorkoutScreen — viewing a day's exercise list
-  Each exercise row gets a small flag affordance (tap to open):
-    - 3-way toggle: Too Easy / Just Right / Too Hard (default: Just Right)
-    - Pain toggle (off by default); turning it on reveals an optional
-      short text field ("What hurt, and where?")
+WorkoutScreen — viewing a day's exercise list (unchanged from today, plus
+one addition)
+  [Finish Workout] — new button below the exercise list. Tapping it swaps
+  in the feedback screen (see below) — a local view-state toggle, the same
+  pattern OnboardingFlow.tsx already uses for its step sequence (a `step`
+  useState switched between step components), not a new stack navigator.
+  TabNavigator.tsx has no per-tab stack today and none is needed here.
+
+WorkoutFeedbackScreen (new) — "How did today go?"
+  Every exercise from the day is listed with:
+    - 3-way pill group: Too Easy / Just Right / Too Hard (default: Just Right)
+    - A separate "Painful" pill (off by default); turning it on reveals an
+      optional short note field ("What hurt, and where?") for that exercise
   Rows never touched keep the Pydantic-matching defaults:
     completed=true, difficulty="just_right", pain=false
 
-  [Finish Workout] — always visible below the exercise list, always submits
+  [Submit Feedback] — always submits whatever's on screen
     -> POST /workouts/{session_id}/feedback
        day_label = activeSection.title (e.g. "Day 1 — Push: Chest Focus")
        exercises = the full list (flagged rows + defaulted rows)
 
     -> nothing flagged: fast response (no agent call server-side, since
-       needs_adjustment() short-circuits) -> brief success toast
+       needs_adjustment() short-circuits) -> return to WorkoutScreen with a
+       brief success toast
     -> something flagged: this call blocks on a real Plan Adjuster run
        (the route awaits agents/plan_adjuster.py synchronously today, no
        SSE/background task like /generate-plan has) -> show a spinner
-       ("Adjusting your plan…") until the response arrives, then show the
-       returned `summary` in a confirmation card
+       ("Adjusting your plan…") until the response arrives, then return to
+       WorkoutScreen and show the returned `summary` in a confirmation card
 ```
+
+A back action on the feedback screen returns to WorkoutScreen without
+submitting anything — no partial state is ever sent.
 
 ## Exact payload shapes
 
@@ -147,8 +168,8 @@ built here.
 | File | Change |
 |---|---|
 | `mobile/src/api/workouts.ts` | **New.** `submitWorkoutFeedback(sessionId, dayLabel, exercises)` calling `apiFetch('/workouts/{id}/feedback', { method: 'POST', body })`, matching the style of `mobile/src/api/plan.ts`. |
-| `mobile/src/screens/WorkoutScreen.tsx` | Add the per-exercise flag affordance to each exercise row, and a "Finish Workout" button below the list that assembles the full `exercises` array (touched + defaulted rows) and calls the new API function. |
-| `mobile/src/components/WorkoutFeedbackPanel.tsx` | **New.** Houses the per-exercise toggle UI (3-way difficulty + pain + note + skipped) and the submit/loading/summary states, kept as its own component so `WorkoutScreen.tsx` doesn't take on a second responsibility. |
+| `mobile/src/screens/WorkoutScreen.tsx` | Add a `view` state, either `'list'` or `'feedback'` (default `'list'`), and a "Finish Workout" button below the exercise list that sets it to `'feedback'`. When `'feedback'`, renders `WorkoutFeedbackScreen` in place of the list — mirrors `OnboardingFlow.tsx`'s `step` state pattern. No per-exercise UI is added to the list itself. |
+| `mobile/src/screens/WorkoutFeedbackScreen.tsx` | **New.** The dedicated feedback screen: renders every exercise from the active day with its 3-way pill group + pain pill + conditional note field, holds the in-progress feedback as local state, and owns the submit/loading/summary states. Takes the day's exercises + `onDone`/`onBack` callbacks as props — it doesn't fetch anything itself. |
 | Backend (`api/routes/workouts.py`, `agents/plan_adjuster.py`, `prompts/plan_adjuster.md`, `pipeline/workout_feedback.py`) | **No changes.** |
 
 ## Error handling
