@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -44,6 +44,65 @@ const PAIN_OPTIONS: { label: string; value: 'no' | 'yes' }[] = [
 const DEFAULT_ROW: RowState = { difficulty: 'just_right', pain: false, note: '', completed: true };
 
 /**
+ * One exercise's feedback card, memoized so typing a note or tapping a pill
+ * on one exercise doesn't re-render every other card in the list — without
+ * this, every keystroke while writing a note re-rendered the entire screen,
+ * which is what made scrolling between exercises feel janky while giving
+ * feedback (found via manual testing on-device, not caught by any static
+ * review). `onChange` is the parent's stable (useCallback'd) updateRow.
+ */
+const FeedbackExerciseCard = React.memo(function FeedbackExerciseCard({
+  exercise,
+  row,
+  index,
+  onChange,
+}: {
+  exercise: FeedbackExercise;
+  row: RowState;
+  index: number;
+  onChange: (index: number, patch: Partial<RowState>) => void;
+}) {
+  return (
+    <Card>
+      <Text style={styles.exerciseName}>
+        {exercise.name} <Text style={styles.exerciseSets}>· {exercise.sets}</Text>
+      </Text>
+      <PillSelect
+        label="How did it feel?"
+        options={DIFFICULTY_OPTIONS}
+        value={row.difficulty}
+        onChange={(difficulty) => onChange(index, { difficulty })}
+      />
+      <PillSelect
+        label="Anything hurt?"
+        variant={row.pain ? 'danger' : 'accent'}
+        options={PAIN_OPTIONS}
+        value={row.pain ? 'yes' : 'no'}
+        onChange={(v) => onChange(index, { pain: v === 'yes' })}
+      />
+      {row.pain ? (
+        <TextField
+          label="Note (optional)"
+          placeholder="What hurt, and where?"
+          value={row.note}
+          onChangeText={(note) => onChange(index, { note })}
+          multiline
+          numberOfLines={2}
+        />
+      ) : null}
+      <TouchableOpacity
+        style={styles.skipRow}
+        onPress={() => onChange(index, { completed: !row.completed })}
+        activeOpacity={0.7}
+      >
+        <View style={[styles.checkbox, !row.completed && styles.checkboxChecked]} />
+        <Text style={styles.skipLabel}>I skipped this exercise</Text>
+      </TouchableOpacity>
+    </Card>
+  );
+});
+
+/**
  * Dedicated screen for post-workout feedback — deliberately NOT inline on
  * WorkoutScreen (see docs/superpowers/specs/2026-07-20-post-workout-feedback-mobile-design.md's
  * "Flow" section for why an earlier per-exercise-inline version was rejected).
@@ -55,9 +114,9 @@ export function WorkoutFeedbackScreen({ sessionId, dayLabel, exercises, onBack, 
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  function updateRow(index: number, patch: Partial<RowState>) {
+  const updateRow = useCallback((index: number, patch: Partial<RowState>) => {
     setRows((prev) => prev.map((row, i) => (i === index ? { ...row, ...patch } : row)));
-  }
+  }, []);
 
   async function handleSubmit() {
     setSubmitting(true);
@@ -97,7 +156,7 @@ export function WorkoutFeedbackScreen({ sessionId, dayLabel, exercises, onBack, 
 
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
-      <ScrollView contentContainerStyle={styles.content}>
+      <ScrollView contentContainerStyle={styles.content} keyboardShouldPersistTaps="handled">
         <View style={styles.header}>
           <TouchableOpacity style={styles.backBtn} onPress={onBack} activeOpacity={0.7}>
             <Text style={styles.backBtnText}>‹</Text>
@@ -112,47 +171,9 @@ export function WorkoutFeedbackScreen({ sessionId, dayLabel, exercises, onBack, 
           </Card>
         ) : null}
 
-        {exercises.map((ex, i) => {
-          const row = rows[i];
-          return (
-            <Card key={`${ex.name}-${i}`}>
-              <Text style={styles.exerciseName}>
-                {ex.name} <Text style={styles.exerciseSets}>· {ex.sets}</Text>
-              </Text>
-              <PillSelect
-                label="How did it feel?"
-                options={DIFFICULTY_OPTIONS}
-                value={row.difficulty}
-                onChange={(difficulty) => updateRow(i, { difficulty })}
-              />
-              <PillSelect
-                label="Anything hurt?"
-                variant={row.pain ? 'danger' : 'accent'}
-                options={PAIN_OPTIONS}
-                value={row.pain ? 'yes' : 'no'}
-                onChange={(v) => updateRow(i, { pain: v === 'yes' })}
-              />
-              {row.pain ? (
-                <TextField
-                  label="Note (optional)"
-                  placeholder="What hurt, and where?"
-                  value={row.note}
-                  onChangeText={(note) => updateRow(i, { note })}
-                  multiline
-                  numberOfLines={2}
-                />
-              ) : null}
-              <TouchableOpacity
-                style={styles.skipRow}
-                onPress={() => updateRow(i, { completed: !row.completed })}
-                activeOpacity={0.7}
-              >
-                <View style={[styles.checkbox, !row.completed && styles.checkboxChecked]} />
-                <Text style={styles.skipLabel}>I skipped this exercise</Text>
-              </TouchableOpacity>
-            </Card>
-          );
-        })}
+        {exercises.map((ex, i) => (
+          <FeedbackExerciseCard key={`${ex.name}-${i}`} exercise={ex} row={rows[i]} index={i} onChange={updateRow} />
+        ))}
 
         <PrimaryButton label="Submit Feedback" onPress={handleSubmit} style={{ marginTop: spacing.gapCards }} />
         <GhostButton label="Back" onPress={onBack} style={{ marginTop: spacing.gapInner, marginBottom: 20 }} />
