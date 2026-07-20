@@ -127,7 +127,7 @@ export function WorkoutFeedbackScreen({ sessionId, dayLabel, exercises, onBack, 
               />
               <PillSelect
                 label="Anything hurt?"
-                variant="danger"
+                variant={row.pain ? 'danger' : 'accent'}
                 options={PAIN_OPTIONS}
                 value={row.pain ? 'yes' : 'no'}
                 onChange={(v) => updateRow(i, { pain: v === 'yes' })}
