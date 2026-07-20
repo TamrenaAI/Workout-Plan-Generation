@@ -5,6 +5,7 @@ export interface User {
   email: string;
   name: string | null;
   picture_url: string | null;
+  created_at: string;
 }
 
 export interface SessionResponse {

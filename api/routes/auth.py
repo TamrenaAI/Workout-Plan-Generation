@@ -34,6 +34,7 @@ class UserResponse(BaseModel):
     email: str
     name: str | None
     picture_url: str | None
+    created_at: str
 
 
 @router.post("/auth/google", response_model=SessionResponse)
@@ -59,6 +60,13 @@ async def get_me(user: dict = Depends(get_current_user)):
 
 
 def _public_user(user: dict) -> dict:
-    """Strips internal-only fields (currently none, but google_sub should
-    never round-trip to a client) before returning a user over the API."""
-    return {"id": user["id"], "email": user["email"], "name": user["name"], "picture_url": user["picture_url"]}
+    """Strips internal-only fields (google_sub should never round-trip to
+    a client) before returning a user over the API. created_at is kept —
+    the mobile Home screen uses it for "days since starting"."""
+    return {
+        "id": user["id"],
+        "email": user["email"],
+        "name": user["name"],
+        "picture_url": user["picture_url"],
+        "created_at": user["created_at"],
+    }

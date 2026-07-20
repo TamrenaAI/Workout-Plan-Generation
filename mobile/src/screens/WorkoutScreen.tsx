@@ -1,43 +1,64 @@
-import React, { useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ApiError } from '../api/client';
 import { fetchSessions, PlanSession } from '../api/sessions';
 import { Card } from '../components/Card';
 import { PrimaryButton } from '../components/Buttons';
+import { useLatestPlan } from '../hooks/useLatestPlan';
+import { findColumn, PlanSection } from '../lib/parsePlan';
 import { colors, spacing } from '../theme';
-
-const DAYS = [
-  { label: 'Mon', focus: 'Push', today: false },
-  { label: 'Tue', focus: 'Pull', today: true },
-  { label: 'Wed', focus: 'Legs', today: false },
-  { label: 'Thu', focus: 'Rest', today: false },
-  { label: 'Fri', focus: 'Push', today: false },
-];
-
-// Still mock — there's no GET /sessions/{id}/plan endpoint yet to fetch a
-// specific day's real prescribed exercises out of plan.md. The day strip
-// and this list stay illustrative until that's built.
-const EXERCISES = [
-  { name: 'Pull-Up', sets: '4×8', rest: '2 min', rpe: 8 },
-  { name: 'Barbell Row', sets: '4×10', rest: '90s', rpe: 7 },
-  { name: 'Lat Pulldown', sets: '3×12', rest: '90s', rpe: 7 },
-  { name: 'Face Pull', sets: '3×15', rest: '60s', rpe: 6 },
-];
 
 function formatDate(iso: string): string {
   return new Date(iso.replace(' ', 'T') + 'Z').toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
 }
 
+function dayShortLabel(section: PlanSection): string {
+  // "Day 1 — Push: Chest Focus" -> "Push" (falls back to "Day N" if the
+  // heading doesn't follow the usual "Day N — Focus: ..." shape).
+  const match = section.title.match(/^Day\s+\d+\s*[—-]\s*([^:]+)/i);
+  return match ? match[1].trim() : `Day ${section.dayNumber}`;
+}
+
+function exercisesFromDay(section: PlanSection) {
+  const table = section.blocks.find((b) => b.type === 'table');
+  if (!table || table.type !== 'table') return [];
+
+  const nameIdx = findColumn(table.header, /exercise/i);
+  const setsIdx = findColumn(table.header, /sets/i);
+  const restIdx = findColumn(table.header, /rest/i);
+  const rpeIdx = findColumn(table.header, /rpe/i);
+
+  return table.rows.map((row, i) => ({
+    key: `${section.dayNumber}-${i}`,
+    name: nameIdx >= 0 ? row[nameIdx] : row[1] ?? 'Exercise',
+    sets: setsIdx >= 0 ? row[setsIdx] : '—',
+    rest: restIdx >= 0 ? row[restIdx] : '—',
+    rpe: rpeIdx >= 0 ? row[rpeIdx] : '—',
+  }));
+}
+
 export function WorkoutScreen() {
+  const { isLoading, error, status, days } = useLatestPlan();
+  const [selectedDay, setSelectedDay] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (days.length > 0 && selectedDay === null) {
+      setSelectedDay(days[0].dayNumber);
+    }
+  }, [days, selectedDay]);
+
+  const activeSection = days.find((d) => d.dayNumber === selectedDay) ?? days[0];
+  const exercises = useMemo(() => (activeSection ? exercisesFromDay(activeSection) : []), [activeSection]);
+
   const [sessions, setSessions] = useState<PlanSession[] | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [historyError, setHistoryError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchSessions()
       .then(setSessions)
-      .catch((err) => setError(err instanceof ApiError ? err.message : 'Could not load workout history.'));
+      .catch((err) => setHistoryError(err instanceof ApiError ? err.message : 'Could not load workout history.'));
   }, []);
 
   return (
@@ -45,30 +66,62 @@ export function WorkoutScreen() {
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>Workout</Text>
 
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.dayStrip}>
-          {DAYS.map((d) => (
-            <View key={d.label} style={[styles.dayPill, d.today && styles.dayPillActive]}>
-              <Text style={[styles.dayLabel, d.today && styles.dayLabelActive]}>{d.label}</Text>
-              <Text style={[styles.dayFocus, d.today && styles.dayLabelActive]}>{d.focus}</Text>
-            </View>
-          ))}
-        </ScrollView>
-
-        <Text style={styles.sectionTitle}>Today's Session — Pull</Text>
-        {EXERCISES.map((ex) => (
-          <Card key={ex.name}>
-            <Text style={styles.exerciseName}>{ex.name}</Text>
-            <Text style={styles.exerciseDetail}>
-              {ex.sets} · Rest {ex.rest} · RPE {ex.rpe}
-            </Text>
-            <PrimaryButton label="Start Set" style={{ marginTop: spacing.gapInner }} />
-          </Card>
-        ))}
-
-        <Text style={styles.sectionTitle}>Workout History</Text>
-        {error ? (
+        {isLoading ? (
+          <ActivityIndicator color={colors.accentPrimary} />
+        ) : error ? (
           <Card>
             <Text style={styles.error}>{error}</Text>
+          </Card>
+        ) : status === 'pending' ? (
+          <Card>
+            <Text style={styles.emptyText}>Your plan is still being generated…</Text>
+          </Card>
+        ) : days.length === 0 ? (
+          <Card>
+            <Text style={styles.emptyText}>No plan yet — generate one to see your training days here.</Text>
+          </Card>
+        ) : (
+          <>
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.dayStrip}>
+              {days.map((d) => {
+                const active = d.dayNumber === activeSection?.dayNumber;
+                return (
+                  <TouchableOpacity
+                    key={d.dayNumber}
+                    style={[styles.dayPill, active && styles.dayPillActive]}
+                    activeOpacity={0.7}
+                    onPress={() => setSelectedDay(d.dayNumber)}
+                  >
+                    <Text style={[styles.dayLabel, active && styles.dayLabelActive]}>Day {d.dayNumber}</Text>
+                    <Text style={[styles.dayFocus, active && styles.dayLabelActive]}>{dayShortLabel(d)}</Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+
+            <Text style={styles.sectionTitle}>{activeSection?.title ?? 'Session'}</Text>
+            {exercises.length > 0 ? (
+              exercises.map((ex) => (
+                <Card key={ex.key}>
+                  <Text style={styles.exerciseName}>{ex.name}</Text>
+                  <Text style={styles.exerciseDetail}>
+                    {ex.sets} · Rest {ex.rest} · RPE {ex.rpe}
+                  </Text>
+                  <PrimaryButton label="Start Set" style={{ marginTop: spacing.gapInner }} />
+                </Card>
+              ))
+            ) : (
+              <Card>
+                <Text style={styles.emptyText}>No exercises found for this day.</Text>
+              </Card>
+            )}
+          </>
+        )}
+
+        <Text style={styles.sectionTitle}>Workout History</Text>
+        {historyError ? (
+          <Card>
+            <Text style={styles.error}>{historyError}</Text>
           </Card>
         ) : sessions && sessions.length > 0 ? (
           sessions.map((s) => (

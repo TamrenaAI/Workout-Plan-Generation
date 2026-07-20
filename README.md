@@ -134,19 +134,27 @@ mobile/                          ← React Native (Expo + TypeScript) app — th
                                     TabNavigator depending on auth state
   src/config.ts                  ← API_BASE_URL / GOOGLE_WEB_CLIENT_ID (see .env.example)
   src/api/client.ts               ← apiFetch() — attaches the session JWT, throws ApiError on failure
-  src/api/{auth,sessions,progress}.ts ← typed wrappers per backend resource
+  src/api/{auth,sessions,progress,plan}.ts ← typed wrappers per backend resource
   src/auth/AuthContext.tsx        ← Google Sign-In (native, NOT Expo Go-compatible — see below),
                                     session persistence via expo-secure-store
+  src/lib/parsePlan.ts            ← ports frontend/src/pages/plan.js's markdown parser (headings/
+                                    tables/notes/lists) to a typed block structure — RN has no raw-
+                                    HTML rendering. Groups blocks by heading into PlanSections; a
+                                    "Day {N}" heading sets dayNumber (backend has no real-calendar-
+                                    date mapping for training days, so screens let the user pick one)
+  src/hooks/useLatestPlan.ts       ← shared by Home/Workout: fetches the most recent session's
+                                    persisted plan (GET /sessions/{id}/plan) and parses it once
   src/theme.ts                   ← design tokens ported from frontend/src/theme.css / design-system.md
   src/components/                ← Card, Badge, PrimaryButton/GhostButton, StatTile, ChatButton —
                                     mirror the web app's .t-card/.t-badge/etc. classes
   src/navigation/TabNavigator.tsx ← bottom tabs (Home/Workout/Nutrition/Progress/Profile) + floating
                                     ChatButton overlay
   src/screens/                   ← LoginScreen (real), Profile (real user + logout), Progress (real
-                                    scan history/comparison via /progress/*), Workout (real session
-                                    history via /sessions; today's exercise list still mock — no
-                                    GET /sessions/{id}/plan endpoint exists yet), Home/Nutrition
-                                    (still mock — Nutrition Agent integration is on hold)
+                                    scan history/comparison), Workout (real session history + real,
+                                    tappable day-strip and per-exercise cards parsed from the actual
+                                    plan), Home (real "Next Workout" summary + real days-since-signup).
+                                    Nutrition and the trial/subscription badge stay mock — Nutrition
+                                    Agent integration is on hold, Subscriptions/IAP isn't built yet.
 ```
 
 **Mobile auth note:** `@react-native-google-signin/google-signin` requires custom native
