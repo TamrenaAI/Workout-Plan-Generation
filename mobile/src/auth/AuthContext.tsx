@@ -10,7 +10,20 @@ import { GOOGLE_WEB_CLIENT_ID } from '../config';
 // this only works in a dev-client/standalone build. See mobile/README's
 // auth setup notes for the EAS build + Google Cloud Console steps needed
 // before this can actually be tapped and tested.
-GoogleSignin.configure({ webClientId: GOOGLE_WEB_CLIENT_ID });
+//
+// Calling .configure() reaches into the native module immediately, which
+// doesn't exist in Expo Go — left unguarded, this throws at MODULE LOAD
+// TIME (this runs the moment AuthContext is imported, before React ever
+// renders), crashing the entire app on startup rather than just failing
+// when the sign-in button is tapped. Swallowing it here means the rest of
+// the app (including onboarding, which has no native dependency) still
+// loads fine in Expo Go — signInWithGoogle()'s own try/catch below is what
+// surfaces a real error to the user if they actually tap the button.
+try {
+  GoogleSignin.configure({ webClientId: GOOGLE_WEB_CLIENT_ID });
+} catch {
+  // No native module in this environment (Expo Go) — expected, not a bug.
+}
 
 const TOKEN_STORAGE_KEY = 'tamreena_access_token';
 
