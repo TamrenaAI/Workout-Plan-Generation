@@ -42,7 +42,7 @@ function exercisesFromDay(section: PlanSection) {
 }
 
 export function WorkoutScreen() {
-  const { isLoading, error, status, days, reload } = useLatestPlan();
+  const { isLoading, error, session, status, days, reload } = useLatestPlan();
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [view, setView] = useState<'list' | 'feedback'>('list');
   const [confirmation, setConfirmation] = useState<{ summary: string } | null>(null);
@@ -79,7 +79,7 @@ export function WorkoutScreen() {
     const feedbackExercises: FeedbackExercise[] = exercises.map((ex) => ({ name: ex.name, sets: ex.sets }));
     return (
       <WorkoutFeedbackScreen
-        sessionId={sessions?.[0]?.session_id ?? ''}
+        sessionId={session?.session_id ?? ''}
         dayLabel={activeSection.title}
         exercises={feedbackExercises}
         onBack={() => setView('list')}
