@@ -1,3 +1,5 @@
+import { Platform } from 'react-native';
+
 import { apiFetch, apiFetchForm } from './client';
 import { CapturedImage, IntakeData } from '../onboarding/types';
 
@@ -10,6 +12,30 @@ export function fetchSessionPlan(sessionId: string): Promise<SessionPlanResponse
   return apiFetch<SessionPlanResponse>(`/sessions/${sessionId}/plan`);
 }
 
+/**
+ * React Native's FormData.append(name, {uri, name, type}) shorthand only
+ * works on native platforms — RN's own FormData polyfill knows to read the
+ * file at that URI. On web, `FormData` is the browser's real, unrelated
+ * implementation: it doesn't understand that object shape at all and would
+ * effectively send garbage for the file field (this was the actual cause
+ * of "Unprocessable Entity" when testing via `expo start --web` — not
+ * anything wrong with the image itself). Web needs an actual Blob, fetched
+ * from the picker's blob:/data: URI first.
+ */
+async function appendImageFile(formData: FormData, fieldName: string, image: CapturedImage): Promise<void> {
+  if (Platform.OS === 'web') {
+    const response = await fetch(image.uri);
+    const blob = await response.blob();
+    formData.append(fieldName, blob, 'scan.jpg');
+  } else {
+    formData.append(fieldName, {
+      uri: image.uri,
+      name: 'scan.jpg',
+      type: image.mimeType,
+    } as unknown as Blob);
+  }
+}
+
 export interface ValidateImageResponse {
   valid: boolean;
   stage: string | null;
@@ -19,13 +45,9 @@ export interface ValidateImageResponse {
 /** Quality + authenticity check only — the same pre-check the web app's
  * CameraCapture runs before committing to a full (slower) generation
  * call. Doesn't create a session. */
-export function validateImage(image: CapturedImage): Promise<ValidateImageResponse> {
+export async function validateImage(image: CapturedImage): Promise<ValidateImageResponse> {
   const formData = new FormData();
-  formData.append('file', {
-    uri: image.uri,
-    name: 'scan.jpg',
-    type: image.mimeType,
-  } as unknown as Blob);
+  await appendImageFile(formData, 'file', image);
   return apiFetchForm<ValidateImageResponse>('/validate-image', formData);
 }
 
@@ -37,13 +59,9 @@ export interface GeneratePlanResponse {
 /** Kicks off generation — the caller then opens the SSE stream at
  * GET /generate-plan/stream/{session_id} for live progress and the final
  * plan text (see onboarding/steps/ProcessingStep.tsx). */
-export function generatePlan(intake: IntakeData, image: CapturedImage): Promise<GeneratePlanResponse> {
+export async function generatePlan(intake: IntakeData, image: CapturedImage): Promise<GeneratePlanResponse> {
   const formData = new FormData();
-  formData.append('inbody_file', {
-    uri: image.uri,
-    name: 'scan.jpg',
-    type: image.mimeType,
-  } as unknown as Blob);
+  await appendImageFile(formData, 'inbody_file', image);
   formData.append('goal', intake.goal);
   formData.append('days_per_week', String(intake.days_per_week));
   formData.append('experience', intake.experience);

@@ -137,7 +137,10 @@ mobile/                          ← React Native (Expo + TypeScript) app — th
   src/api/client.ts               ← apiFetch() (JSON) / apiFetchForm() (multipart, no Content-Type
                                     override) — both attach the session JWT, throw ApiError on failure
   src/api/{auth,sessions,progress,plan}.ts ← typed wrappers per backend resource, incl.
-                                    validateImage()/generatePlan() (multipart uploads)
+                                    validateImage()/generatePlan() (multipart uploads — the file
+                                    field is built differently per platform, see plan.ts's
+                                    appendImageFile(): RN's {uri,name,type} FormData shorthand
+                                    only works natively, web needs a real fetched Blob)
   src/onboarding/                 ← linear wizard mirroring frontend/'s intake->capture->processing
                                     flow (no back-navigation, matching the web app's own convention):
     OnboardingFlow.tsx             ← step state machine, accumulates IntakeData across steps
