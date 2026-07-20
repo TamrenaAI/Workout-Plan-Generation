@@ -1,14 +1,16 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { ApiError } from '../api/client';
 import { fetchSessions, PlanSession } from '../api/sessions';
+import { Badge } from '../components/Badge';
 import { Card } from '../components/Card';
-import { PrimaryButton } from '../components/Buttons';
+import { GhostButton, PrimaryButton } from '../components/Buttons';
 import { useLatestPlan } from '../hooks/useLatestPlan';
 import { findColumn, PlanSection } from '../lib/parsePlan';
 import { colors, spacing } from '../theme';
+import { FeedbackExercise, WorkoutFeedbackScreen } from './WorkoutFeedbackScreen';
 
 function formatDate(iso: string): string {
   return new Date(iso.replace(' ', 'T') + 'Z').toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
@@ -40,8 +42,10 @@ function exercisesFromDay(section: PlanSection) {
 }
 
 export function WorkoutScreen() {
-  const { isLoading, error, status, days } = useLatestPlan();
+  const { isLoading, error, status, days, reload } = useLatestPlan();
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
+  const [view, setView] = useState<'list' | 'feedback'>('list');
+  const [confirmation, setConfirmation] = useState<{ summary: string } | null>(null);
 
   useEffect(() => {
     if (days.length > 0 && selectedDay === null) {
@@ -61,10 +65,41 @@ export function WorkoutScreen() {
       .catch((err) => setHistoryError(err instanceof ApiError ? err.message : 'Could not load workout history.'));
   }, []);
 
+  function handleFeedbackDone(result: { adjustmentTriggered: boolean; summary: string | null }) {
+    setView('list');
+    reload();
+    if (result.adjustmentTriggered && result.summary) {
+      setConfirmation({ summary: result.summary });
+    } else {
+      Alert.alert('Feedback saved');
+    }
+  }
+
+  if (view === 'feedback' && activeSection) {
+    const feedbackExercises: FeedbackExercise[] = exercises.map((ex) => ({ name: ex.name, sets: ex.sets }));
+    return (
+      <WorkoutFeedbackScreen
+        sessionId={sessions?.[0]?.session_id ?? ''}
+        dayLabel={activeSection.title}
+        exercises={feedbackExercises}
+        onBack={() => setView('list')}
+        onDone={handleFeedbackDone}
+      />
+    );
+  }
+
   return (
     <SafeAreaView style={styles.safeArea} edges={['top']}>
       <ScrollView contentContainerStyle={styles.content}>
         <Text style={styles.title}>Workout</Text>
+
+        {confirmation ? (
+          <Card>
+            <Badge label="Plan updated" variant="success" />
+            <Text style={styles.confirmationBody}>{confirmation.summary}</Text>
+            <GhostButton label="Got it" onPress={() => setConfirmation(null)} style={{ marginTop: spacing.gapInner }} />
+          </Card>
+        ) : null}
 
         {isLoading ? (
           <ActivityIndicator color={colors.accentPrimary} />
@@ -115,6 +150,9 @@ export function WorkoutScreen() {
                 <Text style={styles.emptyText}>No exercises found for this day.</Text>
               </Card>
             )}
+            {exercises.length > 0 ? (
+              <PrimaryButton label="Finish Workout" onPress={() => setView('feedback')} style={{ marginTop: spacing.gapCards, marginBottom: spacing.gapCards }} />
+            ) : null}
           </>
         )}
 
@@ -169,4 +207,5 @@ const styles = StyleSheet.create({
   historyDate: { fontSize: 12, color: colors.textMuted },
   emptyText: { fontSize: 13, color: colors.textMuted },
   error: { fontSize: 13, color: colors.danger },
+  confirmationBody: { fontSize: 13, lineHeight: 1.55 * 13, color: colors.textPrimary, marginTop: 10 },
 });
