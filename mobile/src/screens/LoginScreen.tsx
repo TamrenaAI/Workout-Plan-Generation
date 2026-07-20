@@ -3,11 +3,11 @@ import { StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useAuth } from '../auth/AuthContext';
-import { PrimaryButton } from '../components/Buttons';
+import { GhostButton, PrimaryButton } from '../components/Buttons';
 import { colors, spacing } from '../theme';
 
 export function LoginScreen() {
-  const { signInWithGoogle, isSigningIn, error } = useAuth();
+  const { signInWithGoogle, signInAsDevUser, isSigningIn, error } = useAuth();
 
   return (
     <SafeAreaView style={styles.safeArea}>
@@ -24,6 +24,20 @@ export function LoginScreen() {
           onPress={signInWithGoogle}
           disabled={isSigningIn}
         />
+
+        {/* __DEV__ is a React Native global, false in any release build —
+            this button can never render outside a development bundle. The
+            backend endpoint it calls is ALSO disabled unless the server
+            operator explicitly opted in (config.ALLOW_DEV_LOGIN), so it's
+            safe even if someone ran a dev build against a real server. */}
+        {__DEV__ ? (
+          <GhostButton
+            label="Continue as Test User (dev only)"
+            onPress={signInAsDevUser}
+            disabled={isSigningIn}
+            style={{ marginTop: spacing.gapInner }}
+          />
+        ) : null}
       </View>
     </SafeAreaView>
   );

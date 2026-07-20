@@ -23,3 +23,11 @@ export function signInWithGoogleIdToken(idToken: string): Promise<SessionRespons
 export function fetchMe(): Promise<User> {
   return apiFetch<User>('/auth/me');
 }
+
+/** Only ever reachable from a __DEV__-gated button (see LoginScreen) —
+ * the backend route itself is also disabled unless the server operator
+ * explicitly set ALLOW_DEV_LOGIN=true, so this 404s against any real
+ * deployment regardless of the client-side guard. See api/routes/auth.py. */
+export function devLogin(): Promise<SessionResponse> {
+  return apiFetch<SessionResponse>('/auth/dev-login', { method: 'POST' });
+}

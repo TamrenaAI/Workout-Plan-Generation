@@ -1,7 +1,7 @@
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-import { fetchMe, signInWithGoogleIdToken, User } from '../api/auth';
+import { devLogin, fetchMe, SessionResponse, signInWithGoogleIdToken, User } from '../api/auth';
 import { setAuthToken } from '../api/client';
 import { GOOGLE_WEB_CLIENT_ID } from '../config';
 import { deleteSecureItem, getSecureItem, setSecureItem } from '../lib/storage';
@@ -33,6 +33,10 @@ interface AuthState {
   isSigningIn: boolean;
   error: string | null;
   signInWithGoogle: () => Promise<void>;
+  /** __DEV__-only shortcut past a real Google Sign-In — see api/auth.ts's
+   * devLogin(). Always present on AuthState; LoginScreen decides whether
+   * to render a button for it. */
+  signInAsDevUser: () => Promise<void>;
   signOut: () => Promise<void>;
 }
 
@@ -65,6 +69,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     }
   }
 
+  async function applySession(session: SessionResponse) {
+    await setSecureItem(TOKEN_STORAGE_KEY, session.access_token);
+    setAuthToken(session.access_token);
+    setUser(session.user);
+  }
+
   async function signInWithGoogle() {
     setIsSigningIn(true);
     setError(null);
@@ -76,12 +86,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         throw new Error('Google did not return an ID token.');
       }
 
-      const session = await signInWithGoogleIdToken(idToken);
-      await setSecureItem(TOKEN_STORAGE_KEY, session.access_token);
-      setAuthToken(session.access_token);
-      setUser(session.user);
+      await applySession(await signInWithGoogleIdToken(idToken));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign-in failed.');
+    } finally {
+      setIsSigningIn(false);
+    }
+  }
+
+  async function signInAsDevUser() {
+    setIsSigningIn(true);
+    setError(null);
+    try {
+      await applySession(await devLogin());
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Dev login failed.');
     } finally {
       setIsSigningIn(false);
     }
@@ -100,7 +119,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <AuthContext.Provider value={{ user, isLoading, isSigningIn, error, signInWithGoogle, signOut }}>
+    <AuthContext.Provider
+      value={{ user, isLoading, isSigningIn, error, signInWithGoogle, signInAsDevUser, signOut }}
+    >
       {children}
     </AuthContext.Provider>
   );

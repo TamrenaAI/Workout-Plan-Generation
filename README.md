@@ -94,7 +94,7 @@ See docs/CODE_MAP.md for the layer diagram and the checklist for adding a new ag
 api/
   main.py                    ← FastAPI app
   routes/health.py            ← GET /health
-  routes/auth.py               ← POST /auth/google, GET /auth/me
+  routes/auth.py               ← POST /auth/google, GET /auth/me, POST /auth/dev-login (see below)
   routes/plan.py               ← POST /validate-image, POST /plan (aliased as /generate-plan, requires
                                   login), GET /generate-plan/stream/{id} (ownership-checked),
                                   GET /sessions (current user's past sessions),
@@ -192,6 +192,18 @@ implementation at all — confirmed against Expo's own SDK 57 docs, not assumed 
 wraps it with a `localStorage` fallback on `Platform.OS === 'web'`. Session persistence
 via this fallback is real on web too, just less protected than the native OS keychain
 (acceptable — that's inherent to any web app's storage, not a downgrade this introduced).
+
+**Getting past the login wall without a build:** since every backend endpoint requires a
+real session JWT, and neither web preview nor Expo Go can produce one via real Google
+Sign-In, there is a **dev-only bypass**: `POST /auth/dev-login` mints a session for a
+fixed test account (`dev@tamreena.local`) with no credential at all. It's disabled by
+default — returns a plain 404, not even confirming it exists — unless the server operator
+sets `ALLOW_DEV_LOGIN=true` in `.env`. **Never set that true anywhere but a local dev
+machine** — it lets anyone with network access to that server sign in with nothing. On
+the client, the "Continue as Test User (dev only)" button on `LoginScreen` only renders
+when React Native's `__DEV__` global is true (always false in a release build), so it's a
+two-layer gate: client-side visibility AND server-side opt-in, either of which alone
+would block it in production.
 
 ## Why a shared markdown file instead of a database
 
