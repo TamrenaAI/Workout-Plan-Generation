@@ -193,6 +193,13 @@ wraps it with a `localStorage` fallback on `Platform.OS === 'web'`. Session pers
 via this fallback is real on web too, just less protected than the native OS keychain
 (acceptable — that's inherent to any web app's storage, not a downgrade this introduced).
 
+Web preview also required adding CORS middleware to `api/main.py` — a real "Failed to
+fetch" hit the first time this was tried, since it's the first time a browser has ever
+called this API cross-origin (the legacy `frontend/` is same-origin; native mobile isn't
+subject to CORS at all). Wide open (`*`) is fine here — every route requires a Bearer
+token, so CORS only gates whether browser JS can *read* a response, never whether a
+request is authorized.
+
 **Getting past the login wall without a build:** since every backend endpoint requires a
 real session JWT, and neither web preview nor Expo Go can produce one via real Google
 Sign-In, there is a **dev-only bypass**: `POST /auth/dev-login` mints a session for a
