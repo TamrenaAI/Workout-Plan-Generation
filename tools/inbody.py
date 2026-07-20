@@ -339,22 +339,67 @@ def format_inbody_result(result: InBodyResult) -> str:
     text block that parse_inbody_text produces, so the Supervisor and all
     downstream sub-agents consume one consistent format regardless of whether
     the InBody data came from an image scan or raw text.
+
+    Surfaces every field the VLM extracted — not just the 4-flag core set —
+    so identity (model/gender/age/weight), each segment's % of ideal, and the
+    higher-model (570/770) metrics (ECW ratio, visceral fat, SMI, phase angle,
+    waist-hip ratio) all reach the Supervisor. Prototyped and validated against
+    real scans in notebooks/Inbody_Agent.ipynb before landing here. Optional
+    fields that are None are simply omitted (no "UNKNOWN" clutter) rather than
+    guessed at; the 4 deterministic FLAGS are unchanged from before.
     """
     r, f = result.raw, result.flags
     yes_no = lambda b: "YES" if b else "NO"
 
-    lines = [
-        "INBODY ANALYSIS",
-        "───────────────",
+    def fmt_seg(reading: SegmentalReading) -> str:
+        pct = f" ({reading.percent_of_ideal}% of ideal)" if reading.percent_of_ideal is not None else ""
+        return f"{reading.value} {reading.unit}{pct}"
+
+    lines = ["INBODY ANALYSIS", "───────────────"]
+
+    if r.inbody_model is not None:
+        lines.append(f"Model                : {r.inbody_model}")
+    lines.append(f"Gender               : {r.gender}")
+    if r.age is not None:
+        lines.append(f"Age                  : {r.age}")
+    lines.append(f"Weight               : {r.weight} {r.weight_unit}")
+
+    lines += [
         f"Skeletal Muscle Mass : {r.skeletal_muscle_mass} {r.smm_unit}",
         f"Body Fat %           : {r.body_fat_percent}%",
         f"BMR                  : {r.bmr_kcal if r.bmr_kcal is not None else 'UNKNOWN'} kcal",
         "Segmental Lean Mass:",
-        f"  Right arm : {r.right_arm.value} {r.right_arm.unit} | Left arm : {r.left_arm.value} {r.left_arm.unit}"
+        f"  Right arm : {fmt_seg(r.right_arm)} | Left arm : {fmt_seg(r.left_arm)}"
         f"  → Arm asymmetry: {yes_no(f.arm_asymmetry)} (diff: {f.arm_diff_grams}g)",
-        f"  Right leg : {r.right_leg.value} {r.right_leg.unit} | Left leg : {r.left_leg.value} {r.left_leg.unit}"
+        f"  Right leg : {fmt_seg(r.right_leg)} | Left leg : {fmt_seg(r.left_leg)}"
         f"  → Leg asymmetry: {yes_no(f.leg_asymmetry)} (diff: {f.leg_diff_grams}g)",
-        f"  Trunk     : {r.trunk.value} {r.trunk.unit}",
+        f"  Trunk     : {fmt_seg(r.trunk)}",
+    ]
+
+    additional = []
+    if r.ecw_ratio is not None:
+        additional.append(f"  ECW Ratio            : {r.ecw_ratio}")
+    if r.visceral_fat_level is not None:
+        additional.append(f"  Visceral Fat Level   : {r.visceral_fat_level}")
+    if r.visceral_fat_area_cm2 is not None:
+        additional.append(f"  Visceral Fat Area    : {r.visceral_fat_area_cm2} cm²")
+    if r.smi is not None:
+        additional.append(f"  SMI                  : {r.smi} kg/m²")
+    if r.phase_angle is not None:
+        additional.append(f"  Phase Angle          : {r.phase_angle}°")
+    if r.waist_hip_ratio is not None:
+        additional.append(f"  Waist-Hip Ratio      : {r.waist_hip_ratio}")
+
+    if additional:
+        lines.append("")
+        lines.append("Additional Metrics:")
+        lines.extend(additional)
+
+    if r.extraction_notes:
+        lines.append("")
+        lines.append(f"Extraction notes: {r.extraction_notes}")
+
+    lines += [
         "",
         "FLAGS (used by all sub-agents)",
         "───────────────────────────────",
@@ -374,13 +419,25 @@ Output format (follow exactly):
 
 INBODY ANALYSIS
 ───────────────
+Model                : {value}          [OPTIONAL — include only if the model number (e.g. "570", "270S") is in the text, otherwise omit this line entirely]
+Gender               : {value}          [OPTIONAL — include only if stated, otherwise omit]
+Age                  : {value}          [OPTIONAL — include only if stated, otherwise omit]
+Weight               : {value} kg/lb    [OPTIONAL — include only if stated, otherwise omit]
 Skeletal Muscle Mass : {value} kg
 Body Fat %           : {value}%
 BMR                  : {value} kcal
 Segmental Lean Mass:
-  Right arm : {value} kg | Left arm : {value} kg  → Arm asymmetry: YES/NO (diff: {value}g)
-  Right leg : {value} kg | Left leg : {value} kg  → Leg asymmetry: YES/NO (diff: {value}g)
-  Trunk     : {value} kg
+  Right arm : {value} kg [(X% of ideal) if that % is shown in the text] | Left arm : {value} kg [(X% of ideal) if shown]  → Arm asymmetry: YES/NO (diff: {value}g)
+  Right leg : {value} kg [(X% of ideal) if shown] | Left leg : {value} kg [(X% of ideal) if shown]  → Leg asymmetry: YES/NO (diff: {value}g)
+  Trunk     : {value} kg [(X% of ideal) if shown]
+
+Additional Metrics:          [OPTIONAL SECTION — include ONLY if at least one of these six appears in the raw text; omit the section header entirely otherwise]
+  ECW Ratio            : {value}        [only if present]
+  Visceral Fat Level   : {value}        [only if present]
+  Visceral Fat Area    : {value} cm²    [only if present]
+  SMI                  : {value} kg/m²  [only if present]
+  Phase Angle          : {value}°       [only if present]
+  Waist-Hip Ratio      : {value}        [only if present]
 
 FLAGS (used by all sub-agents)
 ───────────────────────────────
@@ -389,7 +446,11 @@ LEG_ASYMMETRY   : YES/NO  — if YES, leg day prioritises unilateral, start on w
 ELEVATED_BF     : YES/NO  — if YES (>18% male/>25% female), lean toward 12-15 rep ranges
 TRUNK_UNDERDEVELOPED : YES/NO — if YES, chest/back volume gets priority
 
-Extract what you can from the scan. If a value is not visible, write UNKNOWN."""
+Extract what you can from the scan. For Skeletal Muscle Mass, Body Fat %, and BMR: if one of
+these three is not visible, write UNKNOWN — they are always expected on an InBody printout.
+For every OPTIONAL line/field marked above (Model, Gender, Age, Weight, % of ideal, and the
+entire Additional Metrics section): only include it if it's actually present in the raw text.
+Never write UNKNOWN for an optional field and never guess a value — omit the line instead."""
 
 _text_llm = get_llm(temperature=0.3)
 
