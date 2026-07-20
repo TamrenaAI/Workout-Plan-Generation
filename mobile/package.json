@@ -8,12 +8,14 @@
     "@react-navigation/bottom-tabs": "^7.18.11",
     "@react-navigation/native": "^7.3.11",
     "expo": "~57.0.7",
+    "expo-image-picker": "~57.0.5",
     "expo-secure-store": "~57.0.1",
     "expo-status-bar": "~57.0.1",
     "react": "19.2.3",
     "react-native": "0.86.0",
     "react-native-safe-area-context": "~5.7.0",
-    "react-native-screens": "4.25.2"
+    "react-native-screens": "4.25.2",
+    "react-native-sse": "^1.2.1"
   },
   "devDependencies": {
     "@types/react": "~19.2.2",

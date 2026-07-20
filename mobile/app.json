@@ -23,7 +23,14 @@
     },
     "plugins": [
       "@react-native-google-signin/google-signin",
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-image-picker",
+        {
+          "cameraPermission": "Tamreena uses your camera to scan your InBody body-composition result.",
+          "photosPermission": "Tamreena needs photo access so you can pick an existing InBody scan photo."
+        }
+      ]
     ]
   }
 }

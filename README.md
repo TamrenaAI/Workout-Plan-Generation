@@ -130,11 +130,23 @@ mobile/                          ← React Native (Expo + TypeScript) app — th
                                     forward. See mobile/README (Expo default) for run instructions and
                                     docs/superpowers/specs/2026-07-20-mobile-app-navigation-design.md
                                     for the design this implements.
-  App.tsx                        ← AuthProvider + NavigationContainer; shows LoginScreen or
-                                    TabNavigator depending on auth state
+  App.tsx                        ← AuthProvider + NavigationContainer; shows LoginScreen, then
+                                    OnboardingFlow if the signed-in user has zero sessions yet,
+                                    else TabNavigator
   src/config.ts                  ← API_BASE_URL / GOOGLE_WEB_CLIENT_ID (see .env.example)
-  src/api/client.ts               ← apiFetch() — attaches the session JWT, throws ApiError on failure
-  src/api/{auth,sessions,progress,plan}.ts ← typed wrappers per backend resource
+  src/api/client.ts               ← apiFetch() (JSON) / apiFetchForm() (multipart, no Content-Type
+                                    override) — both attach the session JWT, throw ApiError on failure
+  src/api/{auth,sessions,progress,plan}.ts ← typed wrappers per backend resource, incl.
+                                    validateImage()/generatePlan() (multipart uploads)
+  src/onboarding/                 ← linear wizard mirroring frontend/'s intake->capture->processing
+                                    flow (no back-navigation, matching the web app's own convention):
+    OnboardingFlow.tsx             ← step state machine, accumulates IntakeData across steps
+    steps/IntakeStep{1,2,3}.tsx     ← goal+days / experience+duration / optional details — PillSelect
+                                    options are constrained to values the backend already validates
+    steps/CaptureStep.tsx           ← expo-image-picker (camera or library — works in Expo Go,
+                                    unlike Google Sign-In) + POST /validate-image, retry on failure
+    steps/ProcessingStep.tsx        ← POST /generate-plan then live progress via react-native-sse
+                                    (pure-JS EventSource polyfill — RN has no built-in EventSource)
   src/auth/AuthContext.tsx        ← Google Sign-In (native, NOT Expo Go-compatible — see below),
                                     session persistence via expo-secure-store
   src/lib/parsePlan.ts            ← ports frontend/src/pages/plan.js's markdown parser (headings/
@@ -145,8 +157,9 @@ mobile/                          ← React Native (Expo + TypeScript) app — th
   src/hooks/useLatestPlan.ts       ← shared by Home/Workout: fetches the most recent session's
                                     persisted plan (GET /sessions/{id}/plan) and parses it once
   src/theme.ts                   ← design tokens ported from frontend/src/theme.css / design-system.md
-  src/components/                ← Card, Badge, PrimaryButton/GhostButton, StatTile, ChatButton —
-                                    mirror the web app's .t-card/.t-badge/etc. classes
+  src/components/                ← Card, Badge, PrimaryButton/GhostButton, StatTile, ChatButton,
+                                    StepHeader, PillSelect, TextField — mirror the web app's
+                                    .t-card/.t-badge/.pill/.t-input/etc. classes
   src/navigation/TabNavigator.tsx ← bottom tabs (Home/Workout/Nutrition/Progress/Profile) + floating
                                     ChatButton overlay
   src/screens/                   ← LoginScreen (real), Profile (real user + logout), Progress (real
