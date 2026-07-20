@@ -8,6 +8,7 @@
     "@react-navigation/bottom-tabs": "^7.18.11",
     "@react-navigation/native": "^7.3.11",
     "expo": "~57.0.7",
+    "expo-dev-client": "~57.0.7",
     "expo-image-picker": "~57.0.5",
     "expo-secure-store": "~57.0.1",
     "expo-status-bar": "~57.0.1",
