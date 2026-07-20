@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { ApiError } from '../api/client';
 import { fetchSessionPlan } from '../api/plan';
@@ -26,46 +26,47 @@ const INITIAL_STATE: LatestPlanState = {
  * training days," just for different amounts of detail. Fetches the most
  * recently generated session and parses its persisted weekly schedule
  * (GET /sessions/{id}/plan) rather than duplicating this fetch+parse in
- * each screen. */
-export function useLatestPlan(): LatestPlanState {
+ * each screen. Exposes `reload` so a caller can re-fetch after an action
+ * that might have changed server state (e.g. WorkoutScreen after
+ * submitting post-workout feedback) — see Global Constraints for why the
+ * re-fetched schedule may still look unchanged even after a real
+ * adjustment ran. */
+export function useLatestPlan(): LatestPlanState & { reload: () => void } {
   const [state, setState] = useState<LatestPlanState>(INITIAL_STATE);
+
+  const load = useCallback(async () => {
+    try {
+      const sessions = await fetchSessions();
+      if (sessions.length === 0) {
+        setState({ ...INITIAL_STATE, isLoading: false });
+        return;
+      }
+
+      const latest = sessions[0];
+      const response = await fetchSessionPlan(latest.session_id);
+      const days = response.plan
+        ? parsePlanMarkdown(response.plan).filter((s) => s.dayNumber !== null)
+        : [];
+
+      setState({ isLoading: false, error: null, session: latest, status: response.status, days });
+    } catch (err) {
+      setState({
+        ...INITIAL_STATE,
+        isLoading: false,
+        error: err instanceof ApiError ? err.message : 'Could not load your plan.',
+      });
+    }
+  }, []);
 
   useEffect(() => {
     let cancelled = false;
-
-    async function load() {
-      try {
-        const sessions = await fetchSessions();
-        if (sessions.length === 0) {
-          if (!cancelled) setState({ ...INITIAL_STATE, isLoading: false });
-          return;
-        }
-
-        const latest = sessions[0];
-        const response = await fetchSessionPlan(latest.session_id);
-        const days = response.plan
-          ? parsePlanMarkdown(response.plan).filter((s) => s.dayNumber !== null)
-          : [];
-
-        if (!cancelled) {
-          setState({ isLoading: false, error: null, session: latest, status: response.status, days });
-        }
-      } catch (err) {
-        if (!cancelled) {
-          setState({
-            ...INITIAL_STATE,
-            isLoading: false,
-            error: err instanceof ApiError ? err.message : 'Could not load your plan.',
-          });
-        }
-      }
-    }
-
-    load();
+    (async () => {
+      if (!cancelled) await load();
+    })();
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [load]);
 
-  return state;
+  return { ...state, reload: load };
 }
