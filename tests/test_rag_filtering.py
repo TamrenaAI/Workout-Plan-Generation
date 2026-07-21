@@ -37,3 +37,65 @@ def test_principles_filter_builder_includes_all_sentinel_for_applies_to():
 def test_principles_filter_builder_empty_filter_has_no_conditions():
     built = PrinciplesFilterBuilder().build(PrinciplesQueryFilter())
     assert built.must == []
+
+
+from langchain_core.runnables import RunnableLambda
+
+from tools.rag.filtering import GoalMetadataExtractor, PrinciplesMetadataExtractor
+
+
+class _FakeLLM:
+    """Stands in for a real BaseChatModel — .with_structured_output(...)
+    returns a Runnable that always yields a fixed value, so extractor
+    tests never make a network call."""
+
+    def __init__(self, value):
+        self.value = value
+        self.call_count = 0
+
+    def with_structured_output(self, _schema):
+        def _invoke(_prompt_value):
+            self.call_count += 1
+            return self.value
+
+        return RunnableLambda(_invoke)
+
+
+def test_goal_metadata_extractor_returns_structured_filter():
+    expected = GoalQueryFilter(muscle=["chest"], goals=["hypertrophy"])
+    fake_llm = _FakeLLM(expected)
+    extractor = GoalMetadataExtractor(llm=fake_llm)
+
+    result = extractor.extract("chest compound movements for hypertrophy")
+
+    assert result == expected
+
+
+def test_goal_metadata_extractor_caches_by_exact_query():
+    fake_llm = _FakeLLM(GoalQueryFilter())
+    extractor = GoalMetadataExtractor(llm=fake_llm)
+
+    extractor.extract("same query")
+    extractor.extract("same query")
+
+    assert fake_llm.call_count == 1
+
+
+def test_principles_metadata_extractor_returns_structured_filter():
+    expected = PrinciplesQueryFilter(topic=["volume"], applies_to=["all"])
+    fake_llm = _FakeLLM(expected)
+    extractor = PrinciplesMetadataExtractor(llm=fake_llm)
+
+    result = extractor.extract("general training volume guidance")
+
+    assert result == expected
+
+
+def test_principles_metadata_extractor_caches_by_exact_query():
+    fake_llm = _FakeLLM(PrinciplesQueryFilter())
+    extractor = PrinciplesMetadataExtractor(llm=fake_llm)
+
+    extractor.extract("same query")
+    extractor.extract("same query")
+
+    assert fake_llm.call_count == 1
