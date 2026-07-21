@@ -2,11 +2,6 @@
 plan's paradigm as search_rag's goal argument — a plain-text assertion
 since the prompt itself is only ever consumed by an LLM, not by code."""
 
-import os
-import sys
-
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
 from config import load_prompt
 
 

@@ -6,8 +6,10 @@ real Qdrant, no real LLM call, matching this project's test conventions.
 Real model/Qdrant/LLM wiring inside _ensure_loaded is verified manually
 (see the plan's Step 8), not by this suite."""
 
+from qdrant_client.models import Filter
+
 import tools.rag.pipeline as pipeline
-from tools.rag.models import ScoredChunk
+from tools.rag.models import GoalQueryFilter, PrinciplesQueryFilter, ScoredChunk
 
 
 def _chunk(id_, text, score, collection="principles"):
@@ -53,6 +55,57 @@ def test_format_results_includes_source_attribution_in_order():
 class _FakeReranker:
     def rerank(self, query, chunks):
         return sorted(chunks, key=lambda c: c.score, reverse=True)
+
+
+class _FakeExtractor:
+    def __init__(self, value):
+        self.value = value
+        self.queries_seen = []
+
+    def extract(self, query):
+        self.queries_seen.append(query)
+        return self.value
+
+
+class _FakeFilterBuilder:
+    def __init__(self, filter_to_return):
+        self.filter_to_return = filter_to_return
+        self.built_from = []
+
+    def build(self, query_filter):
+        self.built_from.append(query_filter)
+        return self.filter_to_return
+
+
+class _FakeDenseModel:
+    def encode(self, query, normalize_embeddings=True, convert_to_numpy=True):
+        import numpy as np
+        return np.array([0.1, 0.2, 0.3])
+
+
+class _FakeSparseEmbedding:
+    def __init__(self):
+        import numpy as np
+        self.indices = np.array([1])
+        self.values = np.array([0.5])
+
+
+class _FakeSparseModel:
+    def embed(self, texts):
+        return [_FakeSparseEmbedding() for _ in texts]
+
+
+class _FakeQdrantClientForFilter:
+    def __init__(self):
+        self.last_call_kwargs = None
+
+    def query_points(self, **kwargs):
+        self.last_call_kwargs = kwargs
+
+        class _EmptyResponse:
+            points = []
+
+        return _EmptyResponse()
 
 
 def test_search_rag_routes_merges_reranks_and_truncates_to_top3(monkeypatch):
@@ -106,3 +159,72 @@ def test_search_rag_unrecognized_goal_only_queries_principles(monkeypatch):
     )
 
     assert calls == ["principles"]
+
+
+def test_filter_for_collection_uses_principles_extractor_and_builder(monkeypatch):
+    principles_filter_value = PrinciplesQueryFilter(topic=["volume"])
+    goal_filter_value = GoalQueryFilter(muscle=["chest"])
+    principles_extractor = _FakeExtractor(principles_filter_value)
+    goal_extractor = _FakeExtractor(goal_filter_value)
+    built_principles_filter = Filter(must=[])
+    principles_builder = _FakeFilterBuilder(built_principles_filter)
+    goal_builder = _FakeFilterBuilder(Filter(must=[]))
+
+    monkeypatch.setattr(pipeline, "_state", {
+        "principles_extractor": principles_extractor,
+        "goal_extractor": goal_extractor,
+        "principles_filter_builder": principles_builder,
+        "goal_filter_builder": goal_builder,
+    })
+
+    result = pipeline._filter_for_collection("principles", "some query")
+
+    assert principles_extractor.queries_seen == ["some query"]
+    assert goal_extractor.queries_seen == []
+    assert principles_builder.built_from == [principles_filter_value]
+    assert goal_builder.built_from == []
+    assert result is built_principles_filter
+
+
+def test_filter_for_collection_uses_goal_extractor_and_builder_for_goal_collections(monkeypatch):
+    principles_filter_value = PrinciplesQueryFilter(topic=["volume"])
+    goal_filter_value = GoalQueryFilter(muscle=["chest"])
+    principles_extractor = _FakeExtractor(principles_filter_value)
+    goal_extractor = _FakeExtractor(goal_filter_value)
+    built_goal_filter = Filter(must=[])
+    principles_builder = _FakeFilterBuilder(Filter(must=[]))
+    goal_builder = _FakeFilterBuilder(built_goal_filter)
+
+    monkeypatch.setattr(pipeline, "_state", {
+        "principles_extractor": principles_extractor,
+        "goal_extractor": goal_extractor,
+        "principles_filter_builder": principles_builder,
+        "goal_filter_builder": goal_builder,
+    })
+
+    result = pipeline._filter_for_collection("hypertrophy", "chest compound movements")
+
+    assert goal_extractor.queries_seen == ["chest compound movements"]
+    assert principles_extractor.queries_seen == []
+    assert goal_builder.built_from == [goal_filter_value]
+    assert principles_builder.built_from == []
+    assert result is built_goal_filter
+
+
+def test_retrieve_collection_threads_built_filter_into_hybrid_retriever(monkeypatch):
+    fake_filter = Filter(must=[])
+    fake_client = _FakeQdrantClientForFilter()
+
+    monkeypatch.setattr(pipeline, "_state", {
+        "client": fake_client,
+        "dense_model": _FakeDenseModel(),
+        "sparse_model": _FakeSparseModel(),
+        "principles_extractor": _FakeExtractor(PrinciplesQueryFilter()),
+        "principles_filter_builder": _FakeFilterBuilder(fake_filter),
+    })
+
+    pipeline._retrieve_collection("principles", "chest exercises")
+
+    assert fake_client.last_call_kwargs["collection_name"] == "principles"
+    assert fake_client.last_call_kwargs["query_filter"] is fake_filter
+    assert fake_client.last_call_kwargs["limit"] == 10

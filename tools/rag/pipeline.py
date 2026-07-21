@@ -133,7 +133,7 @@ def format_results(chunks: list[ScoredChunk]) -> str:
 
 
 @tool
-def search_rag(muscle_group: str, query: str, goal: str) -> str:
+def search_rag(muscle_group: str, query: str, goal: str = "") -> str:
     """
     Search the RAG knowledge base for training principles and muscle-specific
     guidance, filtered by the plan's paradigm.
