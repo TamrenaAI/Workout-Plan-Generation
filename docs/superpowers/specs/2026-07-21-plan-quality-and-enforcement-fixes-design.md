@@ -114,6 +114,31 @@ ambiguity between the two tiers. `_extract_sets()`'s check order becomes:
 2. `_SETS_UNKNOWN_SEP.match(cell.strip())` — new: any stray separator character(s)
 3. `_SETS_CONCAT.match(cell.strip())` — fully collapsed, zero separator (unchanged)
 
+**Second confirmed root cause (same component, found while verifying the fix
+above against the real session):** fixing the parsing alone is not sufficient
+to correct the real session's Day 1. Every exercise in Day 1 is its muscle
+group's ordinal-1 pick (one exercise per muscle group, five muscle groups —
+the natural shape of a Full-Body day), and the trim loop only ever removes
+rows with `ordinal > 1` ("never remove the primary compound lift"). Verified
+directly: replacing the stray byte with a clean `x` in a sandboxed copy of the
+real session and re-running `enforce_volume_budget()` returns `True` (the
+summary gets corrected), but Day 1 itself is left completely untouched —
+still 5 exercises, still 20 sets, still 6 over its 14-set budget — because
+`candidates = [r for r in rows if r["ordinal"] is not None and r["ordinal"] > 1]`
+is empty and the loop breaks immediately.
+
+**Fix:** add a second-tier fallback that reduces *set counts* rather than
+removing whole exercises, for exactly the case where the ordinal-based pass
+can't (or couldn't fully) bring the day within budget: while still over
+budget, repeatedly reduce the set count of whichever remaining row has the
+most sets, down to a floor of 2 sets per exercise (never removing the row,
+never dropping a "primary compound lift" prescription to something
+meaningless like 1 set). This requires `_extract_sets()`'s sibling —
+extracting the *reps* half of the cell too (not currently captured anywhere)
+— so a reduced row's cell text can be correctly rewritten (e.g. `4×12` →
+`3×12`) instead of just having its set count silently drift out of sync with
+its displayed text.
+
 ## Component 2 — Honest Weekly Volume Summary (`pipeline/plan_finalize.py`)
 
 **Confirmed root cause:** `enforce_volume_budget()` already tallies
@@ -271,7 +296,12 @@ nutrition/energy-balance outcome outside this program's scope.
   `"4×12"`/`"4x12"`, the literal `"4\x7f12"` byte, a different stray character
   (e.g. `"4?12"`) to confirm the fix isn't narrowly hardcoded to `0x7F`
   specifically, fully-collapsed `"412"`, and a genuinely unparseable cell
-  (e.g. `"n/a"`) that must still return `None`.
+  (e.g. `"n/a"`) that must still return `None`. Plus a fixture reproducing the
+  real session's exact Day 1 shape (every exercise at ordinal 1 for its
+  muscle group, all over budget) asserting the set-reduction fallback brings
+  the day within budget without removing any row, and a fixture where even
+  the reduction floor can't reach the budget (asserting it stops at the floor
+  rather than looping forever or going non-positive).
 - **Component 2:** a fixture `plan.md` reproducing the exact real-world shape —
   every day within its per-day budget, but the Weekly Volume Summary tail
   showing numbers that don't match the real per-day tables — asserting
