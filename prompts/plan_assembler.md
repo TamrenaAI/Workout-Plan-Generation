@@ -68,4 +68,9 @@ rather than reporting a plan with a 0-set muscle group.
 
 ### Recovery Notes
 - {any asymmetry corrections to remind the user of}
-- {any BF% or sleep-based adjustments made}
+- {any BF%-related rep-range lean, framed as what training LEANED TOWARD - e.g. "elevated BF%
+  leaned rep selection toward the higher end of the hypertrophy range." NEVER framed as the
+  workout "addressing," "resolving," or "considering" body composition as an outcome - body
+  composition change is a nutrition/energy-balance outcome outside this program's scope, and this
+  note must say so explicitly if a BF%-related lean is mentioned at all.}
+- {any sleep-based adjustments made, separately from the BF% note above}
