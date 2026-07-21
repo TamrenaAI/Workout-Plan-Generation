@@ -136,15 +136,14 @@ def test_trims_over_budget_day_and_keeps_primary_exercises():
     assert "Seated Dumbbell Overhead Press" in day1
     assert "Close-Grip Bench Press" in day1
 
-    # Trimmed all the way down to just the 3 protected primaries (5+4+4=13 sets) --
-    # still over the 10-set budget, but that's expected: plan_assembler.md's rule
-    # is "never remove the primary compound lift", even if the budget can't be
-    # hit exactly as a result. What matters is it dropped from 35 to 13, and only
-    # non-primary rows were the ones removed.
+    # Pass 1 removes all 7 non-primary rows, leaving just the 3 protected
+    # primaries at 5+4+4=13 sets -- still over the 10-set budget. Pass 2 (the
+    # set-reduction fallback) then reduces set counts on those same 3 rows
+    # (never removing them) until the day reaches the budget exactly: 10.
     import re
     sets_cells = re.findall(r"\|\s*\d+\s*[×xX]\s*\d+", day1)
     total = sum(int(re.match(r"\|\s*(\d+)", c).group(1)) for c in sets_cells)
-    assert total == 13
+    assert total == 10
     assert len(sets_cells) == 3
 
 

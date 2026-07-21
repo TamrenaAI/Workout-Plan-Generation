@@ -189,7 +189,7 @@ def enforce_volume_budget(session_id: str) -> bool:
             rebuilt_days.append(day_lines)
             continue
 
-        header_row = day_lines[table_start].replace("\x7f", "×")
+        header_row = re.sub(r"(Sets\s*)\S(\s*Reps)", r"\1×\2", day_lines[table_start])
         separator_row = day_lines[table_start + 1]
         data_rows = day_lines[table_start + 2: table_end + 1]
 
@@ -213,8 +213,6 @@ def enforce_volume_budget(session_id: str) -> bool:
         if total > budget:
             changed = True
 
-            removed_count = len(rows)
-
             # Pass 1: remove whole non-primary exercises (ordinal > 1),
             # worst (lowest-priority, most sets) first.
             while total > budget:
@@ -225,24 +223,23 @@ def enforce_volume_budget(session_id: str) -> bool:
                 rows.remove(worst)
                 total -= worst["sets"] or 0
 
-            removed_count -= len(rows)
-
-            # Pass 2: only if Pass 1 didn't remove anything (all exercises
-            # are ordinal-1 from the start). Reduce set counts on the
-            # remaining rows instead of removing them, one set at a time
+            # Pass 2: removal alone wasn't enough, or had nothing eligible to
+            # remove (e.g. every exercise in this day is its muscle group's
+            # ordinal-1 "primary compound" pick -- the shape of a Full-Body
+            # day with one exercise per muscle group). Reduce set counts on
+            # the remaining rows instead of removing them, one set at a time
             # from whichever row currently has the most, down to a floor of
             # MIN_SETS_FLOOR per exercise.
-            if removed_count == 0 and total > budget:
-                while total > budget:
-                    reducible = [
-                        r for r in rows
-                        if r["sets"] is not None and r["reps"] is not None and r["sets"] > MIN_SETS_FLOOR
-                    ]
-                    if not reducible:
-                        break
-                    worst = max(reducible, key=lambda r: r["sets"])
-                    worst["sets"] -= 1
-                    total -= 1
+            while total > budget:
+                reducible = [
+                    r for r in rows
+                    if r["sets"] is not None and r["reps"] is not None and r["sets"] > MIN_SETS_FLOOR
+                ]
+                if not reducible:
+                    break
+                worst = max(reducible, key=lambda r: r["sets"])
+                worst["sets"] -= 1
+                total -= 1
 
         for r in rows:
             if r["muscle"] and r["sets"]:
