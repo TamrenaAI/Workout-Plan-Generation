@@ -40,6 +40,7 @@ _state: dict = {}
 
 
 def _ensure_loaded() -> None:
+    global _state
     if _state:
         return
     with _lock:
@@ -73,14 +74,21 @@ def _ensure_loaded() -> None:
 
         llm = get_llm(temperature=0)
 
-        _state["client"] = client
-        _state["dense_model"] = dense_model
-        _state["sparse_model"] = sparse_model
-        _state["reranker"] = CrossEncoderReranker(model=reranker_model)
-        _state["goal_extractor"] = GoalMetadataExtractor(llm=llm)
-        _state["principles_extractor"] = PrinciplesMetadataExtractor(llm=llm)
-        _state["goal_filter_builder"] = GoalFilterBuilder()
-        _state["principles_filter_builder"] = PrinciplesFilterBuilder()
+        # Build the fully-populated state locally, then rebind the module
+        # name in one atomic statement — populating the module-level dict
+        # key-by-key would let a concurrent, unlocked `if _state:` fast-path
+        # check observe a partially-built state (truthy after the first key
+        # write, but missing the rest) and proceed to use it.
+        _state = {
+            "client": client,
+            "dense_model": dense_model,
+            "sparse_model": sparse_model,
+            "reranker": CrossEncoderReranker(model=reranker_model),
+            "goal_extractor": GoalMetadataExtractor(llm=llm),
+            "principles_extractor": PrinciplesMetadataExtractor(llm=llm),
+            "goal_filter_builder": GoalFilterBuilder(),
+            "principles_filter_builder": PrinciplesFilterBuilder(),
+        }
 
 
 def route_collections(goal: str) -> list[str]:
