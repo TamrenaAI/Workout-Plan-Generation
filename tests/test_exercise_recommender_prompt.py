@@ -19,3 +19,9 @@ def test_prompt_splits_hypertrophy_reps_by_compound_vs_isolation():
     text = load_prompt("exercise_recommender")
     assert "Compound Reps" in text
     assert "Isolation Reps" in text
+
+
+def test_prompt_gives_concrete_injury_guidance_under_any_paradigm():
+    text = load_prompt("exercise_recommender")
+    assert "Injury/limitation rule" in text
+    assert "regardless of paradigm" in text

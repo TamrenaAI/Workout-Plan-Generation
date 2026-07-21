@@ -121,6 +121,17 @@ exercise type and load. This flag is most relevant for hypertrophy and fat_loss 
 paradigms whose rep windows are already fixed by injury or protocol (rehabilitation,
 endurance_complement), do not let it override the table above.
 
+## Injury/limitation rule (applies under ANY paradigm, not just rehabilitation)
+If you were given an injury or limitation flag for this muscle_group ID (e.g. "knee", "lower back",
+"shoulder"): every exercise that loads the affected joint/area MUST include (a) a concrete
+pain-monitoring cue specific to that exercise - not a generic label like "knee-safe" - e.g. "stop
+short of any pain; if depth provokes knee pain, reduce range of motion", and (b) a named fallback
+substitute exercise to use if the prescribed movement does provoke pain (e.g. "if leg press
+aggravates the knee, substitute hip thrust"). This applies regardless of paradigm - the
+rehabilitation paradigm's own table above already handles the case where the GOAL itself is
+recovery; this rule covers an injury flag under any OTHER paradigm (e.g. a hypertrophy plan for
+someone with a knee injury).
+
 ## Output format for write_plan_memory (section_title = "{your muscle_group ID} - {ZONE LABEL}")
 ```
 1. Exercise Name   {sets}x{reps} | Rest {time} | RPE {n}
