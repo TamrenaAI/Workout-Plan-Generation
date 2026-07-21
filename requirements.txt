@@ -23,8 +23,12 @@ google-auth
 pyjwt
 
 # Exercise database is SQLite (stdlib sqlite3) at this stage — no MongoDB
-# driver needed yet. RAG is a hardcoded stub (tools/rag.py) — no Qdrant /
-# sentence-transformers / pinecone-text dependency yet either.
+# driver needed yet.
 #
 # Dev/notebook-only extras (ipykernel, ipywidgets, ...) are in
 # requirements-dev.txt, not here.
+
+# ── RAG retrieval (tools/rag/) ────────────────────────────────
+qdrant-client==1.14.3
+sentence-transformers==4.0.1
+fastembed==0.7.1
