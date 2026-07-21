@@ -162,6 +162,13 @@ def test_no_change_when_already_within_budget():
         """| 1 | Flat Barbell Bench Press | 4x8 | 2-3 min | 8 |
 | 2 | Seated Dumbbell Overhead Press | 3x8 | 2-3 min | 8 |
 | 3 | Close-Grip Bench Press | 3x8 | 2-3 min | 8 |""",
+    ).replace(
+        """| chest | 24 | 10-12 | over |
+| shoulders | 20 | 10-12 | over |
+| arms | 28 | 10-12 | over |""",
+        """| chest | 4 | 10-12 | under |
+| shoulders | 3 | 10-12 | under |
+| arms | 3 | 10-12 | under |""",
     )
     session_id = _make_session(within_budget)
     assert enforce_volume_budget(session_id) is False
@@ -346,3 +353,82 @@ def test_set_reduction_stops_at_floor_when_budget_still_not_reachable():
         assert int(sets) == 2
     total = sum(int(sets) for sets, _reps in sets_cells)
     assert total == 10
+
+
+STALE_SUMMARY_SESSION = """
+
+## User Profile and Plan Header
+Goal: hypertrophy
+Paradigm: hypertrophy
+Days per week: 1
+Experience: beginner
+Session duration: 45min
+
+Day 1 - medium: muscles [chest] | max_sets: 14 | intensity: medium
+
+---
+
+## chest - medium
+1. Flat Barbell Bench Press 4x12 | Rest 90s | RPE 7
+   -> heavy compound pressing.
+2. Incline Dumbbell Press 4x12 | Rest 90s | RPE 7
+   -> upper chest compound.
+3. Cable Fly 3x12 | Rest 90s | RPE 7
+   -> isolation.
+
+Evidence: compound + isolation.
+
+---
+
+## Weekly Schedule
+### Day 1 -- Monday: Chest Focus
+**Warm-up:** Light cardio.
+
+| # | Exercise | Sets × Reps | Rest | RPE |
+|---|----------|-------------|------|-----|
+| 1 | Flat Barbell Bench Press | 4×12 | 90s | 7 |
+| 2 | Cable Fly | 3×12 | 90s | 7 |
+
+**Coaching notes:** Focus on form.
+
+---
+
+### Weekly Volume Summary
+| Muscle Group | Sets/Week | Target | Status |
+|---|---|---|---|
+| chest | 14 | 10-12 | over |
+
+### Recovery Notes
+- No asymmetry corrections needed.
+"""
+
+
+def test_corrects_stale_summary_even_when_no_day_needed_trimming():
+    """Day 1 is genuinely within its 14-set budget (4+3=7 sets scheduled --
+    Incline Dumbbell Press was never used, which is fine), but the Weekly
+    Volume Summary claims chest=14/over, which doesn't match the real
+    schedule (7 sets, under the 10-12 target). This must get corrected even
+    though no day was over budget and nothing needed to be trimmed."""
+    session_id = _make_session(STALE_SUMMARY_SESSION)
+
+    changed = enforce_volume_budget(session_id)
+    assert changed is True
+
+    corrected = read_weekly_schedule(session_id)
+    summary = corrected.split("### Weekly Volume Summary")[1]
+    assert "| chest | 7 | 10-12 | under |" in summary
+
+    day1 = corrected.split("## Weekly Schedule")[1].split("### Weekly Volume Summary")[0]
+    assert "| 1 | Flat Barbell Bench Press | 4×12 | 90s | 7 |" in day1
+    assert "| 2 | Cable Fly | 3×12 | 90s | 7 |" in day1
+
+
+def test_still_returns_false_when_everything_is_already_correct():
+    """If the day is within budget AND the summary already matches
+    reality, nothing should be rewritten at all."""
+    already_correct = STALE_SUMMARY_SESSION.replace(
+        "| chest | 14 | 10-12 | over |",
+        "| chest | 7 | 10-12 | under |",
+    )
+    session_id = _make_session(already_correct)
+    assert enforce_volume_budget(session_id) is False

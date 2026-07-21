@@ -6,26 +6,39 @@ and trim any day over its max_sets budget itself, by rewriting the table. In
 practice this doesn't reliably happen:
 
 - The assembler sometimes writes "Sets x Reps" cells without the required
-  "x" separator (e.g. "5 8" collapsed to "58"), which silently breaks
-  validate_session_duration's regex-based set counting — an over-budget day
-  reads as 0 scheduled sets and passes.
+  "x" separator, or with a stray unexpected character in its place (a real
+  session was found with a literal ASCII DEL byte, 0x7F, where "x" should have
+  been) — either of which used to silently break set counting entirely,
+  making an over-budget day read as 0 scheduled sets.
 - Even when formatted correctly and clearly over budget, the LLM has been
   observed to not actually rewrite the day (see sessions/c597aeb5-...: Day 1
   scheduled 35 sets against a 10-set budget, survived untouched through two
   assembler passes).
+- Even when the assembler's per-day removal logic works, a day where every
+  exercise is its muscle group's ordinal-1 ("primary compound") pick can't be
+  fixed by removing exercises at all, since the priority rule never removes
+  an ordinal-1 row — this is exactly the shape of a Full-Body day with one
+  exercise per muscle group.
+- The assembler's own Weekly Volume Summary can also just be wrong (stale
+  relative to whatever the final per-day tables actually say), independent
+  of whether any single day was over its own per-day budget.
 
 enforce_volume_budget() re-parses whatever schedule the assembler actually
 wrote, trims any day still over budget using the same priority rule already
 documented in plan_assembler.md ("never remove the primary compound lift for
-any muscle group"), and appends the corrected schedule as a fresh
-'## Weekly Schedule' section. tools.memory.read_weekly_schedule() already
-returns the LAST such section, so the corrected version becomes what's shown
-to the user with no other wiring changes needed.
+any muscle group") — falling back to reducing set counts (never removing the
+row) when removal alone can't or couldn't reach the budget — and always
+recomputes the Weekly Volume Summary from the real per-day totals, rewriting
+it if it doesn't match what's currently written even when no day needed
+trimming. Appends the corrected schedule as a fresh '## Weekly Schedule'
+section. tools.memory.read_weekly_schedule() already returns the LAST such
+section, so the corrected version becomes what's shown to the user with no
+other wiring changes needed.
 
 Exercises this can't confidently classify (couldn't be matched back to a
-muscle group's numbered prescription list) are never auto-removed — being
-conservative about what we delete matters more than hitting the budget
-exactly.
+muscle group's numbered prescription list) are never auto-removed or
+auto-reduced — being conservative about what we touch matters more than
+hitting the budget exactly.
 """
 
 import re
@@ -117,11 +130,17 @@ def _parse_target_range(cell: str) -> "tuple[int, int] | None":
 
 def enforce_volume_budget(session_id: str) -> bool:
     """Trims any day of the LAST '## Weekly Schedule' section that exceeds its
-    DAY MAP max_sets budget, and recomputes the Weekly Volume Summary from the
-    trimmed days. Appends the corrected schedule as a new section if any
-    changes were made. Returns True if a correction was written, False if the
-    schedule was already within budget (or couldn't be parsed) and nothing
-    needed to change."""
+    DAY MAP max_sets budget -- removing non-primary (ordinal > 1) exercises
+    first, then reducing set counts (never removing the row) down to
+    MIN_SETS_FLOOR if removal alone can't or couldn't reach the budget, e.g.
+    when every exercise in the day is its muscle group's ordinal-1 pick.
+    Always recomputes the Weekly Volume Summary from the real per-day
+    totals and rewrites it if it doesn't match what's currently written,
+    independent of whether any day's rows needed trimming. Appends the
+    corrected schedule as a new section if any day's rows were modified OR
+    the summary didn't match reality. Returns True if a correction was
+    written, False if nothing needed to change (or the schedule couldn't be
+    parsed)."""
     path = _plan_path(session_id)
     try:
         with open(path, "r", encoding="utf-8") as f:
@@ -162,7 +181,7 @@ def enforce_volume_budget(session_id: str) -> bool:
     if not day_blocks:
         return False
 
-    changed = False
+    any_day_trimmed = False
     muscle_week_totals: dict = {}
     rebuilt_days = []
 
@@ -211,7 +230,7 @@ def enforce_volume_budget(session_id: str) -> bool:
         budget = day_info["budget"]
 
         if total > budget:
-            changed = True
+            any_day_trimmed = True
 
             # Pass 1: remove whole non-primary exercises (ordinal > 1),
             # worst (lowest-priority, most sets) first.
@@ -257,9 +276,9 @@ def enforce_volume_budget(session_id: str) -> bool:
             day_lines[:table_start] + [header_row, separator_row] + rebuilt_row_lines + day_lines[table_end + 1:]
         )
 
-    if not changed:
-        return False
-
+    # Always attempt a corrected tail (cheap, no side effects) -- comparing
+    # it against the original tells us whether the summary itself needed
+    # correcting, independent of whether any day's rows were modified above.
     rebuilt_tail = []
     for line in tail_lines:
         vol_match = _VOLUME_ROW.match(line.strip())
@@ -276,6 +295,11 @@ def enforce_volume_budget(session_id: str) -> bool:
                 rebuilt_tail.append(f"| {muscle} | {new_sets} | {target} | {status} |")
                 continue
         rebuilt_tail.append(line)
+
+    summary_needs_correction = bool(muscle_week_totals) and rebuilt_tail != tail_lines
+
+    if not any_day_trimmed and not summary_needs_correction:
+        return False
 
     body_lines = []
     for day_lines in rebuilt_days:
