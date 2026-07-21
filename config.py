@@ -18,6 +18,9 @@ SESSION_DIR = BASE_DIR / "sessions"
 DATA_DIR = BASE_DIR / "data"
 DB_PATH = DATA_DIR / "tamreena.db"
 PROMPTS_DIR = BASE_DIR / "prompts"
+RAG_DATA_DIR = BASE_DIR / "rag_data"
+QDRANT_PATH = RAG_DATA_DIR / "qdrant"
+RAG_MODELS_DIR = DATA_DIR / "models"
 
 SESSION_DIR.mkdir(parents=True, exist_ok=True)
 DATA_DIR.mkdir(parents=True, exist_ok=True)
