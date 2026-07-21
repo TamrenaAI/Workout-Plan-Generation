@@ -13,6 +13,7 @@ to keep the test focused on Day 1 while preserving the exact failure mode.
 """
 
 import os
+import re
 import sys
 import uuid
 
@@ -165,3 +166,184 @@ def test_no_change_when_already_within_budget():
     )
     session_id = _make_session(within_budget)
     assert enforce_volume_budget(session_id) is False
+
+
+def test_extract_sets_handles_clean_x_separator():
+    from pipeline.plan_finalize import _extract_sets
+    assert _extract_sets("4x12") == 4
+    assert _extract_sets("4×12") == 4
+
+
+def test_extract_sets_handles_stray_separator_byte():
+    from pipeline.plan_finalize import _extract_sets
+    assert _extract_sets("4\x7f12") == 4
+
+
+def test_extract_sets_handles_a_different_stray_character():
+    from pipeline.plan_finalize import _extract_sets
+    assert _extract_sets("4?12") == 4
+
+
+def test_extract_sets_handles_fully_collapsed_digits():
+    from pipeline.plan_finalize import _extract_sets
+    assert _extract_sets("58") == 5
+
+
+def test_extract_sets_returns_none_for_unparseable_cell():
+    from pipeline.plan_finalize import _extract_sets
+    assert _extract_sets("n/a") is None
+
+
+def test_extract_sets_reps_returns_both_values():
+    from pipeline.plan_finalize import _extract_sets_reps
+    assert _extract_sets_reps("4\x7f12") == (4, "12")
+    assert _extract_sets_reps("4x8-10") == (4, "8-10")
+    assert _extract_sets_reps("n/a") is None
+
+
+REAL_SESSION_ALL_ORDINAL_ONE = """
+
+## User Profile and Plan Header
+Goal: hypertrophy
+Paradigm: hypertrophy
+Days per week: 3
+Experience: beginner
+Session duration: 45min
+Injuries/limits: knee
+Priority focus: chest
+
+Day 1 - medium: muscles [chest, back, shoulders, arms, legs] | max_sets: 14 | intensity: medium
+
+---
+
+## chest - medium
+1. Flat Barbell Bench Press 4x12 | Rest 90s | RPE 7
+   -> heavy compound pressing.
+2. Incline Dumbbell Press 4x12 | Rest 90s | RPE 7
+   -> upper chest compound.
+
+Evidence: compound pressing.
+
+---
+
+## back - medium
+1. Pull-Up 4x12 | Rest 90s | RPE 7
+   -> compound bodyweight pull.
+2. Lat Pulldown 4x12 | Rest 90s | RPE 7
+   -> compound pull alternative.
+
+Evidence: compound pull.
+
+---
+
+## shoulders - medium
+1. Seated Dumbbell Overhead Press 4x12 | Rest 90s | RPE 7
+   -> compound press.
+2. Dumbbell Lateral Raise 4x12 | Rest 90s | RPE 7
+   -> isolation.
+
+Evidence: compound press.
+
+---
+
+## arms - medium
+1. Close-Grip Bench Press 4x12 | Rest 90s | RPE 7
+   -> compound triceps press.
+2. Barbell Curl 4x12 | Rest 90s | RPE 7
+   -> isolation biceps.
+
+Evidence: compound press.
+
+---
+
+## legs - medium
+1. Leg Press 4x12 | Rest 90s | RPE 7
+   -> compound quad press.
+2. Hip Thrust 4x12 | Rest 90s | RPE 7
+   -> compound glute.
+
+Evidence: compound press.
+
+---
+
+## Weekly Schedule
+### Day 1 -- Monday: Full Body Focus
+**Warm-up:** Light cardio.
+
+| # | Exercise | Sets \x7f Reps | Rest | RPE |
+|---|----------|-------------|------|-----|
+| 1 | Flat Barbell Bench Press | 4\x7f12 | 90s | 7 |
+| 2 | Pull-Up | 4\x7f12 | 90s | 7 |
+| 3 | Seated Dumbbell Overhead Press | 4\x7f12 | 90s | 7 |
+| 4 | Close-Grip Bench Press | 4\x7f12 | 90s | 7 |
+| 5 | Leg Press | 4\x7f12 | 90s | 7 |
+
+**Coaching notes:** Focus on form.
+
+---
+
+### Weekly Volume Summary
+| Muscle Group | Sets/Week | Target | Status |
+|---|---|---|---|
+| chest | 14 | 10-12 | over |
+| back | 14 | 10-12 | over |
+| shoulders | 11 | 10-12 | met |
+| arms | 11 | 10-12 | met |
+| legs | 14 | 10-12 | over |
+
+### Recovery Notes
+- No asymmetry corrections needed.
+"""
+
+
+def test_reproduces_real_session_bug_stray_byte_and_all_ordinal_one_day():
+    """Directly reproduces the real motivating bug: every Sets x Reps cell
+    contains a literal 0x7F byte instead of x (previously made every row
+    parse as 0 sets, so enforce_volume_budget did nothing despite the day
+    being 6 sets over budget), AND every exercise in the day is its muscle
+    group's ordinal-1 pick (so the existing removal-based trim can't remove
+    anything -- this is the shape of a Full-Body day with one exercise per
+    muscle group). Both must be fixed for the day to end up within budget."""
+    session_id = _make_session(REAL_SESSION_ALL_ORDINAL_ONE)
+
+    changed = enforce_volume_budget(session_id)
+    assert changed is True
+
+    corrected = read_weekly_schedule(session_id)
+    day1 = corrected.split("### Weekly Volume Summary")[0]
+
+    for name in [
+        "Flat Barbell Bench Press", "Pull-Up", "Seated Dumbbell Overhead Press",
+        "Close-Grip Bench Press", "Leg Press",
+    ]:
+        assert name in day1
+
+    sets_cells = re.findall(r"\|\s*(\d+)[×xX](\d+)\s*\|", day1)
+    assert len(sets_cells) == 5
+    total = sum(int(sets) for sets, _reps in sets_cells)
+    assert total <= 14
+    assert "\x7f" not in corrected
+
+
+def test_set_reduction_stops_at_floor_when_budget_still_not_reachable():
+    """If every exercise reduces down to the 2-set floor and the day is
+    STILL over budget, the function must stop there rather than looping
+    forever or reducing a set count below the floor."""
+    unreachable_budget = REAL_SESSION_ALL_ORDINAL_ONE.replace(
+        "Day 1 - medium: muscles [chest, back, shoulders, arms, legs] | max_sets: 14 | intensity: medium",
+        "Day 1 - medium: muscles [chest, back, shoulders, arms, legs] | max_sets: 5 | intensity: medium",
+    )
+    session_id = _make_session(unreachable_budget)
+
+    changed = enforce_volume_budget(session_id)
+    assert changed is True
+
+    corrected = read_weekly_schedule(session_id)
+    day1 = corrected.split("### Weekly Volume Summary")[0]
+
+    sets_cells = re.findall(r"\|\s*(\d+)[×xX](\d+)\s*\|", day1)
+    assert len(sets_cells) == 5
+    for sets, _reps in sets_cells:
+        assert int(sets) == 2
+    total = sum(int(sets) for sets, _reps in sets_cells)
+    assert total == 10

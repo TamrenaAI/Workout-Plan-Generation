@@ -33,6 +33,7 @@ import re
 from tools.memory import _plan_path, find_last_schedule_marker, write_plan_memory
 
 _SETS_X_REPS = re.compile(r"(\d+)\s*[×xX]\s*(\d+(?:-\d+)?)")
+_SETS_UNKNOWN_SEP = re.compile(r"^(\d)\D+(\d+(?:-\d+)?)$")  # malformed "4\x7f12" -> sets=4, reps=12
 _SETS_CONCAT = re.compile(r"^(\d)(\d+(?:-\d+)?)$")  # malformed "58" -> sets=5, reps=8
 
 _DAY_MAP_LINE = re.compile(
@@ -43,6 +44,8 @@ _GROUP_HEADING = re.compile(r"^##\s+(\S+)\s*-\s*(\S+)\s*$")
 _NUMBERED_EXERCISE = re.compile(r"^(\d+)\.\s+(.+?)\s+\d+\s*[×xX]\s*\d+")
 _DAY_HEADING = re.compile(r"^###\s+Day\s+(\d+)\b")
 _VOLUME_ROW = re.compile(r"^\|\s*([A-Za-z_]+)\s*\|\s*(\d+)\s*\|\s*([\d]+-[\d]+|\S+)\s*\|\s*(\S+)\s*\|$")
+
+MIN_SETS_FLOOR = 2
 
 
 def _parse_day_map(content: str) -> dict:
@@ -78,14 +81,22 @@ def _parse_group_ordinals(content: str, muscle: str, zone: str) -> dict:
     return ordinals
 
 
-def _extract_sets(cell: str) -> "int | None":
+def _extract_sets_reps(cell: str) -> "tuple[int, str] | None":
     match = _SETS_X_REPS.search(cell)
     if match:
-        return int(match.group(1))
+        return int(match.group(1)), match.group(2)
+    match = _SETS_UNKNOWN_SEP.match(cell.strip())
+    if match:
+        return int(match.group(1)), match.group(2)
     match = _SETS_CONCAT.match(cell.strip())
     if match:
-        return int(match.group(1))
+        return int(match.group(1)), match.group(2)
     return None
+
+
+def _extract_sets(cell: str) -> "int | None":
+    result = _extract_sets_reps(cell)
+    return result[0] if result else None
 
 
 def _split_row(line: str) -> list:
@@ -178,7 +189,7 @@ def enforce_volume_budget(session_id: str) -> bool:
             rebuilt_days.append(day_lines)
             continue
 
-        header_row = day_lines[table_start]
+        header_row = day_lines[table_start].replace("\x7f", "×")
         separator_row = day_lines[table_start + 1]
         data_rows = day_lines[table_start + 2: table_end + 1]
 
@@ -188,11 +199,12 @@ def enforce_volume_budget(session_id: str) -> bool:
             if len(cells) < 5:
                 continue
             exercise_name = cells[1]
-            sets = _extract_sets(cells[2])
+            sets_reps = _extract_sets_reps(cells[2])
+            sets, reps = sets_reps if sets_reps else (None, None)
             lookup = ordinal_lookup.get(exercise_name.strip().lower())
             ordinal, muscle = lookup if lookup else (None, None)
             rows.append({
-                "cells": cells, "sets": sets, "ordinal": ordinal, "muscle": muscle,
+                "cells": cells, "sets": sets, "reps": reps, "ordinal": ordinal, "muscle": muscle,
             })
 
         total = sum(r["sets"] or 0 for r in rows)
@@ -200,6 +212,11 @@ def enforce_volume_budget(session_id: str) -> bool:
 
         if total > budget:
             changed = True
+
+            removed_count = len(rows)
+
+            # Pass 1: remove whole non-primary exercises (ordinal > 1),
+            # worst (lowest-priority, most sets) first.
             while total > budget:
                 candidates = [r for r in rows if r["ordinal"] is not None and r["ordinal"] > 1]
                 if not candidates:
@@ -207,6 +224,25 @@ def enforce_volume_budget(session_id: str) -> bool:
                 worst = max(candidates, key=lambda r: (r["ordinal"], r["sets"] or 0))
                 rows.remove(worst)
                 total -= worst["sets"] or 0
+
+            removed_count -= len(rows)
+
+            # Pass 2: only if Pass 1 didn't remove anything (all exercises
+            # are ordinal-1 from the start). Reduce set counts on the
+            # remaining rows instead of removing them, one set at a time
+            # from whichever row currently has the most, down to a floor of
+            # MIN_SETS_FLOOR per exercise.
+            if removed_count == 0 and total > budget:
+                while total > budget:
+                    reducible = [
+                        r for r in rows
+                        if r["sets"] is not None and r["reps"] is not None and r["sets"] > MIN_SETS_FLOOR
+                    ]
+                    if not reducible:
+                        break
+                    worst = max(reducible, key=lambda r: r["sets"])
+                    worst["sets"] -= 1
+                    total -= 1
 
         for r in rows:
             if r["muscle"] and r["sets"]:
@@ -216,6 +252,8 @@ def enforce_volume_budget(session_id: str) -> bool:
         for idx, r in enumerate(rows, start=1):
             cells = list(r["cells"])
             cells[0] = str(idx)
+            if r["sets"] is not None and r["reps"] is not None:
+                cells[2] = f"{r['sets']}×{r['reps']}"
             rebuilt_row_lines.append("| " + " | ".join(cells) + " |")
 
         rebuilt_days.append(
