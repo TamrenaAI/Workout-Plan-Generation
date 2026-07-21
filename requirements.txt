@@ -29,6 +29,8 @@ pyjwt
 # requirements-dev.txt, not here.
 
 # ── RAG retrieval (tools/rag/) ────────────────────────────────
-qdrant-client==1.14.3
+# qdrant-client pinned to 1.18.0: older versions cannot load the ingested rag_data/qdrant
+# collections (raise ValidationError on metadata field in CreateCollection schema).
+qdrant-client==1.18.0
 sentence-transformers==4.0.1
 fastembed==0.7.1
