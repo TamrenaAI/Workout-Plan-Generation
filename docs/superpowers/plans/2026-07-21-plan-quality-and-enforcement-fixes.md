@@ -498,7 +498,7 @@ def test_corrects_stale_summary_even_when_no_day_needed_trimming():
     summary = corrected.split("### Weekly Volume Summary")[1]
     assert "| chest | 7 | 10-12 | under |" in summary
 
-    day1 = corrected.split("### Weekly Schedule")[1].split("### Weekly Volume Summary")[0]
+    day1 = corrected.split("## Weekly Schedule")[1].split("### Weekly Volume Summary")[0]
     assert "| 1 | Flat Barbell Bench Press | 4×12 | 90s | 7 |" in day1
     assert "| 2 | Cable Fly | 3×12 | 90s | 7 |" in day1
 
@@ -711,17 +711,74 @@ hitting the budget exactly.
 """
 ```
 
-- [ ] **Step 4: Run the tests to verify they pass**
+- [ ] **Step 4: Fix a pre-existing test fixture that Step 3's change correctly starts catching**
+
+`test_no_change_when_already_within_budget` (pre-existing, from before this plan) builds its fixture by replacing `REAL_BROKEN_SESSION`'s over-budget Day 1 table with a within-budget one (chest=4, shoulders=3, arms=3 sets — 10 total, at budget), but never touches `REAL_BROKEN_SESSION`'s Weekly Volume Summary tail, which still reads the ORIGINAL over-budget numbers (`chest | 24 | 10-12 | over`, `shoulders | 20 | 10-12 | over`, `arms | 28 | 10-12 | over`). Before this task, that staleness was invisible (the function never checked the summary independent of day-level trimming). After Step 3's change, it's correctly detected as `summary_needs_correction = True`, so `enforce_volume_budget` now (correctly) returns `True` for this fixture — breaking the test's `is False` assertion.
+
+This is the fixture being internally inconsistent, not the new logic being wrong: fix the fixture so its summary matches its own within-budget day table, preserving the test's original intent (day untouched, summary already accurate, nothing to correct) and its `is False` assertion. Replace:
+
+```python
+def test_no_change_when_already_within_budget():
+    within_budget = REAL_BROKEN_SESSION.replace(
+        """| 1 | Flat Barbell Bench Press | 5x8 | 2-3 min | 8 |
+| 2 | Incline Dumbbell Press | 4x8 | 2-3 min | 8 |
+| 3 | Cable Fly | 3x12 | 90s | 7 |
+| 4 | Pec Deck | 3x12 | 90s | 7 |
+| 5 | Seated Dumbbell Overhead Press | 4x8 | 2-3 min | 8 |
+| 6 | Cable Lateral Raise | 3x12 | 2-3 min | 8 |
+| 7 | Dumbbell Lateral Raise | 3x12 | 2-3 min | 8 |
+| 8 | Close-Grip Bench Press | 4x8 | 2-3 min | 8 |
+| 9 | Barbell Curl | 3x8 | 2-3 min | 8 |
+| 10 | Incline Dumbbell Curl | 3x8 | 2-3 min | 8 |""",
+        """| 1 | Flat Barbell Bench Press | 4x8 | 2-3 min | 8 |
+| 2 | Seated Dumbbell Overhead Press | 3x8 | 2-3 min | 8 |
+| 3 | Close-Grip Bench Press | 3x8 | 2-3 min | 8 |""",
+    )
+    session_id = _make_session(within_budget)
+    assert enforce_volume_budget(session_id) is False
+```
+
+with:
+
+```python
+def test_no_change_when_already_within_budget():
+    within_budget = REAL_BROKEN_SESSION.replace(
+        """| 1 | Flat Barbell Bench Press | 5x8 | 2-3 min | 8 |
+| 2 | Incline Dumbbell Press | 4x8 | 2-3 min | 8 |
+| 3 | Cable Fly | 3x12 | 90s | 7 |
+| 4 | Pec Deck | 3x12 | 90s | 7 |
+| 5 | Seated Dumbbell Overhead Press | 4x8 | 2-3 min | 8 |
+| 6 | Cable Lateral Raise | 3x12 | 2-3 min | 8 |
+| 7 | Dumbbell Lateral Raise | 3x12 | 2-3 min | 8 |
+| 8 | Close-Grip Bench Press | 4x8 | 2-3 min | 8 |
+| 9 | Barbell Curl | 3x8 | 2-3 min | 8 |
+| 10 | Incline Dumbbell Curl | 3x8 | 2-3 min | 8 |""",
+        """| 1 | Flat Barbell Bench Press | 4x8 | 2-3 min | 8 |
+| 2 | Seated Dumbbell Overhead Press | 3x8 | 2-3 min | 8 |
+| 3 | Close-Grip Bench Press | 3x8 | 2-3 min | 8 |""",
+    ).replace(
+        """| chest | 24 | 10-12 | over |
+| shoulders | 20 | 10-12 | over |
+| arms | 28 | 10-12 | over |""",
+        """| chest | 4 | 10-12 | under |
+| shoulders | 3 | 10-12 | under |
+| arms | 3 | 10-12 | under |""",
+    )
+    session_id = _make_session(within_budget)
+    assert enforce_volume_budget(session_id) is False
+```
+
+- [ ] **Step 5: Run the tests to verify they pass**
 
 Run: `pytest tests/test_plan_finalize.py -v`
-Expected: PASS (11 tests: 9 from Task 1 + 2 new)
+Expected: PASS (13 tests: 11 from Task 1 + 2 new — note the brief's earlier step count of "9 from Task 1" undercounted; Task 1 actually left 11 tests in this file, confirmed directly against the file rather than the plan's arithmetic)
 
-- [ ] **Step 5: Run the full suite**
+- [ ] **Step 6: Run the full suite**
 
 Run: `pytest tests/ -q`
 Expected: PASS, no regressions
 
-- [ ] **Step 6: Commit**
+- [ ] **Step 7: Commit**
 
 ```bash
 git add pipeline/plan_finalize.py tests/test_plan_finalize.py
