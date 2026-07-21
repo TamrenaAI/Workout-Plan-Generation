@@ -8,3 +8,8 @@ from config import load_prompt
 def test_prompt_instructs_passing_goal_to_search_rag():
     text = load_prompt("exercise_recommender")
     assert "goal set to the plan's Paradigm value" in text
+
+
+def test_prompt_prefers_regressed_variants_for_beginners_on_bodyweight_compounds():
+    text = load_prompt("exercise_recommender")
+    assert "assisted or regressed variant" in text
