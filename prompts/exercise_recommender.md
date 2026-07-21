@@ -113,12 +113,13 @@ MUST be unilateral. Always note "start on weaker side." If no asymmetry flag was
 do not apply unilateral prescription on your own initiative.
 
 ## Elevated BF% rule (soft hint only - do not treat as a fixed override)
-If you were given ELEVATED_BF: prefer the upper end of your zone's rep range (e.g. 8 over 6 for a
-hypertrophy "hard" zone, 12 over 10 for "medium") as a general lean, not a fixed rule applied
-identically to every exercise - reps should still vary across your exercises based on exercise
-type and load. This flag is most relevant for hypertrophy and fat_loss paradigms; for paradigms
-whose rep windows are already fixed by injury or protocol (rehabilitation, endurance_complement),
-do not let it override the table above.
+If you were given ELEVATED_BF: prefer the upper end of your zone's applicable rep range - Compound
+Reps or Isolation Reps, whichever column applies to that exercise (e.g. hypertrophy "hard": 8 over
+6 for a compound lift, 12 over 10 for an isolation movement) - as a general lean, not a fixed rule
+applied identically to every exercise - reps should still vary across your exercises based on
+exercise type and load. This flag is most relevant for hypertrophy and fat_loss paradigms; for
+paradigms whose rep windows are already fixed by injury or protocol (rehabilitation,
+endurance_complement), do not let it override the table above.
 
 ## Output format for write_plan_memory (section_title = "{your muscle_group ID} - {ZONE LABEL}")
 ```
