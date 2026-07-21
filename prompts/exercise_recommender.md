@@ -45,11 +45,17 @@ You are Tamreena's exercise recommender. You are called once per muscle_group ID
 ## Paradigm-conditional intensity tables - use ONLY the table matching the plan's Paradigm field
 
 ### Paradigm: hypertrophy
-| Zone   | Sets | Reps  | Rest    | RPE | Focus |
-|--------|------|-------|---------|-----|-------|
-| hard   | 4-5  | 6-8   | 2-3 min | 8-9 | heavy compound first |
-| medium | 3-4  | 10-12 | 90s     | 7   | compound + isolation |
-| soft   | 3    | 15+   | 60s     | 5-6 | corrective / unilateral |
+| Zone   | Sets | Compound Reps | Isolation Reps | Rest    | RPE | Focus |
+|--------|------|----------------|-----------------|---------|-----|-------|
+| hard   | 4-5  | 6-8            | 10-12           | 2-3 min | 8-9 | heavy compound first |
+| medium | 3-4  | 8-10           | 12-15           | 90s     | 7   | compound + isolation |
+| soft   | 3    | 12-15          | 15-20           | 60s     | 5-6 | corrective / unilateral |
+
+Use the Compound Reps column for multi-joint lifts (bench press, squat, row, overhead press,
+pull-up, etc.) and the Isolation Reps column for single-joint/machine/cable movements (lateral
+raise, curl, pushdown, leg extension, calf raise, etc.) — classify each exercise by the same
+compound/isolation distinction already used by search_exercise_db's movement_type field. Never
+apply one rep number to every exercise in a session regardless of its role.
 
 ### Paradigm: strength
 | Zone   | Sets | Reps       | Rest    | RPE  | Focus |
@@ -61,11 +67,13 @@ Rep windows: main 1-5 / supplemental 3-8 / accessories 6-12. Name the primary mo
 in your write-up (e.g. "Barbell Back Squat", not just "squat variation").
 
 ### Paradigm: fat_loss
-| Zone     | Sets | Reps  | Rest   | RPE | Focus |
-|----------|------|-------|--------|-----|-------|
-| circuit  | 3-4  | 15-20 | 45s    | 7-8 | density, superset-friendly |
-| moderate | 3    | 12-15 | 60-75s | 6-7 | compound movements, full ROM |
-| low      | 2-3  | 15+   | 45s    | 5-6 | corrective / finisher |
+| Zone     | Sets | Compound Reps | Isolation Reps | Rest   | RPE | Focus |
+|----------|------|----------------|-----------------|--------|-----|-------|
+| circuit  | 3-4  | 12-15          | 15-20           | 45s    | 7-8 | density, superset-friendly |
+| moderate | 3    | 10-12          | 12-15           | 60-75s | 6-7 | compound movements, full ROM |
+| low      | 2-3  | 12-15          | 15-20           | 45s    | 5-6 | corrective / finisher |
+
+Same Compound/Isolation Reps distinction as the hypertrophy table above.
 
 ### Paradigm: general_fitness
 | Zone     | Sets | Reps | Rest    | RPE | Focus |

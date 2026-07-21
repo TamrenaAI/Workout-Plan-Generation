@@ -13,3 +13,9 @@ def test_prompt_instructs_passing_goal_to_search_rag():
 def test_prompt_prefers_regressed_variants_for_beginners_on_bodyweight_compounds():
     text = load_prompt("exercise_recommender")
     assert "assisted or regressed variant" in text
+
+
+def test_prompt_splits_hypertrophy_reps_by_compound_vs_isolation():
+    text = load_prompt("exercise_recommender")
+    assert "Compound Reps" in text
+    assert "Isolation Reps" in text
