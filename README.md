@@ -248,16 +248,35 @@ All LLM calls go through Azure OpenAI (`AZURE_OPENAI_DEPLOYMENT_NAME`) via
 `ChatOpenAI` pointed at the Azure endpoint's OpenAI-compatible `base_url`
 (`agents/llm.py`).
 
-## Retrieval (RAG) — hardcoded stub, by design at this stage
+## Retrieval (RAG) — real hybrid search + reranking
 
-`tools/rag.py` returns static training principles and muscle-specific notes
-per muscle group. **This is intentional and unchanged from the notebooks** —
-the real pipeline (two Qdrant collections, `BAAI/bge-m3` dense + BM25 sparse
-hybrid search fused with RRF, reranked locally with `BAAI/bge-reranker-v2-m3`)
-is designed in `tamrena_architecture_2.md` Section 7 but is pending the RAG
-team's ingestion pipeline. Swapping the stub for the real implementation
-should only touch `tools/rag.py` — `search_rag(muscle_group, query)` is the
-only contract the rest of the system depends on.
+`tools/rag/` is a package: `models.py` (Pydantic schemas matching the
+ingested data), `filtering.py` (LLM-extracted metadata filters + Qdrant
+filter builders), `retrieval.py` (dense `BAAI/bge-m3` + BM25 sparse hybrid
+search fused with RRF), `reranking.py` (`BAAI/bge-reranker-v2-m3`
+cross-encoder), and `pipeline.py` (orchestration). `tools/rag/__init__.py`
+re-exports `search_rag`, the only contract the rest of the system depends
+on — now `search_rag(muscle_group, query, goal)`, where `goal` is the
+plan's paradigm.
+
+Three real Qdrant collections live in `rag_data/qdrant` (`principles`,
+`hypertrophy`, `strength`), ingested from
+`rag_data/books/science_and_development_of_muscle_hypertrophy` by
+`notebooks/chunking.ipynb` + `notebooks/vectordb_retrieval.ipynb`. `goal`
+routes each query to the matching collection plus `principles`
+(`hypertrophy` → `[hypertrophy, principles]`; `strength` →
+`[strength, principles]`; any other paradigm → `[principles]` only).
+Within each collection, an LLM call extracts a structured filter (muscle,
+topic, experience level, etc.) to narrow the search instead of scanning
+the whole collection, then hybrid search retrieves the top 10 per
+collection and the cross-encoder reranks the merged candidates down to
+the top 3 returned to the calling agent.
+
+Models and the BM25 index are downloaded from Hugging Face on first use
+and cached under `data/models/` (gitignored); Qdrant, the dense/reranker
+models, and the LLM client are lazily loaded once per process. See
+`docs/superpowers/specs/2026-07-21-rag-retrieval-integration-design.md`
+for the full design.
 
 ## Exercise database — SQLite, by design at this stage
 
@@ -298,10 +317,10 @@ python scripts/inspect_session.py <session_id>
 | Supervisor + Exercise Recommender + Plan Assembler agents | Implemented (`agents/`, `prompts/`) |
 | Shared MD memory + progress tracking | Implemented (`tools/memory.py`) |
 | SQLite exercise search | Implemented (`tools/database.py`, `database/seed.py`) |
-| RAG (Qdrant hybrid search) | Hardcoded stub (`tools/rag.py`) — real pipeline pending RAG team |
+| RAG (Qdrant hybrid search) | Implemented (`tools/rag/`) — hybrid dense+sparse retrieval, reranking, real ingested data |
 | FastAPI endpoints (`/health`, `/validate-image`, `/plan`, `/generate-plan`) | Implemented (`api/`) |
 | Frontend (vanilla JS/CSS, mounted at `/`) | Implemented (`frontend/`, see `FRONTEND.md`) |
-| `/ingest` (RAG document ingestion) | Not built — no ingestion pipeline exists yet since RAG is a stub |
+| `/ingest` (RAG document ingestion) | Not built as an API route — ingestion is done offline via `notebooks/chunking.ipynb` + `notebooks/vectordb_retrieval.ipynb` |
 | MongoDB exercise DB | Not built — deferred, SQLite is used at this stage per current direction |
 
 `notebooks/Agent_exploration.ipynb` and `notebooks/Inbody_Agent.ipynb` are

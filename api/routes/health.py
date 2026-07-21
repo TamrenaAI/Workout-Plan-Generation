@@ -1,10 +1,13 @@
 """
 GET /health — liveness + readiness probe.
 
-Checks the dependencies this stage of the system actually has: SQLite and
-the Azure OpenAI configuration. RAG (Qdrant + local embedding/reranker
-models) is a hardcoded stub right now, so it's reported as such rather than
-probed — there's nothing external to fail.
+Checks the dependencies this stage of the system actually has: SQLite, the
+Azure OpenAI configuration, and that the RAG Qdrant data is present on
+disk. None of these trigger a real Qdrant connection or load the
+embedding/reranker models — tools/rag/pipeline.py lazily loads those on
+first real search_rag() call, not on every health probe, so this only
+checks that the directory exists (same "config present, not a live call"
+spirit as the Azure OpenAI check below).
 """
 
 from datetime import datetime, timezone
@@ -12,7 +15,7 @@ from datetime import datetime, timezone
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-from config import AZURE_OPENAI_API_KEY, AZURE_OPENAI_DEPLOYMENT_NAME, AZURE_OPENAI_ENDPOINT
+from config import AZURE_OPENAI_API_KEY, AZURE_OPENAI_DEPLOYMENT_NAME, AZURE_OPENAI_ENDPOINT, QDRANT_PATH
 from tools.database import get_db_connection
 
 router = APIRouter()
@@ -40,7 +43,13 @@ async def health_check():
         results["azure_openai"] = "unhealthy: missing AZURE_OPENAI_* environment variables"
         overall = "unhealthy"
 
-    results["rag"] = "stub — hardcoded principles/muscle notes, pending RAG team ingestion pipeline"
+    # RAG Qdrant data present (path exists — not a live Qdrant connection or
+    # model load on every health check)
+    if QDRANT_PATH.exists():
+        results["rag"] = "healthy"
+    else:
+        results["rag"] = f"unhealthy: Qdrant data not found at {QDRANT_PATH}"
+        overall = "unhealthy"
 
     status_code = 200 if overall == "healthy" else 503
     return JSONResponse(
