@@ -3,6 +3,7 @@ window.tamrena = {
   intake: {},           // filled by intake.js
   capturedBlob: null,   // set by CameraCapture after VALID state
   result: null,         // set after /generate-plan response
+  authToken: null,      // set by processing.js's ensureAuthToken() (dev-login)
 };
 
 // ── Pages registry ────────────────────────────────────────────────────────────

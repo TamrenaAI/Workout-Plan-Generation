@@ -77,6 +77,19 @@ function closeStream() {
   }
 }
 
+// This frontend has no real login flow — /auth/dev-login mints a session for
+// a fixed test account (only available when the server has ALLOW_DEV_LOGIN=true).
+// Cached on window.tamrena so a page that generates more than once doesn't
+// re-login every time.
+async function ensureAuthToken() {
+  if (window.tamrena.authToken) return window.tamrena.authToken;
+  const res = await fetch('/auth/dev-login', { method: 'POST' });
+  if (!res.ok) throw new Error(`Dev login failed (${res.status}) — is ALLOW_DEV_LOGIN=true set on the server?`);
+  const data = await res.json();
+  window.tamrena.authToken = data.access_token;
+  return window.tamrena.authToken;
+}
+
 // Kicks off generation, then opens a real-time SSE connection to watch the
 // actual agent pipeline run — no guessing, no fixed timers past this point.
 async function runGeneration() {
@@ -86,9 +99,14 @@ async function runGeneration() {
     if (v !== undefined && v !== '') form.append(k, v);
   });
 
-  let started;
+  let started, token;
   try {
-    const res = await fetch('/generate-plan', { method: 'POST', body: form });
+    token = await ensureAuthToken();
+    const res = await fetch('/generate-plan', {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: form,
+    });
     if (!res.ok) throw new Error(`Server returned ${res.status}`);
     started = await res.json();
   } catch (err) {
@@ -100,12 +118,16 @@ async function runGeneration() {
 
   window.tamrena.result = { session_id: started.session_id, inbody: started.inbody };
 
-  await streamProgress(started.session_id);
+  await streamProgress(started.session_id, token);
 }
 
-function streamProgress(sessionId) {
+// token is passed as a query param, not a header — the browser's native
+// EventSource API cannot send custom headers at all (see
+// auth/dependencies.py's get_current_user_for_stream for the matching
+// server-side accommodation).
+function streamProgress(sessionId, token) {
   return new Promise(resolve => {
-    _eventSource = new EventSource(`/generate-plan/stream/${sessionId}`);
+    _eventSource = new EventSource(`/generate-plan/stream/${sessionId}?token=${encodeURIComponent(token)}`);
 
     _eventSource.onmessage = async (msg) => {
       let event;

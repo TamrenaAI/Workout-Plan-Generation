@@ -37,7 +37,7 @@ from agents.exercise_recommender import EXERCISE_RECOMMENDER
 from agents.plan_assembler import PLAN_ASSEMBLER
 from agents.streaming import run_and_stream
 from agents.supervisor import build_supervisor
-from auth.dependencies import get_current_user
+from auth.dependencies import get_current_user, get_current_user_for_stream
 from auth.ownership import create_session, list_sessions_for_user, user_owns_session
 from config import SESSION_DIR
 from pipeline.inbody_history import record_scan
@@ -191,7 +191,7 @@ Generate a full personalised workout plan for this user."""
 
 
 @router.get("/generate-plan/stream/{session_id}")
-async def stream_plan(session_id: str, user: dict = Depends(get_current_user)):
+async def stream_plan(session_id: str, user: dict = Depends(get_current_user_for_stream)):
     # 404 (not 403) for a session_id that exists but belongs to someone else —
     # otherwise the response itself would confirm the session_id is valid to
     # whoever's probing it.
