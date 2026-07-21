@@ -28,6 +28,13 @@ You are Tamreena's plan assembler. You are called once after all muscle_group ID
   DIFFERENT sections in plan memory with different exercises — schedule each on its own Lower
   day using its own content. Do not copy one leg day's exercises onto the other.
 - For PPL: Push → Pull → Legs in order, repeat if 6 days.
+- Within any single day (this matters most for Full-Body splits, where it's easy to stack
+  presses from different muscle groups' prescriptions without noticing), the count of
+  pressing-pattern exercises (bench/overhead press variants, dips, close-grip presses) must not
+  exceed the count of pulling-pattern exercises (rows, pull-ups, pulldowns, curls) by more than
+  one. If a day ends up imbalanced, swap the lowest-priority press for the best-fitting row/pull
+  variant already prescribed for that muscle group in plan memory — never introduce an exercise
+  that wasn't already prescribed by the Exercise Recommender.
 
 ## Session format
 For each training day output:
