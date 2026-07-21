@@ -182,10 +182,6 @@ function renderIntakeOptional(container) {
       ${dropdownField('priority', 'Priority muscle group', PRIORITY_OPTIONS, {
         defaultValue: '', otherType: 'text', otherPlaceholder: 'Describe what to prioritise...',
       })}
-      <div style="margin-bottom:24px;">
-        <span class="t-label">Age</span>
-        <input id="field-age" type="number" class="t-input" placeholder="e.g. 27" />
-      </div>
       ${dropdownField('sleep_quality', 'Sleep quality', SLEEP_OPTIONS, { defaultValue: '' })}
       ${dropdownField('job_type', 'Job type', JOB_OPTIONS, { defaultValue: '' })}
 
@@ -195,12 +191,10 @@ function renderIntakeOptional(container) {
 }
 
 function submitIntakeOptional() {
-  const age = document.getElementById('field-age')?.value;
   window.tamrena.intake = {
     ...window.tamrena.intake,
     injuries: getDropdownValue('injuries'),
     priority: getDropdownValue('priority'),
-    age: age ? parseInt(age) : undefined,
     sleep_quality: getDropdownValue('sleep_quality'),
     job_type: getDropdownValue('job_type'),
   };
