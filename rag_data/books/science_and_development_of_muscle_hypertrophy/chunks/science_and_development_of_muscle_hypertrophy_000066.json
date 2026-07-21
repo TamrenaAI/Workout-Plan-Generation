@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000066",
+  "text": "multiply and ultimately fuse to existing fibers, providing agents necessary for the repair and remodeling of the muscle (228, 254). This process is regulated by the Notch signaling pathway (208) and the transcription factor known as serum response factor (178). The satellite cell response may include the co-expression of myogenic regulatory factors such as Myf5, MyoD, myogenin, and MRF4 (47) that bind to sequence-specific DNA elements present in the promoter of muscle genes; each plays a distinct role in growth-related processes (193, 210). A subpopulation of satellite cells remains uninvolved in the adaptive me- chanical response and instead is committed to self-renewal to ensure maintenance of the satellite cell pool (57).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 66,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

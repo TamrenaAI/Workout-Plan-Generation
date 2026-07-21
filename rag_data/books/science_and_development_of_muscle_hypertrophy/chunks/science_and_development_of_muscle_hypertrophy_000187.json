@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000187",
+  "text": "## Signaling Pathways\n\nThis section provides a general overview of the primary anabolic intracellular signaling pathways and their significance to skeletal muscle hypertrophy. Although huge strides have been made to elucidate these pathways, our understanding of their relative importance is limited at this time.\n\n## KEY POINT\n\nNumerous intracellular signaling pathways have been identified in skeletal muscle including PI3K/Akt, MAPK, phosphatidic acid, AMPK, and calcium-dependent pathways. The serine/threonine kinase mTOR has been shown to be critical to resistance traininginduced hypertrophic adaptation.\n\n## PI3K/Akt Pathway",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 16,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming",
+      "hypertrophy_programming",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

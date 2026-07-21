@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000435",
+  "text": "The MRI scanning process generally involves lying supine in a tube-like machine and remaining motionless for the duration of the test. The MRI unit creates a magnetic field inside the muscle of interest, causing protons to align in the magnetic field. The protons are then activated by a pulsed radio frequency, causing them to absorb energy. The protons then release energy as the pulse is discontinued, and the protons return to their original position. The released energy is detected by the machine, facilitating image acquisition (73). Image resolution is generally excellent, providing distinct delineation of muscle borders that allows for precise measurements of muscular dimensions.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 90,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

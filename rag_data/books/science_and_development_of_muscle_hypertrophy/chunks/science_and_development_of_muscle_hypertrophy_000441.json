@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000441",
+  "text": "Despite its unique and wide-ranging capabilities for assessing muscle hypertrophy, the biopsy method has several drawbacks. First and foremost, it is an invasive technique. Although the biopsied area is anesthetized, some discomfort is experienced during the procedure; depending on individual pain tolerance, the discomfort can be onerous. In addition, biopsies are specific to a very small region of muscle tissue (~100 mg, or the size of a pencil eraser). As previously mentioned, hypertrophy can manifest in a nonuniform manner along the length of a muscle, and the results obtained by a single biopsy do not necessarily reflect those of the entire muscle. Moreover, differences exist in the location of fibers within a muscle, with Type I fibers tending to reside deeper into the muscle than",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 96,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000308",
+  "text": "ROS have been shown to mediate anabolism via activation of the MAPK pathway. The treatment of C2 myoblasts with an ROS variant heightens MAPK signaling, and the temporal response varies between MAPK subfamilies (ERK1/2, JNK, and p38 MAPK) (130). Given that eccentric exercise is associated with greater MAPK activation compared to concentric or isometric actions (162, 167), it is conceivable that ROS production contributes to this stimulus. There also is evidence that ROS enhance growth processes by amplifying IGF-1 signaling. In vitro ROS treatment of mouse C2C12 myocytes significantly increased phosphorylation of the IGF-1 receptor, whereas phosphorylation was markedly suppressed with antioxidant provision (104). These findings suggest a crucial role for ROS in the biological actions of",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 137,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "recovery",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

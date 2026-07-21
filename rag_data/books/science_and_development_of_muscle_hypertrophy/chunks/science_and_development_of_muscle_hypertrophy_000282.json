@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000282",
+  "text": "Although EIMD can be deleterious from a performance standpoint, some researchers have speculated that the associated increases in inflammation and protein turnover are necessary for muscle growth (63, 300). The rationale is based on the hypothesis that structural alterations associated with damage influence gene expression in a manner that strengthens the affected tissue, thereby serving to protect the muscle against further injury (12). Substantial evidence links muscle damage to factors involved in the hypertrophic response to exercise, although these correlations do not establish causality for a positive effect.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 111,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_activation",
+      "exercise_selection"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

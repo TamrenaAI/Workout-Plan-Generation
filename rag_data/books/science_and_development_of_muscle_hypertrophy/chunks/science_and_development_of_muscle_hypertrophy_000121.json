@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000121",
+  "text": "The binding of testosterone to cell receptors can rapidly (within seconds) trigger second messengers involved in downstream protein kinase signaling (49), suggesting a link between momentary post-workout elevations and muscle protein synthesis. Kvorning and colleagues (1 17) demonstrated that suppressing testosterone levels with goserelin blunted exercise-induced muscle growth despite no alterations in acute mRNA expression of MyoD, myogenin, myostatin, IGF-1Ea, IGF-1Eb, IGF1Ec, and androgen receptor, suggesting that testosterone may mediate intracellular signaling downstream from these factors. Both total and free testosterone levels in the placebo group increased by approximately 15% immediately post-exercise, whereas those treated with goserelin displayed a reduction in total and free",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 121,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

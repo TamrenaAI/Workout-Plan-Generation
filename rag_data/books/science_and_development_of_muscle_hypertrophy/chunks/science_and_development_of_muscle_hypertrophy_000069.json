@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000069",
+  "text": "during growth, the satellite cell-derived addition of myonuclei appears to be essential for sustaining muscular adaptations over the long term (227). This is consistent with the concept of myonuclear domain , which proposes that the myonucleus regulates mRNA production for a finite sarcoplasmic volume and any increases in fiber size must therefore be accompanied by a proportional increase in myonuclei (167). Considering that skeletal muscle contains multiple myonuclear domains, growth could occur by either an increase in the number of domains (via an increase in myonuclear number) or an increase in the size of existing domains. Both events are believed to occur during the adaptive response to exercise, and satellite cells are believed to contribute significantly to the process (228).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 69,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

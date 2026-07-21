@@ -1,0 +1,33 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001042",
+  "text": "the few controlled studies on the topic, Prestes and colleagues (104) randomized a group of young women experienced in resistance training to perform either a traditional periodized program in which loads were progressively increased from 12RM to 14RM up to 4RM to 6RM or a program in which the progression was reversed (from 4RM to 6RM down to 12RM to 14RM). Both groups performed 3 sets of multiple exercises for the whole body, and training occurred 3 days per week over 12 weeks. Body composition, as assessed by the skinfold method, showed that subjects in the linear periodized group significantly increased fat-free mass by approximately 7%, whereas those in the reverse linear periodized group had nonsignificant increases of approximately 4%. Although these results are intriguing and",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 109,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "periodization",
+      "load",
+      "fatigue_management",
+      "volume",
+      "frequency",
+      "exercise_selection",
+      "recovery",
+      "recovery",
+      "fatigue_management",
+      "load",
+      "periodization",
+      "volume",
+      "frequency",
+      "exercise_selection"
+    ],
+    "experience_level": "intermediate",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

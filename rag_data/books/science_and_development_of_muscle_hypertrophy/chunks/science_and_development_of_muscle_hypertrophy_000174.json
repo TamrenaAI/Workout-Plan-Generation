@@ -1,0 +1,24 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000174",
+  "text": "Research indicates that mechanosensors are sensitive to both the magnitude and temporal aspects of loading. Using an in situ model (i.e., examining an intact muscle within the animal), Martineau and Gardiner (167) subjected rat plantaris muscles to peak concentric, eccentric, isometric, and passive tensions. Results showed tension-dependent phosphorylation of c-Jun N-terminal kinase (JNK) and ERK1/2; eccentric actions generated the greatest effect, and passive stretch generated the least. Peak tension was determined to be a better predictor of mitogen-activated protein kinase (MAPK) phosphorylation than either time under tension or rate of tension development. In a follow-up study by the same lab (168), an in situ evaluation of the rat gastrocnemius muscle showed a linear relationship",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 3,
+  "metadata": {
+    "muscle": [
+      "glutes",
+      "quads",
+      "hamstrings",
+      "calves"
+    ],
+    "topic": [
+      "hypertrophy_programming",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "intermediate",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

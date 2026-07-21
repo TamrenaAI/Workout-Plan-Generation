@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000800",
+  "text": "Evidence also suggests that an increase in mitochondrial proteins is responsible for at least some of the increased fiber growth associated with aerobic endurance training (54). A number of studies have reported that aerobic exercise increases only basal mitochondrial protein synthesis and has no effect on myofibrillar protein synthesis (26, 33, 41, 77). However, work by Di Donato and colleagues (25) showed that both mitochondrial and myofibrillar protein fractions were elevated following an acute bout of high-intensity (90% of maximal heart rate) and low-intensity (66% of maximal heart rate) aerobic exercise. Interestingly, only the high-intensity condition showed sustained muscle protein synthesis elevations at 24 to 28 hours post-exercise recovery. Based on these acute results, it",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 6: Role of Aerobic Training in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 23,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "intensity",
+      "recovery"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

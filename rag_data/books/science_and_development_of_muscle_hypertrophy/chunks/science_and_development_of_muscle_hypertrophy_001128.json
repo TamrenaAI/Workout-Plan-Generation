@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001128",
+  "text": "(considered to have a CS of 100). Somewhat similarly, the PDCAAS method is based on a comparison of the EAA content of a test protein with that of a reference EAA profile, but, as the name implies, it also takes into account the effects of digestion. The PER method takes a completely different approach; it measures weight gain in young rats that are fed a test protein as compared to every gram of consumed protein. Alternatively, both the BV and NPU methods are based on nitrogen balance: BV measures the nitrogen retained in the body and divides it by the total amount of nitrogen absorbed from dietary protein, whereas NPU simply compares the amount of protein consumed to the amount retained.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 9: Nutrition for Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 44,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

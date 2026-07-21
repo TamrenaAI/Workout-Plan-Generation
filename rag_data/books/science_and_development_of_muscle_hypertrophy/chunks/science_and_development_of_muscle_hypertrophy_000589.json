@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000589",
+  "text": "Exercise selection is another factor worthy of consideration when determining rest intervals for hypertrophy-oriented goals. Multi-joint exercises, particularly those employing free weights, cause substantially more fatigue than single-joint exercises. This was elegantly demonstrated in a study showing a much larger dropoff in the number of repetitions completed over the course of 5 sets during performance of the bench press compared to the machine chest fly in a cohort of resistance-trained men; in fact, the chest fly showed almost no reduction in repetitions over the first 3 sets in the series (225). It can therefore be inferred that while multi-joint free weight exercises require rest periods of at least 2 minutes, somewhat shorter rest periods can be used during performance of",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 137,
+  "metadata": {
+    "muscle": [
+      "chest"
+    ],
+    "topic": [
+      "exercise_selection",
+      "fatigue_management",
+      "recovery"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

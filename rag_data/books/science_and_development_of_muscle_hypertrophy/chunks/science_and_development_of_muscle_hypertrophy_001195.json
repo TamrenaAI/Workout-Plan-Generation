@@ -1,0 +1,39 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001195",
+  "text": "A number of longitudinal studies have directly investigated the effects of post-exercise protein ingestion on muscle growth. The results of these trials are contradictory, seemingly because of disparities in study design and methodology. In an attempt to achieve clarity on the topic, my lab conducted a meta-analysis of the protein-timing literature (124). Inclusion criteria were that the studies had to involve randomized controlled trials in which one group received protein within 1 hour preor post-workout and the other did not for at least 2 hours after the exercise bout. Moreover, studies had to span at least 6 weeks and provide a minimum dose of 6 g of EAAs-an amount shown to produce a robust increase in muscle protein synthesis following resistance training (19, 65). Twenty-three",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 9: Nutrition for Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 111,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "periodization",
+      "recovery",
+      "hypertrophy_programming",
+      "muscle_growth_mechanisms",
+      "exercise_selection",
+      "fatigue_management",
+      "load",
+      "volume",
+      "frequency",
+      "exercise_order",
+      "exercise_selection",
+      "recovery",
+      "periodization",
+      "hypertrophy_programming",
+      "muscle_growth_mechanisms",
+      "fatigue_management",
+      "load",
+      "volume",
+      "frequency",
+      "exercise_order"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

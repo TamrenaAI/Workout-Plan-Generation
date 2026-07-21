@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000268",
+  "text": "## RESEARCH FINDINGS\n\n## CONCLUSIONS ABOUT THE HYPERTROPHIC ROLE OF METABOLIC STRESS\n\nStrong evidence suggests that exercise-induced metabolic stress contributes to the hypertrophic response. What remains to be determined is whether these effects are additive to the stimulus from mechanical forces or perhaps redundant provided a given loading threshold is achieved. The difficulty in trying to draw inferences from experimental resistance training designs is that mechanical tension and metabolic stress occur in tandem, confounding the ability to tease out the effects of one from the other. This can result in mistakenly attributing growth to metabolic factors when mechanical factors are, in fact, responsible, or vice versa.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 97,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000004",
+  "text": "Skeletal muscle appears striped, or striated, when viewed under an electron microscope. The striated appearance is due to the stacking of sarcomeres, which are the basic functional units of myofibrils. Each muscle fiber contains hundreds to thousands of myofibrils , which are composed of many sarcomeres joined end to end. Myofibrils contain two primary protein filaments that are responsible for muscle contraction: actin (a thin filament) and myosin (a thick filament), which comprise approximately 50% of the protein content of a muscle cell (53). Each myosin filament is surrounded by six actin filaments, and three myosin filaments surround each actin filament, thereby maximizing their ability to interact. Additional proteins, including titin, nebulin, and myotilin, are present in muscle to",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 4,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

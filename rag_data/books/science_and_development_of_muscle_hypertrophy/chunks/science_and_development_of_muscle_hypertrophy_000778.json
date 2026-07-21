@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000778",
+  "text": "It is commonly thought that aerobic endurance exercise produces little to no increase in muscle hypertrophy. This belief is consistent with evidence showing that aerobic-type exercise mediates catabolic pathways, whereas anaerobic exercise mediates anabolic pathways. Atherton and colleagues (6) conducted pioneering work to elucidate differences in the intracellular signaling response between the two types of exercises. Using an ex vivo model, they electrically stimulated isolated rat muscles with either intermittent high-frequency bursts to simulate resistance-type training or continuous low-frequency activation to simulate aerobic-type training. Postintervention analysis revealed that AMPK phosphorylation in the low-frequency condition increased approximately 2-fold immediately and 3",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 6: Role of Aerobic Training in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 1,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "advanced_techniques"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength"
+    ]
+  }
+}

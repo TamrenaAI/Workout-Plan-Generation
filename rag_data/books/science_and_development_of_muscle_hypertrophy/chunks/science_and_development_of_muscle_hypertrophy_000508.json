@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000508",
+  "text": "Heavy loading is generally believed to promote neural adaptations and to have lesser effects on hypertrophy (109). High intensities of load (&gt;85% of 1RM) naturally result in high levels of mechanical tension on muscles. However, because the duration of a heavy set is short (&lt;15 seconds), energy during such training is primarily derived from the ATP-PC system and little contribution occurs from fast glycolysis. Thus, metabolite accumulation is relatively low, which is supported by research showing that peripheral fatigue induced via metabolic stress was significantly reduced when training in a low-repetition range (5 repetitions per set) compared to sets carried out in a medium-repetition range (10 repetitions per set) (195).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 56,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "load",
+      "intensity",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

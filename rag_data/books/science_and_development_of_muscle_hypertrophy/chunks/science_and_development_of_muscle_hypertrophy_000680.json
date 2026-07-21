@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000680",
+  "text": "- An optimal rest interval for hypertrophy training does not appear to exist. Research indicates that resting at least 2 minutes between sets provides a hypertrophic advantage over resting for shorter periods, at least when performing multi-joint free weight exercises. It may be beneficial to employ rest intervals of approximately 60 to 90 seconds for single-joint and perhaps certain machinebased exercises because these movements do not show a reduction in volume load from shorter rest, and the heightened metabolic stress may confer additional anabolic advantages.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 228,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "volume",
+      "recovery",
+      "fatigue_management"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

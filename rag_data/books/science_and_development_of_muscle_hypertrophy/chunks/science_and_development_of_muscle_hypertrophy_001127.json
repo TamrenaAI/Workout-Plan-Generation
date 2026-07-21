@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001127",
+  "text": "Several methods have been developed to determine the quality of protein in a given food. These include the protein digestibility-corrected amino acid score (PDCAAS), protein efficiency ratio (PER), chemical score (CS), biological value (BV), and net protein utilization (NPU). Each method uses its own criteria for assessing protein quality, which is ultimately a function of a food's essential amino acid composition and the digestibility and bioavailability of its amino acids (122). For example, the CS method analyzes the content of each essential amino acid in a food, which is then divided by the content of the same amino acid in egg protein (considered to have a CS of 100). Somewhat similarly, the PDCAAS method is based on a comparison of the EAA content of a test protein with that of a",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 9: Nutrition for Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 43,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "power_development",
+      "power_development"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

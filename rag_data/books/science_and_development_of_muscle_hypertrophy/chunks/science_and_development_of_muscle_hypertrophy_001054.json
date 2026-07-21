@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001054",
+  "text": "Several observational studies have shown an association between poor sleep and low levels of lean mass (21, 71, 135), although these findings are not universal (101). Other observational research indicates that effects of short sleep duration may be sex specific, with greater detriments on lean mass in women compared to men. Moreover, research shows that a year of melatonin treatment positively affected lean mass gains, presumably by helping to regulate sleep patterns (4). Interestingly, evidence also shows that excessive sleep duration correlates with lower lean mass (70, 135), suggesting there may be a sweet spot for optimizing muscle growth. However, while these studies provide intriguing evidence on the topic, they are correlational in nature and thus cannot be used to draw causality.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 121,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

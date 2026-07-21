@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000139",
+  "text": "to be involved in inducing satellite cell activation and proliferation (92, 250), but not differentiation (250). This observation suggests that MGF increases the number of myoblasts available for post-exercise repair as well as facilitating the replenishment of the satellite cell pool. However, other research challenges MGF's role in satellite cell function. Fornaro and colleagues (66) demonstrated that high concentrations of MGF failed to enhance proliferation or differentiation in both mouse C2C12 murine myoblasts and human skeletal muscle myoblasts, as well as primary mouse muscle stem cells. Interestingly, mature IGF-1 promoted a strong proliferative response in all cell types. The discrepancies between this study and previous work are not readily apparent.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 139,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

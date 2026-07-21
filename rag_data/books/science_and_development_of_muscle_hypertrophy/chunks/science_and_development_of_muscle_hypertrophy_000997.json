@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000997",
+  "text": "Stance width during multi-joint lower-body exercise does not appear to affect muscular activity in the quadriceps (91), nor does altering foot position (i.e., tibial rotation) from 30° inward rotation to 80° outward rotation (64, 95). On the other hand, there is evidence that foot position influences quadriceps activity in open-chain single-joint exercise, and that an externally rotated position elicits greater activation of the rectus femoris (125). However, given that extreme rotation of the tibia can change normal patella tracking and potentially cause undesirable varus or valgus moments, the practical value of altering foot positions in an attempt to target aspects of the quadriceps remains questionable. Although some evidence indicates that a wider stance, particularly sumo style,",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 64,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "exercise_selection",
+      "biomechanics",
+      "muscle_activation"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

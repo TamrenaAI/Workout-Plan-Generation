@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000141",
+  "text": "Resistance training acutely upregulates IL-6 by up to 100-fold, and exercise-induced metabolic stress may further stimulate its production (62). Moreover, the magnitude of post-exercise IL-6 expression significantly correlates with hypertrophic adaptations (140). Contracting skeletal muscles account for a majority of circulating IL-6; additional sources are synthesized by connective tissue, adipocytes, and the brain (163). The appearance of IL-6 in the systemic circulation precedes that of other cytokines, and the magnitude of its release is by far more prominent. It was initially thought that muscle damage was a primary mediator of the IL-6 response. This seems logical, given that damage to muscle tissue initiates an inflammatory cas- cade. However, emerging evidence indicates that",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 141,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

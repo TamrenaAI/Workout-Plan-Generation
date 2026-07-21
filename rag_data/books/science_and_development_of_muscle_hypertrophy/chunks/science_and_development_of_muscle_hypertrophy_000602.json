@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000602",
+  "text": "EMG activity of the pectoralis major during traditional lifting was markedly higher on the concentric portion of the movement (by 18%, 19%, and 12% for the first, middle, and last repetition, respectively). During eccentric actions, the activation advantage for training at a traditional versus a slow tempo increased to 32%, 36%, and 36% in the first, middle, and last repetition, respectively. These findings provide evidence that volitionally slowing the tempo during a repetition is suboptimal for maximally activating the target muscle.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 150,
+  "metadata": {
+    "muscle": [
+      "chest"
+    ],
+    "topic": [
+      "muscle_activation"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

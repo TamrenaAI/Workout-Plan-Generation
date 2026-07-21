@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000835",
+  "text": "Depending on the scope of the training program, aerobic endurance exercise can be performed either in the same session with resistance training or on alternate days. Several studies have examined how the order of aerobic and resistance exercise performed in the same session affects intracellular signaling responses. Researchers have put forth the acute interference hypothesis whereby performing aerobic training immediately before strength training produces residual fatigue that ultimately compromises force production during resistance exercise (45). However, the hypothesis is specific to strength adaptations and does not necessarily reflect resultant effects on muscle hypertrophy despite a logical rationale that a reduction in mechanical tension would indeed compromise anabolism.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 6: Role of Aerobic Training in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 58,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "advanced_techniques"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength",
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000636",
+  "text": "replicated this basic study design and similarly found greater increases in triceps thickness when the order of exercises progressed from small- to large-muscle groups (238). Although these findings might seem to indicate a benefit to performing smaller-muscle-group exercises first, it should be noted that hypertrophy of the larger muscles was not assessed in either study. It is possible, if not likely, that whichever muscles were worked earlier in the session hypertrophied to a greater extent than those performed toward the end of the bout. This suggests a benefit to prioritizing exercise order so that lagging muscles are worked at the onset of a workout.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 184,
+  "metadata": {
+    "muscle": [
+      "triceps"
+    ],
+    "topic": [
+      "exercise_order"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

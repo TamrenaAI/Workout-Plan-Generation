@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000144",
+  "text": "IL-15 is another myokine that has received considerable interest as having a potential role in skeletal muscle growth. Muscle is the primary source of IL-15 expression, and exercise regulates its production. Resistance training, in particular, has been shown to acutely elevate IL-15 protein levels, apparently through its release via microtears in muscle fibers as a result of inflammation, oxidative stress, or both (177, 186). Type II fibers show a greater increase in IL-15 mRNA levels than Type I fibers (152).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 144,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

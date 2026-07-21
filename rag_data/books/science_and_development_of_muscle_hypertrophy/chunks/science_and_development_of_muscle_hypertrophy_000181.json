@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000181",
+  "text": "These receptors reside at the cell surface and interact with the extracellular matrix to facilitate the transmission of mechanical and chemical information from the outside to the inside of the cell (307, 308). Integrins mediate intracellular signal transduction as part of focal adhesion complexes (i.e., costameres), which are sarcolemmal proteins that bridge the connection between the extracellular matrix and the cytoskeleton. Focal adhesion complexes can directly enhance protein translation via activation of ribosomal proteins, and their disruption impairs intracellular anabolic signaling (173). Emerging evidence shows that an enzyme called focal adhesion kinase (FAK) serves as a key player in signal initiation (48). The expression of FAK displays load-dependent characteristics whereby",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 10,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_physiology",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

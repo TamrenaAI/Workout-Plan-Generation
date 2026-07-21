@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000485",
+  "text": "General hypertrophy training guidelines recommend allowing at least 48 hours between resistance bouts for the same muscle group (205). It has been surmised that training before muscle protein synthesis has fully run its course-which lasts up to ~48 hours post-exercise-impairs muscle protein accretion (135). Research in rodents shows that myogenic responses are attenuated when recovery occurs less than 48 hours after the previous resistance bout (89). Moreover, total RNA has been shown to be elevated in humans 72 hours after a bout of maximal isometric electrical contractions (21). Because the majority of skeletal muscle RNA is ribosomal, these findings suggest that a cell's potential for protein synthesis remains heightened even beyond the 2-day time point.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 33,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "recovery",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

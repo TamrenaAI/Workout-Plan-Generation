@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000055",
+  "text": "Increases in fascicle length have been reported in athletes who replace heavy resistance training with high-speed training (11, 29). These findings suggest that performing concentric actions with maximal velocity may promote the addition of sarcomeres in series even in those with considerable training experience.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 55,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

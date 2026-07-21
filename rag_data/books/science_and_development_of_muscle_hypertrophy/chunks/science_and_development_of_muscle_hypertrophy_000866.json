@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000866",
+  "text": "Emerging research indicates that micro RNAs (miRNAs) may play a significant role in the interindividual response to resistance exercise. Micro RNAs are short, noncoding RNA molecules capable of altering the translation of protein-coding genes (19). Not only do miRNAs help to fine-tune gene expression patterns, but they also can serve as on-off switches in gene expression (95). To date, hundreds of miRNAs have been identified, and many are known to be responsive to extracellular stimuli, such as physical exercise, and thereby regulate muscle phenotype (9, 19). Davidsen and colleagues (19) found a moderate correlation between resistance training-induced muscle growth and changes in the quantity of miRNAs. Specifically, low responders presented a downregulation of miR-378, -26a, and -29a,",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 7: Factors in Maximal Hypertrophic Development",
+  "collection": "hypertrophy",
+  "chunk_index": 13,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

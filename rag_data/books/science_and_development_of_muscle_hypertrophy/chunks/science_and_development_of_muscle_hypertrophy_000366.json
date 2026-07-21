@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000366",
+  "text": "Several biochemical methods can be employed to estimate total body skeletal muscle mass. Although not as well-known as other methods of measurement, biochemical techniques can be viable options for morphological assessment. The most studied of these methods involves the measurement of 24-hour urinary creatinine excretion, which shows a good correlation with muscle mass in humans (44). The approach originated from animal research showing congruity between total body creatine and urinary excretion of creatinine. However, the validity of the method depends on the assumption that conversion of creatine to creatinine is constant among and within individuals. While this may have credence in a sedentary population, it does not necessarily hold true during resistance training, in which values can",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 21,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000013",
+  "text": "On average, human muscle contains approximately equal amounts of Type I\n\nand Type II fibers. However, a large interindividual variability exists with respect to fiber type percentage. The quadriceps of elite sprinters have been shown to have a predominance of Type II fibers, whereas quadriceps of elite aerobic endurance athletes are primarily composed of Type I fibers.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 13,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength"
+    ]
+  }
+}

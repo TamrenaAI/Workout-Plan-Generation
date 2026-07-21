@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000137",
+  "text": "MGF is purported to regulate muscle growth by several means. For one, it appears to directly stimulate muscle protein synthesis by the phosphorylation of p70S6 kinase (a serine/threonine kinase that targets the S6 ribosomal protein; phosphorylation of S6 causes protein synthesis at the ribosome; it is also written as p70S6K or p70 S6K ) via the PI3K/Akt pathway (see chapter 2) (7, 8, 156). MGF also may elevate muscle protein synthesis by downregulating the catabolic processes involved in proteolysis. Evidence indicates that the activation of MGF suppresses FOXO nuclear localization and transcriptional activities, thereby helping to inhibit protein breakdown (73). These combined anabolic and anticatabolic actions are thought to heighten the post-exercise hypertrophic response.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 137,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

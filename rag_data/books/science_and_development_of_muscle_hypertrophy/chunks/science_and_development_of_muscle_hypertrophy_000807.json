@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000807",
+  "text": "A recent meta-analysis by Grgic and colleagues (36) compared hypertrophic gains between longitudinal aerobic- versus resistance-exercise programs. Results showed a large difference in effect size (Hedges' g = 0.66) for increases in whole-muscle hypertrophy favoring resistance exercise compared to aerobic training. Comparison of individual fiber-type cross-sectional area changes were even more pronounced, with both Type I (Hedges' g = 0.99) and Type II (Hedges' g = 1.44) fibers displaying very large effects in favor of resistance training. Hypertrophic discrepancies observed between individual fibers and at the whole-muscle level suggest that at least some of the aerobic exercise-induced growth is specific to sarcoplasmic fractions, consistent with acute research on the muscle protein",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 6: Role of Aerobic Training in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 30,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

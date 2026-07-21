@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000142",
+  "text": "IL-6 response. This seems logical, given that damage to muscle tissue initiates an inflammatory cas- cade. However, emerging evidence indicates that myodamage is not necessary for its exercise-induced release. Instead, damaging exercise may result in a delayed peak and a slower decrease of plasma IL-6 during recovery (163).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 142,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "recovery"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

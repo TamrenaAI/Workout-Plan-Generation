@@ -1,0 +1,26 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000529",
+  "text": "My lab (208) investigated heavy versus moderate loading in 20 resistance-trained men who were randomly assigned to one of two groups: a hypertrophy group that performed a bodybuilding-style routine, or a strength group that performed a powerlifting-style routine. The hypertrophy group protocol was a split-body routine in which each muscle was worked once per week with 3 exercises per session, performing 3 sets of 10 repetitions and resting 90 seconds between sets. The strength group protocol was a total-body routine in which each muscle was worked 3 times per week with 1 exercise per session, performing 7 sets of 3 repetitions and resting 3 minutes between sets. Volume load was equated so that subjects in both groups lifted approximately the same amount of weight per week. All sets were",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 77,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "intensity",
+      "volume",
+      "frequency",
+      "load",
+      "exercise_selection",
+      "recovery"
+    ],
+    "experience_level": "intermediate",
+    "goals": [
+      "hypertrophy",
+      "strength"
+    ]
+  }
+}

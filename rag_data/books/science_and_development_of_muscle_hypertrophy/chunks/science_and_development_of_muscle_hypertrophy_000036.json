@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000036",
+  "text": "An often-overlooked neural adaptation associated with resistance training is the effect on doublets , defined as the presence of two close spikes less than 5 ms apart. Doublets often occur at the onset of contraction, conceivably to produce rapid force early on and thus generate sufficient momentum to complete the intended movement. Van Cutsem and colleagues (234) reported that the percentage of motor units firing doublets increased from 5.2% to 32.7% after 12 weeks of dynamic resisted dorsiflexion training against a load of 30% to 40% of 1RM. Interestingly, the presence of these doublets was noted not only in the initial phase of force development, but also later in the EMG burst. The findings suggest that doublet discharges contribute to enhancing the speed of voluntary muscle",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 36,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "neuromuscular_system",
+      "neural_adaptation",
+      "muscle_activation"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength"
+    ]
+  }
+}

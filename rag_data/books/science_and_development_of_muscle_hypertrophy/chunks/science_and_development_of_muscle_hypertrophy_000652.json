@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000652",
+  "text": "longlength training than following short-length training (31% vs. 7%, respectively), suggesting that exercise at long muscle lengths induces greater metabolic and mechanical stress. Other research shows a clear hypertrophic advantage to training at longer muscle lengths during knee extension exercises (170). The combination of findings indicates that stretched muscle is in an optimal position for hypertrophy.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 200,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "muscle_activation"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

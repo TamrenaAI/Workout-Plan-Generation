@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000253",
+  "text": "In a study of physically active males, Laurentino and colleagues (150) investigated the effects of BFR on chronic MSTN levels following 8 weeks of training. Results showed a significant 45% reduction in MSTN gene expression with BFR compared to a nonsignificant reduction when performing low-intensity exercise without occlusion. The conflicting nature of these findings makes it difficult to formulate conclusions about whether hypertrophic adaptations from metabolic stress are related to alterations in myokine production. Moreover, none of the trials directly compared results to a heavy-load condition, further clouding the ability to draw causal inferences on the topic.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 82,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "intermediate",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

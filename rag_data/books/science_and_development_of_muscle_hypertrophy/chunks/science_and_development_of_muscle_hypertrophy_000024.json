@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000024",
+  "text": "The findings of increased activation resultant to training are most often ascribed to a combination of greater recruitment (the number of fibers involved in a muscle action) and rate coding (the frequency at which the motor units are stimulated). It has been well established that muscle fiber recruitment follows the size principle (1, 12, 14, 16-19, 23, 33, 34). First explained by Henneman (90), the size principle dictates that the capacity of a motor unit to produce force is directly related to its size (). Accordingly, smaller, low-threshold, slow motor units are recruited initially during movement, followed by progressively larger, higher-threshold, fast motor units as the force demands increase for a given task. This orderly activation pattern allows for a smooth gradation of force,",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 24,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_activation",
+      "neuromuscular_system"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

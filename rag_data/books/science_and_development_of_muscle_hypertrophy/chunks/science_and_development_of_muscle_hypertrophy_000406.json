@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000406",
+  "text": "extent to which fat-free mass changes in conjunction with an exercise program, these differences essentially would be moot provided the same absolute magnitude of error persists on a consistent basis. That said, there is evidence that the magnitude of error may change with alterations in body composition (25, 55, 74), presumably because the density of fat-free mass is altered with changes in body weight, violating the assumption that it remains constant. Monitoring large changes in muscle mass using indirect measurement tools therefore should be treated more skeptically when examining individual-level data.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 61,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

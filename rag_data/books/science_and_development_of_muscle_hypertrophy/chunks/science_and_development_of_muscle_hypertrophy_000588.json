@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000588",
+  "text": "It should be noted that research studies on rest intervals generally have involved protocols in which subjects trained to volitional failure in all sets. This level of exertion necessarily generates greater fatigue than nonfailure sets, thus affecting interset recovery and, in turn, volume load. Higher levels of effort therefore require longer rest intervals to maintain volume load, while stopping short of failure allows for the use of shorter rest periods without compromising volume load.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 136,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "volume",
+      "fatigue_management",
+      "recovery"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

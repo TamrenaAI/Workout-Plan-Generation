@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000634",
+  "text": "Despite wide acceptance that exercise order should proceed from large- to small-muscle groups, research is equivocal on the topic with respect to hypertrophic outcomes. Acute studies show that performance, as determined by the number of repetitions performed, is compromised in exercises performed toward the end of a session regardless of the size of the muscle trained (232). However, given the heavier loads used during multi-joint movements, the absolute magnitude of the decreases are generally greater in these exercises when they are performed after those involving small-muscle groups. Thus, volume load tends to be better preserved when large-muscle exercises are placed early in the training bout.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 182,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "exercise_order"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

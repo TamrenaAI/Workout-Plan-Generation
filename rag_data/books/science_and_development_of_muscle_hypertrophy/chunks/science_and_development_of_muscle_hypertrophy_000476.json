@@ -1,0 +1,26 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000476",
+  "text": "It is important to note that studies investigating volume are generally specific to given muscle groups, and results therefore cannot be generalized to all muscle groups for training programs as a whole. For example, in a study from my lab (218) showing hypertrophic benefits from 30+ sets per muscle per week, the total training time for the highest-volume group was just ~3.5 hours per week. The apparent paradox can be explained by the fact that the study specifically focused on assessing hypertrophy of the muscles of the arms and legs, and hence included only 7 exercises per session. So while the muscles of interest received high volumes, others were worked at much more modest volumes.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 24,
+  "metadata": {
+    "muscle": [
+      "biceps",
+      "triceps",
+      "forearms",
+      "quads",
+      "hamstrings",
+      "glutes",
+      "calves"
+    ],
+    "topic": [
+      "volume"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

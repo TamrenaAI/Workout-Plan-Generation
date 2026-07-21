@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000107",
+  "text": "There is evidence that the quantity of androgen receptors may play a role in the anabolic response to exercise (10). Androgen receptor concentration is diminished immediately after resistance training, but levels rise significantly over the ensuing several hours (240). Indeed, evidence suggests an association between post-exercise androgen receptor content and muscle hypertrophy (142). Some studies indicate this post-exercise androgen receptor upregulation is dependent on corresponding elevations in testosterone levels (216), while others do not support such a relationship (142).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 107,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

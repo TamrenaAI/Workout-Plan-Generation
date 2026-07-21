@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000190",
+  "text": "in muscle protein synthesis are regulated by mTORC1, while continued elevations at later time points involve rapamycin-insensitive or perhaps even mTOR-independent mechanisms (92). It should be noted that mTOR is regulated by a variety of inputs and functions as an energy and nutrient sensor: Elevated energy levels promote its activation while reduction in energy levels and nutrient availability result in its suppression (19).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 19,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_activation",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000371",
+  "text": "In an attempt to enhance practicality, a study was undertaken to determine whether a urine sample obtained after an overnight fast would suffice to accurately predict muscle mass, both as a single measurement and for longitudinal assessment (14). Correlation analysis showed strong agreement between the D 3 -creatine dilution method and MRI-derived predictions of muscle mass ( r = .88 to .91). However, the method underestimated muscle mass by 2.3 to 3.0 kg (5.1 to 6.6 lb) as well as produced significantly greater intraindividual variability than MRI. Moreover, variances were greater in women than in men, calling into question its validity when assessing in women.\n\n## Biochemical Assessment of Muscle Mass: A Viable Method of Hypertrophy Measurement?",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 26,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

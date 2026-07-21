@@ -1,0 +1,25 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000321",
+  "text": "There is evidence that EIMD potentiates IGF-1 production and, thus, given the anabolic functions of this hormone, may enhance muscle growth. McKay and colleagues (178) studied the effects of performing a series of 300 lengthening knee extension contractions on all three IGF-1 isoforms in untrained young men. The results showed a significant increase in MGF mRNA 24 hours post-exercise. Intriguingly, expression of both IGF-1Ea and IGF-1Eb mRNA were not elevated until 72 hours after training. The early-phase activation of MGF as a result of the damaging protocol suggests that this IGF-1 isoform is preferentially involved in the repair and remodeling process following EIMD. Similarly, Bamman and colleagues (10) evaluated the effects of 8 sets of 8 eccentric versus concentric actions on muscle",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 150,
+  "metadata": {
+    "muscle": [
+      "quads",
+      "all"
+    ],
+    "topic": [
+      "muscle_activation",
+      "intensity",
+      "volume",
+      "hypertrophy_programming",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "intermediate",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

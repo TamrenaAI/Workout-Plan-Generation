@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000960",
+  "text": "Our lab conducted the only study to date to directly investigate the effects of attentional focus on muscle hypertrophy (120). Thirty untrained men were randomized to perform biceps curls and leg extensions using either an internal focus (i.e., focus on the muscle) or an external focus (i.e., focus on the outcome of the lift). Both groups performed 4 sets of 8 to 12 repetitions per exercise, with training carried out 3 days per week. After 8 weeks, the internal focus group showed significantly greater increases in elbow flexor thickness compared to those adopting an external focus (12.4% vs. 6.9%, respectively). Alternatively, both groups achieved similar increases in quadriceps growth. Although speculative, discrepancies between muscle groups may be attributed to the fact that most",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 27,
+  "metadata": {
+    "muscle": [
+      "biceps",
+      "quads"
+    ],
+    "topic": [
+      "exercise_order",
+      "exercise_selection",
+      "exercise_order"
+    ],
+    "experience_level": "beginner",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

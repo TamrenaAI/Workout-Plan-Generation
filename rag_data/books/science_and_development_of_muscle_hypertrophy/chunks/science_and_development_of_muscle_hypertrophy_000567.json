@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000567",
+  "text": "signaling molecules. Consistent with the study by Franchi and colleagues, neither contraction mode produced significant increases in Akt or mTOR, suggesting that eccentric actions activate p70 S6K via an Akt-independent pathway. In addition, eccentric exercise was shown to promote significantly greater upregulation of STARS mRNA compared to concentric exercise (10-fold vs. 3-fold, respectively) as well as greater expression of downstream serum response factor (SRF) target genes (261). These findings suggest that eccentric exercise preferentially modulates the transcription of specific myofibrillar genes associated with hypertrophic adaptations to resistance exercise, possibly as a mechanism to protect against contractile-induced muscle damage.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 115,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength"
+    ]
+  }
+}

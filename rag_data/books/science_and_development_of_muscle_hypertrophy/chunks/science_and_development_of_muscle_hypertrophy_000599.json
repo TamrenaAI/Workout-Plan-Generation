@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000599",
+  "text": "A systematic review and meta-analysis from our group examined whether alterations in repetition duration affect the hypertrophic response to resistance training (209). Studies met inclusion criteria if they were randomized trials that directly compared training tempos in dynamic exercise using both concentric and eccentric repetitions carried out to momentary muscular failure. Eight studies ultimately met inclusion criteria, comprising a total of 204 subjects. Repetition duration was stratified into four groups: fast/heavy (sets of 6 to 12 repetitions with a total repetition duration of 0.5 to 4 seconds), fast/light (sets of 20 to 30 with a total repetition duration of 0.5 to 4 seconds), medium (sets of 6 to 12 with a total repetition duration of 4 to 8 seconds), or light (sets of 6 to 12",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 147,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

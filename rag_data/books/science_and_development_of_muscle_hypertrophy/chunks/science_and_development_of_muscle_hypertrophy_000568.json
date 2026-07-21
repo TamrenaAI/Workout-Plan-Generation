@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000568",
+  "text": "Research investigating the effect of contraction modes on muscle protein synthesis has produced disparate results. Several studies have failed to demonstrate any differences in either mixed muscle (78, 177) or myofibrillar (52) muscle protein synthesis after submaximal eccentric or concentric resistance exercise. Conversely, Moore and colleagues (157) reported a more rapid rise in myofibrillar muscle protein synthesis following 6 sets of 10 work-matched maximal eccentric versus concentric knee extension repetitions. The discrepancies between findings suggest that although muscle protein synthesis is similar in all contraction modes during submaximal exercise, maximal eccentric actions enhance the accretion of muscle proteins.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 116,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

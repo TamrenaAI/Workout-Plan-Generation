@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000559",
+  "text": "As mentioned in chapter 1, neural mechanisms are primarily responsible for increases in strength during the early stages of resistance training. Thus, lifters in the initial training phase should focus on acquiring the necessary motor learning and control to effectively carry out exercise performance. Simplification and repeated practice are important in this context. Performing the same movements over and over ingrains motor patterns so that proper technique becomes second nature. For those who have difficulty with coordination, reducing degrees of freedom with machinebased training can be an effective means to enhance neural development. They can then progress to more complex variations in three-dimensional space.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 107,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "neural_adaptation",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "beginner",
+    "goals": [
+      "strength"
+    ]
+  }
+}

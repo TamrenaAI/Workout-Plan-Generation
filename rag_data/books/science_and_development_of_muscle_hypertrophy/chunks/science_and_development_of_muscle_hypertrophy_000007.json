@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000007",
+  "text": "## Motor Unit\n\nMuscles are innervated by the nervous system. Individual nerve cells associated with muscular actions are called motor neurons . Motor neurons consist of three regions: a cell body, an axon, and dendrites. When a decision is made to carry out a movement, the axon conducts nerve impulses away from the cell body to the muscle fibers, ultimately leading to muscular contraction. Collectively, a single motor neuron and",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 7,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "neuromuscular_system",
+      "muscle_activation"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

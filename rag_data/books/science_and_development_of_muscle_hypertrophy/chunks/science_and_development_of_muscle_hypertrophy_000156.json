@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000156",
+  "text": "MSTN carries out its actions via downstream signaling of the transcription factors SMAD2 and SMAD3, which in turn negatively regulate hypertrophy independent of the catabolic enzyme muscle ring finger protein-1 (MuRF-1). Early research indicated that atrophic actions of MSTN were attributed to an inhibition of satellite cell activation, thus impairing protein synthetic capacity (135). Moreover, in vitro research showed that MSTN blunted satellite cell proliferation and differentiation (255). However, subsequent research has refuted these findings, showing instead that MSTN inhibition increases muscle mass primarily by acting on muscle fibers as opposed to satellite cells, thereby increasing the cytoplasmic volume to DNA ratio (243). The body of evidence appears to suggest that the primary",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 156,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000001",
+  "text": "## Neuromuscular System\n\nA detailed discussion of the complexities of muscle hypertrophy requires a fundamental understanding of the neuromuscular systemin particular, the interaction between nerves and muscles that produces force to carry out human movement. Although a thorough exploration of the topic is beyond the scope of this book, this section provides a general overview of concepts that are referenced in later chapters. Those interested in delving further into the subject are advised to seek out one of the many textbooks specific to exercise physiology.\n\n## Structure and Function",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 1,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "neuromuscular_system",
+      "force_production"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

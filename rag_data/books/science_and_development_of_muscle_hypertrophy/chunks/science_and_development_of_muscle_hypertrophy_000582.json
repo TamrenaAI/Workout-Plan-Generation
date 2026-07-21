@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000582",
+  "text": "Moreover, only three studies to date have assessed hypertrophy using a site-specific method. Employing a crossover design in resistance-trained men, Ahtiainen and colleagues (3) reported no differences in MRI-derived quadriceps cross-sectional area between 2-minute and 5-minute rest periods. Conversely, a study from my lab found superior increases in muscle thickness via B-mode ultrasound favoring 3-minute over 1-minute rest intervals in a cohort of resistance-trained men (21 1). Further confounding matters, Fink and colleagues (69) showed that changes in triceps brachii cross-sectional area as measured by MRI were similar between rest intervals of 30 and 150 seconds during training carried out using light loads (40% of 1RM) to failure; however, modestly greater (although statistically",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 130,
+  "metadata": {
+    "muscle": [
+      "quads",
+      "triceps"
+    ],
+    "topic": [
+      "volume",
+      "recovery"
+    ],
+    "experience_level": "intermediate",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

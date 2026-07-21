@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000710",
+  "text": "## Drop Sets\n\nDrop sets (also called descending sets or breakdown sets) are one of the most popular advanced training strategies for enhancing muscle growth. The approach involves carrying out a set to concentric muscle failure and then, with minimal rest, performing as many repetitions as possible at a reduced load. The magnitude of reduction generally ranges from 20% to 25% of initial load (4, 23, 25), although higher or lower percentages can be employed because no accepted guidelines exist. If desired, double or triple drops can be implemented to elicit greater motor unit fatigue.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 5: Advanced Training Practices",
+  "collection": "hypertrophy",
+  "chunk_index": 26,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming",
+      "advanced_techniques"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

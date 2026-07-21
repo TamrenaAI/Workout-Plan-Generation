@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000448",
+  "text": "useful indirect method, both in terms of accuracy and its ability to provide segmental estimates of morphology. BIA also can be a valuable tool and has the added benefit of being able to estimate body water. However, qualitative differences between units and brands must be considered when attempting to draw relevant practical conclusions from data. The 4C method provides the greatest accuracy as a whole-body proxy of muscle mass but lacks the ability to provide regional-specific information. Given wide-ranging differences in the distribution of body fat and muscle mass between ethnicities (46), the use of proper ethnic-specific formulas are imperative for accurately determining body composition across populations.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 103,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

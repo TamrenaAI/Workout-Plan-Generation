@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000362",
+  "text": "## Hydrodensitometry\n\nHydrodensitometry (also known as underwater weighing) is a well-established method for estimating lean tissue mass (). It is often considered the gold standard of 2C models and for this reason is frequently used as a criterion reference for validating other measures and is commonly included in 4C models. The concept is based on Archimedes principle, which states that a body's weight under water is directly proportional to the volume of water displaced by the body's volume. Given that lean tissue is denser than water, and fat mass is less dense, a person with more body fat necessarily will have greater buoyancy and thus weigh less under water than someone with a greater amount of lean tissue.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 17,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

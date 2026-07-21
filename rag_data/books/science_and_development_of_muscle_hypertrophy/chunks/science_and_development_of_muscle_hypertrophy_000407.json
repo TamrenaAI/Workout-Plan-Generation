@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000407",
+  "text": "portion of a muscle (muscle cross-sectional area); or in three dimensions, which accounts for hypertrophic changes across the entire muscle (muscle volume). The ramifications of these classifications are important because they encapsulate different constructs, and therefore can lead to different conclusions drawn from the same data (42).\n\nAlthough one-dimensional assessments can be used in hypertrophic analysis, their usefulness is limited because muscle size may increase differently in different dimensions. For example, width may increase differently than length, and this difference would not be observed in muscle thickness measurements.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 62,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

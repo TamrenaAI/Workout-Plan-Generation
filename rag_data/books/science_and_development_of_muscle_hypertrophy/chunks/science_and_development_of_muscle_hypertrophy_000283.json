@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000283",
+  "text": "Despite the sound theoretical basis, there is a dearth of research directly investigating the causal relationship between EIMD and muscle growth. Exposure of murine tibialis anterior muscles to injury-producing myotoxin injection was found to result in both larger muscle fibers and a 3-fold greater satellite count compared to uninjured fibers (105). Moreover, evidence shows transplantation of satellite cells into damaged myofibers elicits an increase in muscle hypertrophy across an animal's life span (103). Taken together, these data suggest that myocellular damage alone, as well as in combination with an increase in the number of satellite cells, can provide a sufficient stimulus to elicit muscle growth. However, the protocols employed have minimal relevance to human exercise protocols,",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 112,
+  "metadata": {
+    "muscle": [
+      "triceps",
+      "all"
+    ],
+    "topic": [
+      "exercise_selection",
+      "periodization",
+      "recovery"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

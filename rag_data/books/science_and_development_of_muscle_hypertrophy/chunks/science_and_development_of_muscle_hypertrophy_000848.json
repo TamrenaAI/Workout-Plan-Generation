@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000848",
+  "text": "Interestingly, performing an acute resistance training bout 6 hours after aerobic-oriented cycle ergometry was shown to elicit greater mTOR and p70 S6K phosphorylation compared to performing resistance training alone (53). This suggests that the aerobic bout actually potentiated anabolic signaling. The practical implications of these findings are undetermined.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 6: Role of Aerobic Training in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 71,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000943",
+  "text": "It should be noted that viewing the lengthtension relationship in isolation somewhat simplifies the complexity of in vivo kinetics. A variety of factors affect the functional forcelength range, including the absolute muscle length, the number of sarcomeres, tendon length and stiffness, the length of the moment arm, and the range of motion of the acting joint or joints (84). In addition, changes in both active forces (from the myofilaments) and passive forces (from elastic components such as titin, fascia, and tendon) take place throughout a joint's range of motion (84), which in turn may alter the hypertrophic stimulus. Nevertheless, using the concepts of active insufficiency and passive tension to target different muscles is an uncomplicated and viable strategy for guiding exercise",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 10,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

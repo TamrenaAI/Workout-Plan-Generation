@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000109",
+  "text": "## Insulin\n\nInsulin is a peptide hormone secreted by the beta cells of the pancreas. In healthy people, insulin regulates glucose metabolism by facilitating its storage as glycogen in muscle and liver tissue. Among other secondary roles, insulin is involved in muscle anabolism, stimulating both the initiation and elongation phases of protein translation by regulating various eIFs and eEFs. Insulin also exerts anabolic effects through activation of the mammalian target of rapamycin , universally abbreviated as mTOR . A serine/threonine protein kinase, mTOR plays a critical role in regulating cell growth and monitoring cellular nutrient, oxygen, and energy levels (see the PI3K/Akt pathway discussion in chapter 2 for more information).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 109,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

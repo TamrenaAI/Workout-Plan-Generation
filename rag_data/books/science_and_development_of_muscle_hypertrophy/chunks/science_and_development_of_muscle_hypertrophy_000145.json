@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000145",
+  "text": "Early animal research suggested that IL-15 exerted anabolic effects by acting directly on differentiated myotubes to increase muscle protein synthesis and reduce protein degradation (177). A polymorphism in the gene for IL-15 receptor was found to explain a relatively large proportion of the variation in muscle hypertrophy (186). Moreover, recombinant IL-15 administration in healthy growing rats produced more than a 3-fold decrease in the rate of protein breakdown, leading to an increase in muscle weight and contractile protein accretion (177). However, recent research is conflicting as to whether IL-15 causes the hypertrophic adaptations originally thought. For one, IL-15 mRNA correlates poorly with protein expression. In addition, hypertrophic effects of IL-15 have been observed solely",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 145,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

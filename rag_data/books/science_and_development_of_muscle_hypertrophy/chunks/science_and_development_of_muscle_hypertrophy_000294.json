@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000294",
+  "text": "In a human trial on the topic, Flann and colleagues (69) randomly assigned 14 young, healthy men and women into one of two groups: (1) a control group that engaged in eccentric cycle ergometry at a 'somewhat hard' level (gauged by a rating of perceived exertion scale; training was performed 3 times per week for 20 minutes over an 8-week period), and (2) a pretrained group that carried out a protocol identical to the control group's, except that it included a 3-week ramp-up period during which subjects performed exercise at a low intensity to gradually acclimate their muscles to the training stimulus. At the study's end, similar increases in muscle girth were found between the groups. Although these results are intriguing, the study had numerous methodological limitations, including the",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 123,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "exercise_selection",
+      "muscle_growth_mechanisms",
+      "muscle_activation"
+    ],
+    "experience_level": "intermediate",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

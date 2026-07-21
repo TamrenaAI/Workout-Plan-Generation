@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000196",
+  "text": "Mitogen-activated protein kinase (MAPK) is a primary regulator of gene expression, redox status, and metabolism (141). With respect to exercise-induced muscle growth, MAPK is believed to link cellular stress with an adaptive response in myofibers, modulating their growth and differentiation (231). It is theorized that the maximal anabolic response to resistance exercise is at least in part reliant on coactivation of the MAPK and mTORC1 signaling cascades (210). Moreover, MAPK has been implicated in the regulation of ribosome biogenesis, which is critical to sustained increases in muscle growth (67). Three distinct MAPK signaling modules are associated with mechanically stimulated hypertrophic adaptations: ERK1/2, p38 MAPK, and JNK. Activation of these modules depends on the type,",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 25,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

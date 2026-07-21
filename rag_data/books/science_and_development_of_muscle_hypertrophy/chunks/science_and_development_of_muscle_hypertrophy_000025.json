@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000025",
+  "text": "fast motor units as the force demands increase for a given task. This orderly activation pattern allows for a smooth gradation of force, irrespective of the activity performed.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 25,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "neuromuscular_system",
+      "muscle_activation",
+      "force_production",
+      "neural_adaptation"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength"
+    ]
+  }
+}

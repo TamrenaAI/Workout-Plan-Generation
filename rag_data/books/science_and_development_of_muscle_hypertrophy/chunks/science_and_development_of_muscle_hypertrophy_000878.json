@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000878",
+  "text": "Seminal work from the lab of Adam Sharples provides evidence that epigenetic memory extends to hypertrophic adaptations obtained from resistance training (75). Employing a within-subject design, untrained men performed 7 weeks of regimented total-body progressive resistance exercise carried out 3 days a week. This was followed by a 7-week detraining period in which no exercise was performed. Subjects then reengaged in the same exercise for an additional 7 weeks. Results indicated that various hypertrophy-related genes in the trained muscles remained in a hypomethylated state during detraining, and their expression was switched on to an even greater extent upon retraining. Several genes in particular showed significantly enhanced expression upon reloading (RPL35a, UBR5, SETD3, and",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 7: Factors in Maximal Hypertrophic Development",
+  "collection": "hypertrophy",
+  "chunk_index": 25,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "beginner",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

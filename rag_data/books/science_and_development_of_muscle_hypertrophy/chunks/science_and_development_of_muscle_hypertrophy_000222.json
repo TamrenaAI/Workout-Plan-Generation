@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000222",
+  "text": "## MSTN-SMAD Pathway\n\nThe role of MSTN in muscle hypertrophy was outlined in chapter 1 and thus will only be briefly discussed here. MSTN, a member of the transforming growth factorβ superfamily, is a potent negative regulator of muscle growth. Knockout of the MSTN gene causes hypermuscularity whereas its overexpression causes atrophy. MSTN carries out its effects through activation of SMAD2 and SMAD3 (via phosphorylation of activin Type I receptors), which in turn translocate to the cell nucleus and regulate transcription of target genes via interaction with DNA and other nuclear factors (229).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 51,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000193",
+  "text": "Signaling through PI3K/Akt also regulates mTOR-independent growth regulatory molecules to directly inhibit catabolic processes. For one, Akt phosphorylates FOXO proteins-a subgroup of the Forkhead family of transcription factors that encourage atrophy-which induces their translocation from the nucleus to the cytoplasm (90, 106). The cytoplasmic sequestration of FOXO proteins, in turn, blocks upregulation of the ubiquitin ligases MuRF-1 and atrogin-1 (also called MAFbx) and thus helps to lessen the extent of muscle protein breakdown. Indeed, activation of Akt was found to be sufficient to impair increases in the atrophy-associated enzymes MuRF-1 and atrogin-1 transcription via FOXO phosphorylation (86). Akt also suppresses the activation of glycogen synthase kinase 3 beta (GSK3 β ), which",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 22,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_physiology",
+      "muscle_physiology",
+      "muscle_physiology",
+      "muscle_physiology",
+      "muscle_physiology",
+      "muscle_physiology",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

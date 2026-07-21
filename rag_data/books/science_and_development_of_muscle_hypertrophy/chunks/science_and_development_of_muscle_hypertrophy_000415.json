@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000415",
+  "text": "Reliability of circumference assessments is acceptable and is better than that reported with skinfold testing (9). However, the technique has several serious limitations that call into question its utility for measuring muscle mass. First, unlike other site-specific methods that directly measure a given muscle, circumference assessments measure a general area of the body. So, while other methods can, for example, directly assess the size of the biceps brachii and vastus lateralis, circumference measures the entire upper arm or thigh. As such, a girth measurement of the chest could be confounded by growth of the latissimus dorsi. Second, and most importantly, the circumference method cannot distinguish between different tissue components within the area of measurement. Changes in fat mass,",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 70,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

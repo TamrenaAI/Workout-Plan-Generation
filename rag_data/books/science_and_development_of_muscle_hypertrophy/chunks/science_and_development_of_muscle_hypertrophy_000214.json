@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000214",
+  "text": "## AMPK Pathway\n\nThe trimeric enzyme 5'-AMP-activated protein kinase (AMPK) plays a key role in the regulation of cellular energy homeostasis. AMPK acts as a cellular energy sensor; its activation is stimulated by an increase in the AMP/ATP ratio (90). As such, conditions that elicit substantial intracellular energy stress-including exercise-can activate AMPK. Once activated, AMPK suppresses energy-intensive anabolic processes such as protein synthesis and amplifies catabolic processes, including protein breakdown (90).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 43,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "exercise_selection"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

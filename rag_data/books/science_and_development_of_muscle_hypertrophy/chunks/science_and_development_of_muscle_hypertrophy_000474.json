@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000474",
+  "text": "consistently employing high volumes over time hastens the onset of overtraining, periodizing programming by progressively increasing volume over the course of a training cycle appears beneficial. Moreover, periods of reduced training volume should be integrated regularly to facilitate the recovery process and resensitize muscle tissue.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 22,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "volume",
+      "periodization",
+      "recovery",
+      "fatigue_management"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

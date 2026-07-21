@@ -1,0 +1,45 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001119",
+  "text": "Several indices are used to assess the quality of protein sources (see ). The protein digestibility-corrected amino acid score (PDCAAS) is perhaps the most widely used index; a score of 1.0 indicates that the protein is of high quality. PDCAA scores for whey, casein, and soy are all equal to 1.0, implying that there is no difference in their effects on protein accretion. Comparative studies of isolated proteins indicate that this is not the case. Wilkinson and colleagues (149) demonstrated that the post-exercise ingestion of a serving of skim milk containing 18 g of protein stimulated muscle protein synthesis to a greater extent than an isonitrogenous, isoenergetic serving of soy. Follow-up work by Tang and colleagues (134) showed that 10 g of EAAs provided by whey hydrolysate (a",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 9: Nutrition for Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 35,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "power_development",
+      "muscle_growth_mechanisms",
+      "hypertrophy_programming",
+      "recovery",
+      "periodization",
+      "exercise_selection",
+      "biomechanics",
+      "neural_adaptation",
+      "intensity",
+      "volume",
+      "frequency",
+      "load",
+      "fatigue_management",
+      "power_development",
+      "muscle_growth_mechanisms",
+      "hypertrophy_programming",
+      "recovery",
+      "periodization",
+      "exercise_selection",
+      "biomechanics",
+      "neural_adaptation",
+      "intensity",
+      "volume",
+      "frequency",
+      "load",
+      "fatigue_management"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

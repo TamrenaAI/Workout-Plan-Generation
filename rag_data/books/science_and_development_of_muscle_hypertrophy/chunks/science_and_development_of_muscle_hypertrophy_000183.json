@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000183",
+  "text": "Other stimuli and sensors have been surmised to play a role in hypertrophic adaptations. For example, emerging evidence implicates titin as a primary mechanosensor, and the level of signaling depends on its passive stiffness: High stiffness mediates a stronger anabolic response whereas low stiffness moderates the response (285). Moreover, G protein-coupled receptors, which show structural similarity to integrin receptors, are proposed as a potential link between mechanical force transduction and upregulation of intracellular anabolic pathways (301). It also has been hypothesized that the",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 12,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

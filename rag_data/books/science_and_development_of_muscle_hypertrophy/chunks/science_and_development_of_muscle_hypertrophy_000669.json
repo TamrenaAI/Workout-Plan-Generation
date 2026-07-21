@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000669",
+  "text": "The repetitions in reserve (RIR) scale represents a viable strategy to help manage the extent of training to failure (277). In this scale, an RIR of 0 equates to training to failure, an RIR of 1 equates to stopping a set 1 repetition short of failure, an RIR of 2 equates to stopping a set 2 repetitions short of failure, and so on. The scale requires experimentation, but after a period of familiarization, most trained lifters are able to use it to estimate proximity to failure with good precision. When using this scale, most sets should be performed at an RIR of 1 or 2. Failure training could then be selectively employed on the last set of an exercise. This approach not only helps to prevent overtaxing the neuromuscular system, but also in preserving volume load across sets; training to",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 217,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "intensity",
+      "volume",
+      "neuromuscular_system",
+      "fatigue_management"
+    ],
+    "experience_level": "intermediate",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

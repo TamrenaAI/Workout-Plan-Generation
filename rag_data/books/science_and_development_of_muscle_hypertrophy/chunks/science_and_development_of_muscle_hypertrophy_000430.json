@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000430",
+  "text": "Scanning is carried out in a doughnut-shaped device with a table through the middle. The\n\nDR P . MARAZZI/Science Source Courtesy of Dr. Tom Maden-Wilkinson and Dr. Alex Ireland.\n\nperson lies supine on the table, and an X-ray tube rotates around the muscle of interest, emitting ionizing radiation beams. The emitted X-ray beams are attenuated while crossing the muscle and then received by the machine's detectors to produce thin-sliced images, which are processed with the aid of algorithms that define each CT slice. Two-dimensional images of the muscle's cross-sectional area are rendered, with pixels related to tissue density.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 85,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

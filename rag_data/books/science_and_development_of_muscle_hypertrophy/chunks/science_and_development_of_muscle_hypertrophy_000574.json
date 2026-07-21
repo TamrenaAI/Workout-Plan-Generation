@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000574",
+  "text": "Contraction modes also display region-specific effects on hypertrophy; eccentric actions show preferential growth in the distal aspect of the vastus lateralis (8% eccentric vs. 2% concentric), and concentric actions target the midportion of the muscle (7% eccentric vs. 11% concentric) (72). It is speculated that site-specific hypertrophy might be related to regional muscle damage along the length of the fiber that consequently results in nonuniform changes in muscle activation (98).\n\n provides a summary of the research related to type of muscle action and muscle hypertrophy.\n\nAbbreviations: RM = repetition maximum; CSA = cross-sectional area; CT = computerized tomography; MRI = magnetic resonance imaging; DXA = dual X-ray absorptiometry.\n\n## PRACTICAL APPLICATIONS",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 122,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "muscle_activation",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000270",
+  "text": "conflicting evidence on the topic renders a definitive conclusion premature (299). Some evidence indicates that metabolic stress only contributes to muscle growth during performance of low-load resistance training, with no additive hypertrophic effects seen when training with heavy loads (80% of 1RM), at least at the whole-muscle level (18).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 99,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming",
+      "load"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

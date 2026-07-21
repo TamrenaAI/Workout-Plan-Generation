@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001121",
+  "text": "PDCAAS = protein digestibility-corrected amino acid score; BV = biological value; PER = protein efficiency ratio.\n\nAdapted from J.R. Hoffman and M.J. Falvo, 2004, 'Protein-Which Is Best?' Journal of Sports Science and Medicine 3, no. 3 (2004): 118-130.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 9: Nutrition for Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 37,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

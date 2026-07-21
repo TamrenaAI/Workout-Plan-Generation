@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000360",
+  "text": "Equations have been developed to estimate muscle cross-sectional area from the combination of circumference and skinfold measurements. Although these methods show reliability compared to a CT scan, they significantly underestimate cross-sectional area changes during regimented resistance training (18). That said, the errors in results are relatively consistent and therefore track changes in a pattern that is similar to CT (18), making the assessment a viable tool for evaluating muscle mass over time.\n\n## KEY POINT",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 15,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

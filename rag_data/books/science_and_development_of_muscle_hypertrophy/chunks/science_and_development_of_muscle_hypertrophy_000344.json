@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000344",
+  "text": "- Research suggests that EIMD may enhance muscular adaptations, although excessive damage clearly has a negative effect on muscle development. Hypothesized factors involved in the process include the initiation of inflammatory processes, increased satellite cell activity, the mediation of IGF-1 production, and cell swelling. The extent to which these mechanisms are synergistic or redundant, and whether an optimal combination exists to maximize the hypertrophic response to resistance training, remains to be determined.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 173,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000370",
+  "text": "Subsequent pilot work in humans reported good agreement in muscle mass estimates between D 3 -creatine dilution and MRI ( r = .87) (13). The method showed less bias than DXA-derived estimates, which overestimated muscle mass by approximately 2-fold compared to MRI. However, the study was carried out in a hospital setting with a 5-day period of continuous urine collection; hence, its applicability to free-living populations is extremely limited.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 25,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

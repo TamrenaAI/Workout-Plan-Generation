@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000699",
+  "text": "Intraset rest training has been proposed as a method for overcoming the negative effects of peripheral fatigue. As the name implies, the strategy involves resting for a prescribed period of time between repetitions within a given set. These intraset rest periods conceivably allow for the accumulation of a greater total training volume while maintaining high magnitudes of loading, which in turn may promote superior muscular adaptations. However, given the mechanistic role of metabolic stress in resistance training-induced hypertrophy (86), it is unclear whether potential benefits associated with intraset rest supersede the negative implications of altering fatigue levels.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 5: Advanced Training Practices",
+  "collection": "hypertrophy",
+  "chunk_index": 15,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "fatigue_management",
+      "volume",
+      "load",
+      "advanced_techniques"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

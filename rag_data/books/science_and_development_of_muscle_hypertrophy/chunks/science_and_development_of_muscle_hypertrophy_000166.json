@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000166",
+  "text": "- Early-phase adaptations to resistance training are primarily related to neural improvements including greater recruitment, rate coding, synchronization, and doublet firing. The extent and temporal course of neural adaptations depend on the degrees of freedom and complexity of the movement patterns.\n- Muscular adaptations are predicated on net protein balance over time. The process is mediated by intracellular anabolic and catabolic signaling cascades.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 166,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "neuromuscular_system",
+      "neural_adaptation",
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

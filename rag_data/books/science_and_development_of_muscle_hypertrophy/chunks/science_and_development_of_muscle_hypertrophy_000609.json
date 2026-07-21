@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000609",
+  "text": "a 1-second concentric repetition produced greater increases in muscle thickness compared to performing the repetitions at 2 to 3 seconds. A limitation of the study was that both groups used light loads (40% to 60% of 1RM), and sets were terminated well short of muscular failure. Thus, the design would have provided a bias to the 1-second condition because faster velocities promote greater recruitment and stimulation of higher-threshold motor units in the absence of fatigue (237).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 157,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_activation",
+      "intensity"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

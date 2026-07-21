@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000651",
+  "text": "Evidence suggests that training at longer muscle lengths (i.e., when the muscle is in a stretched position) promotes greater hypertrophic adaptations than training at shorter muscle lengths. McMahon and colleagues (150) compared the hypertrophic response to knee extensions at shortened (0° to 50° of knee flexion) or lengthened (40° to 90° of knee flexion) positions. Results showed significantly greater increases in distal cross-sectional area of the quadriceps (53% vs. 18%) as well as fascicle length (29% vs. 14%) in favor of the long- versus short-length training, respectively. Moreover, IGF-1 levels were significantly greater following longlength training than following short-length training (31% vs. 7%, respectively), suggesting that exercise at long muscle lengths induces greater",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 199,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

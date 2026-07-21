@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001058",
+  "text": "## Does Sleep Affect Muscle Growth?\n\ndate, no studies have endeavored to directly examine the effects of restricted sleep on exercise-induced changes in muscle growth in humans; thus, it is not possible to draw strong inferences on the practical implications of the topic.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 125,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "recovery",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

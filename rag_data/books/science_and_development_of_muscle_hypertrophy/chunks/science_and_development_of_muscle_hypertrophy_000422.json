@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000422",
+  "text": "The biggest threat to internal validity (i.e., the trustworthiness of the data) when using ultrasonography is the skill of the operator. A high level of proficiency is required to obtain reliable, high-quality images. Differences in the amount of pressure that the sonographer exerts on the transducer against the skin can result in substantial variations in measurements, resulting in a high degree of inter-rater error. That said, measures can be highly reproducible with appropriate training (33). Another potential issue with ultrasound is that when tracking changes in muscle size over time, scans must be taken at the same site in each testing session; deviations in where measurements are obtained along the line of the muscle skew results. Finally, it is more difficult to obtain",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 77,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "advanced_techniques"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

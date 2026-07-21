@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000173",
+  "text": "activation of the extracellular signal-regulated kinase/tuberous sclerosis complex 2 (ERK/TSC2) pathway (188). It is theorized that these actions are mediated via the synthesis of the lipid second messenger phosphatidic acid by phospholipase D (113, 206). There also is evidence that phosphatidic acid can phosphorylate p70 S6K independent of mTOR (151), presenting another potential avenue whereby mechanical stimuli may directly influence muscle protein synthesis.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 2,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_physiology",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

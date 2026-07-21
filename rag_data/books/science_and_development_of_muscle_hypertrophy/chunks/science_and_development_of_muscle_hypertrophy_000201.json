@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000201",
+  "text": "transcription of target genes by activating other transcription factors (96). There is evidence that p38 may regulate hypertrophy by stimulating Notch signaling, which has been deemed essential for the activation, proliferation, and progression of myogenic satellite cells necessary for muscle regeneration and repair (25).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 30,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "power_development",
+      "muscle_activation",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

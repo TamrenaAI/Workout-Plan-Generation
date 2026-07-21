@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000015",
+  "text": "Many experts claim that all Type II fibers are inherently larger than Type I fibers. However, there is evidence that women often display a larger cross-sectional area of Type I fibers than of Type IIa fibers (236). Research does indicate that the oxidative properties of a fiber, rather than fiber type, influence muscle size. Specifically, the cross-sectional area of glycolytic Type IIx fibers is significantly greater than that of the more oxidative Type I and Type IIa fibers. It has been speculated that the smaller size of high-oxidative myofibers is an evolutionary design constraint based on the premise that muscle tissue has a limited capacity to hypertrophy and increase oxidative capacity at the same time (236). This is consistent with the hypothesis that competition exists between the",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 15,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

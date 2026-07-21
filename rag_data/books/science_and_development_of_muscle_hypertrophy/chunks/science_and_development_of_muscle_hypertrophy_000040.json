@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000040",
+  "text": "Translation occurs in organelles called ribosomes located in the cell's sarcoplasm, which occupy approximately 20% of cell volume and comprise approximately 85% of total cellular RNA (64, 244). Ribosomes can be thought of as large peptide factories that regulate the translation of genetic material encoded in mRNA templates into muscle proteins. Each ribosome is composed of two subunits: a smaller subunit that binds the mRNA and a larger subunit that integrates specific transfer RNAs along with their bound amino acids (44). After binding with mRNA, the ribosomes synthesize a corresponding peptide strand by joining amino acids to transfer ribonucleic acid (tRNA) at the carboxyl end of the chain (44). The result is that translational capacity depends highly on the number of ribosomes in",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 40,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

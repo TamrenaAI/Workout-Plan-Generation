@@ -1,0 +1,24 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000765",
+  "text": "Recently, foam rolling has been advocated for counteracting DOMS. Drinkwater and colleagues (14) found that 15 minutes of foam rolling for the lower-body musculature performed immediately after a muscle-damaging eccentric bout and 24, 48, and 72 hours post-exercise significantly increased the pressure-pain threshold compared to passive recovery. These findings were associated with a greater recovery from the exercise bout, as determined by an increase in countermovement jump performance. Although speculative, a higher pressure-pain threshold conceivably could be related to a reduction in soreness, thereby raising the possibility that foam rolling may be a viable recovery option.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 5: Advanced Training Practices",
+  "collection": "hypertrophy",
+  "chunk_index": 81,
+  "metadata": {
+    "muscle": [
+      "quads",
+      "hamstrings",
+      "glutes",
+      "calves"
+    ],
+    "topic": [
+      "recovery",
+      "fatigue_management"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength"
+    ]
+  }
+}

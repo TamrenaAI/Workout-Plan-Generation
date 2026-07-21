@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000648",
+  "text": "ROM. In the only study to date that included resistance-trained subjects, Goto and colleagues (84) reported greater triceps brachii hypertrophy pursuant to elbow extension exercise using a partial ROM (elbow range from 45° to 90°) versus a full ROM (from 0° to 120°). Intriguingly, the authors noted a positive correlation between markers of intramuscular hypoxia and the percent increase in muscle cross-sectional area ( r = .70) during partial-ROM training, raising the possibility that maintaining a constant tension on the working muscle through a limited range may heighten anabolism, perhaps via compression of the surrounding vessels.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 196,
+  "metadata": {
+    "muscle": [
+      "triceps"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "intermediate",
+    "goals": [
+      "strength",
+      "hypertrophy"
+    ]
+  }
+}

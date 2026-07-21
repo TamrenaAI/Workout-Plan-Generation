@@ -1,0 +1,41 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000295",
+  "text": "muscle girth were found between the groups. Although these results are intriguing, the study had numerous methodological limitations, including the use of untrained subjects, unequal training duration between the groups, and a small sample size that compromised statistical power. In addition, the pretrained group showed evidence of myodamage as assessed by elevated creatine kinase levels, although the extent was significantly less than that noted in the control group. This raises the possibility that the magnitude of damage sustained by those who were pretrained was adequate to maximize any added hypertrophic adaptations. Alternatively, it remains conceivable that EIMD incurred during training by the untrained subjects exceeded the body's reparative capabilities, ultimately mitigating",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 124,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "exercise_selection",
+      "volume",
+      "intensity",
+      "fatigue_management",
+      "intensity",
+      "periodization",
+      "recovery",
+      "neuromuscular_system",
+      "muscle_physiology",
+      "exercise_order",
+      "frequency",
+      "muscle_growth_mechanisms",
+      "muscle_activation",
+      "frequency",
+      "fatigue_management",
+      "hypertrophy_programming",
+      "exercise_order",
+      "muscle_growth_mechanisms",
+      "muscle_activation",
+      "muscle_physiology",
+      "periodization",
+      "recovery"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

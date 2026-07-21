@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000039",
+  "text": "Protein synthesis has two basic components: transcription and translation (). Transcription occurs in the cell nucleus through a complex process that is segregated into three distinct phases: initiation, elongation, and termination. The process involves the creation of a messenger ribonucleic acid (mRNA) template that encodes the sequence of a specific protein from the genome. Each phase of transcription is regulated by various proteins (i.e., transcription factors, coactivators) that ensure the correct gene is transcribed in response to appropriate signals. Messenger ribonucleic acid concentration for a given protein is ultimately regulated by the myonuclear or the mitochondrial density and the transcription factors required for promoter activity (236).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 39,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

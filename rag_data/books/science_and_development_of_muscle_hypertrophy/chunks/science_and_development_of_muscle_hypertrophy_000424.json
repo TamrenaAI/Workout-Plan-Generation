@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000424",
+  "text": "Overall, high intra-rater reliabilities for ultrasound have been reported for the lower extremity muscles, with the majority of intraclass correlation coefficients (ICCs) ranging from .90 to .99 (2). Studies show good inter-rater reliability as well, with ICCs between .82 and .95. Ultrasound also displays good accuracy for muscle thickness measurements obtained at a single time point. Compared to cross-sectional area as determined by MRI or CT, ultrasound measures of anterior thigh muscle thickness showed correlation coefficients of .76 to .98, with the majority of reported values &gt;.90 (2). Similar findings have been shown for the lower leg, with good to strong correlations noted between ultrasound and CT or MRI findings (correlation coefficients of .70 to .91). Single-point",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 79,
+  "metadata": {
+    "muscle": [
+      "quads",
+      "calves"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000505",
+  "text": "Intensity of load is often categorized into loading zones that correspond to repetition ranges. Typically, repetition ranges are classified as heavy (1RM to 5RM), medium (6RM to 12RM), and light (15+RM) (205). Although formulas have been devised to estimate repetitions at a given percentage of 1RM, at best they provide only a crude approximation of the relationship between repetitions and the percentage of 1RM. The combination of genetic factors (e.g., muscle fiber typing, internal moment arm length), physiological factors (e.g., buffering capacity), and exercise types (e.g., upper body versus lower body, single joint versus multi-joint) affect the generalizability of values. Hoeger and colleagues (104) found that a load of 80% of 1RM corresponded to 10RM in the bench press, lat pulldown,",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 53,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "load"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000420",
+  "text": "Ultrasound scans can be obtained either one dimensionally by measuring the thickness of a muscle or two dimensionally by measuring a muscle's cross-sectional area. For muscle thickness, measures are obtained at a single site along the muscle belly; multiple sites can be scanned to obtain insight into potential regional-specific adaptations that may have taken place. The fairly recent introduction of extended field-of-view ultrasound represents a technological advance in the ability to achieve high-quality cross-sectional imaging. These techniques involve the sonographer manually sweeping the transducer across the muscle at a regulated rate of speed. The software algorithms of the ultrasound unit then merge the sequential frames collected during real-time scanning to reconstruct a",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 75,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

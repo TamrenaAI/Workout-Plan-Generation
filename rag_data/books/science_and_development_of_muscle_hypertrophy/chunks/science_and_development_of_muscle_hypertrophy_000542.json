@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000542",
+  "text": "training should be included both to ensure the optimal development of Type I fibers and to improve the buffering capacity of muscle so that additional repetitions can be performed at a given medium intensity of load. Training below approximately 30% of 1RM may be insufficient to fully stimulate optimal muscular development, although its potential ability to selectively target development of Type I fibers remains to be determined.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 90,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "intensity",
+      "load"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000475",
+  "text": "between studies, a possible explanation may be related to the composition of the routines in the studies. Specifically, studies showing beneficial effects for very high volumes employed total-body workouts in which the volume for each muscle was spread out over the course of the week. Alternatively, studies showing no additional benefits to higher-volume training used split routines with the volume for each muscle condensed into a single workout. An unpublished simulation analysis suggests that a threshold for per-session volume exists at approximately 10 sets per week; beyond this point, additional volume appears to confer minimal further hypertrophic benefits (personal communication). This hypothesis warrants further study.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 23,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "volume",
+      "frequency",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

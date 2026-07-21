@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000123",
+  "text": "the acute protein synthetic response to exercise training does not always correlate with chronic anabolic signaling (45), and these events are not necessarily predictive of long-term increases in muscle growth (227). This is particularly true with respect to the untrained subjects used in these studies because their acute responses may be more related to their unfamiliarity with the exercise per se and the associated muscle damage that inevitably occurs from such training (19).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 123,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "beginner",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

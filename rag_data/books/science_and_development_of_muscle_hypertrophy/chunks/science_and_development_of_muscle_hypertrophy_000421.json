@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000421",
+  "text": "rate of speed. The software algorithms of the ultrasound unit then merge the sequential frames collected during real-time scanning to reconstruct a panoramic two-dimensional image. Three-dimensional ultrasound imaging is an emerging technology that shows promise for accurately estimating muscle volume (6); however, research into its validity for assessing hypertrophic changes over time is scant.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 76,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "volume"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

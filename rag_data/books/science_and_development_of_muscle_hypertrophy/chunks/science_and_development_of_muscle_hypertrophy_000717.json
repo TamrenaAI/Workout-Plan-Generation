@@ -1,0 +1,37 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000717",
+  "text": "(3) a load of 4RM followed by two drop sets with successive reductions of 20% of load. The program employed exercises for all the major muscle groups; however, drop sets were performed for only the lat pulldown, chest press, and leg press. After 12 weeks, post-exercise changes in fat-free mass showed no significant differences between conditions despite a greater volume performed by the drop set groups. A limitation was the measurement of fat-free mass by air displacement plethysmography (e.g., BodPod), which provides only a gross estimate of all nonfat components (e.g., muscle, bone, body water); thus, results cannot necessarily be extrapolated to changes in skeletal muscle size. This is particularly pertinent given that drop sets were performed on just three of the exercises.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 5: Advanced Training Practices",
+  "collection": "hypertrophy",
+  "chunk_index": 33,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "advanced_techniques",
+      "volume",
+      "load",
+      "fatigue_management",
+      "recovery",
+      "periodization",
+      "exercise_selection",
+      "recovery",
+      "muscle_growth_mechanisms",
+      "periodization",
+      "load",
+      "volume",
+      "advanced_techniques",
+      "exercise_selection",
+      "muscle_growth_mechanisms",
+      "fatigue_management",
+      "recovery",
+      "periodization"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

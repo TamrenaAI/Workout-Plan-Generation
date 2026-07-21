@@ -1,0 +1,24 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000206",
+  "text": "in rodents (124). Intriguingly, the hypertrophy occurred in the soleus but not the plantaris muscles, suggesting that calcium-dependent effects are specific to slow-twitch fibers.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 35,
+  "metadata": {
+    "muscle": [
+      "glutes",
+      "hamstrings",
+      "abs"
+    ],
+    "topic": [
+      "exercise_selection",
+      "muscle_activation",
+      "biomechanics"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

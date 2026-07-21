@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000419",
+  "text": "Ultrasound has two primary imaging modes: A-mode (amplitude modulation) and B-mode (brightness modulation). A-mode involves the emission of a narrow sound beam to scan tissue discontinuity; the resultant output takes the form of spikes on a graph. Alternatively, B-mode emits a linear array of sound waves to generate images of the tissue of interest, and hence produces resolution superior to that of A-mode. Although A-mode has been used in research to assess muscle morphology, its validity for this purpose has not been well-studied. Thus, further discussion will be specific to B-mode imaging, which has substantial support in the literature as a valid assessment tool.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 74,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

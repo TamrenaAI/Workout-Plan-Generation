@@ -1,0 +1,25 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000026",
+  "text": "Two primary factors are responsible for the extent of muscle recruitment: level of muscle force and rate of force development. Training with heavy loads requires substantial force production and therefore calls on both low- and high-threshold motor units to maximize force. Although there is an intent to lift heavy loads quickly, the actual velocity of the lift is relatively slow. As the intensity of load decreases, the required force production from the muscle decreases, and fewer motor units are necessary to complete the lift given the same speed of shortening. By lifting a lighter weight quickly, however, most motor units are likely to be recruited even at loads equivalent to 33% of maximum (56). The extent of reductions in recruitment threshold from rapid contractions is greater for",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 26,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_activation",
+      "neuromuscular_system",
+      "load",
+      "intensity",
+      "force_production",
+      "biomechanics"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength"
+    ]
+  }
+}

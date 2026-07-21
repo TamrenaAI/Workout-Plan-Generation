@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000480",
+  "text": "Data from Schoenfeld et al. (218).\n\nslightly lower volumes and others thrive with somewhat higher volumes; experimentation is warranted to determine individual responsiveness. Given data indicating that responsiveness to higher volumes shows a dose-response relationship, there may be a benefit to strategically employing higher volumes for a poorly responding muscle group. For example, if the muscle development of the deltoids is lagging behind other groups, increasing their volume of training above that of other muscle groups could be warranted. If multiple muscles are considered poor responders, employ higher volumes for a single muscle group at a time over a given training cycle; set up a rotation that targets the other lagging muscle groups with higher volumes in future cycles.\n\n## Frequency",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 28,
+  "metadata": {
+    "muscle": [
+      "shoulders"
+    ],
+    "topic": [
+      "volume",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

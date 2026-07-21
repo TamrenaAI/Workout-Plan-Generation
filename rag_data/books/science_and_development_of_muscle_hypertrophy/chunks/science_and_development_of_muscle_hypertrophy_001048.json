@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001048",
+  "text": "As previously explained, sessions can be partitioned into loading zones encompassing heavy loads (1RM to 5RM), moderate loads (8RM to 12RM), and light loads (≥20RM). A periodized approach to this variable can be carried out using either a linear or undulating model. Note that loading can also be varied within a given session. For example, a lower-body routine could include the squat performed at 5RM, leg press performed at 10RM, and leg extension at 15RM. Alternatively, pyramid systems can use different loading zones for the same exercise over the course of a fixed number of sets. Both ascending (loads progressively increase with each subsequent set) and descending (loads progressively decrease with each subsequent set) pyramids are viable options. Research indicates that a pyramid",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 115,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "load",
+      "periodization",
+      "exercise_order",
+      "intensity"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

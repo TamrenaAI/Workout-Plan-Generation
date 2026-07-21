@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000050",
+  "text": "phy Contractile hypertrophy can occur by adding sarcomeres either in parallel or in series (). In the context of traditional exercise protocols, the majority of gains in muscle mass result from an increase of sarcomeres added in parallel (161, 224). Mechanical overload causes a disruption in the ultrastructure of the myofibers and the corresponding extracellular matrix that sets off an intracellular signaling cascade (see chapter 2 for a full explanation). With a favorable an- abolic environment, this process ultimately leads to an increase in the size and amounts of the contractile and structural elements in the muscle as well as the number of sarcomeres in parallel. The upshot is an increase in the diameter of individual fibers and thus an increase in total muscle cross-sectional area",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 50,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

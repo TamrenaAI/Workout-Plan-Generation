@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000027",
+  "text": "recruited even at loads equivalent to 33% of maximum (56). The extent of reductions in recruitment threshold from rapid contractions is greater for motor units in slow-contracting muscles, such as the soleus, compared with fast-contracting muscles, such as the masseter, one of the primary muscles involved in chewing food (56). The role of fatigue also must be considered with respect to recruitment. As fatigue increases during low-load contractions, the recruitment threshold of higher-threshold motor units progressively decreases even at somewhat slower speeds (95, 195, 242). It has been hypothesized that fatigue-induced reductions in motor unit threshold recruitment is an attempt by the neuromuscular system to sustain necessary levels of force generation to continue work output during",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 27,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "neuromuscular_system",
+      "muscle_activation",
+      "fatigue_management"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

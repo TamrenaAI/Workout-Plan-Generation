@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000395",
+  "text": "Because of the vast differences between methods and units, it is somewhat difficult to draw general conclusions about the validity of BIA in measuring fat-free mass. Single-frequency BIA was shown to correlate well with the 4C model in single-point assessment of lean mass in bodybuilders (89). Single-point comparisons between multifrequency BIA and DXA generally show agreement between modalities, although BIA tends to overestimate fat-free mass (23, 26, 37, 92). In regard to segmental lean mass analysis, BIA tends to slightly underestimate fat-free mass compared to reference methods, although agreement is relatively good at the group level (94).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 50,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

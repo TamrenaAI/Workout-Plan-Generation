@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000158",
+  "text": "In addition to acutely upregulating numerous growth-related factors, resistance training also downregulates inhibitory factors, including MSTN (107). Untrained people show modest decreases in MSTN following a resistance exercise bout, and these reductions are more than 3-fold greater, with consistent resistance training experience (148). Moreover, an inverse relationship was shown between thigh muscle mass and the resistance traininginduced load-mediated decrease in myostatin mRNA expression, indicating that those larger muscles were more responsive to reductions in MSTN (107). Other research also shows a cor- relation between the downregulation of MSTN and increases in muscle cross-sectional area following resistance exercise (179), although these findings are not universal (63). Thus,",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 158,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

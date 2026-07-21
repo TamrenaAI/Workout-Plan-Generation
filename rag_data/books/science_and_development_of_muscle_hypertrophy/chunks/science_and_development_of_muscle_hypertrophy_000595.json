@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000595",
+  "text": "## Repetition Duration\n\nRepetition duration represents the sum of the concentric, eccentric, and isometric components of a repetition, and is predicated on the tempo at which the repetition is performed (173). Tempo is often expressed as a three-digit arrangement in which the first number is the time (in seconds) to complete the concentric action, the second number is the isometric transition phase between concentric and eccentric actions, and the third number is the time to complete the eccentric action (173). For example, a tempo of 2-0-3 would indicate a repetition taking 2 seconds on the concentric action, not pausing at the top of the movement, and then taking 3 seconds to perform the eccentric action. In the preceding example, the repetition duration would be 5 seconds.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 143,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "recovery"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength",
+      "hypertrophy",
+      "strength",
+      "hypertrophy"
+    ]
+  }
+}

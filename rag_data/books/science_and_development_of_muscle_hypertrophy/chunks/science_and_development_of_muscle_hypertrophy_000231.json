@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000231",
+  "text": "Evidence suggests that various metabolites can directly function as hypertrophic stimuli. Of particular relevance, several studies have demonstrated that culturing muscle cells in vitro with lactate enhances anabolic signaling and myogenesis (204, 205, 282, 303), and similar results have been shown using an in vivo murine model (34). An in vivo study by Oishi and colleagues (205) showed that daily oral administration of a lactate and caffeine supplement combined with treadmill exercise produced significantly greater hypertrophic increases in the gastrocnemius and tibialis anterior muscles of male rats than in the exercise-only and sedentary control groups. The inclusion of caffeine in the supplement confounds these findings, although acute results from the same study showed only minor",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 60,
+  "metadata": {
+    "muscle": [
+      "glutes",
+      "hamstrings",
+      "quads",
+      "calves"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

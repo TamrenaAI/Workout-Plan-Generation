@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000490",
+  "text": "for higher training frequencies (although there was insufficient data to evaluate whether effects persisted for frequencies above 3 days per week). These findings indicate that, as a standalone variable, frequency does not have much impact on muscle development; it seems that its primary utility is to act as a vehicle to manage weekly volume.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 38,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "frequency",
+      "volume"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

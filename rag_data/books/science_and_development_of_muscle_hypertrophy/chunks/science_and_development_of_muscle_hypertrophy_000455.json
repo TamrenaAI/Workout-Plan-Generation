@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000455",
+  "text": "Note that to strengthen the ability to draw causal inferences, studies generally attempt to manipulate a given variable while controlling all other variables. Although this is beneficial for research, in practice there is an interaction between variables, and manipulating one variable tends to affect the others. Thus, while each variable will be discussed in isolation, the implications of their manipulation must be taken into account within the context of the other variables when designing hypertrophy-oriented programs such as those discussed in chapter 8.\n\n## Volume",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 3,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "volume",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000184",
+  "text": "'flattening' of myonuclei during mechanical loading may act as a sensory signal for various growth-related proteins (e.g., YAP) to translocate from the cytosol to the nucleus and thus initiate anabolism (294), although this theory remains speculative. Overall, our understanding of the stimuli and sensors involved in mechanotransduction is poorly characterized; the topic will be an important area of future research.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 13,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

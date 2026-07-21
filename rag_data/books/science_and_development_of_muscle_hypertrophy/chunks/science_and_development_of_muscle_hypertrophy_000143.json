@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000143",
+  "text": "The primary hypertrophic actions of IL-6 appear to be related to its effects on satellite cells, both by inducing proliferation (102, 229) and by influencing satellite cell-mediated myonuclear accretion (206). There also is evidence that IL-6 may directly mediate protein synthesis via activation of the Janus kinase/signal transducer and activator of transcription (JAK/STAT), ERK1/2, and PI3K/Akt signal transduction pathways (see chapter 2) (184).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 143,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

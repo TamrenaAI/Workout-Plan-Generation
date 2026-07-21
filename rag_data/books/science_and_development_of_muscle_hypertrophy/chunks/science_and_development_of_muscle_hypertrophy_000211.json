@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000211",
+  "text": "Phosphatidic acid (PA) is a lipid second messenger that regulates a diverse array of cellular processes, including muscle growth in response to mechanical load. The activation of PA is mediated via several classes of enzymes. In particular, it is synthesized by phospholipase D1 (PLD1), which hydrolyzes phosphatidylcholine into PA and choline. Once activated, PA exerts effects on both protein synthesis and proteolysis. This is principally accomplished by its direct binding to mTOR and then activating p70 S6K activity (248, 307). PA also can phosphorylate p70 S6K in an mTOR-independent manner, presenting yet another path whereby mechanical stimuli may directly drive anabolic processes (151). In addition, overexpression of PLD1 is associated with a decrease in catabolic factors such as",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 40,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

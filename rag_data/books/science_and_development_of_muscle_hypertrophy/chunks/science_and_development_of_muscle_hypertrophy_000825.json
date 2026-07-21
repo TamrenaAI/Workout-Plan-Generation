@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000825",
+  "text": "Results showed that all groups significantly increased measures of maximal strength and local muscular endurance, with no differences observed between the groups. Muscle hypertrophy was not assessed, however, precluding conclusions about the effects of intensity on growth.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 6: Role of Aerobic Training in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 48,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "maximal_strength",
+      "intensity"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength"
+    ]
+  }
+}

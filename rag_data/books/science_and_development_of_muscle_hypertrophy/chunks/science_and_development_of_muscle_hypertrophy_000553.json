@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000553",
+  "text": "hypertrophy correlated to the site of activation, but occurred in a different region of the muscle compared to the previous study (263). To the contrary, other research shows that regional differences in quadriceps femoris hypertrophy following regimented resistance training are a function of muscle oxygenation status during exercise as opposed to neuromuscular activity (154).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 101,
+  "metadata": {
+    "muscle": [
+      "quads",
+      "quads"
+    ],
+    "topic": [
+      "hypertrophy_programming",
+      "muscle_activation"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength",
+      "hypertrophy"
+    ]
+  }
+}

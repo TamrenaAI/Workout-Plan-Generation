@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000285",
+  "text": "Alternatively, Komulainen and colleagues (132) exposed the tibialis anterior muscles of anesthetized Wistar rats to repeated concentric or eccentric muscle actions. The eccentric muscle actions produced massive injury to the muscle; beta-glucuronidase activity (a measure of myodamage) showed a 7.1-fold increase from baseline. Alternatively, concentric muscle actions resulted in a modest 2.6-fold increase in beta-glucuronidase activity, indicating that the damage was relatively minor. Similar increases in muscle cross-sectional area were noted in both groups, suggesting a threshold for EIMD-induced growth beyond which myodamage provides no additional beneficial hypertrophic effects. The study is confounded by evaluating polar-extreme levels of damage. Whether a dose-response relationship",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 114,
+  "metadata": {
+    "muscle": [
+      "triceps"
+    ],
+    "topic": [
+      "exercise_selection",
+      "hypertrophy_programming",
+      "muscle_activation"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

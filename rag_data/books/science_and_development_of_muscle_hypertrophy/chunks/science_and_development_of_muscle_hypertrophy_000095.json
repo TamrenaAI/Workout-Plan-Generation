@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000095",
+  "text": "The anabolic influence of GH on muscle tissue is thought to be carried out primarily via its potentiative effect on IGF-1 (238). Animal research shows that an increase in skeletal muscle mass associated with GH requires an intact IGF-1 receptor (106). These findings are consistent with studies showing significant increases in circulating IGF-1 levels following GH administration (18, 83, 188). In addition to mediating the release of systemic IGF-1 iso- forms, GH also appears to increase the action of MGF. Klover and Hennighausen (109) found that removing the genes for signal transducers and activators of transcription (STAT), which are considered compulsory regulators of GH-induced transcription of the IGF-1 gene, led to a selective loss of skeletal muscle STAT5 protein, whereas hepatic",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 95,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

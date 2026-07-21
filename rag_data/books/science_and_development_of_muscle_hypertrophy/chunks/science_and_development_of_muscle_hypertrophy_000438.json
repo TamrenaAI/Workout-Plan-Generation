@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000438",
+  "text": "87) and lower (79) body. However, the volume of certain muscles demonstrates a greater ability to be accurately assessed than others; one study reported differences between MRI and dissection measurement ranging from 7.7% to 21.6% (21). In particular, muscles with high ratios of surface area to volume may predispose them to segmentation error, compromising the validity of measurement (21). Moreover, volumes of smaller, shorter muscles tend to be underestimated, likely due to an inability to obtain a sufficient number of samples along the muscle's length. The adductor brevis, for example, showed a large measurement error between MRI and cadaver analysis, with results attributed to the fact that the muscle was visible in only 3 of the 12 images sampled (79). Thus, the ability of MRI to",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 93,
+  "metadata": {
+    "muscle": [
+      "abs"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

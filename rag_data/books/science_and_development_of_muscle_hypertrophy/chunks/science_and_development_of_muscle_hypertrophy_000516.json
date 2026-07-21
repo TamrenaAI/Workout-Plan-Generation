@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000516",
+  "text": "Tesch and colleagues (253) employed glycogen depletion analysis to evaluate recruitment during dynamic knee extension performance at loads of 30%, 45%, and 60% of 1RM. Results showed that Type IIa fibers began to be recruited at 30% of 1RM, and about half of these fibers showed glycogen loss as the load approached 50% of 1RM. However, the Type IIax and IIx fibers were activated only when the load reached 60% of 1RM. The study was limited by the fact that sets were not carried out to muscular failure. More recently, Morton and colleagues (158) reported similar glycogen depletion in both Type I and Type II fibers during performance of fatiguing heavy (80% of 1RM) versus light (30% of 1RM) loading, indicating that the magnitude of load does not determine recruitment threshold when training",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 64,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "muscle_activation",
+      "load",
+      "intensity"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

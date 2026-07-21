@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000797",
+  "text": "Aerobic exercise can increase hypertrophy in sedentary people, primarily in Type I muscle fibers. The extent of hypertrophic increases depends on the level of sedentarism; greater gains are seen in the elderly than in the young. Intensities of ≥80% of HRR are generally needed to elicit significant muscular growth. Although definitive evidence regarding the effects of aerobic volume on hypertrophy is lacking, research indicates that longer periods of sedentarism reduce the total weekly duration required to promote the accretion of lean mass. With respect to the modality of exercise, cycling appears to have the greatest hypertrophic benefit, although the paucity of studies on alternative modalities makes it difficult to draw firm conclusions on this variable. Importantly, muscular gains are",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 6: Role of Aerobic Training in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 20,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "intensity",
+      "volume",
+      "exercise_selection",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "beginner",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

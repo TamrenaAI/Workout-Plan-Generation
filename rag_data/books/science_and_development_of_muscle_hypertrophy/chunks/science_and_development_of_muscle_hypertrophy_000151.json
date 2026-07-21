@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000151",
+  "text": "Myostatin (MSTN), a member of the transforming growth factorβ superfamily, is recognized as a powerful negative regulator of developing muscle mass (108). The MSTN gene is expressed almost exclusively in muscle fibers throughout embryonic development as well as in adult animals (200). A mutation of the MSTN gene has been shown to produce marked hypertrophy in animals. A breed of cattle known to be null for the MSTN gene, called the Belgian Blue, displays a hypermuscular appearance (), so much so that they are popularly referred to as Schwarzenegger cattle after the champion bodybuilder. Targeted disruption of the MSTN gene in mice causes a doubling of skeletal muscle mass (136), ostensibly from a combination of hyperplasia and hypertrophy. Moreover, MSTN inhibition increases myofiber",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 151,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

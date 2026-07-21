@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000495",
+  "text": "Some researchers have speculated that very frequent training sessions comprised of low per-session volumes may help to maximize the hypertrophic response. This hypothesis is based on the premise that the muscle protein synthetic response to a training bout is truncated as an individual gains training experience (55). Indeed, while muscle protein synthesis in untrained individuals remains elevated for ≥48 hours (177), trained lifters experience a higher initial peak response that returns to baseline after &lt;28 hours (243). Based on these data, more repetitive stimulation of the muscle with higher weekly training frequencies would seem to allow for greater time spent in a net-positive protein balance, conceivably promoting a greater accretion of muscle proteins over time.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 43,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

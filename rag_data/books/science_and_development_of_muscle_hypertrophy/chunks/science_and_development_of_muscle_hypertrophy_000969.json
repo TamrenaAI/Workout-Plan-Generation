@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000969",
+  "text": "Numerous electromyographic (EMG) studies report differences in muscle activation between multi-joint and single-joint exercise. For example, single-joint exercises targeting the hamstrings (e.g., leg curl, stiff-leg deadlift) display significantly greater EMG amplitudes than multi-joint lower-body exercise (e.g., squat, leg press) (5, 150). With respect to the quadriceps, studies show higher EMG amplitudes for the rectus femoris during single-joint knee extension exercise versus multi-joint exercises such as the barbell squat and leg press (5, 44). Discrepancies in muscle activation between muscles during multi-joint exercises have been shown for the upper-body musculature and provide further insights on the topic. Activation of the pectoralis major is approximately twice as great as that",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 36,
+  "metadata": {
+    "muscle": [
+      "hamstrings",
+      "quads",
+      "hamstrings"
+    ],
+    "topic": [
+      "muscle_activation",
+      "exercise_selection"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

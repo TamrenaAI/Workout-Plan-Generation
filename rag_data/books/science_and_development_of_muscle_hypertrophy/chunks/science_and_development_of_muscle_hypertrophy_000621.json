@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000621",
+  "text": "Current evidence suggests little difference in muscle hypertrophy when training with isotonic repetition durations ranging from 0.5 to 6 seconds to muscular failure. Thus, it would seem that a fairly wide range of repetition durations can be used if the primary goal is to maximize muscle growth. Research is limited on the topic, making it difficult to draw concrete conclusions. Concentric tempos of 1 to 3 seconds can be considered viable options; an eccentric tempo of at least 2 seconds appears necessary to ensure loads are lowered under muscular control. On the other hand, training at very slow volitional durations (&gt;10 seconds per repetition) appears to produce inferior increases in muscle growth, although a lack of controlled studies on the topic makes it difficult to draw",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 169,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming",
+      "volume"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

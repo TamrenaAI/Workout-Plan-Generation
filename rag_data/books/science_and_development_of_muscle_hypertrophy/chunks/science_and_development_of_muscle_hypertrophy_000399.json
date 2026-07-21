@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000399",
+  "text": "As the name implies, site-specific assessments evaluate muscle morphology at a given aspect of a muscle. Site-specific measures can be obtained either in vitro (biopsy), whereby muscle is assessed on a microscopic level, or in vivo (circumference measurement, ultrasound, CT, MRI), whereby muscle is assessed on a macroscopic level. In vitro measures allow analysis of the size of individual fibers, whereas in vivo measures assess gross muscle morphology. In vivo measures can be assessed in a single dimension (muscle thickness), which looks at a given point of a portion of a muscle; in two dimensions, which looks at a given slice of a Abbreviations: CSA = cross-sectional area; FFM = fat-free mass; FM = fat mass; ADP = air displacement plethysmography; DXA = dual X-ray absorptiometry; BIA =",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 54,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

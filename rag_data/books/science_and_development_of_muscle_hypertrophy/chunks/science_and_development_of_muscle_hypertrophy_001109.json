@@ -1,0 +1,40 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001109",
+  "text": "The accretion of lean mass depends on meeting daily dietary protein needs. The RDA for protein is 0.8 g/kg of body mass. This recommendation is based on research showing that such an amount is sufficient for 98% of healthy, non-exercising adults to remain in a non-negative nitrogen balance. However, the RDA, although adequate for those who are largely sedentary, cannot be generalized to a resistance-trained population, particularly those who aspire to maximize muscle development. For one, the maintenance of nitrogen balance indicates that day-to-day protein losses are offset by the synthesis of new bodily proteins; gaining muscle requires a positive nitrogen balance (i.e., protein synthesis exceeds degradation over time). Moreover, intense exercise substantially increases protein",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 9: Nutrition for Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 25,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming",
+      "fatigue_management",
+      "recovery",
+      "periodization",
+      "exercise_selection",
+      "volume",
+      "intensity",
+      "frequency",
+      "advanced_techniques",
+      "hypertrophy_programming",
+      "hypertrophy_programming",
+      "fatigue_management",
+      "fatigue_management",
+      "recovery",
+      "periodization",
+      "exercise_selection",
+      "volume",
+      "intensity",
+      "frequency",
+      "advanced_techniques"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy",
+      "fat_loss"
+    ]
+  }
+}

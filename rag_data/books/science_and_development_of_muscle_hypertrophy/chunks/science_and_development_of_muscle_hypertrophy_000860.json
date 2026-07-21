@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000860",
+  "text": "An array of hereditary factors are believed to influence hypertrophic potential. Pioneering multidisciplinary work published in a large exercise genomics study titled 'Functional Single Nucleotide Polymorphisms Associated With Human Muscle Size and Strength' (FAMuSS) identified 17 genes believed to explain some of the variances in interindividual muscular adaptations (59). One such gene, bone morphogenetic protein 2 (BMP2), is believed to be especially relevant to hypertrophic outcomes. Devaney and colleagues (20) found that polymorphisms of the BMP2 gene were responsible for differences in muscular adaptations to intense exercise. Specifically, young males with the CC genotype displayed greater gains in muscle mass following 12 weeks of progressive resistance training compared to those",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 7: Factors in Maximal Hypertrophic Development",
+  "collection": "hypertrophy",
+  "chunk_index": 7,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

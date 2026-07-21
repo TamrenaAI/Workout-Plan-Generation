@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000126",
+  "text": "the post-exercise testosterone response and muscle growth. Interestingly, a subanalysis of hormonal variations between hypertrophic responders and nonresponders (i.e., those in the top and bottom ~16%) showed a strong trend for correlations between increased IGF-1 levels and muscular adaptations ( p = .053). Follow-up work by the same lab found no relationship between acute elevations in testosterone, GH, or IGF-1 and mean increases in muscle fiber cross-sectional area following 16 weeks of resistance training in a group of 23 untrained young men (140). Although the aforementioned studies provide insight into possible interactions, caution must be used in attempting to draw causal conclusions from correlative data.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 126,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

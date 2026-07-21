@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000408",
+  "text": "Accordingly, two-dimensional measures can provide greater insights into muscle morphology compared to one-dimensional assessments. Two primary classifications of two-dimensional measurements are anatomical cross-sectional area (ACSA) and physiological cross-sectional area (PCSA). ACSA is operationally defined as the cross-sectional area of its muscle obtained perpendicular to its longitudinal axis. Alternatively, PCSA represents the cross-sectional area of a muscle obtained perpendicular to its fibers. Because the fibers of nonpennate muscles are all parallel to the long axis, ACSA and PCSA produce similar results. However, the fibers in pennate muscles such as the deltoids, rectus femoris, and triceps brachii are aligned orthogonally, and thus values between the constructs (ACSA versus",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 63,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

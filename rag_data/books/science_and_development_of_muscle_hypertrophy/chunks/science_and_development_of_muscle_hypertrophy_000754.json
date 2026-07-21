@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000754",
+  "text": "Horwath and colleagues (40) randomly assigned 22 resistance-trained men to perform lower-body resistance exercise consisting of either isokinetic training combined with eccentric overload or traditional isotonic training for 8 weeks. Exercises consisted of heavy squats and jump squats. Mean post-exercise increases in muscle thickness across the quadriceps muscles favored the eccentric overload training compared to traditional training (8.9% vs. 2.1%, respectively). Although these findings suggest a potential benefit to incorporating eccentric overload training into resistance training prescription, the study was confounded by the use of different modalities (isokinetic versus isotonic training). Moreover, eccentric overload was performed only on the power-oriented exercise (jump squat),",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 5: Advanced Training Practices",
+  "collection": "hypertrophy",
+  "chunk_index": 70,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "advanced_techniques",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "intermediate",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

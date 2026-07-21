@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000458",
+  "text": "Research provides compelling evidence that higher training volumes are necessary to maximize anabolism. This relationship has been demonstrated in multiple lines of evidence. For one, studies generally show heightened anabolic intracellular signaling studies with higher volumes. Terzis and colleagues (252) showed that phosphorylation of p70 S6K and ribosomal protein S6 increases 30 minutes following resistance training in a volume-dependent manner. The fact that values did not reach a plateau in the volumes studied suggests that higher volumes might have led to even greater increases. Intriguingly, the study found similar elevations in mTOR independent of training volume, suggesting that increased training volumes may augment S6 phosphorylation via alternative anabolic pathways,",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 6,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "volume",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000326",
+  "text": "Despite a seemingly logical basis for COX-mediated hypertrophic effects, acute studies on the use of NSAIDs do not seem to show a detrimental impact on post-exercise protein synthesis. Although NSAID administration in animal trials following chronic overload has consistently found impairments in protein metabolism (208, 228, 287), only one human trial showed a blunting of protein synthesis (280), whereas several others failed to note a deleterious effect (28, 185, 215). Discrepancies between findings may be related to methodological variances, physiological differences between species, or differences in the mechanisms of the NSAIDs used (i.e., selective versus nonselective COX inhibitors).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 155,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy",
+      "strength",
+      "hypertrophy",
+      "strength"
+    ]
+  }
+}

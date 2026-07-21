@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000255",
+  "text": "Current theory suggests that an increase in cellular hydration causes pressure against the cytoskeleton and cell membrane, which is perceived as a threat to the cell's integrity. In response, the cell upregulates an anabolic signaling cascade that ultimately leads to reinforcement of its ultrastructure (148, 240). Signaling appears to be mediated via integrin-associated volume osmosensors within cells (158). These sensors turn on anabolic protein-kinase transduction pathways, which are thought to be mediated by local growth factors (41, 146). PI3K appears to be an important signaling component in modulating amino acid transport in muscle as a result of increased cellular hydration (158). Research suggests that anabolic effects are also carried out in an mTOR-independent fashion (237),",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 84,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming",
+      "exercise_selection"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

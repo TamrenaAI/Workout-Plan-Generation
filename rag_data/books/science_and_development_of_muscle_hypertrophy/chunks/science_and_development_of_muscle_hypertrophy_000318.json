@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000318",
+  "text": "Initial signaling to activate satellite cells following EIMD is purported to originate from muscle-derived nitric oxide, potentially in combination with the release of HGF (4, 269, 277). The process appears to be controlled at least to some extent by the cyclooxygenase (COX)-2 pathway, which is considered necessary for maximizing exercise-induced hypertrophic adaptations (257). COX-2 acts to promote the synthesis of prostaglandins believed to stimulate satellite cell proliferation, differentiation, and fusion (22). Research shows an enhanced myogenic response when inflammatory cells are abundant and a blunted response in their absence (22), suggesting that inflammatory processes subsequent to damaging exercise are critical to remodeling. The hypertrophic importance of COX-2 is further",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 147,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "intensity"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

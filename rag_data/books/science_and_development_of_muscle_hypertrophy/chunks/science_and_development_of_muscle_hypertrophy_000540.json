@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000540",
+  "text": "Hypertrophy can be achieved across a wide spectrum of loading zones, with no differences apparent at the whole-muscle level. Low-load training emphasizes metabolic stress and promotes the greatest increases in local muscular endurance, whereas low-repetition, high-load training requires high levels of mechanical tension and enhances the ability to lift heavier loads as a result of greater neural adaptations. Some evidence suggests there may be a fiber type-specific response in which heavy-load training produces greater cross-sectional area increases in Type II fibers, and light loads have a preferential effect on Type I hypertrophy. Thus, if the primary goal is maximizing hypertrophy without regard to strength-related factors, then training across a wide spectrum of repetition ranges (1",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 88,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "load",
+      "intensity",
+      "volume"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

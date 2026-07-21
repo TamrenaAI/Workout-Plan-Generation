@@ -1,0 +1,25 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001040",
+  "text": "## Reverse Periodization\n\nAnother variation of the traditional periodization model specifically designed to maximize hypertrophy is reverse periodization . As previously mentioned, the traditional linear model involves progressive reductions in training volume to account for corresponding increases in load. Considering the strong dose-response relationship between volume and hypertrophy, this seemingly is counterproductive for maximizing muscle mass in the peak phase of the macrocycle. Reverse periodization addresses this issue by placing a hypertrophy mesocycle at the end of the macrocycle so that volume is relatively high at the point at which a peak is desired.\n\nResearch comparing the hypertrophic adaptations of linear and reverse linear models is sparse (see on page 200). In one of",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 107,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "periodization",
+      "hypertrophy_programming",
+      "recovery",
+      "volume",
+      "load",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

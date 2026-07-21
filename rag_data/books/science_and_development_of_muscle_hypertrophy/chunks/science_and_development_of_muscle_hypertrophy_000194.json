@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000194",
+  "text": "and atrogin-1 transcription via FOXO phosphorylation (86). Akt also suppresses the activation of glycogen synthase kinase 3 beta (GSK3 β ), which blocks protein translation initiated by the eIF2B protein (86, 206). As opposed to mTORC1, which regulates the translation of a small subset of mRNAs, eIF2B is believed to control the translation initiation of virtually all mRNAs, and therefore acts to regulate global rates of protein synthesis (90). Thus, the anticatabolic actions of PI3K/Akt may indirectly provide an even more potent stimulus for growth than its anabolic effects.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 23,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_activation"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

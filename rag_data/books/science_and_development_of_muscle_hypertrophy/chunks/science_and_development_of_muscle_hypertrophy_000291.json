@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000291",
+  "text": "Some investigators have questioned whether EIMD mediates hypertrophic adaptations based on research showing that downhill running can induce significant damage to muscle tissue without corresponding growth (24). This observation, however, fails to take into account the unique molecular responses associated with aerobic versus resistance exercise, and the corresponding post-workout stimulation of myofibers. The two types of training activate and suppress distinctly different subsets of genes and cellular signaling pathways (109), thereby bringing about divergent muscular adaptations. It also should be noted that damage elicited by aerobic training manifests differently from that elicited by resistance exercise. Peak creatine kinase activity is noted approximately 12 to 24 hours after",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 120,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "exercise_order",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

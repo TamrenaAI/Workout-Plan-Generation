@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000722",
+  "text": "Acute research shows that cold-water immersion impairs intracellular anabolic signaling, and an attenuated p70 S6K\n\nphosphorylation response is seen over the course of a 48-hour recovery period after resistance training compared to an active recovery period (72). The same study also showed cold-water immersion mitigated the number of Pax7+ cells and NCAM+ cells at 24 and 48 hours after resistance exercise, indicating a deleterious effect on the satellite cell response to resistance training as well. Other research shows cold-water immersion suppresses ribosome biogenesis (21), which is thought to be a key player in the long-term regulation of muscle growth (22).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 5: Advanced Training Practices",
+  "collection": "hypertrophy",
+  "chunk_index": 38,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "recovery"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

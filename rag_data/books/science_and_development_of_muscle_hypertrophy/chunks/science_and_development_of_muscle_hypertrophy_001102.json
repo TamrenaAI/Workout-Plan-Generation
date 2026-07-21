@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001102",
+  "text": "The essential amino acid leucine, one of the branched-chain amino acids (BCAAs), is believed to be particularly important to the regulation of muscle mass. Leucine has been shown to stimulate muscle protein synthesis both in vitro and in vivo. The mechanism of action appears to be the result of an enhanced translation initiation mediated by increased mTOR phosphorylation (104, 153). This contention is supported by findings that activation of mTOR is relatively unaffected by the other two BCAAs, valine and isoleucine (153). Leucine also has a positive effect on protein balance by attenuating muscle protein breakdown via the inhibition of autophagy (153). The influence of leucine is limited to the activation of muscle protein synthesis, not the duration; sustaining elevated muscle protein",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 9: Nutrition for Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 18,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

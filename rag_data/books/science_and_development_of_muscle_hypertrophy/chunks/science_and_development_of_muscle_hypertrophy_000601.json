@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000601",
+  "text": "Subanalysis of data indicates that superslow training is likely detrimental to maximizing hypertrophy. Keogh and colleagues (1 18) assessed muscle activation in a group of trained lifters during the bench press under a variety of training conditions, including a very slow tempo and a traditional tempo. Those in the slow lifting condition used a repetition duration of 10 seconds (5 seconds for both concentric and eccentric actions), whereas those in the traditional training condition attempted to lift the load as fast as possible. Each condition was carried out to the point of concentric muscular failure. In comparison to the slow tempo, mean EMG activity of the pectoralis major during traditional lifting was markedly higher on the concentric portion of the movement (by 18%, 19%, and 12%",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 149,
+  "metadata": {
+    "muscle": [
+      "triceps"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "intermediate",
+    "goals": [
+      "strength",
+      "hypertrophy"
+    ]
+  }
+}

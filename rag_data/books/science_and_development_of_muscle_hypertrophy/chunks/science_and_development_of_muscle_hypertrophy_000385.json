@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000385",
+  "text": "When measurements are obtained at a single time point, DXA displays very high correlation with the 4C model for estimating lean mass in bodybuilders ( r = .97) (89). DXA also performs adequately in comparison to site-specific measures in this regard. Thigh skeletal muscle area as determined by single-slice CT showed a good correlation with DXA-derived measures of thigh fat-free mass ( r = .86); correlations with thigh muscle volumes derived from multislice CT were even higher ( r = .98) (51). Comparisons with MRI have produced correlation coefficient values ranging from .86 to .97 (85), indicating strong relationships between modalities.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 40,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

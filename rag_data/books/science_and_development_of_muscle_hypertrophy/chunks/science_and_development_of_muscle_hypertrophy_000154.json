@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000154",
+  "text": "There is conflicting evidence as to the quality of muscle tissue in MSTN deficiencies. Racing dogs found to be null for the MSTN gene were significantly faster than those carrying the wildtype genotype, suggesting a clear performance advantage (143). Alternatively, other research shows that a mutation of the MSTN gene in mice is associated with impaired calcium release from the sarcoplasmic reticulum (31). So although these mice are hypermuscular in appearance, the increased muscle mass does not translate into an increased ability to produce force. There also is evidence that MSTN dysfunction negatively affects hypertrophy in muscles comprised of primarily slow-twitch fibers, which in turn may have a detrimental",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 154,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms",
+      "force_production"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy",
+      "strength"
+    ]
+  }
+}

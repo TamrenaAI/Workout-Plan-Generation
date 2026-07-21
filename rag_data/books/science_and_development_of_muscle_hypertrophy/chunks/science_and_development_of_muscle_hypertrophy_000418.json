@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000418",
+  "text": "and then placed over the muscle of interest. The transducer emits sound waves that penetrate bodily tissues; these waves are partially reflected back to the unit and displayed as an image. When a satisfactory scan is obtained, the sonographer freezes the image and obtains the desired measurement. The image can then be stored to a hard drive for future retrieval and comparison. The modality is very safe; the same technology is routinely used to track fetal development over the course of a pregnancy. Moreover, scanning can be carried out relatively quickly and inexpensively. Thus, ultrasound is the most popular site-specific modality employed in hypertrophy research.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 73,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

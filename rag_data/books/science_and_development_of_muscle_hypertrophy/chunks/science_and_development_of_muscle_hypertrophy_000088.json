@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000088",
+  "text": "Insulin-like growth factor 1 (IGF-1) is a homologous peptide that, as the name implies, has structural similarities to insulin. IGF-1 carries out intracellular signaling via multiple pathways (see chapter 2) (78, 189, 205). These signaling cascades have both anabolic and anticatabolic effects on muscle and thus promote increased tissue growth (197). In vitro research (studies done in a laboratory setting on extracted cells, not inside the body) consistently shows that IGF-1 incites protein synthesis, inhibits protein breakdown, and increases both myotube diameter and the number of nuclei per myotube (88). Despite its known anabolic properties, however, evidence suggests that a functional IGF-1 receptor is not essential for exercise-induced muscle hypertrophy (214).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 88,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

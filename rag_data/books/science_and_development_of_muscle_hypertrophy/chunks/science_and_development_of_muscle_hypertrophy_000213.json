@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000213",
+  "text": "PA is highly sensitive to mechanical stimulation. Both ex vivo passive stretch (i.e., stretch performed on a muscle removed from the body) and in vivo eccentric actions (i.e., actions of a muscle that is intact in the body) were found to increase PA and mTOR signaling (91). Moreover, administration of 1-butanol-a PLD antagonist-blunts both PA synthesis and mTOR signaling (114). In combination, these data indicate that PLD-derived PA is integrally involved in the mechanical activation of mTOR (91). It should be noted that PA can be synthesized by alternative enzymes, and there is some evidence that its activation by diacylglycerol kinase may play a role in its hypertrophic effects as well.\n\n## AMPK Pathway",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 42,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology",
+      "muscle_activation"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000306",
+  "text": "Despite a lack of evidence directly linking neutrophils to hypertrophy, it is conceivable that they may mediate anabolism by signaling other inflammatory cells necessary for subsequent muscle remodeling. One such possibility is reactive oxygen species (ROS) (283), which have been shown to mediate intracellular signaling in response to intense physical activity (89, 126, 127, 217, 273). Neutrophils are associated with the production of numerous ROS variants, including hydrogen peroxide, superoxide, hydroxyl radical, and hypochlorous acid (131). ROS are associated with hypertrophy of both smooth muscle and cardiac muscle (262), and some speculate that anabolic effects extend to skeletal muscle as well (265). In support of this hypothesis, transgenic mice displaying suppressed levels of",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 135,
+  "metadata": {
+    "muscle": [
+      "shoulders",
+      "chest",
+      "back",
+      "quads",
+      "hamstrings",
+      "glutes",
+      "calves",
+      "abs",
+      "biceps",
+      "triceps",
+      "forearms",
+      "triceps"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

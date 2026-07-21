@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000887",
+  "text": "Data from Buford et al. (12).\n\nbalance is not compromised with aging in healthy people (11). Alternatively, it has been postulated that chronic systemic inflammation may compromise muscle protein metabolism in the frail elderly (1 1). Various disease states and lifestyle factors are known to exacerbate the rate of muscle wasting with age.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 7: Factors in Maximal Hypertrophic Development",
+  "collection": "hypertrophy",
+  "chunk_index": 34,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

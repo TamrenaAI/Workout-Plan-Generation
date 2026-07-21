@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000410",
+  "text": "Three-dimensional assessments allow for the determination of muscle volume. This can be accomplished with MRI or CT by taking multiple serial scans along a muscle's length and then integrating them as a function of distance to obtain volume (42). Alternatively, three-dimensional ultrasound affords the ability to stitch frames together with the aid of motion capture technology, then transform the frames to create a singular image of the entire muscle (42). In general, muscle volume provides the most accurate depiction of muscle size at the whole-muscle level. However, by considering muscle growth as a whole, volume estimates discount the potential importance of a given strategy to elicit regional-specific changes in muscle mass. For example, a 10-week program of isolated eccentric and",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 65,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

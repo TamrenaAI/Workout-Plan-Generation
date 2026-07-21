@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000345",
+  "text": "# Chapter 3: The Measurement of Muscle Hypertrophy\n\nA variety of measurement techniques are available for assessing muscle hypertrophy. It is important to note that these methods merely provide estimates of muscle mass, and all have limitations that must be considered when attempting to draw conclusions from their use. The gold standard reference in the determination of muscle morphology is cadaver analysis; thus, in vivo techniques can never meet the highest degree of accuracy (95). That said, reasonable predictions can be gleaned from other assessment methods, with some demonstrating better accuracy than others.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 0,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

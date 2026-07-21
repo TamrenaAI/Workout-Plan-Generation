@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000042",
+  "text": "As with transcription, reactions are segregated into three phases: initiation, elongation, and termination. Each phase involves a distinct cluster of translation factors that are aptly termed initiation factors (eIF), elongation factors (eEF), and release factors (eRF) (the e stands for eukaryotic, referring to a cell that contains a nucleus and other cell structures). The availability and the state of activation of these factors determine the rate of translation of mRNA into muscle proteins (236). Translation initiation is believed to be the rate-limiting step in the protein synthetic response (130, 180). Not surprisingly, therefore, hormones and other growth factors that regulate muscle protein synthesis exert their effects by either increasing or decreasing the rate of translation",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 42,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

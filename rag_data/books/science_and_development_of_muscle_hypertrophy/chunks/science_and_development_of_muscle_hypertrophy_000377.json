@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000377",
+  "text": "In general, ADP produces results similar to those of hydrodensitometry for determining body composition at a single time point over a wide array of populations (80). However, its accuracy is somewhat compromised in comparison to 3C and 4C models. A study in collegiate male hockey players found that ADP overestimated fat-free mass compared with DXA (19). Similar overestimations have been observed when comparing Bod Pod to a 4C model (47). The extent of these differences is relatively modest, but nevertheless may be potentially meaningful when attempting to discern the practical implications of research.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 32,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

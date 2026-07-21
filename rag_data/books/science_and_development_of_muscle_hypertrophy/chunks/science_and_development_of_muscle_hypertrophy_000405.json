@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000405",
+  "text": "The greatest interest in body composition assessment for most individuals generally involves tracking lean mass changes over time. In this regard, it is relatively unimportant (within reason) whether a given assessment tool may over- or underestimate lean mass compared to a reference standard at a given time point. Most relevant is that the method of choice is reliable, providing consistent measurements from one assessment to the next. For example, single time point analysis shows multifrequency BIA overestimates fat-free mass by 0.58 to 0.84 kg (1.3 to 1.8 lb) compared with DXA (61). However, if one's primary objective is to determine the extent to which fat-free mass changes in conjunction with an exercise program, these differences essentially would be moot provided the same absolute",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 60,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

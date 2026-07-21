@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000210",
+  "text": "The calcium-calmodulin-dependent kinases (i.e., CaMKII and CaMKIV) also have a prominent role in muscle plasticity. CaMKII and CaMKIV have multiple isoforms that detect and respond to calcium signals via multiple downstream targets (38). CaMKII is activated by both acute and long-duration exercise, indicating that it mediates muscle growth as well as mitochondrial biogenesis (38). Interestingly, increases in one of the CaMKII isoforms (CaMKII γ ) occurs during muscle atrophy, leading to the possibility that it is upregulated as a compensatory response to counter the wasting process (38).\n\n## Phosphatidic Acid Pathway",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 39,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

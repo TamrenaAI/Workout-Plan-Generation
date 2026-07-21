@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000374",
+  "text": "## Air Displacement Plethysmography\n\nADP estimates body composition using principles similar to those of hydrodensitometry. However, as the name implies, it uses air displacement (as opposed to water displacement) along with pressure-volume relationships to estimate body volume. The concept is consistent with Boyle's law, which states that the volume of a gas is inversely proportional to the pressure exerted by the gas at a fixed temperature.\n\nADP is commonly carried out in an eggshaped, fiberglass unit called a Bod Pod (). The testing procedure is relatively simple:",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 29,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

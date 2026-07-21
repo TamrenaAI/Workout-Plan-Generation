@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000383",
+  "text": "units (45). In addition, accuracy also varies by population. Factors that can introduce bias include sex, size, fatness, and disease state. The magnitude of these biases is approximately ≤2 kg (4.4 lb) of fat-free mass (97), which may be practically meaningful. Moreover, although DXA is less prone to fluctuations in total body water compared to hydrodensitometry (45), it nevertheless is quite sensitive to dietary manipulation. In particular, increased glycogen stores and the associated water it attracts can increase bodyweight by several kilograms, potentially having a profound effect on results. A recent study found that food consumption, irrespective of macronutrient content, increased DXA estimates of total and regional lean soft-tissue mass up to 1.7% and 3%, respectively, with",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 38,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

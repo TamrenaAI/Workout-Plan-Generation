@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000342",
+  "text": "- Numerous intracellular signaling pathways have been identified in skeletal muscle including PI3K/Akt, MAPK, phosphatidic acid, AMPK, and calcium-dependent pathways. The serine/threonine kinase mTOR has been shown to be critical to mechanically induced hypertrophic adaptations.\n- Mechanical tension is clearly the most important mechanistic factor in training-induced muscle hypertrophy. Mechanosensors are sensitive to both the magnitude and duration of loading, and these stimuli can directly mediate intracellular signaling to bring about hypertrophic adaptations.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 171,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

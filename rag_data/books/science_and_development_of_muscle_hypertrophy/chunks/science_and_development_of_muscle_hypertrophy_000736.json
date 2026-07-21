@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000736",
+  "text": "A substantial body of research has been conducted into the effects of superset training on muscle activation. Electromyography (EMG) studies carried out on paired-set training show similar activation levels compared with traditional training protocols for the upper-body musculature (71), whereas a beneficial effect has been demonstrated on activation of the lower-body musculature (48).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 5: Advanced Training Practices",
+  "collection": "hypertrophy",
+  "chunk_index": 52,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_activation",
+      "advanced_techniques"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

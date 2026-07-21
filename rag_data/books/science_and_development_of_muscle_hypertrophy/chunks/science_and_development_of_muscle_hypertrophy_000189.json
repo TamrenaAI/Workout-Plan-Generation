@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000189",
+  "text": "A primary means by which Akt carries out its actions is by signaling mTOR, which has been shown to be critical to hypertrophic adaptations induced by mechanical loading. mTOR, named because the pharmacological agent rapamycin antagonizes its growth-promoting effects, exists in two functionally distinct signaling complexes: mTORC1 and mTORC2. Only mTORC1 is inhibited by rapamycin (203), and this complex was originally thought to be responsible for mTOR's hypertrophic regulatory actions; however, recent research indicates that rapamycin-insensitive mTORC2 also plays a role in load-induced anabolism (202). Some evidence shows that early increases in muscle protein synthesis are regulated by mTORC1, while continued elevations at later time points involve rapamycin-insensitive or perhaps even",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 18,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_activation",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

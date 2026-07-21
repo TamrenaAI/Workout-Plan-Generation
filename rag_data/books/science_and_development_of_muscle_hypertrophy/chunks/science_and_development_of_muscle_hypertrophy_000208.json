@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000208",
+  "text": "58). Early evidence suggested that, along with PI3K/Akt signaling, activation of calcineurin was required for IGF-1-mediated hypertrophic adaptations (119). It was hypothesized that these effects were expressed via activation of NFAT, which in turn mediated the signaling of transcriptional regulators such as proliferator-activated receptor gamma coactivator 1-alpha (PGC1 α ) and striated muscle activator of Rho signaling (STARS) (162, 169). However, subsequent research challenged these findings, indicating that calcineurin in muscle was primarily responsible for producing a shift toward a slower phenotype (195, 267). When considering the body of literature as a whole, evidence suggests both correlative and causal links between calcineurin and muscle fiber size, especially in slow-twitch",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 37,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

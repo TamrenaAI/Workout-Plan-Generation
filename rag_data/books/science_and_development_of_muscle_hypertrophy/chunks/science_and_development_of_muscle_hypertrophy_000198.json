@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000198",
+  "text": "ERK1/2 is upregulated by both aerobic endurance and resistance training, and the magnitude of its phosphorylation correlates with the intensity of exercise (141). Studies investigating the role of ERK1/2 in the regulation of muscle mass have been somewhat conflicting. On one hand, there is evidence that it mediates satellite proliferation and induces muscle protein synthesis",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 27,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_activation"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

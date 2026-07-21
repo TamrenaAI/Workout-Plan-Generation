@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000382",
+  "text": "A distinct benefit of DXA is its ability to estimate segmental lean mass for the arms, trunk, and legs. Validated equations have been developed to calculate skeletal muscle mass from DXA-derived data (49), although the algorithm was found to have an unexplained systematic bias that overestimates the variable in Caucasians (38). Nevertheless, DXA is often considered a surrogate measure for hypertrophy and was recently deemed the reference standard for measuring muscle mass by a European Society for Clinical and Economic Aspects of Osteoporosis and Osteoarthritis working group on frailty and sarcopenia (1 1).\n\nNumerous potential sources of error are associated with DXA. For one, the type of unit used can influence findings; the level of accuracy varies between pencil- and fan-beam\n\n(a) Doncaster and Bassetlaw Hospitals/Science Source; (b) courtesy of Dr. Grant Tinsley.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 37,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000893",
+  "text": "Regular resistance training can attenuate muscle loss in the elderly and, depending on genetic, environmental, and training-related factors, even produce increases in lean mass above that in sedentary younger people. However, the hypertrophic potential is blunted with advancing age. This anabolic insensitivity is reflected in the acute response to resistance training. Kumar and colleagues (43) found that phosphorylation of p70 S6K and eIF4EB1 at 60% to 90% of 1RM was diminished in older men following multiple sets of unilateral knee extension and flexion exercises at 60% to 90% of 1RM. Moreover, p70 S6K phosphorylation was uncoupled with the rate of muscle protein synthesis at 1 to 2 hours post-exercise in elderly subjects, but not in the young. Other studies show similar findings (27,",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 7: Factors in Maximal Hypertrophic Development",
+  "collection": "hypertrophy",
+  "chunk_index": 40,
+  "metadata": {
+    "muscle": [
+      "quads",
+      "hamstrings"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

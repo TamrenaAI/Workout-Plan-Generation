@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000868",
+  "text": "Muscle morphology is another potential candidate for genetic differences in the hypertrophic response to resistance training. Cadaver studies show significant interindividual differences in fiber number between individuals (2). By the age of 24 weeks, fiber numbers remain constant; further increases in growth are attributed almost exclusively to hypertrophy as opposed to hyperplasia (83). Logically, a greater number of fibers would be advantageous to increasing muscle size. Research lends support to this hypothesis, as a moderate correlation has been noted between fiber number and whole-muscle cross-sectional area. Moreover, a group of male bodybuilders and age-matched controls showed that those with the largest biceps brachii had a larger number of fibers in this muscle (48).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 7: Factors in Maximal Hypertrophic Development",
+  "collection": "hypertrophy",
+  "chunk_index": 15,
+  "metadata": {
+    "muscle": [
+      "biceps"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

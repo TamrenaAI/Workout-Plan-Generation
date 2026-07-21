@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000489",
+  "text": "Since publication of the Wernbom and colleagues review (267), an emerging body of research has been published examining the effects of frequency on long-term hypertrophic adaptations in humans. Our group performed a meta-analysis of the current data, which at the time comprised 25 studies that directly compared higher versus lower resistance training frequencies (219). When volume was equated between conditions, results showed similar hypertrophic changes regardless of whether muscle groups were worked 1, 2, 3, or 4+ days per week. Alternatively, pooling data from studies whereby volume was not equated showed a small but significant benefit for higher training frequencies (although there was insufficient data to evaluate whether effects persisted for frequencies above 3 days per week).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 37,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "frequency",
+      "volume"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

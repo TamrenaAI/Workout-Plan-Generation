@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000357",
+  "text": "less accurate measurements than more costly units. Another potential issue with skinfold measurement involves interindividual differences in skin qualities and subcutaneous fat patterning, which can result in an inability to palpate the fat-muscle interface and thus unduly bias results (9). Finally, prediction formulas are specific to a particular sample of the population and on factors such as age, sex, nutritional status, genetic background, and activity levels; the assumptions used to create these equations, which are based on the premise that fat-free mass is similar in a limited sample of a given population, may not be universally valid and thus result in errors of estimation (9).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 12,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

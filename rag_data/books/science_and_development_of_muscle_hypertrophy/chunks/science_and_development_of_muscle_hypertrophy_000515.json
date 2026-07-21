@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000515",
+  "text": "the EMG decomposition technique, which allows the ability to isolate motor unit recruitment during high-load and low-load contractions. Results showed that the higher-load condition recruited a greater portion of high-threshold motor units compared to the lower-load condition. That said, some participants were able to achieve similar recruitment levels regardless of the magnitude of load, indicating recruitment ability may have an individual component. It should be noted that the utility of EMG decomposition for predicting recruitment has come under scrutiny (62), raising questions about the veracity of these findings.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 63,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength",
+      "hypertrophy"
+    ]
+  }
+}

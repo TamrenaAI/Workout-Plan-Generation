@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000218",
+  "text": "In addition to the catabolic actions of AMPK, compelling evidence suggests that it suppresses the rate of protein synthesis. It is theorized that this negative influence is mediated at least in part by antagonizing the anabolic effects of mTOR, either by direct phosphorylation of mTOR, indirect phosphorylation of the tuberous sclerosis complex (TSC), or both, which has the effect of inhibiting the Ras homolog enriched in brain (RHEB) (187, 258). The upshot is an inhibition of translation initiation (19), the rate-limiting step in muscle protein synthesis.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 47,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000843",
+  "text": "## RESEARCH FINDINGS\n\n## CONCURRENT TRAINING\n\nResearch indicates that concurrent training can have a negative impact on hypertrophic adaptations. Mitigating aerobic volume or intensity, or both, reduces the potential for negative consequences associated with the strategy. Non-weight-bearing aerobic activities such as cycling appear to attenuate deleterious effects compared to running, although some evidence is contradictory. There is an absence of research on the effects of cross-training on various modalities in the context of a regimented resistance training program. Whether such variation would enhance or hinder results remains speculative.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 6: Role of Aerobic Training in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 66,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming",
+      "volume",
+      "intensity",
+      "exercise_selection"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

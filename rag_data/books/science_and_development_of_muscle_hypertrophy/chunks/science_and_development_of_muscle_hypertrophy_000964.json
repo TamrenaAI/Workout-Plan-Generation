@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000964",
+  "text": "## PRACTICAL APPLICATIONS\n\n## HOW TO CALCULATE VOLUME IN MULTI- VERSUS SINGLE-JOINT EXERCISES\n\nResistance training volume recommendations for hypertrophy are generally based on meta-analytic data that endeavor to quantify the number of sets performed per muscle group per week (i.e., set volume). However, a conundrum arises when deciding how to account for volume during multi-joint versus single-joint exercise. In these movements, working muscles can act as agonists (a prime mover in carrying out the exercise), synergists (a secondary mover that contracts simultaneously with the prime mover in performance), or stabilizers that contract isometrically to maintain postural stability.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 31,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "volume",
+      "exercise_selection"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

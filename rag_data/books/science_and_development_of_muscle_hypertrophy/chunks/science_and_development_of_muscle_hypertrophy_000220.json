@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000220",
+  "text": "A number of studies lend support to the theory that AMPK plays a role in the muscular adaptations in response to regimented exercise training. AMPK activation shows a strong inverse correlation with the magnitude of muscle hypertrophy following chronic overload (275). In addition, AMPK inhibition is associated with an accelerated growth response to mechanical overload, whereas its activation attenuates hypertrophy (90). However, other research calls into question the extent to which AMPK regulates exercise-induced hypertrophy. In humans, mTOR signaling and muscle protein synthetic rate are elevated following resistance exercise despite concomitant activation of AMPK (54). This indicates that, at the very least, the activation of AMPK is not sufficient to completely blunt growth. Moreover,",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 49,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

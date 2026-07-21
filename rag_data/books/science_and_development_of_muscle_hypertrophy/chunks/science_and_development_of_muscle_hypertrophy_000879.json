@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000879",
+  "text": "an even greater extent upon retraining. Several genes in particular showed significantly enhanced expression upon reloading (RPL35a, UBR5, SETD3, and PLA2G16), and their expression was highly correlated with the change in lean mass.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 7: Factors in Maximal Hypertrophic Development",
+  "collection": "hypertrophy",
+  "chunk_index": 26,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "intermediate",
+    "goals": [
+      "strength",
+      "hypertrophy"
+    ]
+  }
+}

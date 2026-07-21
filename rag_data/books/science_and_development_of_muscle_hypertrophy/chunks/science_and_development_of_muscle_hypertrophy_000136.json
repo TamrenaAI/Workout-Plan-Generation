@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000136",
+  "text": "men and women of various ages to undertake 16 weeks of lower-body resistance training. Based on their hypertrophic response to the program, subjects were then categorized as either extreme responders (mean myofiber hypertrophy of 58%), moderate responders (mean myofiber hypertrophy of 28%), or nonresponders (no significant increase in myofiber hypertrophy). Muscle biopsy analysis showed a differential MGF expression across clusters: Whereas MGF levels increased by 126% in those classified as extreme responders, concentrations remained virtually unchanged in nonresponders. These results imply that transient exercise-induced increases in MGF gene expression serve as critical cues for muscle remodeling and may be essential to producing maximal hypertrophic gains.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 136,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

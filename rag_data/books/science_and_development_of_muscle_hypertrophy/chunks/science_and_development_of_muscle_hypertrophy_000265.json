@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000265",
+  "text": "Given that GH is known to potentiate IGF-1 secretion, it seems logical that metabolite accumulation would be associated with increased post-exercise IGF-1 levels as well. This has been borne out to some extent by studies showing significantly greater IGF-1 elevations following the performance of metabolically fatiguing routines (135, 136, 232), although other research has failed to find such an association (138). Moreover, several (2, 81, 264), but not all (55), studies have reported acute increases in post-exercise IGF-1 levels following BFR training, which suggests that the results were mediated by metabolic stress. Importantly, the body of research is specific to the circulating IGF-1 isoform, and findings cannot necessarily be extrapolated to intramuscular effects.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 94,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

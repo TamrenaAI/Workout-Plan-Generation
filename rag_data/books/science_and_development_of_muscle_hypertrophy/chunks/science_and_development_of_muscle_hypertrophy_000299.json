@@ -1,0 +1,25 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000299",
+  "text": "However, such conclusions appear to be an overextrapolation of the findings by Damas and colleagues (49). While the study elegantly demonstrated that an initial bout of damage was explanatory as to why muscle protein synthesis is not necessarily associated with exercise-induced hypertrophy over time, the data cannot be used to draw inferences about long- term effects of damage on muscular adaptations. To properly study the topic would require carrying out a longitudinal resistance training study in which one group experiences mild to moderate damage and then compare those results with another group that experiences minimal damage. Unfortunately, such a design is problematic because attempting to isolate EIMD in this fashion would involve altering other resistance training variables that",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 128,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "exercise_selection",
+      "muscle_activation",
+      "muscle_physiology",
+      "exercise_selection",
+      "muscle_activation",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

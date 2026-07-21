@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000192",
+  "text": "effectors. A primary target of mTOR is p70 S6K , which plays an important role in the initiation of mRNA translation (90). mTOR also exerts anabolic effects by inhibiting eukaryotic initiation factor 4E-binding protein 1 (eIF4EB1), a negative regulator of the eIF4E protein that is a potent mediator of protein translation (86). Interestingly, persistently elevated basal levels of mTOR have been shown to impair fast-twitch fiber growth in mice and contribute to anabolic resistance in elderly humans; thus, it has been postulated that mTOR mediates hypertrophy within a given range, and deviations outside of this range may be detrimental to the growth process (56, 92).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 21,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

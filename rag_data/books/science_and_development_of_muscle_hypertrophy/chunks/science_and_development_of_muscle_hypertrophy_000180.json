@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000180",
+  "text": "A diverse array of tissue and substances help to carry out mechanotransduction, including stretch-activated ion channels, caveolae, integrins, cadherins, growth factor receptors, myosin motors, cytoskeletal proteins, nuclei, and the extracellular matrix (74). These mechanosensory elements do not function independently, but rather act in a coordinated manner with structural components such as the cytoskeleton to elicit intracellular events (74). Central to the process are mechanosensors that detect mechanical tension and transduce the stimuli into chemical signals within the myofiber. Integrins have been identified as a primary mechanosensor. These receptors reside at the cell surface and interact with the extracellular matrix to facilitate the transmission of mechanical and chemical",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 9,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

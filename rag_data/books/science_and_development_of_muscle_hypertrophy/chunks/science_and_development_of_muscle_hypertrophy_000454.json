@@ -1,0 +1,26 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000454",
+  "text": "Resistance training programs are a composite of program design variables that include volume, frequency, load, exercise selection, type of muscle action, rest interval length, repetition duration, exercise order, range of motion, and intensity of effort. These variables can be manipulated to stimulate the neuromuscular system, and they do so in different ways. Consistent with the SAID principle (specific adaptations to imposed demands), the way such stimuli are applied influences phenotypic adaptations. This chapter provides an overview of each variable with respect to how its manipulation affects the hypertrophic response to resistance training.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 2,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming",
+      "volume",
+      "frequency",
+      "load",
+      "intensity",
+      "exercise_selection",
+      "exercise_order"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

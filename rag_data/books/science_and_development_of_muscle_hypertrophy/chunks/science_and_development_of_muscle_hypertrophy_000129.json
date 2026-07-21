@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000129",
+  "text": "Employing a within-subject design, West and colleagues (246) recruited 12 untrained men to perform elbow flexion exercise on separate days under two hormonal conditions: a low-hormone condition in which one arm performed elbow flexion exercise only and a high-hormone condition in which the contralateral arm performed the same arm curl exercise followed immediately by multiple sets of lower-body resistance training designed to promote a robust systemic response. After 15 weeks, increases in muscle cross-sectional area were similar between conditions despite significantly higher post-exercise concentrations of circulating IGF-1, GH, and testosterone in those in the high-hormone condition.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 129,
+  "metadata": {
+    "muscle": [
+      "biceps"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "beginner",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

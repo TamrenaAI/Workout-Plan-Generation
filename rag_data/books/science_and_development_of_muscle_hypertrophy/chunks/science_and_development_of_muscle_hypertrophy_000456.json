@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000456",
+  "text": "Volume refers to the amount of exercise performed over a period of time. Volume is often expressed as the number of repetitions completed in a resistance training bout (sets × repetitions). However, this value does not take into account the amount of load lifted. Thus, a more appropriate term to reflect the total work completed is volume load, which is the product of sets × repetitions × load. Although an increase in training frequency can create the largest increase in weekly volume load, provided volume per session is kept static, an increase in the number of sets performed (and thus total repetitions) in a training bout can also substantially increase training volume (99). Despite the relevance of volume load, resistance training volume for hypertrophy is most often expressed as set",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 4,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "volume",
+      "frequency",
+      "load"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000347",
+  "text": "## Indirect Measures\n\nIndirect measures of body composition analysis can be categorized into one of three basic models: two component (2C), three component (3C), or four component (4C). As the name implies, 2C models partition the body into two distinct compartments: fat mass and fat-free mass (30, 54). Fat-free mass includes all nonfat components, including skeletal muscle, body organs, bone, and body fluids. The 2C model is predicated on assumptions that the density of fat-free mass and the ratio of protein to mineral remains constant-an assumption that may not always hold true. Examples of 2C models include skinfold measurement, hydrodensitometry, and ADP.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 2,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

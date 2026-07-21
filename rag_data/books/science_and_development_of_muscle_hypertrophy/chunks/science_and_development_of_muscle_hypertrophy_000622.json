@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000622",
+  "text": "per repetition) appears to produce inferior increases in muscle growth, although a lack of controlled studies on the topic makes it difficult to draw definitive conclusions. It is conceivable that combining different repetition durations could enhance the hypertrophic response to resistance training, although this hypothesis requires further study.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 170,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "volume"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

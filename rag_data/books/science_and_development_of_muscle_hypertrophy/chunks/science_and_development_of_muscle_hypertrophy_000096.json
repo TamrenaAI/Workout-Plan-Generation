@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000096",
+  "text": "compulsory regulators of GH-induced transcription of the IGF-1 gene, led to a selective loss of skeletal muscle STAT5 protein, whereas hepatic expression remained unaltered (109). These findings are consistent with in vitro research showing that treating myoblast C2C12 cells with recombinant GH directly potentiates MGF expression before that of IGF-1Ea (99). In addition, the administration of GH in mice significantly elevated MGF, indicating that MGF mRNA expression occurs in parallel with GH release (98). Alternatively, GH-independent expression of IGF-1Ea and MGF has been observed in hypophysectomized (pituitary gland removed) rats following synergist ablation (249), which implies that GH serves to potentiate rather than regulate IGF-1 function. Interestingly, there is evidence that",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 96,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

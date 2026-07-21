@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000881",
+  "text": "The UBR5 gene appears especially relevant to exercise-induced hypertrophy because it has been found to be involved at the DNA-methylation, gene, and protein level in recovery and growth across human, mouse, and rat studies. Human genetic association research (examining over 700,000 single nucleotide polymorphisms across the genome) demonstrates that certain polymorphisms of the UBR5 gene are strongly associated with a larger cross-sectional area of fast-twitch muscle fibers, and occur more frequently in strength and power athletes compared with endurance athletes and untrained individuals (76). Although speculative, the findings suggest that individuals possessing these UBR5 polymorphisms may have both a genetic and an epigenetic propensity for muscle memory.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 7: Factors in Maximal Hypertrophic Development",
+  "collection": "hypertrophy",
+  "chunk_index": 28,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

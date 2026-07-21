@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000164",
+  "text": "## KEY POINT\n\nMyokines are autocrine or paracrine agents that exert their effects directly on muscle tissue as a result of mechanical stimulation. Numerous myokines have been identified, although the specific roles of the substances and their interactions with one another have yet to be elucidated.\n\nMany additional myokines with potential hypertrophic effects have been identified in the literature, including fibroblast growth factor, brain-derived neutrophic factor, tumor necrosis factor, follistatin, platelet-derived growth factor-BB, vascular endothelial growth factor, and chitinase-3-like protein 1, among others.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 164,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

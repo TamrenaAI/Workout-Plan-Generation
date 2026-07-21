@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000368",
+  "text": "A novel technique using deuterated creatine, referred to as the D 3 -creatine dilution method, has been proposed as a superior alternative to other biochemical approaches. D 3 -creatine is a stable isotope that is consumed orally in water and taken up almost exclusively by skeletal muscle, which represents the storage site of approximately 95% of the body's creatine stores (muscle has no capacity for creatine synthesis). The total-body creatine pool is then calculated from D 3 -creatinine enrichment in urine via liquid chromatography-tandem mass spectrometry; an estimate of muscle mass is obtained by dividing the creatine pool size using an estimation of creatine content in muscle.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 23,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000965",
+  "text": "A recent meta-analysis on the topic gave equal weight to both agonists and synergists when calculating volume during multi-joint exercise (119). Thus, for determining hypertrophy of the triceps brachii, a set of the bench press (multi-joint exercise) and triceps pushdown (single-joint exercise) were counted on a 1:1 basis. The same principle applied for the biceps brachii during lat pulldowns (multi-joint exercise) and arm curls (multi-joint exercise), and the quadriceps during the leg press (multi-joint exercise) and leg extension (multi-joint exercise). The approach was justified by findings of a recent review that concluded the performance of multi-joint and single-joint exercises produces similar increases in muscle size (54).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 32,
+  "metadata": {
+    "muscle": [
+      "triceps",
+      "biceps",
+      "quads"
+    ],
+    "topic": [
+      "volume"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

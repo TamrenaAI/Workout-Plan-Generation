@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000022",
+  "text": "Several neural adaptations have been proposed to account for strength gains during acclimation to resistance training. Central to these adaptations is an increase in neural drive . Research indicates that humans are incapable of voluntarily producing maximal muscle force (55), but repeated exposure to resistance training enhances this ability. Numerous studies have reported increases in surface electromyography (EMG) amplitude after a period of regular resistance training, consistent with a heightened central drive to the trained muscles (2, 3, 80, 150). Research using the twitch interpolation technique, in which supramaximal stimuli are delivered to a muscle while subjects perform voluntary contractions, shows that as much as 5% of the quadriceps femoris muscle is not activated during",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 22,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "neural_adaptation",
+      "muscle_activation",
+      "maximal_strength"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength"
+    ]
+  }
+}

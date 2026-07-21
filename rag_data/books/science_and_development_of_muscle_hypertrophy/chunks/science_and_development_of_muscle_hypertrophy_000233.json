@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000233",
+  "text": "exercise, elicited significantly greater hypertrophy of the tibialis anterior muscle compared to saline injection. Although the mechanisms of potential hypertrophic effects of lactate have not been elucidated, it is hypothesized that they may be regulated via calcium-dependent signaling pathways (205). Notably, these animal studies do not replicate the in vivo response during human exercise, so the practical implications of results must be interpreted cautiously. Intriguingly, lactate production serves to inhibit activity of histone deacetylase (149), a negative regulator of muscle growth (179), thereby providing another potential avenue for inducing hypertrophic effects.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 62,
+  "metadata": {
+    "muscle": [
+      "triceps"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

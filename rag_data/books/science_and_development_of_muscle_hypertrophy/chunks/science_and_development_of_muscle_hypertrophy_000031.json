@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000031",
+  "text": "Increases in force production above 85% of maximal voluntary contraction are thought to occur through greater discharge rates. Thus, an increase in rate coding would seem to be the most likely target for neural adaptation. Research is limited on the topic, but a study by Kamen and Knight (101) provides supporting evidence for training-induced enhancements in rate coding. Fifteen untrained young and older adults were tested for maximal voluntary contraction in knee extensions before and after 6 weeks of resistance exercise. By the end of the study, young subjects increased maximal discharge rate by 15%, and older subjects showed a 49% increase. Similarly, Van Cutsem and colleagues (234) showed that 12 weeks of resisted dorsiflexion training increased average firing frequency in the",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 31,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "neural_adaptation",
+      "muscle_activation",
+      "neuromuscular_system",
+      "force_production"
+    ],
+    "experience_level": "beginner",
+    "goals": [
+      "strength"
+    ]
+  }
+}

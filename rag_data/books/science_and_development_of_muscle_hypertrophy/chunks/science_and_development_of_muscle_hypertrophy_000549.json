@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000549",
+  "text": "Muscular partitions may have functional or task-oriented roles; that is, different portions of one muscle may be called into play depending on the task-relevant demands of the situation (61). This is exemplified in the biceps brachii, in which both the long and short heads have architectural compartments that are innervated by private branches of the primary neurons (223). Research indicates that fibers in the lateral portion of the long head of the muscle are recruited for elbow flexion, fibers in the medial aspect are recruited for supination, and fibers that are centrally located are recruited for nonlinear combinations of flexion and supination (250, 251). Moreover, the short head demonstrates greater activity in the latter part of an arm curl (i.e., greater elbow flexion), whereas",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 97,
+  "metadata": {
+    "muscle": [
+      "biceps"
+    ],
+    "topic": [
+      "muscle_activation",
+      "neuromuscular_system",
+      "biomechanics"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

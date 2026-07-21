@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000551",
+  "text": "Although evidence that varying the exercises enhances muscle activation is compelling, the extent to which selective activation of a given portion of a muscle enhances its site-specific hypertrophic response remains to be determined. A large body of research shows that muscle hypertrophy occurs in a nonuniform fashion in terms of preferential growth of both individual muscles in a muscle group and different regions within the same muscle. For example, multiple studies have shown that knee extension exercises result in a heterogeneous hypertrophic response in which certain areas of the quadriceps femoris show greater hypertrophy than others (91, 108, 163). Similar nonuniform growth has been demonstrated in the triceps brachii following regimented elbow extension exercises (262, 263).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 99,
+  "metadata": {
+    "muscle": [
+      "quads",
+      "triceps"
+    ],
+    "topic": [
+      "exercise_selection",
+      "muscle_activation"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength",
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000390",
+  "text": "## Bioelectrical Impedance Analysis\n\nBIA emits a low-level electrical current throughout the body and then estimates body composition based on the ease of electrical flow through the body while taking into account the individual's height, weight, and sex. BIA is perhaps the most convenient of all body composition modalities, taking less than a few minutes to complete. It also is relatively inexpensive and thus is employed extensively in research settings. Higher-end BIA units are able to estimate segmental lean mass and skeletal muscle mass. A unique feature of certain BIA units is an ability to calculate intracellular and extracellular fluid compartments, which cannot be gleaned from other techniques.\n\nBIA can be classified into two basic categories: single frequency and multifrequency.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 45,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

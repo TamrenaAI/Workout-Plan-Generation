@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000067",
+  "text": "The satellite cell response to a bout of resistance exercise lasts for many days, with effects peaking approximately 72 to 96 hours post-workout (23). The majority of evidence indicates that Type I fibers possess a greater resting number of satellite cells compared to Type II fibers, but it appears their population is increased to a greater extent in Type II fibers after resistance training (23). See .\n\nIt has been theorized that the most important hypertrophic role of satellite cells is their ability to retain a muscle's mitotic capacity by donating nuclei to existing myofibers (see ), thereby increasing the muscle's capacity to synthesize new contractile proteins (22, 144). This phenomenon is generally considered obligatory for maximizing overload-induced hypertrophy (60).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 67,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

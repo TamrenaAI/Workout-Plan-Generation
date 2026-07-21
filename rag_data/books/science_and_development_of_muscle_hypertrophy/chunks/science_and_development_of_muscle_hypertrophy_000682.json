@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000682",
+  "text": "- primary goal is to maximize muscle growth. Training at very slow volitional durations (&gt;10 seconds per repetition) appears to be suboptimal for increasing muscle size and thus should be avoided. A more important consideration is to develop a strong mind-muscle connection, which involves focusing on actively contracting the target muscle throughout the range of motion of a given exercise. If the target muscle is forced to work over the entire concentric and eccentric portions of movement, tempo becomes largely moot.\n- Evidence indicates a hypertrophic benefit for muscles worked first in a resistance training bout. Therefore, lagging muscles should be trained earlier in the session.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 230,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_activation",
+      "exercise_order"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

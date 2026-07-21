@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000958",
+  "text": "The logical question is whether increasing activation of a muscle translates into greater muscle growth. Although research on the topic remains limited, some evidence suggests that this is indeed the case. Wakahara and colleagues (138) carried out a two-part experiment to investigate the topic. In the first part of the experiment, muscle activation was assessed by T2-weighted magnetic resonance imaging during 5 sets of 8 repetitions of the lying triceps extension in 12 untrained men. The results showed that activation of the triceps brachii was significantly higher in the proximal and middle aspects of the muscle versus the distal portion. In the second part of the study, 12 additional subjects performed the same routine used in part 1 of the study for 3 days per week over 12 weeks. At",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 25,
+  "metadata": {
+    "muscle": [
+      "triceps"
+    ],
+    "topic": [
+      "muscle_activation",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "beginner",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

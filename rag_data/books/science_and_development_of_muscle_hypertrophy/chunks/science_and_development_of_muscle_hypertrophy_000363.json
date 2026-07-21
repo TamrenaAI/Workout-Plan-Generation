@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000363",
+  "text": "A limitation of hydrodensitometry is the need for a dedicated water tank, making it less accessible than other methods of assessment. Data are obtained by completely submerging a person in the water tank while he or she is attached to a scale and then calculating body volume as the difference between dry weight and underwater weight, with corrections made for water density. Body density is then derived by dividing body mass by body volume. Various formulas can be employed to estimate lean mass from the data. Although the Siri and Brozek equations have been most commonly used for prediction, these formulas are based on findings from white male and female cadavers and thus may not accurately estimate results for other races and ethnicities (45).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 18,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

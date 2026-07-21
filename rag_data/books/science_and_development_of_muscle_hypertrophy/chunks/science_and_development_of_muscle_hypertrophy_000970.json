@@ -1,0 +1,24 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000970",
+  "text": "for the upper-body musculature and provide further insights on the topic. Activation of the pectoralis major is approximately twice as great as that of the triceps brachii during performance of the bench press (27 , 108), and EMG amplitude of the biceps brachii is lower than that of the latissimus dorsi in the lat pulldown and seated row exercises (79, 82). It is important to note that although some evidence indicates a correlation between muscle activation and increases in hypertrophy (138-140), causality cannot be inferred from correlational data, and the efficacy of EMG in predicting future hypertrophic changes remains undetermined.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 37,
+  "metadata": {
+    "muscle": [
+      "chest",
+      "triceps",
+      "biceps",
+      "back"
+    ],
+    "topic": [
+      "muscle_activation",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

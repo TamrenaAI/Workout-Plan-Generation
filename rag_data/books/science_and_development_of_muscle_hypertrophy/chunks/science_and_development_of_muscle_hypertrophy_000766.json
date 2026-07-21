@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000766",
+  "text": "A potential issue when interpreting research on the topic is the possibility that findings are due to a placebo effect. It is difficult to provide adequate sham treatments as a control for manipulative therapies, and subjects therefore are not adequately blinded to the given treatment. This limits the ability to conclude whether the treatment is actually responsible for beneficial effects or if results are influenced by subjects' perception of treatment.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 5: Advanced Training Practices",
+  "collection": "hypertrophy",
+  "chunk_index": 82,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "advanced_techniques"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

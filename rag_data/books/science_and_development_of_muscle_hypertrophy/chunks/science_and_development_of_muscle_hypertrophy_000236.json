@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000236",
+  "text": "As discussed in chapter 1, muscle fiber recruitment is carried out in an orderly fashion whereby low-threshold motor units are recruited first and then higher-threshold motor units are progressively recruited thereafter to sustain muscle contraction depending on force demands (110). Although heavy loading rapidly activates the full spectrum of fiber types, research indicates that metabolic stress increases the recruitment of higher-threshold motor units even when lifting light loads. Studies show that as fatigue increases during sustained submaximal exercise, recruitment thresholds correspondingly decrease (1 16, 234, 293). Accordingly, activation of fast-twitch fibers is high provided a set is carried out to the point of muscular failure. Studies employing electromyography (EMG) (265,",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 65,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_activation",
+      "fatigue_management"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

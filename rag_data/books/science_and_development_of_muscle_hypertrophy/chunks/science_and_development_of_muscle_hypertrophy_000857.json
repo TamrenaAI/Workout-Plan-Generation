@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000857",
+  "text": "Early work investigating the effects of body build on training-induced hypertrophy showed that those with a 'solid' build achieved greater increases in fat-free mass compared to slender individuals following performance of a 12-week regimented resistance training program (88). However, subsequent research shows that baseline variations in muscle mass tend to be a poor predictor of hypertrophic increases induced by exercise. This indicates that a different set of genes influences variability in muscle mass attained during normal growth and development compared to that acquired from repeated bouts of mechanical overload (40). In addition, the magnitude of hypertrophic changes can vary between fiber types; greater increases in slow-twitch muscles (e.g., soleus) do not necessarily predict",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 7: Factors in Maximal Hypertrophic Development",
+  "collection": "hypertrophy",
+  "chunk_index": 4,
+  "metadata": {
+    "muscle": [
+      "calves"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000393",
+  "text": "Regardless of frequency capacity, BIA has several potential sources of error. For one, it is highly susceptible to hydration status and fluctuations in body fluids; this can be especially problematic in premenopausal women when measurements are obtained at different times of the menstrual cycle, although research generally shows minimal effects in this regard (15, 39, 60). Moreover, as with DXA, food consumption can substantially alter readings (88), necessitating an overnight fast for accuracy. In addition, the algorithms can vary in sophistication between manufacturers and units; this is important because accuracy of results depends on the predictive equation on which calculations are based. In particular, significant variations in predictions are seen when the algorithm does not",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 48,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

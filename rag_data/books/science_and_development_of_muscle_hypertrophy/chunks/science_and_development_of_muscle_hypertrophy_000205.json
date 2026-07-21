@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000205",
+  "text": "Intracellular calcium plays an important role in signal transduction in a variety of cell types, including skeletal muscle (38). An increase in myoelectrical activity substantially elevates calcium levels within myofibers, and this alteration is considered to be a primary mediator of skeletal muscle gene expression (38). Increased intracellular calcium levels have been shown to amplify protein synthesis via TORC1 signaling, although the mechanism of action is as yet unknown (173). Moreover, elevations in extracellular ATP promote muscle hypertrophy via an increase in intracellular calcium levels, leading to subsequent downstream anabolic signaling in rodents (124). Intriguingly, the hypertrophy occurred in the soleus but not the plantaris muscles, suggesting that calcium-dependent effects",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 34,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

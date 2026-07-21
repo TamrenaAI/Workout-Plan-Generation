@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000439",
+  "text": "analysis, with results attributed to the fact that the muscle was visible in only 3 of the 12 images sampled (79). Thus, the ability of MRI to accurately estimate muscle volume is highly dependent on the number of serial images obtained along the longitudinal axis of a given muscle. Although no studies have validated MRI-derived measures of muscle volume over the course of a longitudinal exercise study, it seems reasonable to conclude that its precision would be similar to single-point analysis.\n\n## Muscle Biopsy",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 94,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "volume"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

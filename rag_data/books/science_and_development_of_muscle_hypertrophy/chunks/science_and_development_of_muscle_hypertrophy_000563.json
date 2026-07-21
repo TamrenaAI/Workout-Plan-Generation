@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000563",
+  "text": "number of motor units during eccentric hamstring exercise, including additional recruitment of previously inactive motor units (147). However, other research shows that Type I and Type II fibers are equally glycogen depleted following eccentric exercise, suggesting no preferential recruitment of high-threshold motor units (248).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 111,
+  "metadata": {
+    "muscle": [
+      "hamstrings"
+    ],
+    "topic": [
+      "muscle_activation",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

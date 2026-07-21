@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000937",
+  "text": "The capacity of a muscle fiber to produce force is predicated on the position of the actin and myosin filaments in its sarcomeres. This phenomenon, known as the length-tension relationship (), can be harnessed to target muscles or portions of them by making them more or less active during exercise. Optimal force-producing capacity is often said to take place at approximately resting length, whereby the overlap of actin and myosin filaments is maximized, thus facilitating optimal crossbridge formation. However, working a muscle at 125% to 140% of resting length may confer even greater benefits on force output because the stretching of sarcomeres brings the myofilaments together and enhances calcium sensitivity; it is hypothesized that the greater potential for crossbridge attachment from",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 4,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "force_production"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000375",
+  "text": "ADP is commonly carried out in an eggshaped, fiberglass unit called a Bod Pod (). The testing procedure is relatively simple:\n\nThe person sits motionless inside the Bod Pod chamber, a test is performed, and the unit derives an estimate of body composition based on a predetermined algorithm. A benefit of ADP is its convenience, taking only about 10 minutes to complete after calibration of the unit. Also, by eliminating the need to be submerged under water, the Bod Pod provides a more inviting alternative to hydrodensitometry. Because of these attributes, it is often used as a reference method in 4C models.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 30,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

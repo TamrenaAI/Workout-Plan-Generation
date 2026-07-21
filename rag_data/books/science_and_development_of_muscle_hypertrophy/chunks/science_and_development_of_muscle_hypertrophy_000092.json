@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000092",
+  "text": "to exercise (132, 157). Serum concentrations of IGF-1 are not necessarily correlated with post-workout increases in muscle protein synthesis (257). Furthermore, IGF-1-deficient mice exhibiting an 80% reduction in circulating IGF-1 levels do not exhibit an impaired hypertrophic response to resistive exercise (128). The inconsistencies in studies on this topic have yet to be reconciled.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 92,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

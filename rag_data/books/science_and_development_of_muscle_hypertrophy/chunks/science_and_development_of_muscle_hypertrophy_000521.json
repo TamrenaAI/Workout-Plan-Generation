@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000521",
+  "text": "The authors of several animal studies have investigated the acute molecular responses to training at various intensities of load. Using an in situ model, Martineau and Gardiner (138) subjected rat plantaris muscles to peak concentric, eccentric, and isometric actions via electrical stimulation. Results showed tension-dependent phosphorylation of JNK and ERK1/2, and higher mechanical tension resulted in progressively greater phosphorylation. This suggests that peak tension is a better predictor of MAPK phosphorylation than either time under tension or rate of tension development. Follow-up work by the same laboratory revealed a linear relationship between time under tension and signaling of JNK, whereas the rate of tension change showed no effect, highlighting the importance of time under",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 69,
+  "metadata": {
+    "muscle": [
+      "calves"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms",
+      "load",
+      "intensity"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

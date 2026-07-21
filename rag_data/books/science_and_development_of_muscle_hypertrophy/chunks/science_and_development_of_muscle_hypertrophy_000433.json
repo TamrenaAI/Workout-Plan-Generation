@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000433",
+  "text": "## KEY POINT\n\nCT imaging is an excellent option for evaluating muscle hypertrophy, and it can be considered a reference standard. However, it is costly and generally only available in a hospital-based setting. Importantly, it cannot be used for frequent measurements because of the high dose of radiation emitted per scan. Thus, CT has limited practical use as a tool in assessing muscle morphology in the general population.\n\nWith respect to muscle volume, CT of the legs shows very high agreement with DXA measures of leg fat-free mass ( r = .98) (51). However, as previously noted, the validity for DXA in determining highly accurate measurements of regional lean mass remains somewhat suspect. Studies examining the validity of CT's ability to measure changes in muscle volume are lacking.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 88,
+  "metadata": {
+    "muscle": [
+      "quads",
+      "hamstrings",
+      "glutes",
+      "calves"
+    ],
+    "topic": [
+      "volume"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

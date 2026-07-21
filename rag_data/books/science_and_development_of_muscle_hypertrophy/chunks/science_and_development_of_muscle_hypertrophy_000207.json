@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000207",
+  "text": "Various calcium-dependent pathways have been implicated in the control of skeletal muscle mass. Calcineurin, a calcium-regulated phosphatase, is believed to have a particularly important role in muscular adaptations. Calcineurin is activated by a sustained increase in intracellular calcium levels. Once aroused, it acts on various downstream anabolic effectors, including myocyte-enhancing factor 2 (MEF2), GATA transcription factors, and nuclear factor of activated T cells (NFAT) (183). Calcineurin has been shown to promote hypertrophy in all fiber types, whereas its inhibition prevents growth even when muscles were subjected to overload (57, 58). Early evidence suggested that, along with PI3K/Akt signaling, activation of calcineurin was required for IGF-1-mediated hypertrophic adaptations",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 36,
+  "metadata": {
+    "muscle": [
+      "shoulders"
+    ],
+    "topic": [
+      "hypertrophy_programming",
+      "exercise_order",
+      "exercise_selection"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

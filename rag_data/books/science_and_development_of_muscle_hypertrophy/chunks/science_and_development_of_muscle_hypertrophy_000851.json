@@ -1,0 +1,25 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000851",
+  "text": "- Aerobic exercise can promote increases in muscle hypertrophy in untrained people, and gains are primarily limited to Type I fibers. The extent of hypertrophic adaptations is contingent on intensity, volume, frequency, and mode of training, as well as the person's level of deconditioning.\n- Aerobic intensities of &gt;80% of HRR are generally required to promote gains in muscle mass in untrained people.\n- Although highly deconditioned people can experience hypertrophic increases with relatively low volumes of aerobic training, those who are more active require higher training volumes.\n- Evidence suggests that cycling exercise may be more conducive to increasing muscle mass than walking, running, or jogging, possibly because ambulatory activities are performed more often in daily life.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 6: Role of Aerobic Training in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 74,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology",
+      "volume",
+      "intensity",
+      "frequency",
+      "exercise_selection"
+    ],
+    "experience_level": "beginner",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000836",
+  "text": "Coffey and colleagues (18) investigated the acute intracellular response to a combined session of knee extension resistance exercise and moderate-intensity cycling. Cycling before resistance exercise resulted in a heightened phosphorylation of Akt but a reduction in IGF-1 mRNA; alternatively, reversing the order of performance elevated concentrations of MuRF-1 mRNA. Follow-up work by the same lab revealed that performing a high-intensity sprint cycling bout prior to knee extensions blunted phosphorylation of p70 S6K compared to performing resistance exercise first (17). Moreover, the upregulation of translation initiation via the PI3K/Akt signaling pathway may be altered when resistance training is performed after glycogen-depleting aerobic exercise (21). Combined, these data suggest",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 6: Role of Aerobic Training in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 59,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms",
+      "exercise_order"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000434",
+  "text": "## Magnetic Resonance Imaging\n\nMRI is widely regarded as the gold standard for assessing muscle hypertrophy because it displays better soft-tissue contrast than CT (figures 3.11 and 3.12). The technique is noninvasive and does not produce ionizing radiation (as with CT), making it a safe and relatively com-\n\nSTEPHANE DE SAKUTIN/AFP via Getty Images fortable measurement option. However, its high cost is a major drawback, limiting widespread use in practice. Moreover, MRI units are bulky and require controlled environments, thereby limiting accessibility.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 89,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

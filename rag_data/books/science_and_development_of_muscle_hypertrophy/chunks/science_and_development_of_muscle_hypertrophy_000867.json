@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000867",
+  "text": "muscle growth and changes in the quantity of miRNAs. Specifically, low responders presented a downregulation of miR-378, -26a, and -29a, and an upregulation of miR-451; these changes were linked to a suppression of mTOR signaling. Additional miRNAs that have been linked to hypertrophic adaptations include miR-1, miR-29c, miR128a, and miR-133a/b, among others; the influence of genetics across the full spectrum of miRNAs remains to be fully explored. The collective findings suggest a hereditary link between certain miRNAs and human skeletal muscle hypertrophy.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 7: Factors in Maximal Hypertrophic Development",
+  "collection": "hypertrophy",
+  "chunk_index": 14,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

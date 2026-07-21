@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000596",
+  "text": "To a certain degree, tempo can be volitionally manipulated. The extent depends on two factors: the intensity of load and the accumulated fatigue. Heavier loads take longer to lift; the closer the load is to the person's 1RM, the slower the concentric action will be, even when the intent is to move the weight as quickly as possible. Moreover, the onset of fatigue causes velocity to decrease because of the inability of working fibers to maintain force output. The capacity to lift even very light loads is curtailed when repetitions approach failure. In one study, the first three concentric repetitions of a 5RM bench press took approximately 1.2 to 1.6 seconds to complete, whereas the fourth and fifth repetitions took 2.5 to 3.3 seconds, respectively (155). These results were seen despite the",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 144,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "intensity",
+      "load",
+      "fatigue_management"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

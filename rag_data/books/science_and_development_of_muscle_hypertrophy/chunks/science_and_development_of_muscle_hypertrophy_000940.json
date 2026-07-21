@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000940",
+  "text": "Two primary strategies can be employed to take advantage of the length-tension relationship from an exercise selection standpoint: active insufficiency and passive tension. Active insufficiency refers to when a two-joint muscle is shortened at one joint while a muscular action is initiated at the other joint. Because a muscle loses the ability to shorten when its attachments are close together, it is in a functionally disadvantageous position on the length-tension curve, resulting in a diminished capacity to produce force. For example, when the shoulder is in the flexed position during performance of the biceps curl, the biceps brachii's origin at the scapula and insertions below the elbow are brought closer together, and the bicep's ability to produce force is therefore limited.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 7,
+  "metadata": {
+    "muscle": [
+      "biceps"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "biomechanics",
+      "exercise_selection"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

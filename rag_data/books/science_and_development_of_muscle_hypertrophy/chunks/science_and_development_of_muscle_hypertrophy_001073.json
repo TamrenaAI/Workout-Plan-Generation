@@ -1,0 +1,26 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001073",
+  "text": "Maximum recoverable volume (MRV) has been proposed as a strategy to manage volume across a training cycle (66). MRV is a performance-oriented concept that assesses recovery based on an individual's ability to maintain loading over time. It can be operationally defined as the maximal number of sets that an individual can perform in a given unit of time and still recover from in that time frame, usually defined as a week or the length of a microcycle. If the loads used increase from the previous cycle or remain stable, then the volume of the previous microcycle was lower than MRV and volume can be added to the program. Alternatively, if the amount lifted is less than in the previous microcycle, the person may have exceeded his or her MRV and would likely benefit from reducing volume and",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 140,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "volume",
+      "recovery",
+      "load",
+      "frequency",
+      "intensity",
+      "periodization",
+      "advanced_techniques"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

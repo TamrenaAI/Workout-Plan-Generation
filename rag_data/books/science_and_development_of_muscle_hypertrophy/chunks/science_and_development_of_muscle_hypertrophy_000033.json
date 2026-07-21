@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000033",
+  "text": "Several other factors have been speculated to account for neural improvements following resistance exercise. One of the most commonly hypothesized adaptations is an enhanced synchronization of motor units, whereby the discharge of action potentials by two or more motor units occurs simultaneously. A greater synchrony between motor units would necessarily result in a more forceful muscle contraction. Semmler and Nordstrom (204) demonstrated that motor unit synchronization varied when they compared skilled musicians (greatest degree of synchronization), Olympic weightlifters, and a group of controls (lowest degree of synchronization). However, other studies have failed to show increased synchronization following resistance training or computer simulation (105, 251). The findings cast doubt",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 33,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "neural_adaptation",
+      "neuromuscular_system",
+      "muscle_activation",
+      "force_production"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength"
+    ]
+  }
+}

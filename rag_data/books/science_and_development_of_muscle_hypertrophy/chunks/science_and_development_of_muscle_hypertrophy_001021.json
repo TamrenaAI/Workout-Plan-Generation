@@ -1,0 +1,35 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001021",
+  "text": "Some acute data support the concept of training based on the purported strength acrophase. For example, Burley and colleagues (23) observed a superior anabolic response to evening resistance exercise compared to the same workout performed in the morning. However, other research refutes such findings, showing similar increases in p70 S6K phosphorylation following resistance training bouts performed in the morning versus evening hours (122). Importantly, these studies only looked at the response to a single bout of exercise, and thus do not take into account how adaptations might be affected longitudinally over time.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 88,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "periodization",
+      "exercise_order",
+      "exercise_selection",
+      "intensity",
+      "volume",
+      "frequency",
+      "recovery",
+      "advanced_techniques",
+      "biomechanics",
+      "neuromuscular_system",
+      "hypertrophy_programming",
+      "recovery",
+      "advanced_techniques",
+      "biomechanics",
+      "neuromuscular_system",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

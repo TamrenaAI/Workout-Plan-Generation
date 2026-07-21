@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000338",
+  "text": "A sound theoretical rationale exists for how EIMD may contribute to the accretion of muscle proteins. Although exercise-induced hypertrophy can apparently occur without significant myodamage (304), evidence implies that microtrauma enhances the adaptive response or at least initiates the signaling pathways that mediate anabolism. That said, a cause-effect relationship between EIMD and hypertrophy has yet to be established, and if such a relationship does exist, the degree of damage necessary to maximize muscle growth remains to be determined. Research does suggest a threshold for a hypertrophic stimulus, beyond which additional myodamage confers no further benefits and may in fact interfere with growth-related processes. There is clear evidence that excessive EIMD reduces a muscle's",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 167,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

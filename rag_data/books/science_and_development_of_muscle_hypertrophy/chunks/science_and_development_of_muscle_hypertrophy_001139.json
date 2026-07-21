@@ -1,0 +1,39 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001139",
+  "text": "in chapter 2, AMPK acts as a cellular energy sensor that facilitates energy availability. This is accomplished by inhibiting energy-consuming processes including the phosphorylation of mTORC1, as well as amplifying catabolic processes such as glycolysis, beta-oxidation, and protein degradation (46). Glycogen has been shown to suppress purified AMPK in cell-free assays (87), and glycogen depletion correlates with heightened AMPK activity in humans in vivo (151). Moreover, ketogenic diets impair mTOR signaling in rats, which is theorized to explain its antiepileptic actions (154).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 9: Nutrition for Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 55,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms",
+      "muscle_growth_mechanisms",
+      "muscle_growth_mechanisms",
+      "muscle_growth_mechanisms",
+      "muscle_growth_mechanisms",
+      "muscle_growth_mechanisms",
+      "muscle_growth_mechanisms",
+      "muscle_growth_mechanisms",
+      "muscle_growth_mechanisms",
+      "muscle_growth_mechanisms",
+      "muscle_growth_mechanisms",
+      "muscle_growth_mechanisms",
+      "muscle_growth_mechanisms",
+      "muscle_growth_mechanisms",
+      "muscle_growth_mechanisms",
+      "muscle_growth_mechanisms",
+      "muscle_growth_mechanisms",
+      "muscle_growth_mechanisms",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

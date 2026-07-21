@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000010",
+  "text": "## Fiber T ypes\n\nMuscle fibers are broadly categorized into two primary fiber types: Type I and Type II . Type I fibers, often referred to as slow-twitch fibers, are fatigue resistant and thus well suited for activities requiring local muscular endurance. However, peak tension takes time-approximately 110 ms-to achieve in these fibers, thereby limiting their ability to produce maximal force.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 10,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength"
+    ]
+  }
+}

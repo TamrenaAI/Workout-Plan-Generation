@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000564",
+  "text": "Hypertrophic advantages of eccentric exercise are also thought to be related to muscle damage (206). Although concentric and isometric exercise can induce muscle damage, the extent of damage is heightened during eccentric actions. This is believed to be due to greater force demands on fewer active fibers, which are prone to tear when attempting to resist lengthening. Because the weakest sarcomeres are located at different regions of each myofibril, it is hypothesized that the associated nonuniform lengthening causes a shearing of myofibrils. This deforms membranes, particularly T-tubules, leading to a disturbance of calcium homeostasis that further damages muscle tissue by eliciting the release of the calcium-activated neutral proteases involved in degrading Z-line proteins (4, 18).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 112,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "exercise_selection"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

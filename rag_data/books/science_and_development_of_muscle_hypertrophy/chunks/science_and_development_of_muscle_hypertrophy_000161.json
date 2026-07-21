@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000161",
+  "text": "The active form of HGF is present in the extracellular compartment of uninjured skeletal muscle (221), and it is activated by mechanical signaling via the dystrophin-associated protein complex (5). Muscular contractions alter this complex, leading to nitric oxide synthase activation, which stimulates the release of HGF from the extracellular matrix and facilitates its interaction with receptors on satellite cells (5). There is also evidence that calcium-calmodulin signaling mediates HGF release from the matrix independent of nitric oxide production (222). Evidence shows that HGF is critical for the activation of inactive satellite cells (5). Interestingly, chronically high levels of HGF are associated with the upregulation of MSTN mRNA, which in turn may have a negative effect on the",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 161,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

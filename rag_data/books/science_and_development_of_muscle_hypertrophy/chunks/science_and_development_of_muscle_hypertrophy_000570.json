@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000570",
+  "text": "## KEY POINT\n\nConcentric and eccentric muscle actions appear to recruit muscle fibers in different orders, result in different signaling responses, and produce distinct morphological adaptations in muscle fibers and fascicles. Therefore, both concentric and eccentric actions should be incorporated during training to maximize the hypertrophic response.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 118,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_activation",
+      "muscle_growth_mechanisms",
+      "biomechanics"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

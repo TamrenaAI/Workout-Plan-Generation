@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000781",
+  "text": "Subsequent research, however, indicates that the concept of a switch that regulates anabolic and catabolic signaling pathways is at best overly simplistic and ultimately somewhat misleading. Considerable overlap has been shown to exist between candidate genes involved in aerobic and strength phenotypes, indicating that the two muscle traits are not at opposite ends of the molecular spectrum (70). In fact, multiple studies have shown increased mTOR activation following aerobic endurance exercise (9, 55, 56), whereas resistance training has consistently been found to increase the levels of AMPK (16, 27, 51, 76). To this end, research shows that of 263 genes analyzed in the resting state, only 21 were differentially expressed in aerobic endurance-trained athletes and strength-trained",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 6: Role of Aerobic Training in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 4,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000185",
+  "text": "Once forces are transduced, intracellular enzymatic cascades carry out signaling to downstream targets that ultimately shift muscle protein balance to favor synthesis over degradation. Certain pathways act in a permissive role, whereas others directly mediate cellular processes that influence mRNA translation and myofiber growth (172). A number of primary anabolic signaling pathways have been identified, including the PI3K/Akt pathway, MAPK pathways, calcium-dependent pathways, and the phosphatidic acid pathway (see ), among others. Although these pathways may overlap at key regulatory steps, there is evidence they may be interactive rather than redundant (276).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 14,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

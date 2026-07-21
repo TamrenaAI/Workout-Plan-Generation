@@ -1,0 +1,25 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000545",
+  "text": "Numerous muscles have common origins, but their fibers diverge to insert at different attachment sites. These different heads provide greater leverage for carrying out multiplanar movement. A classic example is the deltoid muscle: The anterior deltoid performs shoulder flexion, the middle deltoid performs abduction, and the posterior deltoid performs horizontal abduction. Other examples are the pectoralis major (clavicular and sternal heads), biceps brachii (short and long heads), and gastrocnemius (medial and lateral heads). Moreover, the direction of the fibers in a given muscle allow for greater or lesser leverage in a given move- ment. The trapezius, for example, is subdivided so that the upper aspect elevates the scapula, the middle aspect abducts the scapula and the lower aspect",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 93,
+  "metadata": {
+    "muscle": [
+      "shoulders",
+      "chest",
+      "biceps",
+      "calves",
+      "back"
+    ],
+    "topic": [
+      "muscle_activation",
+      "exercise_selection"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

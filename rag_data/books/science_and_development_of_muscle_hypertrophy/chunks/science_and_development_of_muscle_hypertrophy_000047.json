@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000047",
+  "text": "Emerging evidence indicates that ribosome biogenesis is critical to increasing muscle mass. While translational efficiency appears to be a primary driver of the muscle protein synthesis response to exercise, the total number of ribosomes also plays an important role in the process (35, 244). The ribosomal pool is limited and must be expanded to support long-term growth because a given ribosome can translate only a finite amount of muscle proteins (183, 244). Numerous studies in both animals and humans have demonstrated strong correlations between muscle hypertrophy and ribosome biogenesis (244). Moreover, research in rodents shows that varying increases in hypertrophy following synergist ablation of 22%, 32%, and 45% are paralleled by dose-dependent increases in ribosomal content",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 47,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

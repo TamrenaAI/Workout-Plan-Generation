@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000008",
+  "text": "travels down the nerve axon to the neuromuscular junction, where the neurotransmitter acetylcholine is released across the synaptic cleft and ultimately binds to the muscle fiber's plasmalemma. This depolarizes the muscle cell, causing calcium to be released from the sarcoplasmic reticulum. Calcium binds to troponin, which in turn moves tropomyosin from actin binding sites so they are exposed to myosin. Assuming sufficient ATP to drive muscular contraction, the globular myosin heads bind to exposed actin sites, pull the thin filament inward, release, and then reattach at a site farther along the actin filament to begin a new cycle. The continuous pulling and releasing between actin and myosin is known as crossbridge cycling, and the repeated power strokes ultimately cause the sarcomere to",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 8,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "neuromuscular_system",
+      "muscle_activation",
+      "force_production"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000199",
+  "text": "(85); on the other hand, some research shows opposite effects (61). That said, early signaling of mTORC1 likely occurs through activation of the ERK/TSC2 pathway (188). Whereas Akt and ERK1/2 both stimulate mTOR to a similar extent, their combined effects lead to an even greater stimulation compared to either alone (305). Moreover, the two pathways appear to be synergistic to satellite cell function; ERK1/2 stimulates cell proliferation, and PI3K facilitates differentiation (101).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 28,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

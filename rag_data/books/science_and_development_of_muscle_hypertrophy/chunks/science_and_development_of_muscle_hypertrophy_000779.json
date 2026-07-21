@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000779",
+  "text": "Postintervention analysis revealed that AMPK phosphorylation in the low-frequency condition increased approximately 2-fold immediately and 3 hours post-stimulation, whereas phosphorylation was suppressed in the high-frequency condition over the same period. Conversely, phosphorylation of Akt was a mirror image of AMPK results: Markedly greater phosphorylation was seen in the high-frequency condition. Recall from chapter 2 that AMPK acts as an energy sensor to turn on catabolic signaling cascades, whereas Akt promotes the intracellular signaling responses associated with anabolism. These findings led to the AMPK-Akt switch hypothesis (see ), which states that aerobic and anaerobic exercise produces opposing signaling responses and thus are incompatible for optimizing muscular adaptations",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 6: Role of Aerobic Training in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 2,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

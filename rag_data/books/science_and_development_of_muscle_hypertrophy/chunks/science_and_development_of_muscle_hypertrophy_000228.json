@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000228",
+  "text": "values increase to 118 mmol/kg after 3 sets (160). In contrast, minimal metabolite buildup is seen in protocols involving very heavy loading (≥90% of 1RM) because the short training durations involved (generally &lt;10 seconds per set) primarily tap the phosphagen system for energy provision. In addition, muscle oxygenation is compromised during resistance training that relies on fast glycolysis. The persistent compression of circulatory flow throughout a longer-duration set results in acute hypoxia, thereby heightening metabolite buildup (268). The combination of these factors causes the rapid accumulation of intramuscular metabolites along with a concomitant decrease in pH levels (260).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 57,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_activation",
+      "fatigue_management"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

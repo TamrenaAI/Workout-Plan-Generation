@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000212",
+  "text": "stimuli may directly drive anabolic processes (151). In addition, overexpression of PLD1 is associated with a decrease in catabolic factors such as FOXO3, atrogin-1, and MuRF-1 (91). Suppression of these atrophy-related genes is believed to be due to Akt phosphorylation and subsequent activation of mTORC2. Thus, PLD1 carries out anabolic and anticatabolic actions through varied intracellular mechanisms.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 41,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

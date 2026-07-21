@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000172",
+  "text": "Skeletal muscle is highly responsive to alterations in mechanical loading. Accordingly, a number of researchers have surmised that mechanical tension is the primary driving force in the hypertrophic response to regimented resistance training (77, 88) and at the very least initiates critical hypertrophy-related intracellular signaling following resistance exercise (226). In simple terms, mechanical tension can be defined as a force normalized to the area over which it acts, with units expressed in either newtons per square meter or pascals (31). Mechanical tension alone has been shown to directly stimulate mTOR (113), possibly through activation of the extracellular signal-regulated kinase/tuberous sclerosis complex 2 (ERK/TSC2) pathway (188). It is theorized that these actions are",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 1,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming",
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000581",
+  "text": "Despite the commonly accepted belief that hypertrophy-oriented routines benefit from moderate rest between sets, only a handful of studies have directly investigated the effect of rest intervals on muscle growth over time. The results of these studies have been conflicting, with some showing a potential benefit from longer rest intervals (34, 21 1), others showing a potential benefit from shorter rest (260), and yet others showing no differences between conditions (3, 69). Differences in findings may be related to the methods and populations studied. For example, studies have included untrained young men (34, 69, 178), trained young men (3, 21 1), untrained older men (260), and untrained women (103). It remains unclear how the length of rest intervals may affect these diverse populations.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 129,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000098",
+  "text": "The claim that GH mediates hypertrophy solely via potentiating IGF-1 release remains controversial. Some researchers have suggested that the two hormones may confer additive effects (213, 238). The possibility of IGF-1-independent anabolic effects of GH is indicated by research showing reduced growth retardation in IGF-1 knockout mice compared to those lacking both an IGF-1 and GH receptor (122). Moreover, a reduction in myofiber size is seen in skeletal muscle deficient of functional GH receptors (213). These effects are thought to be carried out, at least in part, by later-stage GH-regulated cell fusion that results in an increase in the number of nuclei per myotube (213). The actions of GH also seem to cause a permissive, or perhaps even a synergistic, effect on testosterone-mediated",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 98,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

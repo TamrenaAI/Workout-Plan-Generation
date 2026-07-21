@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000029",
+  "text": "The upper limit of motor unit recruitment is approximately 85% of maximal applied isometric force; recruitment thresholds during dynamic actions are even lower (56). This suggests that enhancements in motor unit recruitment likely play a limited role in strength-related training adaptations. The ability to maximally recruit all available fibers in a given motor unit pool is essential for maximizing the hypertrophic response to resistance training. After all, the stimulus for a muscle fiber to adapt is predicated on its recruitment. However, it is important to note that simply recruiting a fiber does not necessarily promote a hypertrophic response. For example, a substantial recruitment of the full spectrum of muscle fibers, including those associated with high-threshold motor units, is",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 29,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "neuromuscular_system",
+      "muscle_activation",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

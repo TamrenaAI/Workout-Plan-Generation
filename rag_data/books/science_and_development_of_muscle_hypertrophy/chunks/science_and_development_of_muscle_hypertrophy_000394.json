@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000394",
+  "text": "on the predictive equation on which calculations are based. In particular, significant variations in predictions are seen when the algorithm does not properly account for inherent differences in body composition between populations (e.g., general public versus athletes) (94). Finally, electrode configurations can vary between units. Hand-to-hand, foot-to-foot, and hand-to-foot are common arrangements, and differences in analysis between these designs can influence body composition results (88).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 49,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "intermediate",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000140",
+  "text": "## Interleukins\n\nThe interleukins (ILs) are a class of cytokines released by numerous bodily tissues to control and coordinate immune responses. The most studied of these isoforms is IL-6, an early-stage myokine believed to play an important and perhaps even critical role in exercise-induced muscular growth. This contention is supported by research showing that IL-6 deficient mice display an impaired hypertrophic response (206). IL-6 is also considered an important growth factor for human connective tissue, stimulating collagen synthesis in healthy tendons (15). Such actions enhance the ability of muscle tissue to endure high levels of mechanical stress.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 140,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

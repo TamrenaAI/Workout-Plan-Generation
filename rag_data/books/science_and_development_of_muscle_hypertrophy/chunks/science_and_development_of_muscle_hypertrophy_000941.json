@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000941",
+  "text": "origin at the scapula and insertions below the elbow are brought closer together, and the bicep's ability to produce force is therefore limited. Alternatively, passive tension refers to when a two-joint muscle is elongated at one joint while carrying out dynamic movement at the other joint. This produces a favorable length-tension relationship, enhancing the muscle's ability to produce force. For example, the long head of the triceps brachii crosses both the shoulder and elbow joints, carrying out shoulder flexion and elbow extension at these joints, respectively. Because the muscle is shortened during shoulder exten- sion, it is lengthened during shoulder flexion. Thus, performing an exercise in which the shoulder joint is flexed (such as the overhead triceps extension) places the muscle",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 8,
+  "metadata": {
+    "muscle": [
+      "triceps",
+      "biceps"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "biomechanics",
+      "force_production"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

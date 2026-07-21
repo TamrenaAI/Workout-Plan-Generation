@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000749",
+  "text": "Several lines of evidence indicate that eccentric training plays an important and potentially additive role in resistance training-induced hypertrophy. For one, lengthening actions have been shown to elicit a more rapid rise in muscle protein synthesis and promote greater increases in anabolic signaling and gene expression than other muscle actions do (17, 57, 78). There also is evidence that eccentric actions induce preferential recruitment of Type II myofibers (58), which in turn may facilitate their growth by an increase in mechanical tension. Moreover, regional increases in hypertrophy of the quadriceps are different between actions, with eccentric training eliciting greater growth in the distal portion of the muscle and concentric training promoting greater growth at the midpoint",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 5: Advanced Training Practices",
+  "collection": "hypertrophy",
+  "chunk_index": 65,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "exercise_selection"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength"
+    ]
+  }
+}

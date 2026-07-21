@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000376",
+  "text": "Several factors can alter the validity of ADP measurements. First and foremost, the measurement is affected by body hair, body temperature, moisture, and clothing (28, 71). Hence, valid results require individuals to wear a scalp cap and tight-fitting swimsuit and, if applicable, shave body and facial hair. Modifications in body position during testing also can affect results, albeit to a relatively small degree (72). As with other indirect assessment modalities, physical activity and food and fluid intake must be restricted before testing to prevent confounding the analysis. Finally, the Bod Pod unit is sensitive to alterations in room temperature; readings can be significantly altered by modest deviations in the surrounding environment (29).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 31,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

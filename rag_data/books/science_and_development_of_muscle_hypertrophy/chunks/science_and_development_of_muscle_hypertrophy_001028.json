@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001028",
+  "text": "Several studies have been carried out to determine whether periodizing a resistance training program enhances muscle growth, and results have been mixed. A recent systematic review of the topic identified 12 studies that compared hypertrophic changes in periodized versus nonperiodized resistance training programs. After taking into account the body of literature, no clear benefit was seen for periodizing training as a strategy to elicit gains in muscle mass. When attempting to draw evidence-based conclusions on periodization, however, it is important to note several important limitations of current research on the topic.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 95,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "periodization",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

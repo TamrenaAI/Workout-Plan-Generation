@@ -1,0 +1,30 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000452",
+  "text": "# Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 0,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming",
+      "volume",
+      "frequency",
+      "intensity",
+      "load",
+      "exercise_selection",
+      "exercise_order",
+      "periodization",
+      "recovery",
+      "fatigue_management",
+      "advanced_techniques"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

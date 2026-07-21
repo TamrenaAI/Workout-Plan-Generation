@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000215",
+  "text": "Because of its inherent actions, AMPK is theorized to be involved in the maintenance of skeletal muscle mass. This contention is supported by evidence showing that knockout (inactivation) of AMPK in animal models causes hypertrophy both in vitro and in vivo (90). Alternatively, activation of AMPK by AICAR-an AMPK agonist-promotes myotube atrophy, whereas its suppression counteracts the atrophic response (90). Taken together, these findings indicate that AMPK impairs muscle hypertrophy by suppressing protein synthesis and stimulating proteolysis.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 44,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

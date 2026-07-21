@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000713",
+  "text": "Early support for drop set training was derived from evidence that performing a low-intensity set (50% of 1RM) of knee extensions immediately after a set carried out at 90% of 1RM resulted in significantly higher post-exercise elevations in growth hormone compared to performing the high-intensity protocol alone (32). However, emerging research calls into question the extent to which acute hormonal fluctuations mediate hypertrophic adaptations, raising doubt about the relevance of these findings. Recently, it was demonstrated that drop set training heightened motor unit activation and intramuscular hypoxia in trained lifters, whereas these effects were not seen in untrained individuals (35).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 5: Advanced Training Practices",
+  "collection": "hypertrophy",
+  "chunk_index": 29,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "advanced_techniques",
+      "muscle_activation"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

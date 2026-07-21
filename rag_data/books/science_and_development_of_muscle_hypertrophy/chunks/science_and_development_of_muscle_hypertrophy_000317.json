@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000317",
+  "text": "## Satellite Cell Activity\n\nA large body of evidence links EIMD with satellite cell activity (52, 233, 245). Damaged myofibers must rapidly acquire additional myonuclei to aid in tissue repair and regeneration or otherwise face cell death. Satellite cells facilitate these means by proliferating and fusing to damaged fibers. Because satellite cells tend to populate under the myoneural junction (111, 251), it is speculated that they may be further stimulated by activation from motor neurons innervating damaged fibers, enhancing the regenerative response (289). It has been hypothesized that under certain conditions, stimulated satellite cells fuse to each other to form new myofibers (13), but evidence as to how this relates to traditional resistance training practices is lacking.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 146,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms",
+      "neuromuscular_system"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

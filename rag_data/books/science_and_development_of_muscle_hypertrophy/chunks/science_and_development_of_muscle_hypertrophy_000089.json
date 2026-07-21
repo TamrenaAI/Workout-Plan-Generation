@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000089",
+  "text": "Three distinct IGF-1 isoforms have been identified in humans: IGF-1Ea, IGF-1Eb, and IGF-1Ec. Both IGF-1Ea and IGF-1Eb are produced mainly in the liver and then released into systemic circulation. Other tissues express these isoforms as well, however, and the extent of nonhepatic synthesis increases in response to physical activity. In fact, contracting muscles produce the majority of systemic IGF-1 during intense exercise, and much of the circulating IGF-1 is inevitably taken up by active myofibers (33, 71). On the other hand, IGF-1Ec is a splice variant of the IGF-1 gene specific to muscle tissue. It is expressed in response to mechanical loading and then carries out its actions in an autocrine/paracrine fashion (71). Because IGF-1Ec is stimulated mechanically, and given that its carboxy",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 89,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

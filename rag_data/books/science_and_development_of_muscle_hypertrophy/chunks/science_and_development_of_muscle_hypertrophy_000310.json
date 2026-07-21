@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000310",
+  "text": "Interestingly, there is evidence that ROS interfere with the signaling of various serine/ threonine phosphatases, such as calcineurin. ROS activity impairs calcineurin activation by blocking its calmodulin-binding domain (33). Calcineurin is thought to be involved in both skeletal muscle growth (58, 183) and fiber phenotype transformation (209), and thus its inhibition may be detrimental to anabolism. Moreover, some studies have failed to demonstrate that ROS are in fact activated in response to EIMD (235). When considering the body of literature as a whole, any anabolic effects of ROS are likely dependent on exercise mode (i.e., anaerobic versus aerobic), the species of ROS produced, and perhaps other factors.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 139,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "recovery"
+    ],
+    "experience_level": "intermediate",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

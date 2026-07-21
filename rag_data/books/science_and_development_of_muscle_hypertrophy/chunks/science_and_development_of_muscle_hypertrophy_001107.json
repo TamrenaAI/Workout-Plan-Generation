@@ -1,0 +1,43 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001107",
+  "text": "It should be noted that the dose-response anabolic effects of leucine are maxed out once the threshold is attained; increasing intake beyond this point has no additional effect on muscle protein synthesis either at rest or following resistance exercise (104). Moreover, longitudinal studies in animal models have failed to show increased protein accretion from leucine supplementation in the absence of other amino acids (37, 81). This raises the possibility that supplementation of leucine alone results in an EAA imbalance that impairs transcriptional or translational function, or both. Alternatively, although leucine supplementation triggers the activation of muscle protein synthesis, the duration may not be sufficient to produce substantial synthesis of contractile elements. Either way, the",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 9: Nutrition for Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 23,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "neural_adaptation",
+      "muscle_growth_mechanisms",
+      "recovery",
+      "periodization",
+      "exercise_selection",
+      "load",
+      "volume",
+      "frequency",
+      "biomechanics",
+      "intensity",
+      "recovery",
+      "advanced_techniques",
+      "intensity",
+      "recovery",
+      "advanced_techniques",
+      "exercise_selection",
+      "load",
+      "volume",
+      "frequency",
+      "biomechanics",
+      "intensity",
+      "periodization",
+      "muscle_growth_mechanisms",
+      "neural_adaptation"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

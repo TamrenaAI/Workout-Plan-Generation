@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000647",
+  "text": "elicited significantly greater increases in muscle volume of the adductors and gluteus maximus compared to a partial ROM (0° to 90°). However, no differences were observed in quadriceps muscle volume between conditions, suggesting that the response to variations in ROM may be muscle specific over a given joint excursion. Other research shows similar quadriceps growth when using either a partial ROM (0° to 60° knee flexion) or a full ROM (0° to 100° knee flexion) during isokinetic knee extension on a dynamometer (257), although findings must be taken with the caveat that this mode of training provides accommodating resistance throughout the entire ROM. In the only study to date that included resistance-trained subjects, Goto and colleagues (84) reported greater triceps brachii hypertrophy",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 195,
+  "metadata": {
+    "muscle": [
+      "glutes",
+      "quads",
+      "triceps"
+    ],
+    "topic": [
+      "exercise_selection"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

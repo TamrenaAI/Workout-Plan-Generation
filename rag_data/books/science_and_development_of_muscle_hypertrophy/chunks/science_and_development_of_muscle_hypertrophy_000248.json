@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000248",
+  "text": "Muddle and colleagues (191) decomposed EMG signals to provide more accurate insights into motor unit recruitment during low-load (30% maximal voluntary isometric contraction) versus high-load (70% maximal voluntary isometric contraction) training to muscular failure. Results showed that although fatigue brought about progressively greater recruitment of high-threshold motor units during light-load training, the extent of high-threshold recruitment was greater during heavier loading. More recently, Morton and colleagues (190) reported that high- and low-load training results in similar glycogen depletion in Type I and Type II fibers when sets are taken to momentary muscle failure; although metabolic stress was not measured, this suggests that the buildup of metabolites may have contributed",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 77,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "recovery",
+      "advanced_techniques"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

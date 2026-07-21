@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000219",
+  "text": "Another potential means whereby AMPK is theorized to negatively affect muscle protein synthesis is the inhibition of translation elongation and the indirect suppression of the anabolic effector eIF3F (90). Thus, there are multiple potential mechanisms for AMPK-mediated regulation of protein synthesis.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 48,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_activation"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

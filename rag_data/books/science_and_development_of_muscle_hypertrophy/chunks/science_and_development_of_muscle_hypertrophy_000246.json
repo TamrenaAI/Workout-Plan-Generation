@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000246",
+  "text": "increases in hypertrophy associated with metabolic stress, it appears that other factors likely play a role as well. Suga and colleagues (261) demonstrated that only 31% of subjects displayed recruitment of fast-twitch fibers during occlusion training at 20% of 1RM compared with 70% of subjects who performed nonoccluded training at 65% of 1RM. Considering that BFR at this intensity (20% of 1RM) has been shown to increase muscle growth to an extent similar to, or greater than, high-intensity resistance training (150, 306), the anabolic effects seemingly cannot be solely a function of equal fiber recruitment. These findings are further supported by research showing significantly higher surface EMG amplitudes when traditional training is carried out at 80% of 1RM compared to occluded",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 75,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_activation",
+      "fatigue_management"
+    ],
+    "experience_level": "intermediate",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

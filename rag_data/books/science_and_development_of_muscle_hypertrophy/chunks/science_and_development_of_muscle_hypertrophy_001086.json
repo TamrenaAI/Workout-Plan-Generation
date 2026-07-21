@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001086",
+  "text": "Energy balance , the net difference between energy intake and energy expenditure, has a profound effect on the capacity to build muscle. Molecular signaling is altered during shortterm energy deficits to favor catabolism over anabolism. Studies show that caloric restriction induces a decrease in both Akt phosphorylation and downregulation of mTOR signaling, with a corresponding activation of the FOXO family of transcription factors and upregulation of atrogin-1 and MuRF-1 expression (86, 105). Moreover, nutrient deprivation activates AMPK and NAD-dependent deacetylases, such as sirtuin 1, which in turn blunt mTOR phosphorylation (88). Because AMPK concurrently impairs translational processes while heightening high-oxidative gene expression and proteolysis, a caloric deficit would induce a",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 9: Nutrition for Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 2,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

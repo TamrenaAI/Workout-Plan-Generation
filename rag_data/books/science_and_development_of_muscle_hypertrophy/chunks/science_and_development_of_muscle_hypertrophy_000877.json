@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000877",
+  "text": "An emerging body of research supports the concept of epigenetic muscle memory. Acute exercise demethylates various promoters of given genes, resulting in expression of the associated genes. Demethylation is specific to the intensity of aerobic exercise, with higher intensities targeting genes such as PPARγ , PGC-1 α , PDK4, and MEF2A; these effects are seen immediately after exercise and, in some cases (such as with PPARδ ), 3 hours post-workout (55). What is most interesting is that muscles apparently are able to retain this molecular information and use it later when faced with the same exercise stressor to facilitate appropriate adaptations.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 7: Factors in Maximal Hypertrophic Development",
+  "collection": "hypertrophy",
+  "chunk_index": 24,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

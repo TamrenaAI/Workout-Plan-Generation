@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000845",
+  "text": "The aerobic endurance protocol consisted of a combination of steady-state and high-intensity interval training. After 12 weeks, subjects in the resistance-only group displayed increases in Type I, Type IIa, and Type IIc fiber diameters, whereas those in the concurrent group showed significant increases only in Type IIa fibers. Bell and colleagues (8) found similar results in a group of physically active university students, at least some of whom had experience in strength and aerobic endurance training. Subjects performed 12 weeks of cycle ergometry, resistance training, or a combination of both modalities. Results showed that resistance training only increased both Type I and Type II fiber cross-sectional area, whereas concurrent training produced increases only in Type II fibers.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 6: Role of Aerobic Training in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 68,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "intermediate",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

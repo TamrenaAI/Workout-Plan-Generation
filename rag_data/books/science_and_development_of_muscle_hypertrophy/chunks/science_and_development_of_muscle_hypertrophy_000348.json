@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000348",
+  "text": "The major issue when attempting to extrapolate findings from 2C models to determine changes in muscle mass is that other nonfat components, particularly water, may influence fat-free mass readings. The water content in the human body can vary from day to day and also over longer periods. This is especially relevant to women during the phases of their menstrual cycle, where cyclical hormonal alterations can cause total body water to fluctuate greatly. Moreover, resistance training-associated changes in fat-free mass hydration are routinely observed, with results at least partially attributed to alterations in blood volume (89). Finally and importantly, considerable interindividual variability exists in the density of fat-free mass, particularly in the ratio of water to mineral, which can",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 3,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

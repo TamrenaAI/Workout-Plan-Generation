@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000062",
+  "text": "Although this line of reasoning provides a logical basis for training-specific alterations in sarcoplasmic volume, evidence that this occurs in practice remains equivocal. Burd and colleagues (37) found that training at 90% of 1RM induced greater early-phase post-exercise (~4 hours) increases in sarcoplasmic protein synthesis compared to training at 30% of 1RM, but the low-load condition showed a greater increase at 24 hours post-exercise. Although these findings are specific to myocellular protein fractions and do not necessarily reflect the long-term changes in hydration status associated with resistance training, the two are related. However, it is unknown whether such acute results would have persisted over time.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 62,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "intensity",
+      "load"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

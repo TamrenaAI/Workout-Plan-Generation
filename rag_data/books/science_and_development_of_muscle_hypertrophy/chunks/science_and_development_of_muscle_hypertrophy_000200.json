@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000200",
+  "text": "Activation of p38 MAPK occurs primarily following aerobic endurance exercise. Four p38 isoforms have been identified (p38 α , p38 β , p38 δ , and p38 γ ). Of these isoforms, p38 γ is specific to muscle tissue, whereas p38 α and p38 β are expressed throughout the body; p38 δ does not appear to be involved with muscular actions; p38 γ is preferentially upregulated in slow-twitch fibers while remaining largely inactive in fast-twitch fibers (73). Moreover, a loss of p38 γ in rat and mouse models is associated with a decrease in slow-twitch fiber size and no change in fast-twitch fibers (73). As opposed to directly binding to DNA, p38 MAPK mediates transcription of target genes by activating other transcription factors (96). There is evidence that p38 may regulate hypertrophy by stimulating",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 29,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "periodization"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000378",
+  "text": "ADP generally has not fared well in predicting changes in body composition across longitudinal studies. The technique showed a strong correlation to hydrodensitometry ( r = .95) when assessing fat-free mass changes in athletes consuming creatine monohydrate over a 7-day period. On the other hand, estimates of fat-free mass using ADP showed a poor correlation with DXA ( r = .34) in a cohort of overweight men and women in response to an 8-week weight loss program (96). Moreover, a study tracking body composition across a 6-month weight loss program in overweight men and women found no correlation at all between the Bod Pod and DXA for predicting lean mass changes (34). The combined findings indicate ADP is not a viable assessment method in this population. A dearth of longitudinal research",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 33,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy",
+      "fat_loss"
+    ]
+  }
+}

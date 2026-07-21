@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000566",
+  "text": "A number of researchers have investigated the acute signaling response to modes of contractions. Franchi and colleagues (72) found that eccentric training preferentially upregulated early MAPK activation (p38 MAPK, ERK1/2, p90 RSK ) compared to concentric training, but neither mode affected Akt/ mTOR or inflammatory signaling 30 minutes after exercise. Eliasson and colleagues (60) found that maximal eccentric actions (4 sets of 6 repetitions) significantly increased early-phase (2 hours) phosphorylation of p70 S6K and the ribosomal protein S6, whereas the same number of maximal concentric actions showed no effect on phosphorylation of these signaling molecules. Consistent with the study by Franchi and colleagues, neither contraction mode produced significant increases in Akt or mTOR,",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 114,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

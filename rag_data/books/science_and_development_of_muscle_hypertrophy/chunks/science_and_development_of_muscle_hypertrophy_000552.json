@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000552",
+  "text": "Some evidence suggests that regional hypertrophy is specific to the site of muscle activation. Using magnetic resonance imaging technology, Wakahara and colleagues (262) determined muscle activation in a group of subjects performing 5 sets of 8 repetitions of the lying triceps extension exercise. Another group of subjects then underwent a 12-week supervised exercise program employing the same variables used in the acute activation study. Results showed that the extent of hypertrophy in the triceps was specific to the region of activation. Follow-up work by the same lab showed a similar outcome from the close-grip bench press exercise; triceps hypertrophy correlated to the site of activation, but occurred in a different region of the muscle compared to the previous study (263). To the",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 100,
+  "metadata": {
+    "muscle": [
+      "triceps"
+    ],
+    "topic": [
+      "muscle_activation",
+      "muscle_growth_mechanisms",
+      "exercise_selection"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000573",
+  "text": "One thing that appears quite clear from the literature is that concentric and eccentric actions produce distinct morphological adaptations at the fiber and fascicle levels. Franchi and colleagues (72) found that eccentric training produced significantly greater increases in fascicle length compared to concentric training (12% vs. 5%, respectively), whereas concentric actions produced significantly greater increases in pennation angle (30% vs. 5%). These findings are consistent with those of other research on the topic (190, 227) and indicate a predisposition toward in-series hypertrophy following eccentric exercise. Interestingly, fascicle length changes seem to be specific to the initial stages of resistance training; increases abate after 5 weeks of consistent training (24).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 121,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_activation"
+    ],
+    "experience_level": "beginner",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000401",
+  "text": "## RESEARCH FINDINGS\n\n## DISCERNING BETWEEN INDIVIDUAL AND GROUP RESULTS\n\nAs with results in all applied exercise-related studies, it is important to understand the difference in the implications of body composition research when studying a group versus an individual. Research findings generally are reported as the collective mean (i.e., average) of data obtained from a cohort of subjects. However, there will be a variance in responses across different subjects, the extent of which is exhibited as the standard deviation of the data. Sometimes these variances can be quite large. Hence, simply taking the mean at face value does not necessarily reflect the results a given person can expect to see.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 56,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000369",
+  "text": "The D 3 -creatine dilution method was initially validated in rodents, showing a strong relationship with estimates of lean tissue mass ( r = .96) (83). A follow-up study demonstrated the method could be employed repeatedly over time to accurately measure lean tissue changes in growing rats (84). Collectively, the findings show promise for D 3 -creatine dilution as an assessment tool.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 24,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

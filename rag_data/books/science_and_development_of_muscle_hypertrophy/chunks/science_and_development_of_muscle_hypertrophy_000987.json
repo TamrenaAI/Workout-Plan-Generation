@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000987",
+  "text": "With respect to the elbow extensors, the long head of the triceps brachii has an optimal length-tension relationship when the shoulder is flexed to about 180° (77), meaning that this aspect of the musculature is most active during exercises in which the humerus is held overhead (e.g., overhead triceps extension).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 54,
+  "metadata": {
+    "muscle": [
+      "triceps"
+    ],
+    "topic": [
+      "exercise_selection",
+      "muscle_activation"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

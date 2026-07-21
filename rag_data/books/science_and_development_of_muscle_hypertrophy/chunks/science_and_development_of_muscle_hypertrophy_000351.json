@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000351",
+  "text": "Four-component models are considered the gold standard in indirect body composition analysis. This model segments the body into fat, protein, mineral, and water. Moreover, it eschews assumptions of constancy in the hydration component of fat-free mass, as well as the ratio between protein and mineral content. This is particularly important when assessing body composition changes over the course of a weight-loss protocol because water loss from adipose tissue is otherwise reported as a loss of fat-free mass (3). Multiple measurement methods are needed to devise a 4C model; the preference is to use reference standards that target each of the components. Common 4C components include hydrodensitometry, DXA, and BIA.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 6,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy",
+      "fat_loss"
+    ]
+  }
+}

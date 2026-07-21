@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000381",
+  "text": "## Dual X-Ray Absorptiometry\n\nDXA is a 3C model that divides the body into total bone, lean soft-tissue mass, and fat mass (). The technique has gained popularity as a method to measure body composition in research-based settings, largely because of its combination of high reliability, convenience, and relatively low per-scan cost. Although DXA emits radiation, the associated amounts are very low and generally not considered an issue with infrequent use. However, a licensed radiological technician is often required to operate the unit, making it less practical in these circumstances.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 36,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

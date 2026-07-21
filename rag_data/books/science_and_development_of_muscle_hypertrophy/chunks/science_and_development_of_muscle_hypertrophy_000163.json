@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000163",
+  "text": "Leukemia inhibitory factor (LIF) is another myokine that has been shown to play a role in muscle hypertrophy (215). During exercise, skeletal muscle markedly upregulates the expression of LIF mRNA, likely as a result of fluctuations in intracellular calcium concen- trations (34). Mice null for the LIF gene were incapable of increasing muscle size following muscular overload, but the growth response was restored following recombinant LIF administration (215). It is hypothesized that LIF exerts hypertrophic effects primarily by acting in a paracrine fashion on adjacent satellite cells, inducing their proliferation while preventing premature differentiation (34).\n\n## KEY POINT",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 163,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "advanced",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

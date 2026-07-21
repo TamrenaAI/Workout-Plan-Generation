@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000168",
+  "text": "- Satellite cells appear to be crucial to maximizing the hypertrophic response to resistance training. The primary role of satellite cells appears to be their ability to retain a muscle's mitotic capacity by donating nuclei to existing myofibers. Satellite cells also are involved in the repair and remodeling of muscle tissue, including the co-expression of myogenic regulatory factors that mediate growth-related processes. Additional hypertrophic effects of satellite cells may lie in their regulatory role in the remodeling of extracellular matrix components.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 168,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

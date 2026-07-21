@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000170",
+  "text": "- Myokines are important players in exercise-induced muscular adaptations. These autocrine/paracrine agents exert their effects directly on muscle tissue as a result of mechanical stimulation. Numerous myokines have been identified, although the specific roles of the substances and their interactions with one another have yet to be elucidated.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 170,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

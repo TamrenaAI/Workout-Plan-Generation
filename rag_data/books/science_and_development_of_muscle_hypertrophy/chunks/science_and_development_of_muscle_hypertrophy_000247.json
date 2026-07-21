@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000247",
+  "text": "supported by research showing significantly higher surface EMG amplitudes when traditional training is carried out at 80% of 1RM compared to occluded training at 20% of 1RM, indicating reduced muscle activation at the lower intensity (165). Recent studies investigating heavy- versus light-load training also show significantly greater muscle activation during the higher-intensity bout despite an apparently much greater metabolite accumulation during the light-load condition (5, 46, 242). However, surface EMG only provides insights into neural drive, which encompasses not only recruitment but also rate coding, synchronization, muscle fiber propagation velocity, and intracellular action potentials (16, 53).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 76,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_activation",
+      "neural_adaptation",
+      "intensity"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

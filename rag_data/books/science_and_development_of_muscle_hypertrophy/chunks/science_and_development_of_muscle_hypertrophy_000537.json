@@ -1,0 +1,24 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000537",
+  "text": "The question then arises as to whether there is a minimum loading threshold for eliciting hypertrophic changes. This question was explored in an elegant study by Lasevicius and colleagues (129). Employing a within-subject design, untrained men performed 3 sets of the unilateral leg press and arm curl at 20% of 1RM to volitional failure on one of their limbs. For the other limb, subjects were randomly assigned to one of three intensities: 40%, 60%, or 80% of 1RM. The 20% of 1RM condition was always trained first in the sequence, and the contralateral limb then performed as many sets as required to achieve the same volume load as attained in the lower-load condition. Results showed almost identical hypertrophy of both the elbow flexors and quadriceps for the 40%, 60%, and 80% of 1RM",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 85,
+  "metadata": {
+    "muscle": [
+      "biceps",
+      "quads"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "intensity",
+      "load",
+      "volume"
+    ],
+    "experience_level": "beginner",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

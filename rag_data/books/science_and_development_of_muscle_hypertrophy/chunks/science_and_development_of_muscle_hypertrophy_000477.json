@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000477",
+  "text": "The response to different volumes is highly individual. In perhaps the most elegant study on the topic to date, Hammarström and colleagues (92) employed a within-subject design in which untrained subjects were randomized to perform a higher volume with one leg (~15 sets per muscle per week) and a lower volume with the other leg (~5 sets per muscle per week). After 12 weeks of training, the higher-volume condition elicited significantly greater quadriceps hypertrophy than the lower-volume condition. Moreover, these changes coincided with a greater activation of anabolic intracellular signaling pathways and a heightened stimulation of ribosome biogenesis. Most interestingly, ~44% of the cohort derived a clear benefit from the higher-volume condition while only ~9% showed a clear benefit",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 25,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "volume",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "beginner",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000427",
+  "text": "resistance training for the knee extensors (32). However, correlation between ultrasound measures and muscle volume determined by MRI in the same study was poor ( r = .33) (32). Discrepancies in findings seemingly can be explained by differences in regional hypertrophy that are routinely seen in the quadriceps across training studies (8, 66, 67). Additionally, extended field-of-view ultrasound imaging showed high agreement with MRI in detecting changes in muscle cross-sectional area (ICC = .929, SEM = .94 cm 2 ) over the course of a 21-week resistance training program (4).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 82,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

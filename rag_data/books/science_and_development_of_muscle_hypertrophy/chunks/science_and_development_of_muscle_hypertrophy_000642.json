@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000642",
+  "text": "Abbreviations: RM = repetition maximum; DXA = dual X-ray absorptiometry.\n\n## Range of Motion\n\nBasic principles of structural anatomy and kinesiology dictate that muscles have greater contributions at different joint angles for given exercises. For example, there is evidence that the quadriceps muscles are differentially activated during knee extension exercise: The vastus lateralis is maximally activated during the first 60° of range of motion (ROM), whereas the vastus medialis is maximally activated during the final 60° of ROM (230). Similar findings have been reported during the arm curl: The short head appears to be more active in the latter phase of the movement (i.e., greater elbow flexion), whereas the long head is more active in the early phase (28).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 190,
+  "metadata": {
+    "muscle": [
+      "biceps",
+      "quads"
+    ],
+    "topic": [
+      "exercise_selection"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength"
+    ]
+  }
+}

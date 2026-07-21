@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000656",
+  "text": "The extent of motor unit activation likely depends on the magnitude of load. During heavy-load training, the highest-threshold motor units are recruited almost immediately, whereas during lighter-load training, the recruitment of these motor units is delayed. The point at which complete motor unit activation occurs is not clear, but evidence suggests that a majority of the motor unit pool for a working muscle is recruited with loads as low as 30% of 1RM, provided sets are carried out with a high intensity of effort (158). Thus, a high intensity of effort becomes increasingly important as the intensity of loading is reduced.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 204,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_activation",
+      "neuromuscular_system",
+      "load",
+      "intensity"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

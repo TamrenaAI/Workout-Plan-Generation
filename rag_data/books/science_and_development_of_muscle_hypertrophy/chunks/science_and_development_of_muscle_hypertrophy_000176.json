@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000176",
+  "text": "Mechanosensors also appear to be sensitive to the type of load imposed on muscle tissue. Stretch-induced mechanical loading elicits the deposition of sarcomeres longitudinally (i.e., in series), whereas dynamic muscular actions increase cross-sectional area in parallel with the axes (74). Moreover, the hypertrophic response can vary based on the type of muscle action. Isometric and eccentric actions stimulate the expression of distinct genes in a manner that cannot be explained by differences in the magnitude of applied mechanical force (74). These examples highlight the intricate complexity of mechanosensors and their capacity to distinguish between types of mechanical information to produce an adaptive response. What follows is a discussion of how mechanical forces regulate muscle",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 5,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

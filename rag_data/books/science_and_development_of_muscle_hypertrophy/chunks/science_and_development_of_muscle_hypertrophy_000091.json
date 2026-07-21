@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000091",
+  "text": "The age-related decrease in serum IGF-1 levels is associated with muscle atrophy (84); this suggests that a minimum threshold exists for circulating concentrations of this hormone, below which muscle mass is compromised. IGF-1 is a potent effector of the PI3K/Akt pathway (see chapter 2) and is widely thought to be necessary for activating the signal transduction required for the initiation of protein translation following mechanical loading (215). However, the extent to which systemic IGF-1 is involved in compensatory hypertrophy remains controversial, and some researchers dispute whether it has a primary role in the anabolic response to exercise (132, 157). Serum concentrations of IGF-1 are not necessarily correlated with post-workout increases in muscle protein synthesis (257).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 91,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000802",
+  "text": "An important limitation of current research is that the time course of hypertrophic adaptations during aerobic training has not been well investigated. In those who are sedentary, virtually any training stimulus-including aerobic exercise-is sufficient to overload muscle. This necessarily results in an adaptive response that promotes tissue remodeling. However, the intensity of aerobic training is not sufficient to progressively overload muscle in a manner that promotes further adaptations over time. Thus, it stands to reason that the body would quickly plateau after an initial increase in muscle size.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 6: Role of Aerobic Training in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 25,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "hypertrophy_programming",
+      "intensity"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

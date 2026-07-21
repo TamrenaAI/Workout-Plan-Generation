@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000355",
+  "text": "Skinfold measurements are obtained on the right side of the body in sequential fashion. Common skinfold sites include the chest, midaxilla, triceps, subscapular, abdomen, suprailium, thigh, biceps, and calf (). Valid results can be obtained using three-, four-, seven-, and nine-site assessments. At least two measurements are taken at each site, and results are averaged to enhance accuracy. Once final values are acquired, the sum of the skinfolds is entered into one of many regression equations to generate an estimate of body composition.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 10,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "fat_loss"
+    ]
+  }
+}

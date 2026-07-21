@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001029",
+  "text": "For one, the vast majority of periodization research has been carried out on untrained individuals, with only two of the included studies involving subjects with previous resistance training experience. This is problematic because the adaptations in the initial phase of training are primarily directed toward neural improvements in recruitment, rate coding, and synchronization within and between muscles. If anything, naive trainees would benefit from consistently performing the same routine for the first month or two in order to better ingrain motor patterns for exercise performance; only after an individual gains proficiency in lifting technique would there be a potential benefit to systematically manipulating variables. Consistent with this point, De Souza and colleagues (39) found that",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 96,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "periodization",
+      "neural_adaptation",
+      "exercise_order"
+    ],
+    "experience_level": "beginner",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

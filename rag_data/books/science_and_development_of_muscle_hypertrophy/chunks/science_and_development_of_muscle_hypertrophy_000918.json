@@ -1,0 +1,50 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000918",
+  "text": "Alterations in anabolic intracellular signaling have been demonstrated between trained and untrained subjects in both animal and human models. Ogasawara and colleagues (56) exposed male rats to maximal isometric contractions via percutaneous electrical stimulation of the gastrocnemius muscle every other day for either 1 bout, 12 bouts, or 18 bouts. Those in a detraining group performed 12 bouts, detrained for 12 days, and then were subjected to an additional exercise session prior to being sacrificed. Phosphorylation of p70 S6K , ribosomal protein S6, and p90 RSK were elevated in the group that performed 1 bout, but repeated exercise bouts suppressed phosphorylation levels. This suggests that anabolic signaling becomes desensitized to resistance training when it is performed consistently",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 7: Factors in Maximal Hypertrophic Development",
+  "collection": "hypertrophy",
+  "chunk_index": 65,
+  "metadata": {
+    "muscle": [
+      "glutes",
+      "calves"
+    ],
+    "topic": [
+      "intensity",
+      "frequency",
+      "volume",
+      "exercise_selection",
+      "periodization",
+      "recovery",
+      "recovery",
+      "advanced_techniques",
+      "biomechanics",
+      "intensity",
+      "recovery",
+      "recovery",
+      "advanced_techniques",
+      "biomechanics",
+      "intensity",
+      "frequency",
+      "volume",
+      "exercise_selection",
+      "periodization",
+      "recovery",
+      "advanced_techniques",
+      "biomechanics",
+      "intensity",
+      "frequency",
+      "volume",
+      "exercise_selection",
+      "periodization",
+      "recovery",
+      "advanced_techniques",
+      "biomechanics"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

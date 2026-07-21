@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000188",
+  "text": "## PI3K/Akt Pathway\n\nThe phosphatidylinositol 3-kinase (PI3K)/Akt pathway is considered a master network for regulating skeletal muscle growth (20, 125, 274). Akt, also known as protein kinase B (PKB), acts as a molecular upstream nodal point that functions both as an effector of anabolic signaling and a dominant inhibitor of catabolic signals (279). Multiple isoforms of Akt have been identified in skeletal muscle (Akt1, Akt2, Akt3), and each has a distinct physiological role. Of these isoforms, Akt1 appears to be most responsive to mechanical stimuli (307). Early research indicated that high mechanical intensities were required to activate Akt; however, subsequent studies demonstrate evidence to the contrary (307).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 17,
+  "metadata": {
+    "muscle": [
+      "shoulders"
+    ],
+    "topic": [
+      "exercise_selection"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

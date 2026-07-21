@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000536",
+  "text": "10 studies that assessed changes in muscle size using site-specific methods showed no difference between high- versus low-load conditions; the observed effect size difference of 0.03 indicates hypertrophic adaptations were virtually identical. Moreover, findings were consistent across populations including age, sex, and training status. Collectively, the body of literature indicates that load is not a determining factor in the exercise-induced accretion of muscle mass, at least at the whole-muscle level.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 84,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "load",
+      "hypertrophy_programming",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

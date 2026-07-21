@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000999",
+  "text": "The hamstrings are a biarticular muscle complex. The semimembranosus, semitendinosus, and long head of the biceps femoris carry out both hip extension and knee flexion; the short head of the biceps femoris crosses only the knee joint and thus is purely a knee flexor. Contrary to popular belief, the hamstrings are only moderately active during multi-joint lower-body exercise, producing approximately half the amount of EMG activity as single-joint exercise (145, 150). This is consistent with the fact that when the hamstrings are shortening at the hip, they are lengthening at the knee, and vice versa. Their length thus remains fairly constant throughout performance, thereby limiting force output. In line with these findings, hypertrophy of the hamstrings is minimal following regular squat",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 8: Program Design for Maximal Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 66,
+  "metadata": {
+    "muscle": [
+      "hamstrings"
+    ],
+    "topic": [
+      "muscle_activation",
+      "exercise_selection",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

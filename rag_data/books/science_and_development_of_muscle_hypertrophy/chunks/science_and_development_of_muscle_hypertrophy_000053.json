@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000053",
+  "text": "Research indicates that certain types of exercise actions can affect fascicle length. There are three distinct types of actions: concentric, eccentric, and isometric. Concentric actions occur when a muscle is shortening; eccentric actions occur when a muscle is lengthening; and isometric actions occur when a muscle is producing force at an immobile joint. Lynn and Morgan (123) demonstrated lower sarcomere counts when rats climbed on a treadmill (i.e., incline) compared to when they descended (i.e., decline). This indicates that repeated eccentric-only actions result in a greater number of sarcomeres in series, whereas exercise consisting solely of concentric contractions leads to a serial decrease in sarcomere length, at least during unaccustomed aerobic-type exercise.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 53,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000431",
+  "text": "While CT provides excellent insights into muscle morphology, it is expensive (although less so than MRI) and inconvenient. Moreover, its emission of relatively high levels of ionizing radiation is not considered safe for repeated measurements (73). Thus, the practical value of CT is limited for assessing hypertrophy.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 86,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000182",
+  "text": "focal adhesion kinase (FAK) serves as a key player in signal initiation (48). The expression of FAK displays load-dependent characteristics whereby its activation is suppressed during unloading and heightened during mechanical overload, highlighting the mechanosensitive role of FAK in exercise-induced hypertrophy (9).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 11,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "frequency"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

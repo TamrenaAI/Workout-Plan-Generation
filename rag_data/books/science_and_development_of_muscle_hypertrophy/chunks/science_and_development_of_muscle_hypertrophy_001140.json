@@ -1,0 +1,41 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001140",
+  "text": "Evidence suggests that low glycogen levels alter exercise-induced intracellular signaling. Creer and colleagues (29) randomized trained aerobic endurance athletes to perform 3 sets of 10 repetitions of knee extensions with a load equating to 70% of 1RM after following either a low-carbohydrate diet (2% of total calories) or a high-carbohydrate diet (77% of total calories). Muscle glycogen content was markedly lower in the low- compared to high-carbohydrate condition (~174 vs. ~591 mmol/kg dry weight). Early-phase Akt phosphorylation was significantly elevated only in the presence of high glycogen stores; phosphorylation of mTOR mimicked the Akt response, although the ERK1/2 pathway was relatively unaffected by muscle glycogen content status. Glycogen inhibition also has been shown to",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 9: Nutrition for Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 56,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "intensity",
+      "volume",
+      "frequency",
+      "exercise_selection",
+      "biomechanics",
+      "periodization",
+      "recovery",
+      "advanced_techniques",
+      "intensity",
+      "biomechanics",
+      "exercise_selection",
+      "advanced_techniques",
+      "periodization",
+      "recovery",
+      "intensity",
+      "volume",
+      "frequency",
+      "exercise_selection",
+      "biomechanics",
+      "advanced_techniques",
+      "periodization",
+      "recovery"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

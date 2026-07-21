@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000386",
+  "text": "While DXA's predictive ability is fairly high, it demonstrates a reduced ability to track changes in markers of muscle mass over the course of a regimented exercise program. When tracking changes in a cohort of bodybuilders across an 8-week resistance training program, it demonstrated a fairly high correlation with 4C ( r = .77), although this relationship was significantly lower than when assessed at a single time point (89). A study in elite judokas reported similar findings; DXA results explained only 38% of the 4C reference values for fat-free mass when tracking the athletes from a period of weight stability to just before competition. Agreement with changes in lean mass as assessed by site-specific measures is even more compromised; the correlation coefficient was just .49 compared",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 41,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

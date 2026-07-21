@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000079",
+  "text": "It has been theorized that exercise-induced muscle growth may be due in part to hyperplasia -an increase in fiber number ( 1). Evidence supporting the ability of muscles to undergo hyperplasia is primarily derived from animal research. Alway and colleagues (12) attached a weight to the right wings of adult Japanese quails that corresponded to 10% of their body mass. The contralateral limb served as a control. After 5 to 7 days of chronic stretch, fiber number was approximately 27% greater than that in nonloaded controls. These findings indicate a substantial contribution of hyperplasia to gains in lean mass. Follow-up work by the same lab evaluated a comparable stretch protocol except that loading was carried out for 24-hour intervals interspersed with 48- to 72-hour rest periods (16).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 79,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

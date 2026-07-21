@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000202",
+  "text": "Of all the MAPK modules, JNK appears to be the most sensitive to mechanical tension, and it is particularly responsive to eccentric actions. Contraction-induced phosphorylation of JNK correlates with a rapid rise in mRNA of transcription factors that mediate cell proliferation and DNA repair (7, 8), indicating a role in muscle regeneration following intense exercise. Moreover, JNK phosphorylation displays a linear increase, with heightened levels of contractile force (141). However, the specific role of JNK in exercise-induced muscle hypertrophy remains undetermined. Some researchers have deemed JNK a molecular switch that, when activated, stimulates a hypertrophic response and, when suppressed, induces smaller, more oxidative muscle fibers; these effects were found to be regulated, at",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 31,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

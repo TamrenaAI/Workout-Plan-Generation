@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000397",
+  "text": "## KEY POINT\n\nBIA can be a valid option for assessing lean mass, although accuracy depends on the sophistication of the given unit and its algorithms. While BIA theoretically has an enhanced ability to determine skeletal muscle mass by parceling out the effects of body water, the validity of these measures have not been well studied.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 52,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000300",
+  "text": "such a design is problematic because attempting to isolate EIMD in this fashion would involve altering other resistance training variables that would confound the ability to determine causality. It is impossible to determine whether some level of muscle damage experienced by subjects in the study by Damas and colleagues (49) contributed to the observed hypertrophic changes. Moreover, it is not clear whether more (or less) damage may have influenced hypertrophy over time. The only conclusion that can be made is that the damage experienced in an initial exercise bout in untrained individuals appears to be directed toward structural repair as opposed to hypertrophy; the effects of repeated exposure to varying levels of damage beyond the initial bout cannot be deduced from the study design.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 129,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "exercise_selection",
+      "muscle_activation"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

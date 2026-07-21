@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000444",
+  "text": "When compared to whole-muscle quadriceps cross-sectional area measures via MRI, most studies show higher increases in muscle fiber cross-sectional area with biopsy (24, 27, 91, 98), although some have reported lower values (67). Similar discrepancies are seen when biopsy is compared to CT, again generally biasing to a higher increase in quadriceps cross-sectional area (35, 68, 90). The relative differences in the magnitude of findings between micro- and macroscopic measures often are substantial. For example, Verdijk and colleagues (90) reported increases in Type II quadriceps cross-sectional area of 28% as obtained via biopsy, while CT measures showed just an 8.5% increase. Results from Frontera and colleagues (36) were almost identical, with 28% increases shown by biopsy and only 10%",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 99,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

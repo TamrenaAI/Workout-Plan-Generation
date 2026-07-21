@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000034",
+  "text": "other studies have failed to show increased synchronization following resistance training or computer simulation (105, 251). The findings cast doubt on whether synchronization plays a meaningful role in exercise-induced early-phase neuromuscular adaptations; if it does, the overall impact seems to be modest.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 34,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "neuromuscular_system",
+      "neural_adaptation"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000428",
+  "text": "Equations have been developed to estimate muscle volume from ultrasound imaging. A formula combining measures of muscle thickness along with limb length was found\n\n## KEY POINT\n\nUltrasound testing presents an efficient method for assessing muscle hypertrophy and displays good accuracy when carried out by a qualified sonographer. Obtaining scans at multiple sites along the length of a given muscle can provide greater insight into overall development of that muscle. This is particularly relevant in the quadriceps musculature, which routinely shows distinct regional intramuscular adaptations in response to regimented resistance training.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 83,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000610",
+  "text": "Some have theorized that performing eccentric actions at higher velocities enhances anabolism as a result of increased tension on muscle during high-speed lengthening. Roschel and colleagues (198) found similar activation of Akt, mTOR, and p70 S6K following 5 sets of 8 eccentric repetitions at a slow (20° per second) versus fast (210° per second) velocity, suggesting that the velocity of eccentric actions does not influence intracellular anabolic signaling. Several studies have shown a benefit from faster eccentric actions. Shepstone and colleagues (228) reported a trend for greater increases in muscle cross-sectional area of the elbow flexors with faster eccentric repetitions (210° per second vs. 20° per second) and Farthing and Chilibeck (64) demonstrated that fast (180° per second)",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 158,
+  "metadata": {
+    "muscle": [
+      "biceps"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

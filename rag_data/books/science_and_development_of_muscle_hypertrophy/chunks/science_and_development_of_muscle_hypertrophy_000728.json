@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000728",
+  "text": "It can be hypothesized that negative anabolic effects of cold-water immersion are in some way related to a reduction in blood flow (50, 54), possibly by compromising post-exercise amino acid delivery to muscle (29). Exposure to cold temperatures also has been shown to interfere with anabolic signaling, potentially via an upregulation of AMPK, a known inhibitor of mTOR (12). Because research is limited, it is difficult to draw strong inferences on the topic.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 5: Advanced Training Practices",
+  "collection": "hypertrophy",
+  "chunk_index": 44,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "recovery"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000346",
+  "text": "This chapter focuses on describing how to employ various assessment techniques to determine muscle size and its change over the course of regimented exercise programs. Thus, the discussions of the underlying concepts on which these techniques are based are brief; if you seek greater insights into this topic, refer to the authoritative text, Human Body Composition based on whether the assessment of muscle is made indirectly or in a site-specific fashion. Indirect methods include skinfold measurement, hydrodensitometry, air displacement plethysmography (ADP), dual X-ray absorptiometry (DXA), and bioelectrical impedance analysis (BIA); site-specific measures include circumference measurement, ultrasound, computerized tomography (CT), magnetic resonance imaging (MRI), and muscle biopsy.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 1,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

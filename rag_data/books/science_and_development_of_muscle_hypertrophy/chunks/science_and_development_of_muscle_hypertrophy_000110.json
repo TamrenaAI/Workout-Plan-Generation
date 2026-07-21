@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000110",
+  "text": "Despite its anabolic properties (28, 65), the primary role of insulin on exercise-induced hypertrophic adaptations is believed to be a reduction in protein breakdown as opposed to promoting increases in muscle protein synthesis (52, 69, 91, 104). The mechanisms by which insulin reduces proteolysis are not well understood at this time. Given that muscle hypertrophy represents the difference between muscle protein synthesis and proteolysis, a decrease in protein breakdown would conceivably enhance the accretion of contractile proteins and thus facilitate greater hypertrophy.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 110,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

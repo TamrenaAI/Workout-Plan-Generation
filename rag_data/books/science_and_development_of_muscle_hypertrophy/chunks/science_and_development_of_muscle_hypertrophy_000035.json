@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000035",
+  "text": "## Antagonist Coactivation\n\nAnother possible explanation for exercise-induced neural enhancement is a decrease in antagonist coactivation. The attenuation of antagonist activity reduces opposition to the agonist, thereby allowing the agonist to produce greater force. Carolan and Cafarelli (41) reported that hamstring coactivation decreased by 20% after just 1 week of maximal voluntary isometric knee extension exercises, whereas no differences were seen in a group of controls. These findings are consistent with observations that skilled athletes display reduced coactivation of the semitendinosus muscle during open-chain knee extensions compared to sedentary people (13). The extent to which these adaptations confer positive effects on strength or hypertrophy remains unclear.\n\n## Doublets",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 35,
+  "metadata": {
+    "muscle": [
+      "hamstrings"
+    ],
+    "topic": [
+      "neuromuscular_system",
+      "neural_adaptation",
+      "force_production"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength",
+      "hypertrophy"
+    ]
+  }
+}

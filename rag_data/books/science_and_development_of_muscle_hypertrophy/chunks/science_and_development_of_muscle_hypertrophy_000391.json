@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000391",
+  "text": "Single-frequency units commonly emit a 50 kHz electrical impulse that not only passes through extracellular bodily fluids but also may traverse the cellular membrane (10, 50). The limitations in making estimations from a single 50 kHz frequency in combination with potential confounding from intracellular penetration of the electrical current compromise the validity of these units (10, 57). Alternatively, multifrequency units apply currents below 50 kHz to quantify extracellular water with minimal penetration of the cellular membrane as well as currents up to 1,000 kHz that estimate the quantity of total body water and thus allow for the calculation of intracellular water (10) (). Because of these advanced capabilities, multifrequency BIA units are purported to be less prone to error than",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 46,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "frequency"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000628",
+  "text": "Despite the paucity of objective evidence, a logical case can be made that TUT does play a role in hypertrophy. However, it appears the effects are more related to the time a muscle is worked over the duration of a training session than to the TUT for a given set. In support of this hypothesis, my lab showed that performing a powerlifting-style workout consisting of 7 sets of 3RM produced increases in muscle growth similar to those of a bodybuilding-style workout consisting of 3 sets of 10RM (208). Although TUT in the powerlifting-style sets was markedly lower than in the bodybuilding-style sets (~9 seconds vs. ~30 seconds, respectively), the total TUT for the training session was approximately equal because of the greater number of sets performed for the powerlifting-style condition.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 176,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

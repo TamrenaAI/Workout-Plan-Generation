@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000065",
+  "text": "Satellite Cells Skeletal muscle is a postmitotic tissue, meaning that it does not undergo significant cell replacement throughout its life. An efficient means for regeneration of fibers is therefore required to maintain healthy tissue and avoid cell death. It is widely accepted that satellite cells are essential to this process. These myogenic stem cells, which reside between the basal lamina and sarcolemma, remain inactive until a sufficient mechanical stimulus is imposed on skeletal muscle (239). Once aroused, they produce daughter cells that either self-renew to preserve the satellite cell pool or differentiate to become myoblasts that multiply and ultimately fuse to existing fibers, providing agents necessary for the repair and remodeling of the muscle (228, 254). This process is",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 65,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

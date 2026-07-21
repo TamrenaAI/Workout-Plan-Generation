@@ -1,0 +1,43 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_001185",
+  "text": "In summary, there is little doubt that a threshold exists for how much protein an individual can utilize in a given meal; beyond a certain dose, amino acids will be oxidized for energy rather than used for muscle building. However, evidence indicates that the threshold appears to be higher than the common claim of 20 to 30 g in a sitting. It is important to note that several external factors influence the threshold, including the protein source, the co-consumption of other nutrients, and the amount of muscle involved in the exercise bout. Individual factors such as age, training status, and the amount of lean body mass must be considered as well.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 9: Nutrition for Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 101,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "periodization",
+      "hypertrophy_programming",
+      "muscle_growth_mechanisms",
+      "recovery",
+      "exercise_selection",
+      "load",
+      "volume",
+      "frequency",
+      "recovery",
+      "periodization",
+      "advanced_techniques",
+      "fatigue_management",
+      "exercise_order",
+      "muscle_growth_mechanisms",
+      "hypertrophy_programming",
+      "load",
+      "volume",
+      "frequency",
+      "exercise_selection",
+      "advanced_techniques",
+      "fatigue_management",
+      "exercise_order",
+      "recovery",
+      "periodization"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

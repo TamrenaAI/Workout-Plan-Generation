@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000425",
+  "text": "lower leg, with good to strong correlations noted between ultrasound and CT or MRI findings (correlation coefficients of .70 to .91). Single-point assessments of quadriceps cross-sectional area using panoramic ultrasound also show good to excellent agreement with MRI (4, 78) and CT (69); however, its agreement was found to be poor when assessing cross-sectional area of the gastrocnemius (78).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 80,
+  "metadata": {
+    "muscle": [
+      "quads",
+      "calves"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

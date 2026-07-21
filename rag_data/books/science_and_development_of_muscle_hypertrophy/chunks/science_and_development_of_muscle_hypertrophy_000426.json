@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000426",
+  "text": "Findings are somewhat disparate when comparing changes in muscle development over time between ultrasound and MRI. A study involving 6 weeks of blood flow restriction training concluded that ultrasound measures of muscle thickness produced similar conclusions about hypertrophy as MRI-derived measures of cross-sectional area; however, the estimates of the magnitude of change were not equivalent (52). In another study, pre- to poststudy ultrasound-derived measures of vastus lateralis muscle thickness obtained at 50% of femur length showed a moderate to strong correlation with MRI-derived measures of ACSA ( r = .69) following 12 weeks of isokinetic resistance training for the knee extensors (32). However, correlation between ultrasound measures and muscle volume determined by MRI in the same",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 81,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

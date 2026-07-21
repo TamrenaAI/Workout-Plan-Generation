@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000432",
+  "text": "CT has consistently shown high reproducibility for the determination of human muscle size (58) and generally displays good agreement when validated against cadaver values (62). However, although CT is considered a reference method for measurement of muscle mass, its accuracy is somewhat less than MRI. Whereas MRI-derived cross-sectional area assessments were shown to be within ±7.5% of cadaver analysis, those of CT systematically overestimated measurements by 10% to 20% (22). Moreover, validity is further compromised in muscles that have closely apposed muscle bellies, which can increase difficulty in determining intermuscular boundaries (22).\n\n## KEY POINT",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 87,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

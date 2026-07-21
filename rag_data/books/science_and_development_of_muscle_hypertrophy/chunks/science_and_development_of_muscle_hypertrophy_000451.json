@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000451",
+  "text": "## TAKE-HOME POINTS\n\n- No single measurement tool provides comprehensive insights into muscle hypertrophy and its associated changes over time.\n- All methods of measurement offer advantages and disadvantages.\n- Indirect measures of hypertrophy lack the ability to detect subtle changes in muscle mass over time.\n- Muscle volume provides an estimate of whole-muscle changes but does not account for potential regional hypertrophic differences.\n- Muscle biopsy is the only method capable of providing information about fiber type-specific hypertrophy and differences between protein subfractions (sarcoplasmic versus contractile) within muscle.\n- Combining multiple types of methods is needed to provide a complete picture of muscle development in a given individual or group of individuals.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 106,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

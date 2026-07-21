@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000017",
+  "text": "Another often-proposed assumption is that Type II fibers are primarily responsible for exercise-induced increases in muscle size. This is principally based on studies showing that Type II fibers experience superior growth compared to Type I fibers after regimented resistance training (1, 40, 43, 1 1 1, 201, 217). When considered as a whole, the literature indicates that the growth capacity of Type II fibers is approximately 50% greater than that of Type I fibers (6), although substantial interindividual variability is seen in the extent of fiber type-specific hypertrophic adaptation (111). There also is evidence that the rate of muscle protein synthesis is elevated to a greater extent in the primarily fast-twitch human vastus lateralis muscle (approximately 50% to 60% Type II fibers)",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 17,
+  "metadata": {
+    "muscle": [
+      "quads"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

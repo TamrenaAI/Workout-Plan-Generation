@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000221",
+  "text": "activation of AMPK (54). This indicates that, at the very least, the activation of AMPK is not sufficient to completely blunt growth. Moreover, growth in mice lacking the primary upstream kinase for AMPK was not enhanced following functional overload, casting uncertainty about the importance of AMPK in muscular adaptations to mechanical loading (175).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 50,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

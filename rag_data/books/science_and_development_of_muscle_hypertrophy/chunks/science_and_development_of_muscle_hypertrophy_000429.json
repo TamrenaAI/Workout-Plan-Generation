@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000429",
+  "text": "to be a reasonably good predictor of muscle volume compared to MRI, with coefficients of determination varying from 41.9% for the knee extensors to 70.4% for the elbow flexors (63). However, values were obtained at a single time point, and given regional-specific differences in hypertrophy that occur with regimented exercise (8, 56, 66, 67), the accuracy of the formula for assessing hypertrophic changes in muscle volume over time seems suspect.\n\n## Computerized Tomography\n\nCT uses X-ray-based technology to produce cross-sectional images of a given body area, including muscles (figures 3.9 and 3.10). Along with MRI, it is considered a reference method for evaluating muscle morphometry.\n\nScanning is carried out in a doughnut-shaped device with a table through the middle. The",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 84,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "volume"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

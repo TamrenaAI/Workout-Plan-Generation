@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000502",
+  "text": "Modulating training frequency is an effective way to manipulate training volume. When performing relatively low weekly volumes, frequency of training does not play much if any role in muscle growth, and individuals can choose the frequency that best fits their schedule and goals. Alternatively, when moderate to high volumes are performed (&gt;10 sets per muscle per week), higher training frequencies (at least twice per week) provide better volume management and thus facilitate greater muscular adaptations. If very high volumes are implemented for a given muscle group (~30 sets per muscle per week), spreading training across at least 3 weekly sessions appears to be warranted. Very high training frequencies (6 days per week) do not appear to be more effective than moderately high",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 50,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "volume",
+      "frequency"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000175",
+  "text": "tension development. In a follow-up study by the same lab (168), an in situ evaluation of the rat gastrocnemius muscle showed a linear relationship between time under tension and the signaling of JNK, whereas the rate of change of tension showed no effect. This suggests that time under tension is an important parameter for muscle hypertrophic adaptations. In support of these findings, Nader and Esser (193) reported increased activation of p70 S6K following both high-intensity and low-intensity electrical stimuli of the rat hind limb; however, the response was not as prolonged following the low-intensity protocol. Similarly, in vitro research shows a magnitude-dependent effect on p70 S6K signaling when mouse C2C12 myoblasts are subjected to biaxial strain (74).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 4,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

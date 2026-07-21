@@ -1,0 +1,22 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000655",
+  "text": "The primary rationale for training to failure is to maximize motor unit recruitment (272), which is a requisite for achieving maximal protein accretion across all fiber types. Evidence supporting this position is lacking, however. It has been demonstrated that fatiguing contractions result in a corresponding increase in surface EMG activity, presumably as a result of the increased contribution of high-threshold motor units to maintain force output as lower-threshold motor units fatigue (237). However, as previously mentioned, surface EMG is not specific to recruitment; increases in amplitude can be caused by several other factors as well, including rate coding, synchronization, muscle fiber propagation velocity, and intracellular action potentials (17, 57).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 203,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_activation",
+      "neuromuscular_system",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

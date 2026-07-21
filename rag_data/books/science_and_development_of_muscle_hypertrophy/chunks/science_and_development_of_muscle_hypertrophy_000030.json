@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000030",
+  "text": "For example, a substantial recruitment of the full spectrum of muscle fibers, including those associated with high-threshold motor units, is achieved by cycling to fatigue at 75% of V ˙ O 2 max (195). Although this observation suggests that submaximal cycle exercise would promote substantial size increases across fiber types, research shows that muscle growth associated with aerobic exercise is limited primarily to Type I fibers (87).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 30,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_activation",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

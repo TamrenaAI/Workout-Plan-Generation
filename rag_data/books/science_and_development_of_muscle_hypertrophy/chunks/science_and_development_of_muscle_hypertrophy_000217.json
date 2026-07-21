@@ -1,0 +1,29 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000217",
+  "text": "cell degradation by organelles termed lysosomes) (90), although it remains to be determined whether this mechanism plays a role in skeletal muscle adaptations following mechanical overload. Other research indicates that AMPK reduces cell differentiation of myoblasts and thus negatively affects hypertrophic adaptations without necessarily accelerating protein degradation (286).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 46,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "intensity",
+      "volume",
+      "frequency",
+      "exercise_selection",
+      "periodization",
+      "recovery",
+      "fatigue_management",
+      "muscle_activation",
+      "exercise_order",
+      "recovery"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

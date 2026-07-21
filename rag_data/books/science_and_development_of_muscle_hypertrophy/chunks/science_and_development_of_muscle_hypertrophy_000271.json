@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000271",
+  "text": "Finally and importantly, the mechanisms responsible for anabolic effects of metabolic stress have not been fully elucidated. Although it is conceivable that increased muscle fiber recruitment is the primary mechanism by which metabolite accumulation induces hypertrophic adaptations, it seems unlikely that this phenomenon solely accounts for any or all of the observed effects. Rather, evidence suggests that the combined integration of multiple local and perhaps systemic factors contributes to muscular growth in a direct or permissive manner, or both (302). The fact that human studies to date have been primarily carried out in untrained subjects leaves open the prospect that mechanisms may differ based on training experience.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 2: Mechanisms of Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 100,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "hypertrophy_programming",
+      "advanced_techniques"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

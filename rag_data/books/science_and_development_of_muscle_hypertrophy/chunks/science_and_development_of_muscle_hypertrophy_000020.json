@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000020",
+  "text": "the body is 'getting used to' the movement patterns required for exercise performance. A general motor program must be created and then finetuned to carry out the exercise in a coordinated fashion. Ultimately, this results in a smoother, more efficient motor pattern and thus allows greater force to be exerted during the movement.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 20,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "neuromuscular_system",
+      "neural_adaptation",
+      "force_production"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "strength",
+      "hypertrophy"
+    ]
+  }
+}

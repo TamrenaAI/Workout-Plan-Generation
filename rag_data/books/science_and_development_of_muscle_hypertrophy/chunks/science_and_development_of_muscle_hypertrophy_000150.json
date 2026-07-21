@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000150",
+  "text": "persistent elevations of this myokine suppress muscle protein synthesis (151). Reducing chronically elevated inflammatory levels with nonsteroidal anti-inflammatory drugs has been shown to restore muscle protein anabolism and significantly reduce muscle loss in aging rats (187). Moreover, physical activity displays an inverse correlation with low-grade systemic inflammation (163): The acute elevation of ILs enhances anabolism, whereas the suppression of chronic IL production mitigates catabolic processes.\n\n## Myostatin",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 1: Hypertrophy-Related Responses and Adaptations to Exercise Stress",
+  "collection": "hypertrophy",
+  "chunk_index": 150,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology",
+      "muscle_growth_mechanisms"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

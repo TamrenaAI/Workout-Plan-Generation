@@ -1,0 +1,25 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000741",
+  "text": "Superset training can alter training volume, which in turn can affect hypertrophy outcomes.\n\nResearch indicates that paired-set training of the upper-body musculature (bench press and lat pulldown) produces a greater per-session volume load and a greater level of muscular fatigue than performing the same exercises in a traditional manner (65, 70). This suggests that the use of supersets performed in agonistantagonist fashion may promote an enhanced hypertrophic training stimulus. However, other research shows no differences in volume load using the same upper-body exercises (71). Moreover, upper-body compound supersets employing two multi-joint movements (bench press and incline press) seem to have a detrimental effect on volume load (88).",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 5: Advanced Training Practices",
+  "collection": "hypertrophy",
+  "chunk_index": 57,
+  "metadata": {
+    "muscle": [
+      "chest",
+      "back",
+      "shoulders",
+      "triceps",
+      "biceps"
+    ],
+    "topic": [
+      "hypertrophy_programming",
+      "advanced_techniques"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

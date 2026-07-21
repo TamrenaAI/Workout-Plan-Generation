@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000514",
+  "text": "Research from surface EMG studies consistently show a reduced EMG amplitude in lower-load training than in higher-load training when carried out to failure (1 12, 158, 203, 207), with evidence indicating that a minimum load of approximately 70% of 1RM is required to achieve equated amplitudes (82). However, surface EMG represents the neural drive to a given muscle, which comprises not only motor unit recruitment but other factors such as rate coding, synchronization, muscle fiber propagation velocity, and intracellular action potentials as well (17, 57). In an effort to achieve better clarity on the topic, Muddle and colleagues (159) employed the EMG decomposition technique, which allows the ability to isolate motor unit recruitment during high-load and low-load contractions. Results",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 4: Role of Resistance Training Variables in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 62,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "load"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

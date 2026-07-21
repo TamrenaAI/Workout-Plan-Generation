@@ -1,0 +1,23 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000740",
+  "text": "Several studies have investigated muscle activation during performance of supersets that involve different but related areas of the body (triceps extension and bench press): Some report greater activation of the pectorals compared to a traditional training protocol (37), while others show similar EMG amplitudes between conditions (82, 88). Overall, it is difficult to reconcile the divergent findings between EMG studies on superset training; as such, conclusions about practical implications remain equivocal.\n\nSuperset training can alter training volume, which in turn can affect hypertrophy outcomes.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 5: Advanced Training Practices",
+  "collection": "hypertrophy",
+  "chunk_index": 56,
+  "metadata": {
+    "muscle": [
+      "triceps",
+      "chest"
+    ],
+    "topic": [
+      "muscle_activation",
+      "volume",
+      "hypertrophy_programming"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

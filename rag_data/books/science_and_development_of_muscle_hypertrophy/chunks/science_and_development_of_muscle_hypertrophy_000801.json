@@ -1,0 +1,21 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000801",
+  "text": "condition showed sustained muscle protein synthesis elevations at 24 to 28 hours post-exercise recovery. Based on these acute results, it would seem that sarcoplasmic proteins account for a considerable portion of aerobic-induced hypertrophic adaptations. Given evidence that the growth of a given muscle fiber is achieved at the expense of its aerobic endurance capacity (75), the accretion of mitochondrial proteins seems to have a negative impact on the ability to maximize gains in contractile proteins.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 6: Role of Aerobic Training in Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 24,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_growth_mechanisms",
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}

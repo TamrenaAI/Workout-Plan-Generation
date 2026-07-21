@@ -1,0 +1,20 @@
+{
+  "id": "science_and_development_of_muscle_hypertrophy_000350",
+  "text": "The 3C model uses the 2C approach of partitioning the body into fat mass and fat-free mass, and then it further segments the fat-free mass portion into protein and mineral fractions. Although the 3C model is more sophisticated than the 2C model, it is still limited by an inability to distinguish body water from other fat-free tissue proteins. DXA is an example of a 3C model.",
+  "book": "Science and Development of Muscle Hypertrophy",
+  "chapter": "Chapter 3: The Measurement of Muscle Hypertrophy",
+  "collection": "hypertrophy",
+  "chunk_index": 5,
+  "metadata": {
+    "muscle": [
+      "all"
+    ],
+    "topic": [
+      "muscle_physiology"
+    ],
+    "experience_level": "all",
+    "goals": [
+      "hypertrophy"
+    ]
+  }
+}
