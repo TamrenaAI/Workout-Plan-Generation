@@ -8,3 +8,5 @@ __pycache__/
 .superdesign
 .pytest_cache
 .worktrees/
+.superpowers
+docs/
