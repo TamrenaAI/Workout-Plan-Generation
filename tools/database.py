@@ -19,12 +19,35 @@ SCHEMA_SQL = """
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
         primary_muscle TEXT NOT NULL,
-        movement_type TEXT NOT NULL,
+        movement_type TEXT,
         equipment TEXT,
         difficulty TEXT,
-        contraindications TEXT
+        contraindications TEXT,
+        external_id TEXT,
+        category TEXT,
+        target_muscle TEXT,
+        secondary_muscles TEXT,
+        instructions TEXT,
+        image_path TEXT,
+        gif_path TEXT,
+        attribution TEXT
     )
 """
+
+# Columns added after the original 7-column schema shipped. Listed here so
+# init_db() can ALTER an existing tamreena.db in place instead of requiring
+# everyone to delete their local file — see exercises_dataset/import.py,
+# the first thing to populate these.
+_MIGRATION_COLUMNS = [
+    ("external_id", "TEXT"),
+    ("category", "TEXT"),
+    ("target_muscle", "TEXT"),
+    ("secondary_muscles", "TEXT"),
+    ("instructions", "TEXT"),
+    ("image_path", "TEXT"),
+    ("gif_path", "TEXT"),
+    ("attribution", "TEXT"),
+]
 
 
 def get_db_connection() -> sqlite3.Connection:
@@ -32,10 +55,15 @@ def get_db_connection() -> sqlite3.Connection:
 
 
 def init_db() -> None:
-    """Idempotent — creates the exercises table if it doesn't exist yet.
-    Does NOT seed data; run database/seed.py for that."""
+    """Idempotent — creates the exercises table if it doesn't exist yet,
+    and adds any columns introduced since an existing tamreena.db was
+    created. Does NOT seed data; run database/seed.py for that."""
     conn = get_db_connection()
     conn.execute(SCHEMA_SQL)
+    existing = {row[1] for row in conn.execute("PRAGMA table_info(exercises)")}
+    for column, sql_type in _MIGRATION_COLUMNS:
+        if column not in existing:
+            conn.execute(f"ALTER TABLE exercises ADD COLUMN {column} {sql_type}")
     conn.commit()
     conn.close()
 

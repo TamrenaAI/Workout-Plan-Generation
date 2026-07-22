@@ -25,7 +25,8 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from api.routes import auth, health, plan, progress, workouts
+from api.routes import auth, exercises, health, plan, progress, workouts
+from config import EXERCISE_MEDIA_DIR
 
 app = FastAPI(
     title="Tamreena AI",
@@ -45,6 +46,13 @@ app.include_router(auth.router, tags=["auth"])
 app.include_router(plan.router, tags=["plan"])
 app.include_router(progress.router, tags=["progress"])
 app.include_router(workouts.router, tags=["workouts"])
+app.include_router(exercises.router, tags=["exercises"])
+
+# Serves the exercise GIFs/thumbnails imported by
+# database/exercises_dataset/import.py — gif_url/image_url in
+# GET /exercises/lookup responses are paths under this mount.
+if EXERCISE_MEDIA_DIR.is_dir():
+    app.mount("/media/exercises", StaticFiles(directory=EXERCISE_MEDIA_DIR), name="exercise_media")
 
 FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
 if FRONTEND_DIR.is_dir():

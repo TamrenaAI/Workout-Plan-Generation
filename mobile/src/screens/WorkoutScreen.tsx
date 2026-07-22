@@ -7,6 +7,7 @@ import { fetchSessions, PlanSession } from '../api/sessions';
 import { Badge } from '../components/Badge';
 import { Card } from '../components/Card';
 import { GhostButton, PrimaryButton } from '../components/Buttons';
+import { ExercisePreviewModal } from '../components/ExercisePreviewModal';
 import { useLatestPlan } from '../hooks/useLatestPlan';
 import { findColumn, PlanSection } from '../lib/parsePlan';
 import { colors, spacing } from '../theme';
@@ -46,6 +47,7 @@ export function WorkoutScreen() {
   const [selectedDay, setSelectedDay] = useState<number | null>(null);
   const [view, setView] = useState<'list' | 'feedback'>('list');
   const [confirmation, setConfirmation] = useState<{ summary: string } | null>(null);
+  const [previewExercise, setPreviewExercise] = useState<string | null>(null);
 
   useEffect(() => {
     if (days.length > 0 && selectedDay === null) {
@@ -142,7 +144,11 @@ export function WorkoutScreen() {
                   <Text style={styles.exerciseDetail}>
                     {ex.sets} · Rest {ex.rest} · RPE {ex.rpe}
                   </Text>
-                  <PrimaryButton label="Start Set" style={{ marginTop: spacing.gapInner }} />
+                  <PrimaryButton
+                    label="Start Set"
+                    style={{ marginTop: spacing.gapInner }}
+                    onPress={() => setPreviewExercise(ex.name)}
+                  />
                 </Card>
               ))
             ) : (
@@ -176,6 +182,13 @@ export function WorkoutScreen() {
           </Card>
         ) : null}
       </ScrollView>
+
+      <ExercisePreviewModal
+        visible={previewExercise !== null}
+        exerciseName={previewExercise ?? ''}
+        onClose={() => setPreviewExercise(null)}
+        onStart={() => setPreviewExercise(null)}
+      />
     </SafeAreaView>
   );
 }
