@@ -169,3 +169,126 @@ async function submitFeedbackForDay(sessionId, dayIndex) {
     resultEl.innerHTML = `<p style="color:var(--danger);">${escapeHtml(err.message)}</p>`;
   }
 }
+
+// ── Monthly review form ────────────────────────────────────────────────────────
+
+let _wtSameGoal = true;
+let _wtSampleInbodyFile = null;
+
+function openMonthlyReviewForm(sessionId) {
+  const panel = document.getElementById('wt-panel');
+  _wtSameGoal = true;
+  _wtSampleInbodyFile = null;
+  panel.innerHTML = `
+    <div class="t-card" style="margin-top:24px;">
+      <div class="t-section-title" style="margin-bottom:16px;">Start Monthly Review</div>
+      <div style="margin-bottom:16px;">
+        <span class="t-label">Same goal as before?</span>
+        <div class="pill-group">
+          <button type="button" class="pill active" id="wt-same-goal-yes" onclick="setSameGoal(true)">Same goal</button>
+          <button type="button" class="pill" id="wt-same-goal-no" onclick="setSameGoal(false)">Goal changed</button>
+        </div>
+      </div>
+      <div id="wt-intake-fields" style="display:none;">
+        ${dropdownField('wt-goal', 'Goal', GOAL_OPTIONS, { defaultValue: 'hypertrophy', otherType: 'text' })}
+        ${dropdownField('wt-days', 'Days per week', DAYS_OPTIONS, { defaultValue: '4' })}
+        ${dropdownField('wt-exp', 'Experience', EXPERIENCE_OPTIONS, { defaultValue: 'intermediate' })}
+        ${dropdownField('wt-dur', 'Session duration', DURATION_OPTIONS, { defaultValue: '60min', otherType: 'number' })}
+        ${dropdownField('wt-injuries', 'Injuries', INJURY_OPTIONS, { defaultValue: '', otherType: 'text' })}
+        ${dropdownField('wt-priority', 'Priority', PRIORITY_OPTIONS, { defaultValue: '', otherType: 'text' })}
+        ${dropdownField('wt-sleep', 'Sleep quality', SLEEP_OPTIONS, { defaultValue: '' })}
+        ${dropdownField('wt-job', 'Job type', JOB_OPTIONS, { defaultValue: '' })}
+      </div>
+      <div style="margin-bottom:16px;">
+        <span class="t-label">InBody scan</span>
+        <input type="file" id="wt-inbody-file" accept="image/*,application/pdf" class="t-input" style="padding:8px;height:auto;" onchange="clearSampleInbody()" />
+        <button type="button" class="t-btn-ghost" style="margin-top:8px;" onclick="useSampleInbody()">Use sample image</button>
+        <div id="wt-inbody-status" style="font-size:12px;color:var(--text-muted);margin-top:6px;"></div>
+      </div>
+      <button class="t-btn-primary" id="wt-monthly-review-submit" onclick="submitMonthlyReview('${sessionId}')">Start Review</button>
+      <div id="wt-monthly-review-result" style="margin-top:12px;"></div>
+    </div>
+  `;
+}
+
+function setSameGoal(same) {
+  _wtSameGoal = same;
+  document.getElementById('wt-same-goal-yes').classList.toggle('active', same);
+  document.getElementById('wt-same-goal-no').classList.toggle('active', !same);
+  document.getElementById('wt-intake-fields').style.display = same ? 'none' : 'block';
+}
+
+async function useSampleInbody() {
+  const status = document.getElementById('wt-inbody-status');
+  status.textContent = 'Loading sample image…';
+  try {
+    const res = await fetch('/media/samples/inbody3.jfif');
+    if (!res.ok) throw new Error(`Failed to load sample image (${res.status})`);
+    const blob = await res.blob();
+    _wtSampleInbodyFile = new File([blob], 'inbody3.jfif', { type: blob.type || 'image/jpeg' });
+    document.getElementById('wt-inbody-file').value = '';
+    status.textContent = 'Sample image attached (inbody3.jfif).';
+  } catch (err) {
+    status.textContent = err.message;
+  }
+}
+
+function clearSampleInbody() {
+  _wtSampleInbodyFile = null;
+  document.getElementById('wt-inbody-status').textContent = '';
+}
+
+async function submitMonthlyReview(sessionId) {
+  const fileInput = document.getElementById('wt-inbody-file');
+  const file = fileInput.files[0] || _wtSampleInbodyFile;
+  const resultEl = document.getElementById('wt-monthly-review-result');
+
+  if (!file) {
+    resultEl.innerHTML = `<p style="color:var(--danger);">Attach an InBody file or click "Use sample image" first.</p>`;
+    return;
+  }
+
+  const form = new FormData();
+  form.append('same_goal', String(_wtSameGoal));
+  form.append('inbody_file', file, file.name);
+
+  if (!_wtSameGoal) {
+    form.append('goal', getDropdownValue('wt-goal'));
+    form.append('days_per_week', getDropdownValue('wt-days'));
+    form.append('experience', getDropdownValue('wt-exp'));
+    form.append('session_duration', getDropdownValue('wt-dur', v => `${v}min`));
+    const optional = {
+      injuries: getDropdownValue('wt-injuries'),
+      priority: getDropdownValue('wt-priority'),
+      sleep_quality: getDropdownValue('wt-sleep'),
+      job_type: getDropdownValue('wt-job'),
+    };
+    Object.entries(optional).forEach(([k, v]) => { if (v) form.append(k, v); });
+  }
+
+  resultEl.innerHTML = `<p style="color:var(--text-muted);">Submitting…</p>`;
+  document.getElementById('wt-monthly-review-submit').disabled = true;
+
+  try {
+    const token = await ensureAuthToken();
+    const res = await fetch(`/plan/${sessionId}/monthly-review`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
+      body: form,
+    });
+    const data = await res.json().catch(() => null);
+    if (!res.ok) {
+      let message = `Server returned ${res.status}`;
+      if (typeof data?.detail === 'string') message = data.detail;
+      else if (Array.isArray(data?.detail)) message = data.detail.map(e => `${e.loc?.at(-1)}: ${e.msg}`).join(', ');
+      throw new Error(message);
+    }
+
+    window.tamrena.result = { session_id: data.session_id, inbody: data.inbody };
+    window.tamrena.resumeStreamSessionId = data.session_id;
+    navigate('processing');
+  } catch (err) {
+    resultEl.innerHTML = `<p style="color:var(--danger);">${escapeHtml(err.message)}</p>`;
+    document.getElementById('wt-monthly-review-submit').disabled = false;
+  }
+}

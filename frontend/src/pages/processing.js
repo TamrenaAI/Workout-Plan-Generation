@@ -93,6 +93,18 @@ async function ensureAuthToken() {
 // Kicks off generation, then opens a real-time SSE connection to watch the
 // actual agent pipeline run — no guessing, no fixed timers past this point.
 async function runGeneration() {
+  // Set by workout-test.js after a successful POST /plan/{id}/monthly-review —
+  // that call already triggered generation server-side, so this screen just
+  // needs to watch its SSE stream, not start a second, unrelated /generate-plan
+  // call using the wizard's own (irrelevant) captured InBody blob/intake state.
+  if (window.tamrena.resumeStreamSessionId) {
+    const sessionId = window.tamrena.resumeStreamSessionId;
+    window.tamrena.resumeStreamSessionId = null;
+    const token = await ensureAuthToken();
+    await streamProgress(sessionId, token);
+    return;
+  }
+
   const form = new FormData();
   form.append('inbody_file', window.tamrena.capturedBlob, 'scan.jpg');
   Object.entries(window.tamrena.intake).forEach(([k, v]) => {
