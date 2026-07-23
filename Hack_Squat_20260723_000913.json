@@ -1,0 +1,159 @@
+{
+  "session": {
+    "id": "d0f9a0d67660489f904dd96edc02c7a0",
+    "recorded_at": "2026-07-22T21:09:13.970653+00:00",
+    "fps": 25.0,
+    "scoring": {
+      "base_score": 100.0,
+      "severity_weights": {
+        "error": 50.0,
+        "warning": 20.0,
+        "info": 10.0
+      }
+    }
+  },
+  "exercise": {
+    "name": "Hack Squat",
+    "description": "Machine-guided squat emphasizing the quadriceps through the sled's fixed path.",
+    "muscle_groups": [
+      "quadriceps",
+      "glutes",
+      "hamstrings"
+    ],
+    "camera": "side",
+    "counter_rules": [
+      {
+        "name": "knee",
+        "joints": [
+          23,
+          25,
+          27
+        ],
+        "up_angle": 130,
+        "down_angle": 90,
+        "up_stage": "up",
+        "down_stage": "down",
+        "min_rom_angle": 85,
+        "max_rom_angle": 150,
+        "min_rep_frames": 0,
+        "sync_group": null
+      }
+    ]
+  },
+  "summary": {
+    "total_reps": 4,
+    "good_reps": 2,
+    "bad_reps": 2,
+    "accuracy": 50.0,
+    "average_rep_duration": 3.47,
+    "fastest_rep": 2.68,
+    "slowest_rep": 4.2,
+    "total_workout_duration": 24.72,
+    "common_errors": {
+      "knee_unlocked": 3
+    },
+    "most_common_error": "knee_unlocked",
+    "score": 85.0
+  },
+  "rules": [
+    {
+      "name": "knee_unlocked",
+      "type": "angle",
+      "severity": "warning",
+      "message": "Don't lock your knee — stay between 60° and 170°",
+      "expected_min": 60,
+      "expected_max": 170,
+      "value_unit": "degrees",
+      "joints": [
+        23,
+        25,
+        27
+      ]
+    }
+  ],
+  "history": [
+    {
+      "number": 1,
+      "good": false,
+      "judged_by": "counter",
+      "score": 80.0,
+      "start_frame": 33,
+      "end_frame": 119,
+      "duration_seconds": 3.48,
+      "evaluations": [
+        {
+          "rule": "knee_unlocked",
+          "passed": false,
+          "measured_value": 178.0144584627707
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "good": false,
+      "judged_by": "counter",
+      "score": 80.0,
+      "start_frame": 120,
+      "end_frame": 207,
+      "duration_seconds": 3.52,
+      "evaluations": [
+        {
+          "rule": "knee_unlocked",
+          "passed": false,
+          "measured_value": 173.6253949532166
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "good": true,
+      "judged_by": "counter",
+      "score": 80.0,
+      "start_frame": 208,
+      "end_frame": 312,
+      "duration_seconds": 4.2,
+      "evaluations": [
+        {
+          "rule": "knee_unlocked",
+          "passed": false,
+          "measured_value": 176.7372298836279
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "good": true,
+      "judged_by": "counter",
+      "score": 100.0,
+      "start_frame": 313,
+      "end_frame": 379,
+      "duration_seconds": 2.68,
+      "evaluations": [
+        {
+          "rule": "knee_unlocked",
+          "passed": true,
+          "measured_value": 161.33514921873197
+        }
+      ]
+    }
+  ],
+  "stats": {
+    "rules": [
+      {
+        "rule": "knee_unlocked",
+        "evaluations": 4,
+        "passed": 1,
+        "failed": 3,
+        "success_rate": 25.0,
+        "avg_measured_value": 172.43,
+        "min_measured_value": 161.34,
+        "max_measured_value": 178.01
+      }
+    ],
+    "scores": {
+      "best": 100.0,
+      "worst": 80.0,
+      "std_dev": 8.66
+    }
+  }
+}
