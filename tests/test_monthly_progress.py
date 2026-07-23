@@ -17,6 +17,7 @@ from bson import ObjectId
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
+from auth import ownership
 from pipeline import monthly_progress, workout_feedback
 from pipeline.inbody_history import record_scan
 from tools.inbody import InBodyFlags, InBodyRawExtraction, InBodyResult, SegmentalReading
@@ -173,3 +174,31 @@ def test_record_and_get_progress_report_roundtrip():
 
 def test_get_progress_report_none_when_not_found():
     assert monthly_progress.get_progress_report("never-reviewed") is None
+
+
+# --- end-to-end regression: get_session's created_at flowing into build_monthly_summary ---
+
+def test_build_monthly_summary_accepts_get_session_created_at():
+    # Regression test for the naive/aware datetime bug: api/routes/plan.py's
+    # monthly_review handler passes ownership.get_session(...)["created_at"]
+    # straight into build_monthly_summary's old_created_at, which subtracts
+    # it from an aware datetime.now(timezone.utc) inside _adherence. This
+    # exercises that real path (not a pre-built aware datetime) end to end.
+    owner_id = _uid()
+    old_session_id = "old-real-flow"
+    ownership.create_session(old_session_id, owner_id, "hypertrophy")
+    get_db().plan_sessions.update_one(
+        {"_id": old_session_id},
+        {"$set": {"created_at": datetime.now(timezone.utc) - timedelta(days=28)}},
+    )
+
+    old_session = ownership.get_session(old_session_id)
+
+    summary = monthly_progress.build_monthly_summary(
+        old_session_id=old_session_id,
+        new_session_id="new-real-flow",
+        days_per_week=3,
+        old_created_at=old_session["created_at"],
+    )
+    rate = summary["adherence"]["adherence_rate"]
+    assert isinstance(rate, (int, float))

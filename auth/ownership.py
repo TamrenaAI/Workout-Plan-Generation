@@ -83,7 +83,7 @@ def _serialize(doc: dict, already_reviewed: bool) -> dict:
         "goal": doc.get("goal"),
         "status": doc.get("status"),
         "error": doc.get("error"),
-        "created_at": doc["created_at"],
+        "created_at": created_at,
         "intake": doc.get("intake"),
         "previous_session_id": doc.get("previous_session_id"),
         "eligible_for_review": eligible,
