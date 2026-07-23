@@ -6,19 +6,32 @@
 // including ones backdated directly in MongoDB to test review eligibility.
 
 let _wtSessions = [];
+let _wtContainer = null;
 
 function renderWorkoutTest(container) {
-  container.innerHTML = `
+  _wtContainer = container;
+  renderSessionListScreen();
+}
+
+// The session list can be long (every session for this user) — each action below
+// used to render its result into a panel appended AFTER that whole list, which put
+// the result far below the fold with no visual sign anything happened. Each open*
+// function below now replaces the ENTIRE screen instead, with a way back to this list.
+function renderSessionListScreen() {
+  _wtContainer.innerHTML = `
     <div class="t-screen">
       <h1 style="font-size:28px;font-weight:700;margin-bottom:4px;">Workout Feature Test</h1>
       <p style="color:var(--text-muted);font-size:13px;margin-bottom:24px;">
         Manual test harness for feedback, monthly review, and progress reports.
       </p>
       <div id="wt-sessions"><p style="color:var(--text-muted);">Loading sessions…</p></div>
-      <div id="wt-panel"></div>
     </div>
   `;
   loadSessions();
+}
+
+function wtBackButton() {
+  return `<button class="t-btn-ghost" style="width:auto;padding:0 12px;margin-bottom:20px;" onclick="renderSessionListScreen()">← Back to sessions</button>`;
 }
 
 async function loadSessions() {
@@ -64,20 +77,20 @@ function renderSessionList(el) {
 let _wtParsedDays = [];
 
 async function openFeedbackForm(sessionId) {
+  _wtContainer.innerHTML = `<div class="t-screen">${wtBackButton()}<div id="wt-panel"><div class="t-card"><p style="color:var(--text-muted);">Loading plan…</p></div></div></div>`;
   const panel = document.getElementById('wt-panel');
-  panel.innerHTML = `<div class="t-card" style="margin-top:24px;"><p style="color:var(--text-muted);">Loading plan…</p></div>`;
   try {
     const token = await ensureAuthToken();
     const res = await fetch(`/sessions/${sessionId}/plan`, { headers: { Authorization: `Bearer ${token}` } });
     if (!res.ok) throw new Error(`Failed to load plan (${res.status})`);
     const data = await res.json();
     if (data.status !== 'ready' || !data.plan) {
-      panel.innerHTML = `<div class="t-card" style="margin-top:24px;"><p style="color:var(--text-muted);">Plan not ready yet for this session (status: ${escapeHtml(data.status)}).</p></div>`;
+      panel.innerHTML = `<div class="t-card"><p style="color:var(--text-muted);">Plan not ready yet for this session (status: ${escapeHtml(data.status)}).</p></div>`;
       return;
     }
-    panel.innerHTML = `<div class="t-section-title" style="margin-top:24px;margin-bottom:12px;">Submit Feedback</div>` + renderFeedbackDays(sessionId, data.plan);
+    panel.innerHTML = `<div class="t-section-title" style="margin-bottom:12px;">Submit Feedback</div>` + renderFeedbackDays(sessionId, data.plan);
   } catch (err) {
-    panel.innerHTML = `<div class="t-card" style="border-color:var(--danger);margin-top:24px;"><p style="color:var(--danger);">${escapeHtml(err.message)}</p></div>`;
+    panel.innerHTML = `<div class="t-card" style="border-color:var(--danger);"><p style="color:var(--danger);">${escapeHtml(err.message)}</p></div>`;
   }
 }
 
@@ -176,11 +189,12 @@ let _wtSameGoal = true;
 let _wtSampleInbodyFile = null;
 
 function openMonthlyReviewForm(sessionId) {
-  const panel = document.getElementById('wt-panel');
   _wtSameGoal = true;
   _wtSampleInbodyFile = null;
-  panel.innerHTML = `
-    <div class="t-card" style="margin-top:24px;">
+  _wtContainer.innerHTML = `
+    <div class="t-screen">
+      ${wtBackButton()}
+    <div class="t-card">
       <div class="t-section-title" style="margin-bottom:16px;">Start Monthly Review</div>
       <div style="margin-bottom:16px;">
         <span class="t-label">Same goal as before?</span>
@@ -207,6 +221,7 @@ function openMonthlyReviewForm(sessionId) {
       </div>
       <button class="t-btn-primary" id="wt-monthly-review-submit" onclick="submitMonthlyReview('${sessionId}')">Start Review</button>
       <div id="wt-monthly-review-result" style="margin-top:12px;"></div>
+    </div>
     </div>
   `;
 }
@@ -296,20 +311,20 @@ async function submitMonthlyReview(sessionId) {
 // ── Progress report viewer ───────────────────────────────────────────────────
 
 async function openProgressReport(sessionId) {
+  _wtContainer.innerHTML = `<div class="t-screen">${wtBackButton()}<div id="wt-panel"><div class="t-card"><p style="color:var(--text-muted);">Loading report…</p></div></div></div>`;
   const panel = document.getElementById('wt-panel');
-  panel.innerHTML = `<div class="t-card" style="margin-top:24px;"><p style="color:var(--text-muted);">Loading report…</p></div>`;
   try {
     const token = await ensureAuthToken();
     const res = await fetch(`/progress/${sessionId}/report`, { headers: { Authorization: `Bearer ${token}` } });
     if (res.status === 404) {
-      panel.innerHTML = `<div class="t-card" style="margin-top:24px;"><p style="color:var(--text-muted);">No progress report for this session.</p></div>`;
+      panel.innerHTML = `<div class="t-card"><p style="color:var(--text-muted);">No progress report for this session.</p></div>`;
       return;
     }
     if (!res.ok) throw new Error(`Failed to load report (${res.status})`);
     const data = await res.json();
     panel.innerHTML = renderProgressReport(data);
   } catch (err) {
-    panel.innerHTML = `<div class="t-card" style="border-color:var(--danger);margin-top:24px;"><p style="color:var(--danger);">${escapeHtml(err.message)}</p></div>`;
+    panel.innerHTML = `<div class="t-card" style="border-color:var(--danger);"><p style="color:var(--danger);">${escapeHtml(err.message)}</p></div>`;
   }
 }
 
@@ -321,7 +336,7 @@ function renderProgressReport(report) {
   const topErrors = repQuality.top_form_errors || [];
 
   return `
-    <div class="t-card" style="margin-top:24px;margin-bottom:16px;">
+    <div class="t-card" style="margin-bottom:16px;">
       <div class="t-section-title">Progress Report</div>
       <p style="color:var(--text-secondary);font-size:14px;line-height:1.7;white-space:pre-wrap;">${escapeHtml(report.narrative || '')}</p>
     </div>
