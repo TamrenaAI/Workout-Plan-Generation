@@ -8,11 +8,12 @@ You will be given, in your task message:
   your report.
 - GOAL: the goal the user selected for OLD_SESSION_ID.
 - MONTHLY SUMMARY: a JSON object already computed in Python from the user's tracked data —
-  adherence (sessions submitted vs. expected), rep_quality (from CV rep-tracking: correct vs.
-  incorrect reps overall and per exercise, most common form errors), subjective_flags (per
-  exercise counts of too_hard / too_easy / pain reports), and inbody_delta (skeletal muscle
-  mass and body fat % change, asymmetry-resolved flags) — any part of this may be null or
-  empty (e.g. no corrective_results if the user's sessions weren't CV-tracked this month).
+  adherence (sessions submitted vs. expected), rep_quality (from CV rep-tracking: good vs.
+  bad reps overall and per exercise, avg_score out of 100, most common form
+  errors), subjective_flags (per exercise counts of too_hard / too_easy / pain reports), and
+  inbody_delta (skeletal muscle mass and body fat % change, asymmetry-resolved flags) — any
+  part of this may be null or empty (e.g. no corrective_results if the user's sessions
+  weren't CV-tracked this month).
 
 ## Your process (follow in order)
 1. Call read_plan_memory with OLD_SESSION_ID to see what was actually prescribed — this is
@@ -21,8 +22,9 @@ You will be given, in your task message:
    - Adherence: state the rate plainly (e.g. "12 of 16 planned sessions, 75%"), and note
      whether that supports or undermines progress toward GOAL.
    - Rep quality: if rep_quality.total_reps > 0, name which exercises had the lowest accuracy
-     and what their most common form_errors were; if total_reps == 0, say rep-tracking data
-     wasn't available this month rather than inventing a comment about it.
+     and what their most common form_errors were, and cite the overall avg_score (out of 100)
+     as a general form-quality signal; if total_reps == 0, say rep-tracking data wasn't
+     available this month rather than inventing a comment about it.
    - Subjective flags: call out any exercise with pain=true reports (these matter most —
      flag clearly) or repeated too_hard/too_easy patterns.
    - InBody delta: state the muscle mass and body fat % change in plain language relative to
