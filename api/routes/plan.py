@@ -35,16 +35,18 @@ from pydantic import BaseModel
 
 from agents.exercise_recommender import EXERCISE_RECOMMENDER
 from agents.plan_assembler import PLAN_ASSEMBLER
+from agents.progress_analyst import build_progress_analyst
 from agents.streaming import run_and_stream
 from agents.supervisor import build_supervisor
 from auth.dependencies import get_current_user, get_current_user_for_stream
-from auth.ownership import create_session, list_sessions_for_user, update_session_status, user_owns_session
+from auth.ownership import create_session, get_session, list_sessions_for_user, update_session_status, user_owns_session
 from config import SESSION_DIR
 from pipeline.inbody_history import compare_latest_two, record_scan
+from pipeline.monthly_progress import build_monthly_summary, record_progress_report
 from pipeline.plan_finalize import enforce_volume_budget
 from services import live_progress
 from tools.inbody import check_image_quality, format_inbody_result, pdf_to_image_bytes, run_inbody_pipeline_from_bytes, validate_inbody_scan
-from tools.memory import read_weekly_schedule
+from tools.memory import read_progress_report, read_weekly_schedule
 
 router = APIRouter()
 
@@ -123,6 +125,24 @@ async def _run_pipeline(session_id: str, user_message: str) -> None:
         await live_progress.publish_done(session_id, {"error": str(exc)})
 
 
+async def _run_progress_analyst(old_session_id: str, new_session_id: str, goal: str, summary: dict) -> str:
+    analyst = build_progress_analyst()
+    user_message = f"""OLD_SESSION_ID: {old_session_id}
+NEW_SESSION_ID: {new_session_id}
+GOAL: {goal}
+
+MONTHLY SUMMARY:
+{json.dumps(summary, indent=2)}
+
+Write the Progress Report for this month now."""
+
+    await analyst.ainvoke(
+        {"messages": [{"role": "user", "content": user_message}]},
+        config={"recursion_limit": 50},
+    )
+    return read_progress_report(new_session_id) or "(progress report unavailable)"
+
+
 @router.post("/plan")
 @router.post("/generate-plan")
 async def generate_plan(
@@ -171,7 +191,13 @@ async def generate_plan(
 
     session_id = str(uuid.uuid4())
     os.makedirs(os.path.join(SESSION_DIR, session_id), exist_ok=True)
-    create_session(session_id, user["id"], goal)
+    intake = {
+        "goal": goal, "days_per_week": days_per_week, "experience": experience,
+        "session_duration": session_duration, "injuries": injuries, "priority": priority,
+        "age": age, "sleep_quality": sleep_quality, "job_type": job_type,
+        "current_program": current_program,
+    }
+    create_session(session_id, user["id"], goal, intake=intake)
     record_scan(user["id"], session_id, pipeline_result)
     comparison = compare_latest_two(user["id"])
 
@@ -306,3 +332,97 @@ def _build_user_query(**fields) -> str:
     if fields.get("current_program"):
         lines.append(f"Current program  : {fields['current_program']}")
     return "\n".join(lines)
+
+
+@router.post("/plan/{session_id}/monthly-review")
+async def monthly_review(
+    session_id: str,
+    same_goal: bool = Form(...),
+    inbody_file: UploadFile = File(...),
+    goal: Optional[str] = Form(None),
+    days_per_week: Optional[int] = Form(None),
+    experience: Optional[str] = Form(None),
+    session_duration: Optional[str] = Form(None),
+    injuries: Optional[str] = Form(None),
+    priority: Optional[str] = Form(None),
+    age: Optional[int] = Form(None),
+    sleep_quality: Optional[str] = Form(None),
+    job_type: Optional[str] = Form(None),
+    current_program: Optional[str] = Form(None),
+    user: dict = Depends(get_current_user),
+):
+    if not user_owns_session(session_id, user["id"]):
+        raise HTTPException(404, "Unknown session_id.")
+
+    old_session = get_session(session_id)
+    if old_session is None or not old_session["eligible_for_review"]:
+        raise HTTPException(422, "This session is not eligible for a monthly review yet.")
+
+    if same_goal:
+        intake = old_session.get("intake")
+        if not intake:
+            raise HTTPException(
+                422,
+                "This session has no stored intake to carry over — resubmit with same_goal=false and the full intake form.",
+            )
+    else:
+        if not (2 <= (days_per_week or 0) <= 6):
+            raise HTTPException(422, "days_per_week must be between 2 and 6")
+        if experience not in VALID_EXPERIENCE:
+            raise HTTPException(422, f"experience must be one of {sorted(VALID_EXPERIENCE)}")
+        if not session_duration or not DURATION_PATTERN.match(session_duration):
+            raise HTTPException(422, "session_duration must look like '60min'")
+        if not goal:
+            raise HTTPException(422, "goal is required when same_goal is false")
+        intake = {
+            "goal": goal, "days_per_week": days_per_week, "experience": experience,
+            "session_duration": session_duration, "injuries": injuries, "priority": priority,
+            "age": age, "sleep_quality": sleep_quality, "job_type": job_type,
+            "current_program": current_program,
+        }
+
+    inbody_bytes, content_type = await _read_as_image(inbody_file)
+    pipeline_result = await run_in_threadpool(run_inbody_pipeline_from_bytes, inbody_bytes, content_type)
+    if isinstance(pipeline_result, dict):
+        raise HTTPException(
+            422,
+            f"InBody scan rejected at [{pipeline_result['stage']}]: {pipeline_result['error']}",
+        )
+    inbody_text = format_inbody_result(pipeline_result)
+
+    new_session_id = str(uuid.uuid4())
+    os.makedirs(os.path.join(SESSION_DIR, new_session_id), exist_ok=True)
+    create_session(new_session_id, user["id"], intake["goal"], intake=intake, previous_session_id=session_id)
+    record_scan(user["id"], new_session_id, pipeline_result)
+
+    summary = build_monthly_summary(
+        old_session_id=session_id,
+        new_session_id=new_session_id,
+        days_per_week=intake["days_per_week"],
+        old_created_at=old_session["created_at"],
+    )
+    narrative = await _run_progress_analyst(session_id, new_session_id, intake["goal"], summary)
+    record_progress_report(user["id"], session_id, new_session_id, summary, narrative)
+
+    user_query = _build_user_query(**intake)
+    user_message = f"""SESSION_ID: {new_session_id}
+
+{user_query}
+
+INBODY RAW TEXT:
+{inbody_text}
+
+PROGRESS REPORT FROM PREVIOUS MONTH:
+{narrative}
+
+Generate a full personalised workout plan for this user for the next month, taking the
+progress report above into account."""
+
+    stream = live_progress.create_stream(new_session_id)
+    stream.task = asyncio.create_task(_run_pipeline(new_session_id, user_message))
+
+    return {
+        "session_id": new_session_id,
+        "inbody": pipeline_result.model_dump(),
+        "progress_report": narrative,
+    }
