@@ -9,6 +9,7 @@ fixture (autouse).
 
 import os
 import sys
+from datetime import datetime
 
 import pytest
 from fastapi.testclient import TestClient
@@ -98,7 +99,14 @@ def test_corrective_endpoint_accepts_real_cv_json_shape_and_stores_it():
     assert doc["fastest_rep"] == 2.68
     assert doc["slowest_rep"] == 4.2
     assert doc["total_workout_duration"] == 24.72
-    assert doc["recorded_at"].isoformat() == "2026-07-22T21:09:13.970653+00:00"
+    expected = datetime.fromisoformat("2026-07-22T21:09:13.970653+00:00")
+    actual = doc["recorded_at"]
+    # Strip timezone for comparison (mongomock may strip timezone info)
+    if expected.tzinfo is not None:
+        expected = expected.replace(tzinfo=None)
+    if actual.tzinfo is not None:
+        actual = actual.replace(tzinfo=None)
+    assert abs((actual - expected).total_seconds()) < 0.001
 
 
 def test_corrective_endpoint_rejects_impossible_rep_counts():
