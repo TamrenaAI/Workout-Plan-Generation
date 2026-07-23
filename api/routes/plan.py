@@ -395,14 +395,18 @@ async def monthly_review(
     create_session(new_session_id, user["id"], intake["goal"], intake=intake, previous_session_id=session_id)
     record_scan(user["id"], new_session_id, pipeline_result)
 
-    summary = build_monthly_summary(
-        old_session_id=session_id,
-        new_session_id=new_session_id,
-        days_per_week=intake["days_per_week"],
-        old_created_at=old_session["created_at"],
-    )
-    narrative = await _run_progress_analyst(session_id, new_session_id, intake["goal"], summary)
-    record_progress_report(user["id"], session_id, new_session_id, summary, narrative)
+    try:
+        summary = build_monthly_summary(
+            old_session_id=session_id,
+            new_session_id=new_session_id,
+            days_per_week=intake["days_per_week"],
+            old_created_at=old_session["created_at"],
+        )
+        narrative = await _run_progress_analyst(session_id, new_session_id, intake["goal"], summary)
+        record_progress_report(user["id"], session_id, new_session_id, summary, narrative)
+    except Exception as exc:
+        update_session_status(new_session_id, "failed", error=str(exc))
+        raise HTTPException(500, f"Failed to generate the monthly progress report: {exc}")
 
     user_query = _build_user_query(**intake)
     user_message = f"""SESSION_ID: {new_session_id}

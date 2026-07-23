@@ -22,6 +22,7 @@ from auth import models as auth_models
 from auth import ownership
 from auth import tokens
 from pipeline import monthly_progress
+from tools.inbody import InBodyFlags, InBodyRawExtraction, InBodyResult, SegmentalReading
 from tools.mongo import get_db
 
 _SAMPLE_INTAKE = {
@@ -133,6 +134,57 @@ def test_monthly_review_changed_goal_requires_goal_field():
         same_goal="false", days_per_week="4", experience="beginner", session_duration="60min",
     )
     assert r.status_code == 422
+
+
+def _make_inbody_result() -> InBodyResult:
+    seg = SegmentalReading(value=3.0, unit="kg", percent_of_ideal=100.0)
+    raw = InBodyRawExtraction(
+        gender="male",
+        weight=80.0,
+        weight_unit="kg",
+        skeletal_muscle_mass=30.0,
+        smm_unit="kg",
+        body_fat_percent=20.0,
+        right_arm=seg,
+        left_arm=seg,
+        trunk=seg,
+        right_leg=seg,
+        left_leg=seg,
+    )
+    flags = InBodyFlags(
+        arm_asymmetry=False, arm_diff_grams=50.0,
+        leg_asymmetry=False, leg_diff_grams=50.0,
+        elevated_bf=False, trunk_underdeveloped=False,
+    )
+    return InBodyResult(raw=raw, flags=flags)
+
+
+def test_monthly_review_marks_session_failed_on_summary_error(monkeypatch):
+    import api.routes.plan as plan_route
+
+    owner = _make_user("mr-owner6")
+    ownership.create_session("mr-s6", owner["id"], "hypertrophy", intake=_SAMPLE_INTAKE)
+    _backdate_and_ready("mr-s6", days=31)
+
+    monkeypatch.setattr(plan_route, "run_inbody_pipeline_from_bytes", lambda *a, **kw: _make_inbody_result())
+
+    def _boom(*args, **kwargs):
+        raise RuntimeError("agent blew up")
+
+    monkeypatch.setattr(plan_route, "build_monthly_summary", _boom)
+
+    import api.main as m
+
+    client = TestClient(m.app)
+    token = tokens.create_access_token(user_id=owner["id"])
+    r = _post_review(client, "mr-s6", token)
+    assert r.status_code == 500
+
+    new_sessions = list(get_db().plan_sessions.find({"previous_session_id": "mr-s6"}))
+    assert len(new_sessions) == 1
+    doc = new_sessions[0]
+    assert doc["status"] == "failed"
+    assert doc.get("error")
 
 
 # --- GET /progress/{session_id}/report ----------------------------------------
