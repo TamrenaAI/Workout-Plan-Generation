@@ -95,8 +95,8 @@ api/
   main.py                    ← FastAPI app
   routes/health.py            ← GET /health
   routes/auth.py               ← POST /auth/google, GET /auth/me, POST /auth/dev-login (see below)
-  routes/plan.py               ← POST /validate-image, POST /plan (aliased as /generate-plan, requires
-                                  login), GET /generate-plan/stream/{id} (ownership-checked),
+  routes/plan.py               ← POST /validate-image, POST /generate-plan (requires login),
+                                  GET /generate-plan/stream/{id} (ownership-checked),
                                   GET /sessions (current user's past sessions),
                                   GET /sessions/{id}/plan (persisted weekly schedule, fetchable any
                                   time after generation — not just live via the SSE stream)
