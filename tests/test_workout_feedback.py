@@ -3,6 +3,11 @@ Tests for pipeline/workout_feedback.py (recording feedback + deciding
 whether an adjustment is needed) and the read side in tools/memory.py.
 Does not exercise agents/plan_adjuster.py itself — that requires a live
 LLM call, same scoping as the rest of this test suite.
+
+Mongo access is mongomock'd per-test — see tests/conftest.py's mongo_db
+fixture (autouse). plan.md/feedback.json-style session files still live
+under SESSION_DIR (unaffected by this migration — only feedback storage
+moved to Mongo), hence the SESSION_DIR monkeypatch below.
 """
 
 import json
@@ -24,12 +29,7 @@ from tools import memory as tools_memory
 
 @pytest.fixture(autouse=True)
 def _isolated_state(tmp_path, monkeypatch):
-    monkeypatch.setattr(workout_feedback, "SESSION_DIR", str(tmp_path))
     monkeypatch.setattr(tools_memory, "SESSION_DIR", str(tmp_path))
-    monkeypatch.setattr(ownership, "DB_PATH", tmp_path / "test_ownership.db")
-    ownership.init_db()
-    monkeypatch.setattr(auth_models, "DB_PATH", tmp_path / "test_users.db")
-    auth_models.init_db()
     monkeypatch.setattr(tokens, "JWT_SECRET", "test-secret-do-not-use-in-real-envs")
 
 
@@ -55,9 +55,14 @@ def test_needs_adjustment_true_when_flagged(exercises):
 
 
 def test_record_feedback_accumulates_submissions_and_is_readable_via_memory_tool():
+    user = _make_user("feedback-user")
     session_id = "session-1"
-    workout_feedback.record_feedback(session_id, "Day 1", [{"name": "Bench Press", "difficulty": "too_hard", "pain": False}])
-    workout_feedback.record_feedback(session_id, "Day 2", [{"name": "Squat", "difficulty": "just_right", "pain": False}])
+    workout_feedback.record_feedback(
+        user["id"], session_id, "Day 1", [{"name": "Bench Press", "difficulty": "too_hard", "pain": False}], True,
+    )
+    workout_feedback.record_feedback(
+        user["id"], session_id, "Day 2", [{"name": "Squat", "difficulty": "just_right", "pain": False}], False,
+    )
 
     raw = tools_memory.read_workout_feedback.invoke({"session_id": session_id})
     submissions = json.loads(raw)

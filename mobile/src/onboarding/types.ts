@@ -10,7 +10,6 @@ export interface IntakeData {
   session_duration: string;
   injuries?: string;
   priority?: string;
-  age?: number;
   sleep_quality?: 'good' | 'average' | 'poor';
   job_type?: 'desk' | 'light_physical' | 'heavy_physical';
   current_program?: string;

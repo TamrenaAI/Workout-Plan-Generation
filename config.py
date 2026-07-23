@@ -26,6 +26,10 @@ EXERCISE_MEDIA_DIR = BASE_DIR / "database" / "exercises_dataset" / "media"
 SESSION_DIR.mkdir(parents=True, exist_ok=True)
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
+# ── MongoDB ───────────────────────────────────────────────────────────
+MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
+MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "tamreena")
+
 # ── Azure OpenAI (only external LLM API) ─────────────────────────────
 AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
 AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")

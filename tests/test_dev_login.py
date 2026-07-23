@@ -15,14 +15,11 @@ from fastapi.testclient import TestClient
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from api.routes import auth as auth_routes
-from auth import models as auth_models
 from auth import tokens
 
 
 @pytest.fixture(autouse=True)
-def _isolated_state(tmp_path, monkeypatch):
-    monkeypatch.setattr(auth_models, "DB_PATH", tmp_path / "test_users.db")
-    auth_models.init_db()
+def _isolated_state(monkeypatch):
     monkeypatch.setattr(tokens, "JWT_SECRET", "test-secret-do-not-use-in-real-envs")
 
 

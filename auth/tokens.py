@@ -20,19 +20,20 @@ class InvalidSessionToken(Exception):
     pass
 
 
-def create_access_token(user_id: int) -> str:
+def create_access_token(user_id: str) -> str:
     now = datetime.now(timezone.utc)
     payload = {
-        "sub": str(user_id),
+        "sub": user_id,
         "iat": now,
         "exp": now + timedelta(minutes=JWT_EXPIRE_MINUTES),
     }
     return jwt.encode(payload, JWT_SECRET, algorithm=JWT_ALGORITHM)
 
 
-def decode_access_token(token: str) -> int:
-    """Returns the user_id encoded in the token. Raises InvalidSessionToken
-    on expiry, tampering, or malformed input."""
+def decode_access_token(token: str) -> str:
+    """Returns the user_id (a Mongo ObjectId's string form) encoded in the
+    token. Raises InvalidSessionToken on expiry, tampering, or malformed
+    input."""
     try:
         payload = jwt.decode(token, JWT_SECRET, algorithms=[JWT_ALGORITHM])
     except jwt.PyJWTError as exc:
@@ -41,4 +42,4 @@ def decode_access_token(token: str) -> int:
     user_id: Optional[str] = payload.get("sub")
     if user_id is None:
         raise InvalidSessionToken("Token has no subject.")
-    return int(user_id)
+    return user_id

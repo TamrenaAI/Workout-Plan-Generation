@@ -1,74 +1,29 @@
 """
-Exercise database — SQLite.
-
-MongoDB is the target per tamrena_architecture_2.md Section 8, but this stage
-of the project keeps everything on SQLite (data/tamreena.db). Swapping the
-backing store later only touches this file — `search_exercise_db` is the
-only contract the agents depend on.
+Exercise database — MongoDB `exercises` collection (per
+tamrena_architecture_2.md Section 8). `search_exercise_db` is the only
+contract the agents depend on — its filter shape and return format are
+unchanged from the SQLite version, only the backing store moved.
 """
 
-import sqlite3
 from typing import Optional
 
+from bson import ObjectId
+from bson.errors import InvalidId
 from langchain_core.tools import tool
 
-from config import DB_PATH
-
-SCHEMA_SQL = """
-    CREATE TABLE IF NOT EXISTS exercises (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        name TEXT NOT NULL,
-        primary_muscle TEXT NOT NULL,
-        movement_type TEXT,
-        equipment TEXT,
-        difficulty TEXT,
-        contraindications TEXT,
-        external_id TEXT,
-        category TEXT,
-        target_muscle TEXT,
-        secondary_muscles TEXT,
-        instructions TEXT,
-        image_path TEXT,
-        gif_path TEXT,
-        attribution TEXT
-    )
-"""
-
-# Columns added after the original 7-column schema shipped. Listed here so
-# init_db() can ALTER an existing tamreena.db in place instead of requiring
-# everyone to delete their local file — see exercises_dataset/import.py,
-# the first thing to populate these.
-_MIGRATION_COLUMNS = [
-    ("external_id", "TEXT"),
-    ("category", "TEXT"),
-    ("target_muscle", "TEXT"),
-    ("secondary_muscles", "TEXT"),
-    ("instructions", "TEXT"),
-    ("image_path", "TEXT"),
-    ("gif_path", "TEXT"),
-    ("attribution", "TEXT"),
-]
+from tools.mongo import get_db
 
 
-def get_db_connection() -> sqlite3.Connection:
-    return sqlite3.connect(DB_PATH)
-
-
-def init_db() -> None:
-    """Idempotent — creates the exercises table if it doesn't exist yet,
-    and adds any columns introduced since an existing tamreena.db was
-    created. Does NOT seed data; run database/seed.py for that."""
-    conn = get_db_connection()
-    conn.execute(SCHEMA_SQL)
-    existing = {row[1] for row in conn.execute("PRAGMA table_info(exercises)")}
-    for column, sql_type in _MIGRATION_COLUMNS:
-        if column not in existing:
-            conn.execute(f"ALTER TABLE exercises ADD COLUMN {column} {sql_type}")
-    conn.commit()
-    conn.close()
-
-
-init_db()
+def get_exercise_by_id(exercise_id: str) -> Optional[dict]:
+    try:
+        oid = ObjectId(exercise_id)
+    except InvalidId:
+        return None
+    doc = get_db().exercises.find_one({"_id": oid})
+    if not doc:
+        return None
+    doc["id"] = str(doc.pop("_id"))
+    return doc
 
 
 @tool
@@ -82,20 +37,22 @@ def search_exercise_db(
     movement_type: compound | isolation | unilateral | all
     exclude_contraindication: body part to avoid (e.g. 'knee_pain')
     """
-    conn = get_db_connection()
-    query = "SELECT name, equipment, difficulty, movement_type, contraindications FROM exercises WHERE primary_muscle = ?"
-    params = [muscle_group]
+    query = {"primary_muscle": muscle_group}
     if movement_type != "all":
-        query += " AND movement_type = ?"
-        params.append(movement_type)
-    rows = conn.execute(query, params).fetchall()
-    conn.close()
+        query["movement_type"] = movement_type
+
+    docs = list(get_db().exercises.find(
+        query, {"name": 1, "equipment": 1, "difficulty": 1, "movement_type": 1, "contraindications": 1},
+    ))
 
     if exclude_contraindication:
-        rows = [r for r in rows if not (r[4] and exclude_contraindication in r[4])]
+        docs = [d for d in docs if not (d.get("contraindications") and exclude_contraindication in d["contraindications"])]
 
-    if not rows:
+    if not docs:
         return f"No exercises found for [{muscle_group}] [{movement_type}]"
 
-    lines = [f"  • {r[0]} ({r[1] or '?'}, {r[2] or '?'}, {r[3] or '?'})" for r in rows]
+    lines = [
+        f"  • {d['name']} ({d.get('equipment') or '?'}, {d.get('difficulty') or '?'}, {d.get('movement_type') or '?'})"
+        for d in docs
+    ]
     return f"DB results — muscle: [{muscle_group}] | type: [{movement_type}]\n" + "\n".join(lines)

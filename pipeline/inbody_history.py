@@ -1,97 +1,65 @@
 """
 InBody scan history — records every scan a user runs through the pipeline
-(SQLite, same database as everything else) and compares the two most
-recent scans. Not agent-invoked: the API route records a scan right after
-the InBody pipeline finishes, and reads history/comparisons when the
-Progress tab asks for them — see docs/CODE_MAP.md's tools/ vs pipeline/
-rule.
+(MongoDB `inbody_scans` collection, same database as everything else) and
+compares the two most recent scans. Not agent-invoked: the API route
+records a scan right after the InBody pipeline finishes, and reads
+history/comparisons when the Progress tab (or the Supervisor's own prompt,
+see api/routes/plan.py's _format_inbody_comparison) asks for them.
 
 Values are normalized to kg before storage so comparisons never have to
 worry about a user's two scans being in different units (`to_kg` mirrors
 tools/inbody.py's own normalization for the asymmetry flags).
 """
 
-import sqlite3
+from datetime import datetime, timezone
 from typing import Optional
 
-from config import DB_PATH
+from bson import ObjectId
+
 from tools.inbody import InBodyResult, to_kg
-
-SCHEMA_SQL = """
-    CREATE TABLE IF NOT EXISTS inbody_scans (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER NOT NULL,
-        session_id TEXT,
-        skeletal_muscle_mass_kg REAL NOT NULL,
-        body_fat_percent REAL NOT NULL,
-        bmr_kcal INTEGER,
-        arm_asymmetry INTEGER NOT NULL,
-        arm_diff_grams REAL NOT NULL,
-        leg_asymmetry INTEGER NOT NULL,
-        leg_diff_grams REAL NOT NULL,
-        elevated_bf INTEGER NOT NULL,
-        trunk_underdeveloped INTEGER NOT NULL,
-        created_at TEXT NOT NULL DEFAULT (datetime('now'))
-    )
-"""
+from tools.mongo import get_db
 
 
-def get_db_connection() -> sqlite3.Connection:
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
-
-
-def init_db() -> None:
-    conn = get_db_connection()
-    conn.execute(SCHEMA_SQL)
-    conn.commit()
-    conn.close()
-
-
-init_db()
-
-
-def record_scan(user_id: int, session_id: Optional[str], result: InBodyResult) -> None:
+def record_scan(user_id: str, session_id: Optional[str], result: InBodyResult) -> None:
     r, f = result.raw, result.flags
     smm_kg = to_kg(r.skeletal_muscle_mass, r.smm_unit)
 
-    conn = get_db_connection()
-    conn.execute(
-        """INSERT INTO inbody_scans
-           (user_id, session_id, skeletal_muscle_mass_kg, body_fat_percent, bmr_kcal,
-            arm_asymmetry, arm_diff_grams, leg_asymmetry, leg_diff_grams,
-            elevated_bf, trunk_underdeveloped)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-        (
-            user_id, session_id, smm_kg, r.body_fat_percent, r.bmr_kcal,
-            int(f.arm_asymmetry), f.arm_diff_grams, int(f.leg_asymmetry), f.leg_diff_grams,
-            int(f.elevated_bf), int(f.trunk_underdeveloped),
-        ),
-    )
-    conn.commit()
-    conn.close()
+    get_db().inbody_scans.insert_one({
+        "user_id": ObjectId(user_id),
+        "session_id": session_id,
+        "skeletal_muscle_mass_kg": smm_kg,
+        "body_fat_percent": r.body_fat_percent,
+        "bmr_kcal": r.bmr_kcal,
+        "arm_asymmetry": f.arm_asymmetry,
+        "arm_diff_grams": f.arm_diff_grams,
+        "leg_asymmetry": f.leg_asymmetry,
+        "leg_diff_grams": f.leg_diff_grams,
+        "elevated_bf": f.elevated_bf,
+        "trunk_underdeveloped": f.trunk_underdeveloped,
+        "created_at": datetime.now(timezone.utc),
+    })
 
 
-def list_scans_for_user(user_id: int) -> list[dict]:
-    """Most recent first."""
-    conn = get_db_connection()
-    rows = conn.execute(
-        "SELECT * FROM inbody_scans WHERE user_id = ? ORDER BY created_at DESC, id DESC",
-        (user_id,),
-    ).fetchall()
-    conn.close()
-    return [dict(r) for r in rows]
+def list_scans_for_user(user_id: str) -> list[dict]:
+    """Most recent first. Sorts by created_at with _id as a tiebreaker —
+    two scans recorded within the same timestamp resolution would
+    otherwise sort in an undefined order (ObjectId encodes creation time
+    and is monotonically increasing, so it's a reliable secondary key,
+    mirroring the old SQLite version's `ORDER BY created_at DESC, id DESC`)."""
+    docs = get_db().inbody_scans.find({"user_id": ObjectId(user_id)}).sort([("created_at", -1), ("_id", -1)])
+    return [_serialize(d) for d in docs]
 
 
-def compare_latest_two(user_id: int) -> Optional[dict]:
+def compare_latest_two(user_id: str) -> Optional[dict]:
     """Returns None if the user has fewer than 2 scans — nothing to compare
     yet. Otherwise the two most recent scans plus the deltas between them."""
-    scans = list_scans_for_user(user_id)
-    if len(scans) < 2:
+    docs = list(
+        get_db().inbody_scans.find({"user_id": ObjectId(user_id)}).sort([("created_at", -1), ("_id", -1)]).limit(2)
+    )
+    if len(docs) < 2:
         return None
 
-    latest, previous = scans[0], scans[1]
+    latest, previous = _serialize(docs[0]), _serialize(docs[1])
     return {
         "latest": latest,
         "previous": previous,
@@ -102,4 +70,22 @@ def compare_latest_two(user_id: int) -> Optional[dict]:
             "leg_asymmetry_resolved": bool(previous["leg_asymmetry"]) and not bool(latest["leg_asymmetry"]),
             "trunk_underdeveloped_resolved": bool(previous["trunk_underdeveloped"]) and not bool(latest["trunk_underdeveloped"]),
         },
+    }
+
+
+def _serialize(doc: dict) -> dict:
+    return {
+        "id": str(doc["_id"]),
+        "user_id": str(doc["user_id"]),
+        "session_id": doc.get("session_id"),
+        "skeletal_muscle_mass_kg": doc["skeletal_muscle_mass_kg"],
+        "body_fat_percent": doc["body_fat_percent"],
+        "bmr_kcal": doc.get("bmr_kcal"),
+        "arm_asymmetry": doc["arm_asymmetry"],
+        "arm_diff_grams": doc["arm_diff_grams"],
+        "leg_asymmetry": doc["leg_asymmetry"],
+        "leg_diff_grams": doc["leg_diff_grams"],
+        "elevated_bf": doc["elevated_bf"],
+        "trunk_underdeveloped": doc["trunk_underdeveloped"],
+        "created_at": doc["created_at"],
     }

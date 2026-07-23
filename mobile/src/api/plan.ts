@@ -68,7 +68,6 @@ export async function generatePlan(intake: IntakeData, image: CapturedImage): Pr
   formData.append('session_duration', intake.session_duration);
   if (intake.injuries) formData.append('injuries', intake.injuries);
   if (intake.priority) formData.append('priority', intake.priority);
-  if (intake.age !== undefined) formData.append('age', String(intake.age));
   if (intake.sleep_quality) formData.append('sleep_quality', intake.sleep_quality);
   if (intake.job_type) formData.append('job_type', intake.job_type);
   if (intake.current_program) formData.append('current_program', intake.current_program);

@@ -19,7 +19,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from auth.dependencies import get_current_user
-from tools.database import get_db_connection
+from tools.mongo import get_db
 
 router = APIRouter()
 
@@ -62,27 +62,24 @@ class ExerciseMedia(BaseModel):
 
 @router.get("/exercises/lookup", response_model=ExerciseMedia)
 async def lookup_exercise(name: str, user: dict = Depends(get_current_user)):
-    conn = get_db_connection()
-    rows = conn.execute(
-        "SELECT name, target_muscle, equipment, instructions, image_path, gif_path, attribution "
-        "FROM exercises WHERE gif_path IS NOT NULL"
-    ).fetchall()
-    conn.close()
+    docs = list(get_db().exercises.find(
+        {"gif_path": {"$ne": None}},
+        {"name": 1, "target_muscle": 1, "equipment": 1, "instructions": 1, "image_path": 1, "gif_path": 1, "attribution": 1},
+    ))
 
-    if not rows:
+    if not docs:
         raise HTTPException(404, f"No matching exercise found for '{name}'.")
 
-    best = max(rows, key=lambda r: _score(name, r[0]))
-    if _score(name, best[0])[0] < _MATCH_THRESHOLD:
+    best = max(docs, key=lambda d: _score(name, d["name"]))
+    if _score(name, best["name"])[0] < _MATCH_THRESHOLD:
         raise HTTPException(404, f"No matching exercise found for '{name}'.")
 
-    row_name, target_muscle, equipment, instructions, image_path, gif_path, attribution = best
     return ExerciseMedia(
-        name=row_name,
-        target_muscle=target_muscle,
-        equipment=equipment,
-        instructions=instructions,
-        image_url=f"{MEDIA_URL_BASE}/{image_path}" if image_path else None,
-        gif_url=f"{MEDIA_URL_BASE}/{gif_path}" if gif_path else None,
-        attribution=attribution,
+        name=best["name"],
+        target_muscle=best.get("target_muscle"),
+        equipment=best.get("equipment"),
+        instructions=best.get("instructions"),
+        image_url=f"{MEDIA_URL_BASE}/{best['image_path']}" if best.get("image_path") else None,
+        gif_url=f"{MEDIA_URL_BASE}/{best['gif_path']}" if best.get("gif_path") else None,
+        attribution=best.get("attribution"),
     )

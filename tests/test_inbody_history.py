@@ -1,15 +1,18 @@
 """
 Tests for pipeline/inbody_history.py — recording InBody scans per user and
-comparing the two most recent ones (the mobile Progress tab's data source).
+comparing the two most recent ones (the mobile Progress tab's data source,
+and the Supervisor's prompt-enrichment source — see api/routes/plan.py's
+_format_inbody_comparison).
 
-DB_PATH is monkeypatched to a temp SQLite file so these tests never touch
-the real data/tamreena.db.
+Mongo access is mongomock'd per-test — see tests/conftest.py's mongo_db
+fixture (autouse).
 """
 
 import os
 import sys
 
 import pytest
+from bson import ObjectId
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -17,10 +20,8 @@ from pipeline import inbody_history
 from tools.inbody import InBodyFlags, InBodyRawExtraction, InBodyResult, SegmentalReading
 
 
-@pytest.fixture(autouse=True)
-def _temp_db(tmp_path, monkeypatch):
-    monkeypatch.setattr(inbody_history, "DB_PATH", tmp_path / "test_inbody_history.db")
-    inbody_history.init_db()
+def _uid() -> str:
+    return str(ObjectId())
 
 
 def _make_result(smm_kg: float, body_fat_percent: float, arm_asymmetry: bool = False) -> InBodyResult:
@@ -50,15 +51,17 @@ def _make_result(smm_kg: float, body_fat_percent: float, arm_asymmetry: bool = F
 
 
 def test_no_comparison_with_fewer_than_two_scans():
-    inbody_history.record_scan(user_id=1, session_id="s1", result=_make_result(30.0, 20.0))
-    assert inbody_history.compare_latest_two(user_id=1) is None
+    user_id = _uid()
+    inbody_history.record_scan(user_id=user_id, session_id="s1", result=_make_result(30.0, 20.0))
+    assert inbody_history.compare_latest_two(user_id=user_id) is None
 
 
 def test_comparison_reports_deltas_between_two_most_recent_scans():
-    inbody_history.record_scan(user_id=1, session_id="s1", result=_make_result(30.0, 20.0, arm_asymmetry=True))
-    inbody_history.record_scan(user_id=1, session_id="s2", result=_make_result(31.5, 18.5, arm_asymmetry=False))
+    user_id = _uid()
+    inbody_history.record_scan(user_id=user_id, session_id="s1", result=_make_result(30.0, 20.0, arm_asymmetry=True))
+    inbody_history.record_scan(user_id=user_id, session_id="s2", result=_make_result(31.5, 18.5, arm_asymmetry=False))
 
-    comparison = inbody_history.compare_latest_two(user_id=1)
+    comparison = inbody_history.compare_latest_two(user_id=user_id)
     assert comparison is not None
     assert comparison["delta"]["skeletal_muscle_mass_kg"] == pytest.approx(1.5)
     assert comparison["delta"]["body_fat_percent"] == pytest.approx(-1.5)
@@ -66,8 +69,9 @@ def test_comparison_reports_deltas_between_two_most_recent_scans():
 
 
 def test_scans_are_scoped_per_user():
-    inbody_history.record_scan(user_id=1, session_id="s1", result=_make_result(30.0, 20.0))
-    inbody_history.record_scan(user_id=2, session_id="s2", result=_make_result(40.0, 15.0))
+    user1, user2 = _uid(), _uid()
+    inbody_history.record_scan(user_id=user1, session_id="s1", result=_make_result(30.0, 20.0))
+    inbody_history.record_scan(user_id=user2, session_id="s2", result=_make_result(40.0, 15.0))
 
-    assert len(inbody_history.list_scans_for_user(user_id=1)) == 1
-    assert len(inbody_history.list_scans_for_user(user_id=2)) == 1
+    assert len(inbody_history.list_scans_for_user(user_id=user1)) == 1
+    assert len(inbody_history.list_scans_for_user(user_id=user2)) == 1

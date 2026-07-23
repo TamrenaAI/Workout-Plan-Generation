@@ -107,7 +107,23 @@ async function runGeneration() {
       headers: { Authorization: `Bearer ${token}` },
       body: form,
     });
-    if (!res.ok) throw new Error(`Server returned ${res.status}`);
+    if (!res.ok) {
+      // Surface the backend's actual reason instead of just the numeric
+      // status code. `detail` is either a plain string (our own
+      // HTTPException messages, e.g. "InBody scan rejected at
+      // [quality_check]: ...") or FastAPI's automatic validation-error
+      // shape (an array of {loc, msg} objects when a required field is
+      // simply missing) — handle both rather than stringifying whichever
+      // one we don't expect into "[object Object]".
+      const body = await res.json().catch(() => null);
+      let message = `Server returned ${res.status}`;
+      if (typeof body?.detail === 'string') {
+        message = body.detail;
+      } else if (Array.isArray(body?.detail)) {
+        message = body.detail.map((e) => `${e.loc?.at(-1)}: ${e.msg}`).join(', ');
+      }
+      throw new Error(message);
+    }
     started = await res.json();
   } catch (err) {
     window.tamrena.result = { error: err.message };

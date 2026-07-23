@@ -49,9 +49,10 @@ async def submit_workout_feedback(
         raise HTTPException(404, "Unknown session_id.")
 
     exercises = [e.model_dump() for e in body.exercises]
-    record_feedback(session_id, body.day_label, exercises)
+    triggers_adjustment = needs_adjustment(exercises)
+    record_feedback(user["id"], session_id, body.day_label, exercises, triggers_adjustment)
 
-    if not needs_adjustment(exercises):
+    if not triggers_adjustment:
         return WorkoutFeedbackResponse(adjustment_triggered=False)
 
     summary = await _run_plan_adjuster(session_id, body.day_label)

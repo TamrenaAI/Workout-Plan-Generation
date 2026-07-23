@@ -22,9 +22,9 @@ langsmith
 google-auth
 pyjwt
 
-# Exercise database is SQLite (stdlib sqlite3) at this stage — no MongoDB
-# driver needed yet.
-#
+# ── Database ──────────────────────────────────────────────────
+pymongo
+
 # Dev/notebook-only extras (ipykernel, ipywidgets, ...) are in
 # requirements-dev.txt, not here.
 

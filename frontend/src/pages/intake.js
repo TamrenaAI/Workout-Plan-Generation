@@ -87,11 +87,10 @@ function renderIntake(container) {
 }
 
 function submitIntakeStep1() {
-  window.tamrena.intake = {
-    ...window.tamrena.intake,
+  saveIntake({
     goal: getDropdownValue('goal'),
     days_per_week: parseInt(getDropdownValue('days')),
-  };
+  });
   navigate('intake-step2');
 }
 
@@ -126,11 +125,10 @@ function renderIntakeStep2(container) {
 }
 
 function submitIntakeStep2() {
-  window.tamrena.intake = {
-    ...window.tamrena.intake,
+  saveIntake({
     experience: getDropdownValue('exp'),
     session_duration: getDropdownValue('dur', v => `${v}min`),
-  };
+  });
   navigate('intake-optional');
 }
 
@@ -191,12 +189,11 @@ function renderIntakeOptional(container) {
 }
 
 function submitIntakeOptional() {
-  window.tamrena.intake = {
-    ...window.tamrena.intake,
+  saveIntake({
     injuries: getDropdownValue('injuries'),
     priority: getDropdownValue('priority'),
     sleep_quality: getDropdownValue('sleep_quality'),
     job_type: getDropdownValue('job_type'),
-  };
+  });
   navigate('capture');
 }

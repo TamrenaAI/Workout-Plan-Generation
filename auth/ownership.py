@@ -4,65 +4,59 @@ authorization check behind "can this user see this session's plan/history" —
 without it, any authenticated user could read any other user's generated
 plan just by guessing/observing a session_id (it's a UUID, not secret).
 
-Same SQLite database as users (data/tamreena.db) — see auth/models.py.
+MongoDB `plan_sessions` collection (same database as everything else, see
+tools/mongo.py). The session_id UUID is used directly as the document's
+_id rather than introducing a second synthetic key.
 """
 
-import sqlite3
+from datetime import datetime, timezone
 from typing import Optional
 
-from config import DB_PATH
+from bson import ObjectId
 
-SCHEMA_SQL = """
-    CREATE TABLE IF NOT EXISTS plan_sessions (
-        session_id TEXT PRIMARY KEY,
-        user_id INTEGER NOT NULL,
-        goal TEXT,
-        created_at TEXT NOT NULL DEFAULT (datetime('now'))
+from tools.mongo import get_db
+
+
+def create_session(session_id: str, user_id: str, goal: Optional[str]) -> None:
+    now = datetime.now(timezone.utc)
+    get_db().plan_sessions.insert_one({
+        "_id": session_id,
+        "user_id": ObjectId(user_id),
+        "goal": goal,
+        "status": "generating",
+        "error": None,
+        "created_at": now,
+        "updated_at": now,
+    })
+
+
+def update_session_status(session_id: str, status: str, error: Optional[str] = None) -> None:
+    get_db().plan_sessions.update_one(
+        {"_id": session_id},
+        {"$set": {"status": status, "error": error, "updated_at": datetime.now(timezone.utc)}},
     )
-"""
 
 
-def get_db_connection() -> sqlite3.Connection:
-    conn = sqlite3.connect(DB_PATH)
-    conn.row_factory = sqlite3.Row
-    return conn
+def get_session(session_id: str) -> Optional[dict]:
+    doc = get_db().plan_sessions.find_one({"_id": session_id})
+    return _serialize(doc) if doc else None
 
 
-def init_db() -> None:
-    conn = get_db_connection()
-    conn.execute(SCHEMA_SQL)
-    conn.commit()
-    conn.close()
+def user_owns_session(session_id: str, user_id: str) -> bool:
+    doc = get_db().plan_sessions.find_one({"_id": session_id, "user_id": ObjectId(user_id)})
+    return doc is not None
 
 
-init_db()
+def list_sessions_for_user(user_id: str) -> list[dict]:
+    docs = get_db().plan_sessions.find({"user_id": ObjectId(user_id)}).sort("created_at", -1)
+    return [_serialize(d) for d in docs]
 
 
-def create_session(session_id: str, user_id: int, goal: Optional[str]) -> None:
-    conn = get_db_connection()
-    conn.execute(
-        "INSERT INTO plan_sessions (session_id, user_id, goal) VALUES (?, ?, ?)",
-        (session_id, user_id, goal),
-    )
-    conn.commit()
-    conn.close()
-
-
-def user_owns_session(session_id: str, user_id: int) -> bool:
-    conn = get_db_connection()
-    row = conn.execute(
-        "SELECT 1 FROM plan_sessions WHERE session_id = ? AND user_id = ?",
-        (session_id, user_id),
-    ).fetchone()
-    conn.close()
-    return row is not None
-
-
-def list_sessions_for_user(user_id: int) -> list[dict]:
-    conn = get_db_connection()
-    rows = conn.execute(
-        "SELECT session_id, goal, created_at FROM plan_sessions WHERE user_id = ? ORDER BY created_at DESC",
-        (user_id,),
-    ).fetchall()
-    conn.close()
-    return [dict(r) for r in rows]
+def _serialize(doc: dict) -> dict:
+    return {
+        "session_id": doc["_id"],
+        "goal": doc.get("goal"),
+        "status": doc.get("status"),
+        "error": doc.get("error"),
+        "created_at": doc["created_at"],
+    }

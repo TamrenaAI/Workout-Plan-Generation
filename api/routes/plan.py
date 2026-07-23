@@ -38,9 +38,9 @@ from agents.plan_assembler import PLAN_ASSEMBLER
 from agents.streaming import run_and_stream
 from agents.supervisor import build_supervisor
 from auth.dependencies import get_current_user, get_current_user_for_stream
-from auth.ownership import create_session, list_sessions_for_user, user_owns_session
+from auth.ownership import create_session, list_sessions_for_user, update_session_status, user_owns_session
 from config import SESSION_DIR
-from pipeline.inbody_history import record_scan
+from pipeline.inbody_history import compare_latest_two, record_scan
 from pipeline.plan_finalize import enforce_volume_budget
 from services import live_progress
 from tools.inbody import check_image_quality, format_inbody_result, pdf_to_image_bytes, run_inbody_pipeline_from_bytes, validate_inbody_scan
@@ -113,11 +113,13 @@ async def _run_pipeline(session_id: str, user_message: str) -> None:
         schedule = read_weekly_schedule(session_id)
         if schedule:
             final_plan = schedule
+        update_session_status(session_id, "ready")
         await live_progress.publish_done(session_id, {
             "plan": final_plan,
             "generated_at": datetime.now(timezone.utc).isoformat(),
         })
     except Exception as exc:
+        update_session_status(session_id, "failed", error=str(exc))
         await live_progress.publish_done(session_id, {"error": str(exc)})
 
 
@@ -171,6 +173,7 @@ async def generate_plan(
     os.makedirs(os.path.join(SESSION_DIR, session_id), exist_ok=True)
     create_session(session_id, user["id"], goal)
     record_scan(user["id"], session_id, pipeline_result)
+    comparison = compare_latest_two(user["id"])
 
     user_message = f"""SESSION_ID: {session_id}
 
@@ -178,7 +181,7 @@ async def generate_plan(
 
 INBODY RAW TEXT:
 {inbody_text}
-
+{_format_inbody_comparison(comparison)}
 Generate a full personalised workout plan for this user."""
 
     stream = live_progress.create_stream(session_id)
@@ -253,6 +256,31 @@ async def get_session_plan(session_id: str, user: dict = Depends(get_current_use
     if schedule is None:
         return SessionPlanResponse(status="pending", plan=None)
     return SessionPlanResponse(status="ready", plan=schedule)
+
+
+def _format_inbody_comparison(comparison: Optional[dict]) -> str:
+    """Folds compare_latest_two()'s delta into the Supervisor's own prompt
+    text so the agent — not just the Progress screen — sees what changed
+    since the user's last scan. Empty string (not a placeholder line) when
+    this is the user's first scan, so the prompt doesn't grow a
+    "no comparison available" line on every single first-time user."""
+    if comparison is None:
+        return ""
+    d = comparison["delta"]
+    resolved = [
+        label for label, flag in (
+            ("arm asymmetry", d["arm_asymmetry_resolved"]),
+            ("leg asymmetry", d["leg_asymmetry_resolved"]),
+            ("trunk underdevelopment", d["trunk_underdeveloped_resolved"]),
+        )
+        if flag
+    ]
+    resolved_text = f" | Resolved since last scan: {', '.join(resolved)}" if resolved else ""
+    return (
+        f"\nINBODY CHANGE SINCE LAST SCAN: "
+        f"Skeletal muscle mass {d['skeletal_muscle_mass_kg']:+.2f}kg, "
+        f"Body fat {d['body_fat_percent']:+.2f}%{resolved_text}\n"
+    )
 
 
 def _build_user_query(**fields) -> str:

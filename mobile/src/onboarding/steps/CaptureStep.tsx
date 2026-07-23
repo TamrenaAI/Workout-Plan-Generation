@@ -1,3 +1,4 @@
+import { manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useState } from 'react';
 import { ActivityIndicator, Image, ScrollView, StyleSheet, Text, View } from 'react-native';
@@ -12,6 +13,16 @@ import { colors, spacing } from '../../theme';
 import { CapturedImage } from '../types';
 
 type Status = 'idle' | 'checking' | 'valid' | 'invalid';
+
+// A phone camera photo (commonly 12-48MP) only needs to be legible enough
+// for the server-side VLM to read InBody's printed numbers — a modern
+// phone's raw capture (several MB) uploads slowly on real mobile networks
+// for no accuracy benefit. Downscaling the long edge to this, plus
+// re-compressing, cuts a typical capture from several MB to a few hundred
+// KB. Only resize when the source actually exceeds it — never upscale a
+// smaller source image (e.g. one already picked from a compressed library
+// photo or screenshot).
+const MAX_DIMENSION = 2000;
 
 /**
  * Uses the native camera/photo-library picker UI (expo-image-picker)
@@ -44,9 +55,24 @@ export function CaptureStep({ onNext }: { onNext: (image: CapturedImage) => void
     if (result.canceled || !result.assets?.[0]) return;
 
     const asset = result.assets[0];
-    const captured: CapturedImage = { uri: asset.uri, mimeType: asset.mimeType ?? 'image/jpeg' };
+    const captured = await resizeIfNeeded(asset);
     setImage(captured);
     await runValidation(captured);
+  }
+
+  async function resizeIfNeeded(asset: ImagePicker.ImagePickerAsset): Promise<CapturedImage> {
+    const longEdge = Math.max(asset.width, asset.height);
+    if (longEdge <= MAX_DIMENSION) {
+      return { uri: asset.uri, mimeType: asset.mimeType ?? 'image/jpeg' };
+    }
+
+    const isPortrait = asset.height >= asset.width;
+    const resized = await manipulateAsync(
+      asset.uri,
+      [{ resize: isPortrait ? { height: MAX_DIMENSION } : { width: MAX_DIMENSION } }],
+      { compress: 0.85, format: SaveFormat.JPEG },
+    );
+    return { uri: resized.uri, mimeType: 'image/jpeg' };
   }
 
   async function runValidation(captured: CapturedImage) {

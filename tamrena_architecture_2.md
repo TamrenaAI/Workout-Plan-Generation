@@ -319,15 +319,15 @@ before applying any intensity rule. Use the matching table below.
 *Paradigm: hypertrophy (default)*
 | Zone   | Sets | Reps  | Rest    | RPE | Focus |
 |--------|------|-------|---------|-----|-------|
-| hard   | 4-5  | 6-8   | 2-3 min | 8-9 | heavy compound first |
+| hard   | 4    | 6-8   | 2-3 min | 8-9 | heavy compound first |
 | medium | 3-4  | 10-12 | 90s     | 7   | compound + isolation |
 | soft   | 3    | 15+   | 60s     | 5-6 | corrective / unilateral |
 
 *Paradigm: strength*
 | Zone   | Sets | Reps       | Rest    | RPE  | Focus |
 |--------|------|------------|---------|------|-------|
-| heavy  | 4-5  | 1-5 main   | 4-8 min | 9+   | primary movement anchor, named explicitly |
-| volume | 3-5  | 3-8 suppl  | 3-5 min | 7-8  | same movement pattern, reduced load |
+| heavy  | 4    | 1-5 main   | 4-8 min | 9+   | primary movement anchor, named explicitly |
+| volume | 3-4  | 3-8 suppl  | 3-5 min | 7-8  | same movement pattern, reduced load |
 | speed  | 3-4  | 2-4        | 3 min   | 6-7  | 60-70% 1RM, technique / bar speed focus |
 Primary movement must be named in the DAY MAP and placed first. Rep windows:
 main 1-5 / supplemental 3-8 / accessories 6-12.
@@ -349,7 +349,7 @@ muscle group. All days use moderate zone — no hard or soft distinction needed.
 *Paradigm: athletic_performance*
 | Zone         | Sets | Reps  | Rest    | RPE | Focus |
 |--------------|------|-------|---------|-----|-------|
-| power        | 3-5  | 3-6   | 2-4 min | 8-9 | explosive, sport-relevant movement |
+| power        | 3-4  | 3-6   | 2-4 min | 8-9 | explosive, sport-relevant movement |
 | strength     | 3-4  | 5-10  | 2-3 min | 7-8 | compound patterns |
 | conditioning | 3-4  | 12-20 | 60-90s  | 6-7 | muscular endurance, sport carry-over |
 

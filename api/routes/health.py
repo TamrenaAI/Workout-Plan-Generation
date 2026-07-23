@@ -16,7 +16,7 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
 from config import AZURE_OPENAI_API_KEY, AZURE_OPENAI_DEPLOYMENT_NAME, AZURE_OPENAI_ENDPOINT, QDRANT_PATH
-from tools.database import get_db_connection
+from tools.mongo import get_client
 
 router = APIRouter()
 
@@ -26,14 +26,12 @@ async def health_check():
     results = {}
     overall = "healthy"
 
-    # SQLite
+    # MongoDB
     try:
-        conn = get_db_connection()
-        conn.execute("SELECT 1")
-        conn.close()
-        results["sqlite"] = "healthy"
+        get_client().admin.command("ping")
+        results["mongodb"] = "healthy"
     except Exception as e:
-        results["sqlite"] = f"unhealthy: {e}"
+        results["mongodb"] = f"unhealthy: {e}"
         overall = "unhealthy"
 
     # Azure OpenAI configuration (env vars present — not a live call on every health check)

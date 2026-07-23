@@ -1,10 +1,11 @@
 """
 Post-workout feedback — recorded by the API route right after a user
 submits it (POST /workouts/{session_id}/feedback), not by any agent.
-Structured JSON, not appended plan.md prose: this codebase already learned
-that lesson once for dispatch progress (see tools/memory.py's
-Section 5d rationale) — "did this exercise need adjustment" is exactly the
-same kind of question that must not depend on regexing an LLM's prose.
+
+MongoDB `workout_feedback` collection: one document per submission (not
+one growing array per session) — this is what makes cross-session training
+history actually queryable (e.g. "this user's last 30 days of feedback")
+without loading and filtering client-side.
 
 The Plan Adjuster agent reads this back via tools/memory.py's
 read_workout_feedback tool, not this module directly — see
@@ -15,15 +16,11 @@ already established by pipeline/plan_finalize.py importing from
 tools/memory.py).
 """
 
-import json
-import os
 from datetime import datetime, timezone
 
-from config import SESSION_DIR
+from bson import ObjectId
 
-
-def feedback_path(session_id: str) -> str:
-    return os.path.join(SESSION_DIR, session_id, "feedback.json")
+from tools.mongo import get_db
 
 
 def needs_adjustment(exercises: list[dict]) -> bool:
@@ -33,20 +30,12 @@ def needs_adjustment(exercises: list[dict]) -> bool:
     return any(e.get("pain") or e.get("difficulty") in ("too_easy", "too_hard") for e in exercises)
 
 
-def record_feedback(session_id: str, day_label: str, exercises: list[dict]) -> None:
-    path = feedback_path(session_id)
-    os.makedirs(os.path.dirname(path), exist_ok=True)
-
-    submissions = []
-    if os.path.exists(path):
-        with open(path, "r", encoding="utf-8") as f:
-            submissions = json.load(f)
-
-    submissions.append({
+def record_feedback(user_id: str, session_id: str, day_label: str, exercises: list[dict], adjustment_triggered: bool) -> None:
+    get_db().workout_feedback.insert_one({
+        "user_id": ObjectId(user_id),
+        "session_id": session_id,
         "day_label": day_label,
         "exercises": exercises,
-        "submitted_at": datetime.now(timezone.utc).isoformat(),
+        "adjustment_triggered": adjustment_triggered,
+        "submitted_at": datetime.now(timezone.utc),
     })
-
-    with open(path, "w", encoding="utf-8") as f:
-        json.dump(submissions, f)

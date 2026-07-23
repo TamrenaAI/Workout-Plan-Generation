@@ -12,7 +12,15 @@ import { colors, spacing } from '../../theme';
 // (Supervisor step 0, tamrena_architecture_2.md Section 4e) -- these are
 // quick-pick suggestions that fill the text field, not a closed enum like
 // experience/duration are on the next step.
-const GOAL_SUGGESTIONS = ['Build muscle', 'Get stronger', 'Lose fat', 'General fitness', 'Athletic performance'];
+const GOAL_SUGGESTIONS = [
+  'Build muscle',
+  'Get stronger',
+  'Lose fat',
+  'General fitness',
+  'Athletic performance',
+  'Endurance complement',
+  'Rehab / recovery',
+];
 const DAY_OPTIONS = ['2', '3', '4', '5', '6'];
 
 interface Props {

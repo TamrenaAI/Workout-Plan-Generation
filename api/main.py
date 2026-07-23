@@ -19,19 +19,29 @@ controls whether browser JS can read a response, never whether a request
 is authorized — a page with no valid token gets 401 regardless of origin.
 """
 
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from api.routes import auth, exercises, health, plan, progress, workouts
+from api.routes import auth, corrective, exercises, health, plan, progress, workouts
 from config import EXERCISE_MEDIA_DIR
+from tools.mongo import ensure_indexes
+
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI):
+    ensure_indexes()
+    yield
+
 
 app = FastAPI(
     title="Tamreena AI",
     description="Personalised workout plan generation via multi-agent pipeline",
     version="1.0.0",
+    lifespan=lifespan,
 )
 
 app.add_middleware(
@@ -47,6 +57,7 @@ app.include_router(plan.router, tags=["plan"])
 app.include_router(progress.router, tags=["progress"])
 app.include_router(workouts.router, tags=["workouts"])
 app.include_router(exercises.router, tags=["exercises"])
+app.include_router(corrective.router, tags=["corrective"])
 
 # Serves the exercise GIFs/thumbnails imported by
 # database/exercises_dataset/import.py — gif_url/image_url in

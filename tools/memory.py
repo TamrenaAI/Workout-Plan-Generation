@@ -21,6 +21,7 @@ import threading
 from langchain_core.tools import tool
 
 from config import SESSION_DIR
+from tools.mongo import get_db
 
 # Guards progress.json's read-modify-write cycle. deepagents can execute
 # multiple task() dispatches concurrently (a ThreadPoolExecutor within this
@@ -253,21 +254,24 @@ def validate_plan_completeness(session_id: str) -> str:
     return f"INCOMPLETE — missing prescriptions for: {result.get('remaining')}. Do not assemble the plan."
 
 
-def _feedback_path(session_id: str) -> str:
-    # Mirrors pipeline/workout_feedback.py's feedback_path() — duplicated
-    # rather than imported so tools/ never depends on pipeline/ (the
-    # dependency runs the other way: pipeline/plan_finalize.py already
-    # imports from this file).
-    return os.path.join(SESSION_DIR, session_id, "feedback.json")
-
-
 @tool
 def read_workout_feedback(session_id: str) -> str:
     """Plan Adjuster calls this to see every post-workout feedback submission recorded for
     this session so far, most recent last. Feedback is written by the API route (via
-    pipeline/workout_feedback.py), not by any agent — this is the read side only."""
-    path = _feedback_path(session_id)
-    if not os.path.exists(path):
+    pipeline/workout_feedback.py), not by any agent — this is the read side only, kept here
+    rather than in pipeline/workout_feedback.py per this repo's tools/ vs pipeline/ rule
+    (writing is a pipeline concern, reading is a tool concern; tools/ must not import from
+    pipeline/ — see this file's module docstring)."""
+    docs = get_db().workout_feedback.find({"session_id": session_id}).sort("submitted_at", 1)
+    submissions = [
+        {
+            "day_label": d["day_label"],
+            "exercises": d["exercises"],
+            "adjustment_triggered": d["adjustment_triggered"],
+            "submitted_at": d["submitted_at"].isoformat(),
+        }
+        for d in docs
+    ]
+    if not submissions:
         return "(no feedback submitted yet for this session)"
-    with open(path, "r", encoding="utf-8") as f:
-        return f.read()
+    return json.dumps(submissions)

@@ -22,7 +22,6 @@ const JOB_OPTIONS: { label: string; value: 'desk' | 'light_physical' | 'heavy_ph
 export interface OptionalIntakeFields {
   injuries?: string;
   priority?: string;
-  age?: number;
   sleep_quality?: 'good' | 'average' | 'poor';
   job_type?: 'desk' | 'light_physical' | 'heavy_physical';
   current_program?: string;
@@ -31,7 +30,6 @@ export interface OptionalIntakeFields {
 export function IntakeStep3({ onNext }: { onNext: (patch: OptionalIntakeFields) => void }) {
   const [injuries, setInjuries] = useState('');
   const [priority, setPriority] = useState('');
-  const [age, setAge] = useState('');
   const [sleepQuality, setSleepQuality] = useState<'good' | 'average' | 'poor' | null>(null);
   const [jobType, setJobType] = useState<'desk' | 'light_physical' | 'heavy_physical' | null>(null);
   const [currentProgram, setCurrentProgram] = useState('');
@@ -40,7 +38,6 @@ export function IntakeStep3({ onNext }: { onNext: (patch: OptionalIntakeFields) 
     onNext({
       injuries: injuries.trim() || undefined,
       priority: priority.trim() || undefined,
-      age: age.trim() ? Number(age.trim()) : undefined,
       sleep_quality: sleepQuality ?? undefined,
       job_type: jobType ?? undefined,
       current_program: currentProgram.trim() || undefined,
@@ -64,7 +61,6 @@ export function IntakeStep3({ onNext }: { onNext: (patch: OptionalIntakeFields) 
           value={priority}
           onChangeText={setPriority}
         />
-        <TextField label="Age" placeholder="e.g. 27" keyboardType="number-pad" value={age} onChangeText={setAge} />
         <PillSelect label="Sleep quality" options={SLEEP_OPTIONS} value={sleepQuality} onChange={setSleepQuality} />
         <PillSelect label="Job type" options={JOB_OPTIONS} value={jobType} onChange={setJobType} />
         <TextField

@@ -41,7 +41,7 @@ class SessionResponse(BaseModel):
 
 
 class UserResponse(BaseModel):
-    id: int
+    id: str
     email: str
     name: str | None
     picture_url: str | None
@@ -96,5 +96,5 @@ def _public_user(user: dict) -> dict:
         "email": user["email"],
         "name": user["name"],
         "picture_url": user["picture_url"],
-        "created_at": user["created_at"],
+        "created_at": user["created_at"].isoformat(),
     }

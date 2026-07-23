@@ -22,10 +22,6 @@ from tools import memory as tools_memory
 @pytest.fixture(autouse=True)
 def _isolated_state(tmp_path, monkeypatch):
     monkeypatch.setattr(tools_memory, "SESSION_DIR", str(tmp_path))
-    monkeypatch.setattr(ownership, "DB_PATH", tmp_path / "test_ownership.db")
-    ownership.init_db()
-    monkeypatch.setattr(auth_models, "DB_PATH", tmp_path / "test_users.db")
-    auth_models.init_db()
     monkeypatch.setattr(tokens, "JWT_SECRET", "test-secret-do-not-use-in-real-envs")
 
 
