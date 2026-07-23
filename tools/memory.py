@@ -103,6 +103,26 @@ def read_weekly_schedule(session_id: str) -> str | None:
     return section
 
 
+def read_progress_report(session_id: str) -> "str | None":
+    """Reads the '## Progress Report' section the Progress Analyst wrote via
+    write_plan_memory into the NEW session's plan.md (see
+    agents/progress_analyst.py) — the deterministic, tool-written source of
+    truth for the narrative, preferred over trusting the agent's own final
+    chat reply (same rationale as read_weekly_schedule above)."""
+    path = _plan_path(session_id)
+    if not os.path.exists(path):
+        return None
+    with open(path, "r", encoding="utf-8") as f:
+        content = f.read()
+    idx = content.rfind("## Progress Report")
+    if idx == -1:
+        return None
+    section = content[idx:].rstrip()
+    if section.endswith("---"):
+        section = section[: -len("---")].rstrip()
+    return section
+
+
 @tool
 def read_plan_memory(session_id: str) -> str:
     """Read the full shared plan memory file for this session. Call this first before doing any work."""
