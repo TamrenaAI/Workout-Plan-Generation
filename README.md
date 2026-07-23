@@ -125,95 +125,22 @@ frontend/                        ← vanilla JS/CSS web UI (see FRONTEND.md), mo
   src/main.js                    ← hash router
   src/pages/                     ← home, intake, capture, processing, plan
   src/components/CameraCapture.js ← live camera feed + quality/authenticity state machine
-
-mobile/                          ← React Native (Expo + TypeScript) app — the actual product going
-                                    forward. See mobile/README (Expo default) for run instructions and
-                                    docs/superpowers/specs/2026-07-20-mobile-app-navigation-design.md
-                                    for the design this implements.
-  App.tsx                        ← AuthProvider + NavigationContainer; shows LoginScreen, then
-                                    OnboardingFlow if the signed-in user has zero sessions yet,
-                                    else TabNavigator
-  src/config.ts                  ← API_BASE_URL / GOOGLE_WEB_CLIENT_ID (see .env.example)
-  src/api/client.ts               ← apiFetch() (JSON) / apiFetchForm() (multipart, no Content-Type
-                                    override) — both attach the session JWT, throw ApiError on failure
-  src/api/{auth,sessions,progress,plan}.ts ← typed wrappers per backend resource, incl.
-                                    validateImage()/generatePlan() (multipart uploads — the file
-                                    field is built differently per platform, see plan.ts's
-                                    appendImageFile(): RN's {uri,name,type} FormData shorthand
-                                    only works natively, web needs a real fetched Blob)
-  src/onboarding/                 ← linear wizard mirroring frontend/'s intake->capture->processing
-                                    flow (no back-navigation, matching the web app's own convention):
-    OnboardingFlow.tsx             ← step state machine, accumulates IntakeData across steps
-    steps/IntakeStep{1,2,3}.tsx     ← goal+days / experience+duration / optional details — PillSelect
-                                    options are constrained to values the backend already validates
-    steps/CaptureStep.tsx           ← expo-image-picker (camera or library — works in Expo Go,
-                                    unlike Google Sign-In) + POST /validate-image, retry on failure
-    steps/ProcessingStep.tsx        ← POST /generate-plan then live progress via react-native-sse
-                                    (pure-JS EventSource polyfill — RN has no built-in EventSource)
-  src/auth/AuthContext.tsx        ← Google Sign-In (native, NOT Expo Go-compatible — see below),
-                                    session persistence via src/lib/storage.ts
-  src/lib/storage.ts               ← wraps expo-secure-store with a localStorage fallback on web
-                                    (SecureStore has no web implementation) — see auth note below
-  src/lib/parsePlan.ts            ← ports frontend/src/pages/plan.js's markdown parser (headings/
-                                    tables/notes/lists) to a typed block structure — RN has no raw-
-                                    HTML rendering. Groups blocks by heading into PlanSections; a
-                                    "Day {N}" heading sets dayNumber (backend has no real-calendar-
-                                    date mapping for training days, so screens let the user pick one)
-  src/hooks/useLatestPlan.ts       ← shared by Home/Workout: fetches the most recent session's
-                                    persisted plan (GET /sessions/{id}/plan) and parses it once
-  src/theme.ts                   ← design tokens ported from frontend/src/theme.css / design-system.md
-  src/components/                ← Card, Badge, PrimaryButton/GhostButton, StatTile, ChatButton,
-                                    StepHeader, PillSelect, TextField — mirror the web app's
-                                    .t-card/.t-badge/.pill/.t-input/etc. classes
-  src/navigation/TabNavigator.tsx ← bottom tabs (Home/Workout/Nutrition/Progress/Profile) + floating
-                                    ChatButton overlay
-  src/screens/                   ← LoginScreen (real), Profile (real user + logout), Progress (real
-                                    scan history/comparison), Workout (real session history + real,
-                                    tappable day-strip and per-exercise cards parsed from the actual
-                                    plan), Home (real "Next Workout" summary + real days-since-signup).
-                                    Nutrition and the trial/subscription badge stay mock — Nutrition
-                                    Agent integration is on hold, Subscriptions/IAP isn't built yet.
 ```
 
-**Mobile auth note:** `@react-native-google-signin/google-signin` requires custom native
-code and does NOT run in Expo Go. Testing the actual "Sign in with Google" button needs a
-dev-client build (`eas build --profile development`, or a local `expo run:android`/`expo
-run:ios` if you set up Android Studio/Xcode) plus real Google Cloud OAuth credentials — a
-"Web application" client ID for `EXPO_PUBLIC_GOOGLE_WEB_CLIENT_ID` / the backend's
-`GOOGLE_OAUTH_CLIENT_ID` (same value, both must match), and platform-specific client IDs
-(with Android SHA-1 fingerprints) wired into the `@react-native-google-signin/google-signin`
-config plugin in `app.json`. `tsc --noEmit` and `expo export` are verified clean, but the
-sign-in flow itself is unverified until that build exists.
+mobile/ has moved to its own repo: https://github.com/TamrenaAI/mobile
+(git history preserved via `git subtree split`). See that repo's README
+for the app's source-tree breakdown, auth setup (Google Sign-In native
+module, dev-client build requirements), and web-preview instructions.
 
-**Previewing without a phone or a build:** `cd mobile && npx expo start --web` opens the
-app in a regular browser tab on the dev machine — no phone, no Expo Go, no EAS build.
-Everything renders (react-native-web + react-dom + @expo/metro-runtime are installed);
-the only thing that won't work is "Sign in with Google" (shows a clean error, same as in
-Expo Go — no native module on web either). `src/lib/storage.ts` exists specifically to
-make this possible: `expo-secure-store` (used to persist the session token) has no web
-implementation at all — confirmed against Expo's own SDK 57 docs, not assumed — so this
-wraps it with a `localStorage` fallback on `Platform.OS === 'web'`. Session persistence
-via this fallback is real on web too, just less protected than the native OS keychain
-(acceptable — that's inherent to any web app's storage, not a downgrade this introduced).
-
-Web preview also required adding CORS middleware to `api/main.py` — a real "Failed to
-fetch" hit the first time this was tried, since it's the first time a browser has ever
-called this API cross-origin (the legacy `frontend/` is same-origin; native mobile isn't
-subject to CORS at all). Wide open (`*`) is fine here — every route requires a Bearer
-token, so CORS only gates whether browser JS can *read* a response, never whether a
-request is authorized.
-
-**Getting past the login wall without a build:** since every backend endpoint requires a
-real session JWT, and neither web preview nor Expo Go can produce one via real Google
-Sign-In, there is a **dev-only bypass**: `POST /auth/dev-login` mints a session for a
-fixed test account (`dev@tamreena.local`) with no credential at all. It's disabled by
-default — returns a plain 404, not even confirming it exists — unless the server operator
-sets `ALLOW_DEV_LOGIN=true` in `.env`. **Never set that true anywhere but a local dev
-machine** — it lets anyone with network access to that server sign in with nothing. On
-the client, the "Continue as Test User (dev only)" button on `LoginScreen` only renders
-when React Native's `__DEV__` global is true (always false in a release build), so it's a
-two-layer gate: client-side visibility AND server-side opt-in, either of which alone
-would block it in production.
+**Backend note:** `POST /auth/dev-login` (in `api/routes/auth.py`) mints
+a session for a fixed test account (`dev@tamreena.local`) with no
+credential, for use by any client that can't complete real Google
+Sign-In (e.g. a client running against this backend without a full
+OAuth setup). Disabled by default — returns a plain 404, not even
+confirming it exists — unless the server operator sets
+`ALLOW_DEV_LOGIN=true` in `.env`. **Never set that true anywhere but a
+local dev machine** — it lets anyone with network access to that server
+sign in with nothing.
 
 ## Why a shared markdown file instead of a database
 
