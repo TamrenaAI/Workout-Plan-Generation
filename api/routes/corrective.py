@@ -1,12 +1,19 @@
 """
 POST /workouts/{session_id}/corrective-results — ingestion endpoint for the
 external corrective/CV system (a separate repo, called over HTTP, per this
-project's convention for coworker-owned agents). Pure storage scaffolding:
-no downstream wiring into any agent yet, and no scoring/validation logic
-beyond a loose sanity check — the CV repo's real output contract isn't
-defined yet, so exercise_id stays optional (falls back to exercise_name)
-until the workout-plan restructure (a separate, later phase) gives
-exercises a stable id this system can reference directly.
+project's convention for coworker-owned agents). Accepts the CV tool's
+native per-exercise JSON export directly — one call per exercise
+recording, matching how the tool actually produces one file per exercise
+(see Hack_Squat_20260723_000913.json, repo root, for a real sample).
+Unknown fields (rules/history/stats) are accepted and ignored — Pydantic
+drops extra fields by default, so the CV tool's full file can be POSTed
+as-is without the caller needing to strip anything.
+
+exercise_name (from exercise.name) is the join key for aggregation
+(pipeline/monthly_progress.py) — no exercise_id/day_label/set_number:
+the CV tool doesn't know our plan's day/set structure, and nothing yet
+gives exercises a stable id to reference (a separate, later workout-plan
+restructure).
 """
 
 from datetime import datetime, timezone
@@ -23,62 +30,68 @@ from tools.mongo import get_db
 router = APIRouter()
 
 
-class FormError(BaseModel):
-    rep_index: int
-    error_type: str
-    confidence: Optional[float] = None
+class CVSummary(BaseModel):
+    total_reps: int
+    good_reps: int
+    bad_reps: int
+    accuracy: float
+    average_rep_duration: float
+    fastest_rep: float
+    slowest_rep: float
+    total_workout_duration: float
+    common_errors: dict[str, int] = {}
+    most_common_error: Optional[str] = None
+    score: float
 
 
-class CorrectiveExerciseResult(BaseModel):
-    exercise_id: Optional[str] = None
-    exercise_name: str
-    day_label: Optional[str] = None
-    set_number: Optional[int] = None
-    reps_attempted: int
-    reps_correct: int
-    reps_incorrect: int
-    form_errors: list[FormError] = []
-    recorded_at: Optional[datetime] = None
+class CVExercise(BaseModel):
+    name: str
 
 
-class CorrectiveResultsRequest(BaseModel):
-    results: list[CorrectiveExerciseResult]
+class CVSession(BaseModel):
+    recorded_at: datetime
 
 
-class CorrectiveResultsResponse(BaseModel):
+class CorrectiveResultPayload(BaseModel):
+    session: CVSession
+    exercise: CVExercise
+    summary: CVSummary
+
+
+class CorrectiveResultResponse(BaseModel):
     recorded: int
 
 
-@router.post("/workouts/{session_id}/corrective-results", response_model=CorrectiveResultsResponse)
-async def submit_corrective_results(
+@router.post("/workouts/{session_id}/corrective-results", response_model=CorrectiveResultResponse)
+async def submit_corrective_result(
     session_id: str,
-    body: CorrectiveResultsRequest,
+    body: CorrectiveResultPayload,
     user: dict = Depends(get_current_user),
 ):
     if not user_owns_session(session_id, user["id"]):
         raise HTTPException(404, "Unknown session_id.")
 
-    now = datetime.now(timezone.utc)
-    docs = []
-    for r in body.results:
-        if r.reps_correct + r.reps_incorrect > r.reps_attempted:
-            raise HTTPException(422, f"reps_correct + reps_incorrect exceeds reps_attempted for '{r.exercise_name}'.")
-        docs.append({
-            "user_id": ObjectId(user["id"]),
-            "session_id": session_id,
-            "exercise_id": ObjectId(r.exercise_id) if r.exercise_id else None,
-            "exercise_name": r.exercise_name,
-            "day_label": r.day_label,
-            "set_number": r.set_number,
-            "reps_attempted": r.reps_attempted,
-            "reps_correct": r.reps_correct,
-            "reps_incorrect": r.reps_incorrect,
-            "form_errors": [fe.model_dump() for fe in r.form_errors],
-            "recorded_at": r.recorded_at or now,
-            "received_at": now,
-        })
+    s = body.summary
+    if s.good_reps + s.bad_reps > s.total_reps:
+        raise HTTPException(422, f"good_reps + bad_reps exceeds total_reps for '{body.exercise.name}'.")
 
-    if docs:
-        get_db().corrective_results.insert_many(docs)
+    get_db().corrective_results.insert_one({
+        "user_id": ObjectId(user["id"]),
+        "session_id": session_id,
+        "exercise_name": body.exercise.name,
+        "total_reps": s.total_reps,
+        "good_reps": s.good_reps,
+        "bad_reps": s.bad_reps,
+        "accuracy": s.accuracy,
+        "score": s.score,
+        "common_errors": s.common_errors,
+        "average_rep_duration": s.average_rep_duration,
+        "fastest_rep": s.fastest_rep,
+        "slowest_rep": s.slowest_rep,
+        "total_workout_duration": s.total_workout_duration,
+        "most_common_error": s.most_common_error,
+        "recorded_at": body.session.recorded_at,
+        "received_at": datetime.now(timezone.utc),
+    })
 
-    return CorrectiveResultsResponse(recorded=len(docs))
+    return CorrectiveResultResponse(recorded=1)
