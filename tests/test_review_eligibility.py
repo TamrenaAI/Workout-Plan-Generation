@@ -1,0 +1,96 @@
+"""
+Tests for monthly-review eligibility computation (auth/ownership.py):
+a session becomes eligible 30 days after creation, only once its plan has
+finished generating, and only until a review has already been created for it.
+
+Mongo access is mongomock'd per-test — see tests/conftest.py's mongo_db
+fixture (autouse).
+"""
+
+import os
+import sys
+from datetime import datetime, timedelta, timezone
+
+import pytest
+
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from auth import models as auth_models
+from auth import ownership
+from tools.mongo import get_db
+
+_SAMPLE_INTAKE = {
+    "goal": "hypertrophy", "days_per_week": 4, "experience": "beginner",
+    "session_duration": "60min", "injuries": None, "priority": None,
+    "age": None, "sleep_quality": None, "job_type": None, "current_program": None,
+}
+
+
+def _make_user(sub: str) -> dict:
+    return auth_models.get_or_create_user_by_google(sub=sub, email=f"{sub}@example.com", name=sub, picture_url=None)
+
+
+def _backdate_and_ready(session_id: str, days: int):
+    get_db().plan_sessions.update_one(
+        {"_id": session_id},
+        {"$set": {"status": "ready", "created_at": datetime.now(timezone.utc) - timedelta(days=days)}},
+    )
+
+
+def test_create_session_persists_intake_and_previous_session_id():
+    owner = _make_user("elig-create")
+    ownership.create_session("s0", owner["id"], "hypertrophy", intake=_SAMPLE_INTAKE, previous_session_id="prev-0")
+
+    doc = ownership.get_session("s0")
+    assert doc["intake"] == _SAMPLE_INTAKE
+    assert doc["previous_session_id"] == "prev-0"
+
+
+def test_session_not_eligible_before_30_days():
+    owner = _make_user("elig-1")
+    ownership.create_session("s1", owner["id"], "hypertrophy", intake=_SAMPLE_INTAKE)
+    _backdate_and_ready("s1", days=10)
+
+    sessions = ownership.list_sessions_for_user(owner["id"])
+    assert sessions[0]["eligible_for_review"] is False
+
+
+def test_session_eligible_after_30_days_and_ready():
+    owner = _make_user("elig-2")
+    ownership.create_session("s2", owner["id"], "hypertrophy", intake=_SAMPLE_INTAKE)
+    _backdate_and_ready("s2", days=31)
+
+    sessions = ownership.list_sessions_for_user(owner["id"])
+    assert sessions[0]["eligible_for_review"] is True
+
+
+def test_session_not_eligible_if_still_generating():
+    owner = _make_user("elig-3")
+    ownership.create_session("s3", owner["id"], "hypertrophy", intake=_SAMPLE_INTAKE)
+    get_db().plan_sessions.update_one(
+        {"_id": "s3"}, {"$set": {"created_at": datetime.now(timezone.utc) - timedelta(days=31)}},
+    )
+    # status is left at "generating" — never marked ready
+
+    sessions = ownership.list_sessions_for_user(owner["id"])
+    assert sessions[0]["eligible_for_review"] is False
+
+
+def test_session_not_eligible_once_already_reviewed():
+    owner = _make_user("elig-4")
+    ownership.create_session("s4", owner["id"], "hypertrophy", intake=_SAMPLE_INTAKE)
+    _backdate_and_ready("s4", days=31)
+    ownership.create_session("s4-review", owner["id"], "hypertrophy", intake=_SAMPLE_INTAKE, previous_session_id="s4")
+
+    sessions = ownership.list_sessions_for_user(owner["id"])
+    s4 = next(s for s in sessions if s["session_id"] == "s4")
+    assert s4["eligible_for_review"] is False
+
+
+def test_get_session_reports_eligibility_same_as_list():
+    owner = _make_user("elig-5")
+    ownership.create_session("s5", owner["id"], "hypertrophy", intake=_SAMPLE_INTAKE)
+    _backdate_and_ready("s5", days=31)
+
+    doc = ownership.get_session("s5")
+    assert doc["eligible_for_review"] is True
