@@ -143,7 +143,6 @@ Write the Progress Report for this month now."""
     return read_progress_report(new_session_id) or "(progress report unavailable)"
 
 
-@router.post("/plan")
 @router.post("/generate-plan")
 async def generate_plan(
     inbody_file: UploadFile = File(...),

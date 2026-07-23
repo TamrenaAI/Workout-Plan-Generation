@@ -49,11 +49,16 @@ async function loadSessions() {
 }
 
 function renderSessionList(el) {
-  if (_wtSessions.length === 0) {
-    el.innerHTML = `<p style="color:var(--text-muted);">No sessions yet.</p>`;
+  // All 3 test actions (feedback, monthly review, progress report) only make sense
+  // against a session whose plan is ready AND is review-eligible — narrow down to
+  // just one such session instead of showing every session, most of which can't
+  // actually exercise all 3 options.
+  const usableSessions = _wtSessions.filter(s => s.status === 'ready' && s.eligible_for_review).slice(0, 1);
+  if (usableSessions.length === 0) {
+    el.innerHTML = `<p style="color:var(--text-muted);">No session is ready and review-eligible yet.</p>`;
     return;
   }
-  el.innerHTML = _wtSessions.map(s => `
+  el.innerHTML = usableSessions.map(s => `
     <div class="t-card" style="margin-bottom:12px;">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
         <span style="font-weight:600;">${escapeHtml(s.goal || '—')}</span>
