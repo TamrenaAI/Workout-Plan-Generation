@@ -92,21 +92,29 @@ def test_adherence_computed_from_workout_feedback_count_vs_expected():
 def test_rep_quality_aggregates_across_corrective_results():
     user_id = _uid()
     old_session_id = "old-2"
-    _insert_corrective_result(old_session_id, user_id, "Squat", good=8, bad=2, score=90.0, common_errors={"knee_valgus": 2})
-    _insert_corrective_result(old_session_id, user_id, "Squat", good=7, bad=3, score=80.0, common_errors={"knee_valgus": 1})
-    _insert_corrective_result(old_session_id, user_id, "Bench Press", good=10, bad=0, score=95.0)
+    # Unequal per-submission totals to ensure ratio-of-sums and average-of-averages diverge.
+    # Squat 1: 100 total reps, 10 good, 90 bad (10% accuracy, but heavy weight in ratio-of-sums)
+    _insert_corrective_result(old_session_id, user_id, "Squat", good=10, bad=90, score=50.0, common_errors={"knee_valgus": 2})
+    # Squat 2: 10 total reps, 9 good, 1 bad (90% accuracy, but light weight in ratio-of-sums)
+    _insert_corrective_result(old_session_id, user_id, "Squat", good=9, bad=1, score=95.0, common_errors={"knee_valgus": 1})
+    # Bench Press: 10 total reps, 10 good, 0 bad (100% accuracy, light weight in ratio-of-sums)
+    _insert_corrective_result(old_session_id, user_id, "Bench Press", good=10, bad=0, score=90.0)
 
     summary = monthly_progress.build_monthly_summary(
         old_session_id=old_session_id, new_session_id="new-2", days_per_week=3, old_created_at=_month_ago(),
     )
     rq = summary["rep_quality"]
-    assert rq["total_reps"] == 30
-    assert rq["good_reps"] == 25
-    assert rq["bad_reps"] == 5
-    assert rq["accuracy"] == pytest.approx(25 / 30)
-    assert rq["avg_score"] == pytest.approx((90.0 + 80.0 + 95.0) / 3)
+    # Overall: (10+9+10) / (100+10+10) = 29/120 = 0.24166...
+    # (If wrongly averaged per-submission accuracies: (0.10 + 0.90 + 1.00) / 3 = 2.00/3 = 0.6666... — diverges!)
+    assert rq["total_reps"] == 120
+    assert rq["good_reps"] == 29
+    assert rq["bad_reps"] == 91
+    assert rq["accuracy"] == pytest.approx(29 / 120)
+    assert rq["avg_score"] == pytest.approx((50.0 + 95.0 + 90.0) / 3)
+    # Per-exercise Squat: (10+9) / (100+10) = 19/110 = 0.17272...
+    # (If wrongly averaged per-submission accuracies: (0.10 + 0.90) / 2 = 1.00/2 = 0.50 — diverges!)
     assert rq["per_exercise"]["Squat"] == {
-        "good": 15, "bad": 5, "accuracy": pytest.approx(0.75), "avg_score": pytest.approx((90.0 + 80.0) / 2),
+        "good": 19, "bad": 91, "accuracy": pytest.approx(19 / 110), "avg_score": pytest.approx((50.0 + 95.0) / 2),
     }
     assert rq["top_form_errors"][0] == {"error_type": "knee_valgus", "count": 3}
 
