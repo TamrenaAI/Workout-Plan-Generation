@@ -58,3 +58,114 @@ function renderSessionList(el) {
     </div>
   `).join('');
 }
+
+// ── Feedback form ─────────────────────────────────────────────────────────────
+
+let _wtParsedDays = [];
+
+async function openFeedbackForm(sessionId) {
+  const panel = document.getElementById('wt-panel');
+  panel.innerHTML = `<div class="t-card" style="margin-top:24px;"><p style="color:var(--text-muted);">Loading plan…</p></div>`;
+  try {
+    const token = await ensureAuthToken();
+    const res = await fetch(`/sessions/${sessionId}/plan`, { headers: { Authorization: `Bearer ${token}` } });
+    if (!res.ok) throw new Error(`Failed to load plan (${res.status})`);
+    const data = await res.json();
+    if (data.status !== 'ready' || !data.plan) {
+      panel.innerHTML = `<div class="t-card" style="margin-top:24px;"><p style="color:var(--text-muted);">Plan not ready yet for this session (status: ${escapeHtml(data.status)}).</p></div>`;
+      return;
+    }
+    panel.innerHTML = `<div class="t-section-title" style="margin-top:24px;margin-bottom:12px;">Submit Feedback</div>` + renderFeedbackDays(sessionId, data.plan);
+  } catch (err) {
+    panel.innerHTML = `<div class="t-card" style="border-color:var(--danger);margin-top:24px;"><p style="color:var(--danger);">${escapeHtml(err.message)}</p></div>`;
+  }
+}
+
+// Reuses plan.js's existing parsePlanToHtml (the one and only markdown parser in
+// this frontend) rather than writing a second one — renders it into a detached
+// element and reads day titles / exercise names back out via DOM queries.
+function parsePlanIntoDays(markdown) {
+  const wrapper = document.createElement('div');
+  wrapper.innerHTML = parsePlanToHtml(markdown);
+  const days = [];
+  wrapper.querySelectorAll('.plan-card').forEach(card => {
+    const titleEl = card.querySelector('.plan-card-title');
+    const title = titleEl ? titleEl.textContent : '';
+    if (!/^day\s+\d+/i.test(title)) return; // skip non-day sections like "Weekly Volume Summary"
+    const table = card.querySelector('.exercise-table');
+    if (!table) return;
+    const headers = Array.from(table.querySelectorAll('thead th')).map(th => th.textContent);
+    const exerciseCol = headers.findIndex(h => /exercise/i.test(h));
+    if (exerciseCol === -1) return;
+    const exercises = Array.from(table.querySelectorAll('tbody tr'))
+      .map(tr => {
+        const cells = tr.querySelectorAll('td');
+        return cells[exerciseCol] ? cells[exerciseCol].textContent : null;
+      })
+      .filter(Boolean);
+    if (exercises.length > 0) days.push({ title, exercises });
+  });
+  return days;
+}
+
+function renderFeedbackDays(sessionId, planMarkdown) {
+  _wtParsedDays = parsePlanIntoDays(planMarkdown);
+  if (_wtParsedDays.length === 0) {
+    return `<div class="t-card"><p style="color:var(--text-muted);">No day sections found in this plan.</p></div>`;
+  }
+  return _wtParsedDays.map((day, dayIndex) => `
+    <div class="t-card" style="margin-bottom:12px;">
+      <div class="plan-card-title">${escapeHtml(day.title)}</div>
+      <table class="exercise-table" style="margin-bottom:12px;">
+        <thead><tr><th>Exercise</th><th>Too easy</th><th>Just right</th><th>Too hard</th><th>Pain</th></tr></thead>
+        <tbody>
+          ${day.exercises.map((name, exIndex) => `
+            <tr>
+              <td>${escapeHtml(name)}</td>
+              <td style="text-align:center;"><input type="radio" name="wt-diff-${dayIndex}-${exIndex}" value="too_easy"></td>
+              <td style="text-align:center;"><input type="radio" name="wt-diff-${dayIndex}-${exIndex}" value="just_right" checked></td>
+              <td style="text-align:center;"><input type="radio" name="wt-diff-${dayIndex}-${exIndex}" value="too_hard"></td>
+              <td style="text-align:center;"><input type="checkbox" id="wt-pain-${dayIndex}-${exIndex}"></td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+      <button class="t-btn-ghost" style="width:auto;padding:0 12px;" onclick="submitFeedbackForDay('${sessionId}', ${dayIndex})">Submit feedback for this day</button>
+      <div id="wt-feedback-result-${dayIndex}" style="margin-top:10px;"></div>
+    </div>
+  `).join('');
+}
+
+async function submitFeedbackForDay(sessionId, dayIndex) {
+  const day = _wtParsedDays[dayIndex];
+  const exercises = day.exercises.map((name, exIndex) => {
+    const diffInput = document.querySelector(`input[name="wt-diff-${dayIndex}-${exIndex}"]:checked`);
+    const painInput = document.getElementById(`wt-pain-${dayIndex}-${exIndex}`);
+    return {
+      name,
+      difficulty: diffInput ? diffInput.value : 'just_right',
+      pain: !!(painInput && painInput.checked),
+    };
+  });
+
+  const resultEl = document.getElementById(`wt-feedback-result-${dayIndex}`);
+  resultEl.innerHTML = `<p style="color:var(--text-muted);">Submitting…</p>`;
+  try {
+    const token = await ensureAuthToken();
+    const res = await fetch(`/workouts/${sessionId}/feedback`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      body: JSON.stringify({ day_label: day.title, exercises }),
+    });
+    const data = await res.json().catch(() => null);
+    if (!res.ok) throw new Error(data?.detail ? String(data.detail) : `Server returned ${res.status}`);
+    resultEl.innerHTML = `
+      <span class="t-badge ${data.adjustment_triggered ? 'warning' : 'success'}">
+        ${data.adjustment_triggered ? 'Adjustment triggered' : 'No adjustment needed'}
+      </span>
+      ${data.summary ? `<p style="margin-top:8px;font-size:13px;color:var(--text-secondary);">${escapeHtml(data.summary)}</p>` : ''}
+    `;
+  } catch (err) {
+    resultEl.innerHTML = `<p style="color:var(--danger);">${escapeHtml(err.message)}</p>`;
+  }
+}
