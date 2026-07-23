@@ -43,7 +43,7 @@ def ensure_indexes() -> None:
     db.workout_feedback.create_index([("user_id", ASCENDING), ("submitted_at", -1)])
     db.workout_feedback.create_index([("session_id", ASCENDING), ("submitted_at", -1)])
 
-    db.corrective_results.create_index([("session_id", ASCENDING), ("exercise_id", ASCENDING)])
+    db.corrective_results.create_index([("session_id", ASCENDING), ("exercise_name", ASCENDING)])
     db.corrective_results.create_index([("user_id", ASCENDING), ("recorded_at", -1)])
 
     db.plan_sessions.create_index("previous_session_id")
