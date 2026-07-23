@@ -16,5 +16,18 @@ services:
       ME_CONFIG_MONGODB_SERVER: mongo
       ME_CONFIG_BASICAUTH: "false"
 
+  api:
+    build: .
+    ports:
+      - "8001:8001"
+    environment:
+      MONGO_URI: mongodb://mongo:27017
+    env_file:
+      - .env
+    depends_on:
+      - mongo
+    volumes:
+      - ./sessions:/app/sessions
+
 volumes:
   mongo_data:

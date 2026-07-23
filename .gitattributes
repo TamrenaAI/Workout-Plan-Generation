@@ -1,0 +1,4 @@
+# Shell scripts run inside Linux containers — CRLF line endings break their shebang
+# (#!/bin/sh\r is not a valid interpreter path). core.autocrlf=true on Windows would
+# silently reintroduce CRLF on checkout without this.
+*.sh text eol=lf

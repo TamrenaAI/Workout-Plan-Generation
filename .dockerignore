@@ -1,0 +1,35 @@
+.git
+.env
+sessions/
+__pycache__/
+.pytest_cache/
+tests/
+notebooks/
+Papers/
+data/models/
+.worktrees/
+.superpowers/
+.claude/
+# database/ holds one-time dataset-prep artifacts (raw CSVs/xlsx, import scripts) never
+# read by the running app — search_exercise_db reads from MongoDB (tools/database.py),
+# not these files. Only exercises_dataset/media/ (the GIFs api/main.py mounts at
+# /media/exercises) is actually needed at runtime. Excluding the rest cuts ~300MB from
+# the build context, including a 281MB CSV that was stalling context transfer.
+#
+# The raw media/ directory itself (2648 individual files) is ALSO excluded here, even
+# though it's needed — Docker Desktop's Windows-to-Linux-VM file-sharing layer is
+# dramatically slower (to the point of hanging) transferring many small files versus
+# one large one, independent of total byte size. media.tar (a single pre-built archive,
+# see Dockerfile) is copied and extracted inside the container instead.
+database/*
+!database/exercises_dataset
+database/exercises_dataset/*
+!database/exercises_dataset/media.tar
+
+# Qdrant's local-mode lock file — a runtime artifact recreated automatically on startup,
+# never something to bake into an image. Also a real hazard at build time: while any
+# process (e.g. a running dev server that triggered the RAG pipeline) holds Qdrant open,
+# this file is OS-level locked ("Device or resource busy"), and Docker's build-context
+# reader can hang indefinitely trying to read a locked file rather than failing fast —
+# confirmed as the actual root cause of repeated "load build context" stalls this session.
+rag_data/qdrant/.lock
