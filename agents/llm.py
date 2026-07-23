@@ -20,21 +20,6 @@ from config import (
 )
 
 
-# def get_llm(temperature: float = 0.3) -> ChatOpenAI:
-#     """Build a fresh ChatOpenAI client pointed at the Azure deployment.
-
-#     temperature=0.3 for agent reasoning (supervisor / sub-agents).
-#     temperature=0 is used by the InBody extraction pipeline, where
-#     deterministic reads matter more than variety.
-#     """
-#     return ChatOpenAI(
-#         model=OPENAI_MODEL,
-#         api_key=OPENAI_API_KEY,
-#         temperature=temperature,
-#         timeout=60,
-#         max_retries=2
-#     )
-
 def get_llm(temperature: float = 0.3) -> ChatOpenAI:
     """Build a fresh ChatOpenAI client pointed at the Azure deployment.
 
@@ -43,11 +28,26 @@ def get_llm(temperature: float = 0.3) -> ChatOpenAI:
     deterministic reads matter more than variety.
     """
     return ChatOpenAI(
-        model=AZURE_OPENAI_DEPLOYMENT_NAME,
-        base_url=AZURE_OPENAI_ENDPOINT,
-        api_key=AZURE_OPENAI_API_KEY,
+        model=OPENAI_MODEL,
+        api_key=OPENAI_API_KEY,
         temperature=temperature,
         timeout=60,
-        max_retries=2,
-        stream_usage=True,
+        max_retries=2
     )
+
+# def get_llm(temperature: float = 0.3) -> ChatOpenAI:
+#     """Build a fresh ChatOpenAI client pointed at the Azure deployment.
+
+#     temperature=0.3 for agent reasoning (supervisor / sub-agents).
+#     temperature=0 is used by the InBody extraction pipeline, where
+#     deterministic reads matter more than variety.
+#     """
+#     return ChatOpenAI(
+#         model=AZURE_OPENAI_DEPLOYMENT_NAME,
+#         base_url=AZURE_OPENAI_ENDPOINT,
+#         api_key=AZURE_OPENAI_API_KEY,
+#         temperature=temperature,
+#         timeout=60,
+#         max_retries=2,
+#         stream_usage=True,
+#     )
