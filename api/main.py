@@ -65,6 +65,13 @@ app.include_router(corrective.router, tags=["corrective"])
 if EXERCISE_MEDIA_DIR.is_dir():
     app.mount("/media/exercises", StaticFiles(directory=EXERCISE_MEDIA_DIR), name="exercise_media")
 
+# Serves sample InBody images (samples/inbody*.jfif) so the workout-test frontend
+# page's "Use sample image" button can attach one without a manual file upload —
+# see frontend/src/pages/workout-test.js.
+SAMPLES_DIR = Path(__file__).resolve().parent.parent / "samples"
+if SAMPLES_DIR.is_dir():
+    app.mount("/media/samples", StaticFiles(directory=SAMPLES_DIR), name="samples")
+
 FRONTEND_DIR = Path(__file__).resolve().parent.parent / "frontend"
 if FRONTEND_DIR.is_dir():
     app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
