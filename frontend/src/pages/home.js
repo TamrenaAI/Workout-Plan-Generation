@@ -14,6 +14,8 @@ function renderHome(container) {
         <button class="t-btn-primary" onclick="navigate('intake')">Begin Assessment</button>
       </div>
 
+      <button class="t-btn-ghost" style="margin-top:16px;width:auto;padding:0 16px;font-size:12px;" onclick="navigate('workout-test')">Workout Feature Test</button>
+
       <div class="t-badge" style="margin-top:32px;">Hunter Rank System</div>
     </div>
   `;

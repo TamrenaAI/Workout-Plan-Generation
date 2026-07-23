@@ -39,6 +39,7 @@ const PAGES = {
   'capture':        renderCapture,
   'processing':     renderProcessing,
   'plan':           renderPlan,
+  'workout-test':   renderWorkoutTest,
 };
 
 // ── Router ────────────────────────────────────────────────────────────────────
