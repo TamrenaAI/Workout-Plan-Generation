@@ -42,18 +42,23 @@ def _make_inbody_result(smm_kg: float, body_fat_percent: float, arm_asymmetry: b
     return InBodyResult(raw=raw, flags=flags)
 
 
-def _insert_corrective_result(session_id, user_id, exercise_name, correct, incorrect, error_types=None):
+def _insert_corrective_result(session_id, user_id, exercise_name, good, bad, score=85.0, common_errors=None):
+    total = good + bad
     get_db().corrective_results.insert_one({
         "user_id": ObjectId(user_id),
         "session_id": session_id,
-        "exercise_id": None,
         "exercise_name": exercise_name,
-        "day_label": "Day 1",
-        "set_number": 1,
-        "reps_attempted": correct + incorrect,
-        "reps_correct": correct,
-        "reps_incorrect": incorrect,
-        "form_errors": [{"rep_index": i, "error_type": et, "confidence": 0.9} for i, et in enumerate(error_types or [])],
+        "total_reps": total,
+        "good_reps": good,
+        "bad_reps": bad,
+        "accuracy": (good / total * 100) if total else 0.0,
+        "score": score,
+        "common_errors": common_errors or {},
+        "average_rep_duration": 3.0,
+        "fastest_rep": 2.5,
+        "slowest_rep": 4.0,
+        "total_workout_duration": total * 3.0,
+        "most_common_error": next(iter(common_errors), None) if common_errors else None,
         "recorded_at": datetime.now(timezone.utc),
         "received_at": datetime.now(timezone.utc),
     })
@@ -87,19 +92,22 @@ def test_adherence_computed_from_workout_feedback_count_vs_expected():
 def test_rep_quality_aggregates_across_corrective_results():
     user_id = _uid()
     old_session_id = "old-2"
-    _insert_corrective_result(old_session_id, user_id, "Squat", correct=8, incorrect=2, error_types=["knee_valgus", "knee_valgus"])
-    _insert_corrective_result(old_session_id, user_id, "Squat", correct=7, incorrect=3, error_types=["knee_valgus"])
-    _insert_corrective_result(old_session_id, user_id, "Bench Press", correct=10, incorrect=0)
+    _insert_corrective_result(old_session_id, user_id, "Squat", good=8, bad=2, score=90.0, common_errors={"knee_valgus": 2})
+    _insert_corrective_result(old_session_id, user_id, "Squat", good=7, bad=3, score=80.0, common_errors={"knee_valgus": 1})
+    _insert_corrective_result(old_session_id, user_id, "Bench Press", good=10, bad=0, score=95.0)
 
     summary = monthly_progress.build_monthly_summary(
         old_session_id=old_session_id, new_session_id="new-2", days_per_week=3, old_created_at=_month_ago(),
     )
     rq = summary["rep_quality"]
     assert rq["total_reps"] == 30
-    assert rq["correct_reps"] == 25
-    assert rq["incorrect_reps"] == 5
+    assert rq["good_reps"] == 25
+    assert rq["bad_reps"] == 5
     assert rq["accuracy"] == pytest.approx(25 / 30)
-    assert rq["per_exercise"]["Squat"] == {"correct": 15, "incorrect": 5, "accuracy": pytest.approx(0.75)}
+    assert rq["avg_score"] == pytest.approx((90.0 + 80.0 + 95.0) / 3)
+    assert rq["per_exercise"]["Squat"] == {
+        "good": 15, "bad": 5, "accuracy": pytest.approx(0.75), "avg_score": pytest.approx((90.0 + 80.0) / 2),
+    }
     assert rq["top_form_errors"][0] == {"error_type": "knee_valgus", "count": 3}
 
 
@@ -108,7 +116,8 @@ def test_rep_quality_empty_when_no_corrective_results():
         old_session_id="old-3", new_session_id="new-3", days_per_week=3, old_created_at=_month_ago(),
     )
     rq = summary["rep_quality"]
-    assert rq == {"total_reps": 0, "correct_reps": 0, "incorrect_reps": 0, "accuracy": None, "per_exercise": {}, "top_form_errors": []}
+    assert rq == {"total_reps": 0, "good_reps": 0, "bad_reps": 0, "accuracy": None, "avg_score": None,
+                  "per_exercise": {}, "top_form_errors": []}
 
 
 # --- subjective flags ---------------------------------------------------------------

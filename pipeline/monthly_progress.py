@@ -29,33 +29,39 @@ def _adherence(old_session_id: str, days_per_week: int, old_created_at: datetime
 def _rep_quality(old_session_id: str) -> dict:
     docs = list(get_db().corrective_results.find({"session_id": old_session_id}))
     if not docs:
-        return {"total_reps": 0, "correct_reps": 0, "incorrect_reps": 0, "accuracy": None,
-                "per_exercise": {}, "top_form_errors": []}
+        return {"total_reps": 0, "good_reps": 0, "bad_reps": 0, "accuracy": None,
+                "avg_score": None, "per_exercise": {}, "top_form_errors": []}
 
-    total_correct = sum(d["reps_correct"] for d in docs)
-    total_incorrect = sum(d["reps_incorrect"] for d in docs)
-    total = total_correct + total_incorrect
+    total_good = sum(d["good_reps"] for d in docs)
+    total_bad = sum(d["bad_reps"] for d in docs)
+    total = total_good + total_bad
 
     per_exercise: dict[str, dict] = {}
     error_counts: dict[str, int] = {}
+    scores_by_exercise: dict[str, list[float]] = {}
     for d in docs:
-        ex = per_exercise.setdefault(d["exercise_name"], {"correct": 0, "incorrect": 0})
-        ex["correct"] += d["reps_correct"]
-        ex["incorrect"] += d["reps_incorrect"]
-        for fe in d.get("form_errors", []):
-            error_counts[fe["error_type"]] = error_counts.get(fe["error_type"], 0) + 1
+        ex = per_exercise.setdefault(d["exercise_name"], {"good": 0, "bad": 0})
+        ex["good"] += d["good_reps"]
+        ex["bad"] += d["bad_reps"]
+        scores_by_exercise.setdefault(d["exercise_name"], []).append(d["score"])
+        for error_type, count in d.get("common_errors", {}).items():
+            error_counts[error_type] = error_counts.get(error_type, 0) + count
 
-    for ex in per_exercise.values():
-        ex_total = ex["correct"] + ex["incorrect"]
-        ex["accuracy"] = ex["correct"] / ex_total if ex_total else None
+    for name, ex in per_exercise.items():
+        ex_total = ex["good"] + ex["bad"]
+        ex["accuracy"] = ex["good"] / ex_total if ex_total else None
+        scores = scores_by_exercise[name]
+        ex["avg_score"] = sum(scores) / len(scores) if scores else None
 
     top_errors = sorted(error_counts.items(), key=lambda kv: kv[1], reverse=True)[:5]
+    all_scores = [d["score"] for d in docs]
 
     return {
         "total_reps": total,
-        "correct_reps": total_correct,
-        "incorrect_reps": total_incorrect,
-        "accuracy": total_correct / total if total else None,
+        "good_reps": total_good,
+        "bad_reps": total_bad,
+        "accuracy": total_good / total if total else None,
+        "avg_score": sum(all_scores) / len(all_scores) if all_scores else None,
         "per_exercise": per_exercise,
         "top_form_errors": [{"error_type": t, "count": c} for t, c in top_errors],
     }
