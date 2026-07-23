@@ -292,3 +292,59 @@ async function submitMonthlyReview(sessionId) {
     document.getElementById('wt-monthly-review-submit').disabled = false;
   }
 }
+
+// ── Progress report viewer ───────────────────────────────────────────────────
+
+async function openProgressReport(sessionId) {
+  const panel = document.getElementById('wt-panel');
+  panel.innerHTML = `<div class="t-card" style="margin-top:24px;"><p style="color:var(--text-muted);">Loading report…</p></div>`;
+  try {
+    const token = await ensureAuthToken();
+    const res = await fetch(`/progress/${sessionId}/report`, { headers: { Authorization: `Bearer ${token}` } });
+    if (res.status === 404) {
+      panel.innerHTML = `<div class="t-card" style="margin-top:24px;"><p style="color:var(--text-muted);">No progress report for this session.</p></div>`;
+      return;
+    }
+    if (!res.ok) throw new Error(`Failed to load report (${res.status})`);
+    const data = await res.json();
+    panel.innerHTML = renderProgressReport(data);
+  } catch (err) {
+    panel.innerHTML = `<div class="t-card" style="border-color:var(--danger);margin-top:24px;"><p style="color:var(--danger);">${escapeHtml(err.message)}</p></div>`;
+  }
+}
+
+function renderProgressReport(report) {
+  const s = report.summary || {};
+  const adherence = s.adherence || {};
+  const repQuality = s.rep_quality || {};
+  const inbodyDelta = s.inbody_delta;
+  const topErrors = repQuality.top_form_errors || [];
+
+  return `
+    <div class="t-card" style="margin-top:24px;margin-bottom:16px;">
+      <div class="t-section-title">Progress Report</div>
+      <p style="color:var(--text-secondary);font-size:14px;line-height:1.7;white-space:pre-wrap;">${escapeHtml(report.narrative || '')}</p>
+    </div>
+    <div class="t-card">
+      <div style="font-size:13px;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">Monthly Summary</div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;">
+        <div class="t-stat-tile">
+          <span class="value">${adherence.adherence_rate != null ? Math.round(adherence.adherence_rate * 100) + '%' : '—'}</span>
+          <span class="label">Adherence</span>
+        </div>
+        <div class="t-stat-tile">
+          <span class="value">${repQuality.accuracy != null ? Math.round(repQuality.accuracy * 100) + '%' : '—'}</span>
+          <span class="label">Rep Accuracy</span>
+        </div>
+        <div class="t-stat-tile">
+          <span class="value">${inbodyDelta ? (inbodyDelta.skeletal_muscle_mass_kg > 0 ? '+' : '') + inbodyDelta.skeletal_muscle_mass_kg + 'kg' : '—'}</span>
+          <span class="label">SMM Delta</span>
+        </div>
+      </div>
+      ${topErrors.length ? `
+        <div style="font-size:12px;color:var(--text-muted);margin-bottom:6px;">Top form errors</div>
+        <ul class="plan-list">${topErrors.map(e => `<li>${escapeHtml(e.error_type)} (${e.count}×)</li>`).join('')}</ul>
+      ` : ''}
+    </div>
+  `;
+}
