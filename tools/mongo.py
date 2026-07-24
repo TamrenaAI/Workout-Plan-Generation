@@ -50,3 +50,5 @@ def ensure_indexes() -> None:
 
     db.progress_reports.create_index("new_session_id", unique=True)
     db.progress_reports.create_index([("user_id", ASCENDING), ("created_at", -1)])
+
+    db.plan_adjustments.create_index([("session_id", ASCENDING), ("day_label", ASCENDING), ("created_at", ASCENDING)])

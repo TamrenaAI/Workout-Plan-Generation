@@ -17,6 +17,7 @@ import json
 import os
 import re
 import threading
+from datetime import datetime, timezone
 
 from langchain_core.tools import tool
 
@@ -272,6 +273,68 @@ def validate_plan_completeness(session_id: str) -> str:
     if result.get("all_done"):
         return "PASS — all expected muscle groups have prescriptions."
     return f"INCOMPLETE — missing prescriptions for: {result.get('remaining')}. Do not assemble the plan."
+
+
+@tool
+def record_exercise_adjustment(
+    session_id: str,
+    day_label: str,
+    exercise_name: str,
+    reason: str,
+    new_exercise_name: str | None = None,
+    sets: int | None = None,
+    reps: str | None = None,
+    rpe: int | None = None,
+) -> str:
+    """Plan Adjuster calls this ONCE per flagged exercise it adjusts, in addition to (not
+    instead of) write_plan_memory's prose section. This is the structured record the API
+    route hands back to the frontend so it can update the exercise actually displayed in the
+    user's plan — write_plan_memory's markdown is for human narrative only and is never
+    parsed back out (see this module's docstring).
+
+    exercise_name: the ORIGINAL exercise name as it appears in plan memory — required so the
+        frontend can find what to replace/update.
+    new_exercise_name: set only when substituting the exercise entirely (pain=true case).
+        Leave None for a pure volume/intensity change to the same exercise.
+    sets, reps, rpe: the NEW value only for whichever of these actually changed. Leave the
+        others None.
+    reason: one sentence, referencing the specific feedback that triggered this adjustment.
+    """
+    get_db().plan_adjustments.insert_one({
+        "session_id": session_id,
+        "day_label": day_label,
+        "exercise_name": exercise_name,
+        "new_exercise_name": new_exercise_name,
+        "sets": sets,
+        "reps": reps,
+        "rpe": rpe,
+        "reason": reason,
+        "created_at": datetime.now(timezone.utc),
+    })
+    return f"Recorded structured adjustment for: {exercise_name}"
+
+
+def read_exercise_adjustments(session_id: str, day_label: str, since: "datetime") -> list[dict]:
+    """Plain function (not an agent tool) for the API route to call directly after the Plan
+    Adjuster finishes, to fetch the structured adjustments it just recorded via
+    record_exercise_adjustment. `since` scopes the query to this invocation's run so an
+    earlier adjustment for the same day_label isn't returned again."""
+    docs = get_db().plan_adjustments.find({
+        "session_id": session_id,
+        "day_label": day_label,
+        "created_at": {"$gte": since},
+    }).sort("created_at", 1)
+    return [
+        {
+            "exercise_name": d["exercise_name"],
+            "new_exercise_name": d.get("new_exercise_name"),
+            "sets": d.get("sets"),
+            "reps": d.get("reps"),
+            "rpe": d.get("rpe"),
+            "reason": d["reason"],
+        }
+        for d in docs
+    ]
 
 
 @tool

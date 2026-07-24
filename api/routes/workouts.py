@@ -6,6 +6,7 @@ revise the plan and returns its summary; otherwise just records the
 feedback with no adjustment (no LLM call — nothing to decide).
 """
 
+from datetime import datetime, timezone
 from typing import Literal, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
@@ -15,6 +16,7 @@ from agents.plan_adjuster import build_plan_adjuster
 from auth.dependencies import get_current_user
 from auth.ownership import user_owns_session
 from pipeline.workout_feedback import needs_adjustment, record_feedback
+from tools.memory import read_exercise_adjustments
 
 router = APIRouter()
 
@@ -33,10 +35,20 @@ class WorkoutFeedbackRequest(BaseModel):
     exercises: list[ExerciseFeedback]
 
 
+class ExerciseAdjustment(BaseModel):
+    exercise_name: str
+    new_exercise_name: Optional[str] = None
+    sets: Optional[int] = None
+    reps: Optional[str] = None
+    rpe: Optional[int] = None
+    reason: str
+
+
 class WorkoutFeedbackResponse(BaseModel):
     feedback_recorded: bool = True
     adjustment_triggered: bool
     summary: Optional[str] = None
+    adjustments: list[ExerciseAdjustment] = []
 
 
 @router.post("/workouts/{session_id}/feedback", response_model=WorkoutFeedbackResponse)
@@ -55,8 +67,14 @@ async def submit_workout_feedback(
     if not triggers_adjustment:
         return WorkoutFeedbackResponse(adjustment_triggered=False)
 
+    started_at = datetime.now(timezone.utc)
     summary = await _run_plan_adjuster(session_id, body.day_label)
-    return WorkoutFeedbackResponse(adjustment_triggered=True, summary=summary)
+    adjustments = read_exercise_adjustments(session_id, body.day_label, since=started_at)
+    return WorkoutFeedbackResponse(
+        adjustment_triggered=True,
+        summary=summary,
+        adjustments=[ExerciseAdjustment(**a) for a in adjustments],
+    )
 
 
 async def _run_plan_adjuster(session_id: str, day_label: str) -> str:

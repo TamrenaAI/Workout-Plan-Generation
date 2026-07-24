@@ -12,11 +12,17 @@ from deepagents import create_deep_agent
 
 from agents.llm import get_llm
 from config import load_prompt
-from tools.memory import read_plan_memory, read_workout_feedback, write_plan_memory
+from tools.memory import (
+    read_plan_memory,
+    read_workout_feedback,
+    record_exercise_adjustment,
+    write_plan_memory,
+)
 
 PLAN_ADJUSTER_TOOLS = [
     read_plan_memory,
     read_workout_feedback,
+    record_exercise_adjustment,
     write_plan_memory,
 ]
 

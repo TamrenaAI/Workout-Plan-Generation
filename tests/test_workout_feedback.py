@@ -13,6 +13,7 @@ moved to Mongo), hence the SESSION_DIR monkeypatch below.
 import json
 import os
 import sys
+from datetime import datetime, timedelta, timezone
 
 import pytest
 from fastapi.testclient import TestClient
@@ -94,6 +95,49 @@ def test_feedback_endpoint_requires_ownership():
         headers={"Authorization": f"Bearer {token}"},
     )
     assert r.status_code == 404
+
+
+def test_record_and_read_exercise_adjustments_scoped_by_since():
+    session_id = "session-adj"
+    since = datetime.now(timezone.utc) - timedelta(seconds=1)
+
+    tools_memory.record_exercise_adjustment.invoke({
+        "session_id": session_id,
+        "day_label": "Day 1",
+        "exercise_name": "Overhead Press",
+        "reason": "Shoulder pain reported on pressing movement.",
+        "new_exercise_name": "Machine Shoulder Press",
+    })
+    tools_memory.record_exercise_adjustment.invoke({
+        "session_id": session_id,
+        "day_label": "Day 1",
+        "exercise_name": "Squat",
+        "reason": "Felt too easy at prescribed volume.",
+        "sets": 4,
+    })
+
+    adjustments = tools_memory.read_exercise_adjustments(session_id, "Day 1", since=since)
+    assert len(adjustments) == 2
+    assert adjustments[0]["exercise_name"] == "Overhead Press"
+    assert adjustments[0]["new_exercise_name"] == "Machine Shoulder Press"
+    assert adjustments[1]["exercise_name"] == "Squat"
+    assert adjustments[1]["sets"] == 4
+    assert adjustments[1]["new_exercise_name"] is None
+
+
+def test_read_exercise_adjustments_excludes_entries_before_since():
+    session_id = "session-adj-2"
+    tools_memory.record_exercise_adjustment.invoke({
+        "session_id": session_id,
+        "day_label": "Day 1",
+        "exercise_name": "Bench Press",
+        "reason": "Prior adjustment run.",
+        "sets": 3,
+    })
+
+    later = datetime.now(timezone.utc) + timedelta(seconds=1)
+    adjustments = tools_memory.read_exercise_adjustments(session_id, "Day 1", since=later)
+    assert adjustments == []
 
 
 def test_feedback_endpoint_no_adjustment_path_skips_llm_call():

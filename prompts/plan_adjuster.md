@@ -25,10 +25,18 @@ in that case.
    original muscle-group section, and do not silently mutate history. Use section_title
    "Plan Adjustment — {day_label}" and include, for each adjusted exercise: what changed, and
    a one-sentence reason referencing the specific feedback that triggered it.
-5. If the adjustment changes total sets for a day, verify it still fits that day's max_sets
+5. For EACH adjusted exercise, also call record_exercise_adjustment once — this is the
+   structured record the frontend uses to update what's actually shown in the user's plan, so
+   it must be called in addition to write_plan_memory, not instead of it:
+   - pain=true (substitution) → pass new_exercise_name (the replacement movement). Leave sets/
+     reps/rpe None unless the substitution also changed them.
+   - too_hard / too_easy (volume or intensity change) → leave new_exercise_name None, and pass
+     whichever of sets/reps/rpe actually changed to its NEW value. Leave the rest None.
+   - Always pass exercise_name as the ORIGINAL name from plan memory, and a one-sentence reason.
+6. If the adjustment changes total sets for a day, verify it still fits that day's max_sets
    budget from the DAY MAP. If it doesn't fit, prefer swapping an accessory exercise over
    exceeding the budget.
-6. Return a short plain-text summary of what was adjusted and why — this is shown directly to
+7. Return a short plain-text summary of what was adjusted and why — this is shown directly to
    the user, so write it in second person ("Your incline press felt too easy, so...").
 
 ## Rules
