@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "aws-expert": {
+      "source": "personamanagmentlayer/pcl",
+      "sourceType": "github",
+      "skillPath": "stdlib/cloud/aws-expert/SKILL.md",
+      "computedHash": "f1716c8f006c7f84e487be0a3f78285cc45b342413c60817118be4a2ac6a40d1"
+    },
+    "expo-dev-client": {
+      "source": "expo/skills",
+      "sourceType": "github",
+      "skillPath": "plugins/expo/skills/expo-dev-client/SKILL.md",
+      "computedHash": "f2bd068657f6a65d532fe68ab28b1d279e9428de5197134e84f53df05a5c7269"
+    }
+  }
+}

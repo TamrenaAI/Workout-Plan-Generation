@@ -38,6 +38,9 @@ AZURE_OPENAI_API_VERSION = os.getenv("AZURE_OPENAI_API_VERSION")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL")
 
+# ── ITI Bedrock proxy (alternate LLM path, see llm.py's ITIBedrockChat) ──
+SBG_API_KEY = os.getenv("SBG_API_KEY")
+
 # ── Auth ──────────────────────────────────────────────────────────────
 GOOGLE_OAUTH_CLIENT_ID = os.getenv("GOOGLE_OAUTH_CLIENT_ID")
 JWT_SECRET = os.getenv("JWT_SECRET")

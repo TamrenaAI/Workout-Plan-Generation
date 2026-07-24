@@ -262,3 +262,47 @@ See `.env.example`. LLM calls go through Azure OpenAI
 `AZURE_OPENAI_API_VERSION`). `LANGSMITH_*` enables tracing. No MongoDB URI,
 no Qdrant URL, no Pinecone/Cohere/OpenAI/HuggingFace API keys are needed at
 this stage.
+
+## Deploying to AWS ECR
+
+Manual build-and-push process (no CI/CD pipeline yet — see
+`docs/superpowers/specs/2026-07-23-docker-ecr-deployment-design.md`
+for why that's out of scope for now):
+
+```bash
+# One-time: find your AWS account ID
+aws sts get-caller-identity --query Account --output text
+
+# Authenticate Docker against ECR
+aws ecr get-login-password --region eu-north-1 \
+  | docker login --username AWS --password-stdin <account-id>.dkr.ecr.eu-north-1.amazonaws.com
+
+# Build, tag, push
+docker build -t tamreena-backend .
+docker tag tamreena-backend:latest <account-id>.dkr.ecr.eu-north-1.amazonaws.com/tamreena-backend:latest
+docker push <account-id>.dkr.ecr.eu-north-1.amazonaws.com/tamreena-backend:latest
+```
+
+Replace `<account-id>` with the output of the `aws sts get-caller-identity`
+command above. The ECR repository `tamreena-backend` must already exist
+in `eu-north-1` (`aws ecr create-repository --repository-name tamreena-backend --region eu-north-1`
+if it doesn't yet).
+
+**RAG models from S3:** the image does NOT contain the ~4.4GB RAG
+embedding/reranker models (`data/models/`) — only the small exercise
+media/DB and Qdrant data are baked in. `RAG_MODELS_S3_BUCKET` is set to
+`fitness-app-models-prod-2026` and `RAG_MODELS_S3_PREFIX` to `workout`
+(region `eu-north-1`) as an environment variable on whatever runs this
+image (e.g. an ECS task definition), so they sync from S3 at container
+startup. Leave `RAG_MODELS_S3_BUCKET` unset to skip the sync entirely —
+`tools/rag/pipeline.py`'s existing HuggingFace-download fallback still
+works in that case, just slower on first use. On ECS/Fargate, S3 read
+access should come from the task's IAM role, not static credentials.
+See `docs/AWS_SETUP.md` and `iam/rag-models-s3-policy.json` for the
+least-privilege policy to attach.
+
+**Known limitation:** `sessions/` (plan.md session state) is not
+persistent across ECS task restarts by default — each task has its own
+ephemeral filesystem. Making this durable in production would need EFS
+or a data-store migration; that's an infrastructure decision beyond
+this repo's Docker setup, not solved here.

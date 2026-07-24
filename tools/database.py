@@ -26,6 +26,18 @@ def get_exercise_by_id(exercise_id: str) -> Optional[dict]:
     return doc
 
 
+# Per-movement-type cap on a single "all" query — some muscle groups have
+# 150-330 exercises total (e.g. arms, legs, chest), and dumping every one as
+# text into a sub-agent's tool result reliably overruns its ability to
+# reason over the output in one step, which manifests as the agent stalling
+# / retrying without ever completing (see agents/supervisor.py's raised
+# recursion_limit). Capping per movement_type (rather than one flat cap on
+# the combined list) keeps compound/isolation/unilateral all represented
+# instead of one category crowding out the others.
+RESULTS_PER_MOVEMENT_TYPE = 6
+PROJECTION = {"name": 1, "equipment": 1, "difficulty": 1, "movement_type": 1, "contraindications": 1}
+
+
 @tool
 def search_exercise_db(
     muscle_group: str,
@@ -37,13 +49,19 @@ def search_exercise_db(
     movement_type: compound | isolation | unilateral | all
     exclude_contraindication: body part to avoid (e.g. 'knee_pain')
     """
-    query = {"primary_muscle": muscle_group}
-    if movement_type != "all":
-        query["movement_type"] = movement_type
-
-    docs = list(get_db().exercises.find(
-        query, {"name": 1, "equipment": 1, "difficulty": 1, "movement_type": 1, "contraindications": 1},
-    ))
+    if movement_type == "all":
+        # Untyped docs (movement_type absent/null) are stretches/mobility
+        # drills, not prescribable strength exercises — only surfaced when a
+        # specific movement_type is requested that happens to match them.
+        docs = []
+        for mt in ("compound", "isolation", "unilateral"):
+            docs.extend(list(get_db().exercises.find(
+                {"primary_muscle": muscle_group, "movement_type": mt}, PROJECTION,
+            ).limit(RESULTS_PER_MOVEMENT_TYPE)))
+    else:
+        docs = list(get_db().exercises.find(
+            {"primary_muscle": muscle_group, "movement_type": movement_type}, PROJECTION,
+        ).limit(RESULTS_PER_MOVEMENT_TYPE * 3))
 
     if exclude_contraindication:
         docs = [d for d in docs if not (d.get("contraindications") and exclude_contraindication in d["contraindications"])]

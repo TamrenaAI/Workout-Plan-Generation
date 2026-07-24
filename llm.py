@@ -1,39 +1,30 @@
 """
-Shared LLM client factory.
-
-All agents (supervisor, exercise-recommender, plan-assembler) and the InBody
-VLM pipeline go through the same get_llm() factory. Currently wired to the
-ITI Bedrock proxy (see ITIBedrockChat below, adapted from the reference
-implementation in the repo-root llm.py) instead of Azure/OpenAI directly.
+ITIBedrockChat — LangChain BaseChatModel wrapper for the ITI Bedrock proxy API.
+The API key is loaded from settings (SBG_API_KEY in .env).
 """
 
+import requests
 from typing import Any, List, Optional
 
+# pyrefly: ignore [missing-import]
 from langchain_core.language_models.chat_models import BaseChatModel
-from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
-from langchain_core.outputs import ChatGeneration, ChatResult
-from langchain_openai import ChatOpenAI
-import requests
 
-from config import (
-    AZURE_OPENAI_API_KEY,
-    AZURE_OPENAI_DEPLOYMENT_NAME,
-    AZURE_OPENAI_ENDPOINT,
-    AZURE_OPENAI_API_VERSION,
-    OPENAI_API_KEY,
-    OPENAI_MODEL,
-    SBG_API_KEY,
-)
+# pyrefly: ignore [missing-import]
+from langchain_core.messages import BaseMessage, AIMessage, HumanMessage, SystemMessage
+
+# pyrefly: ignore [missing-import]
+from langchain_core.outputs import ChatResult, ChatGeneration
+
+from app.core.config import settings
 
 
 class ITIBedrockChat(BaseChatModel):
     """LangChain-compatible chat model that calls the ITI Bedrock proxy."""
 
-    # TODO: set the model id to call manually.
-    model_id: str = "openai.gpt-oss-120b-1:0"
+    model_id: str = "us.meta.llama3-3-70b-instruct-v1:0"
     base_url: str = "http://apiaccess.iti.net.eg/api/v1"
     timeout: int = 60
-    temperature: float = 0.3
+    temperature: float = 0.9
 
     @property
     def _llm_type(self) -> str:
@@ -69,11 +60,12 @@ class ITIBedrockChat(BaseChatModel):
             "temperature": kwargs.get("temperature", self.temperature),
         }
 
-        if not SBG_API_KEY:
+        api_key = settings.sbg_api_key
+        if not api_key:
             raise ValueError("SBG_API_KEY is not set. Please add it to your .env file.")
 
         headers = {
-            "Authorization": f"Bearer {SBG_API_KEY}",
+            "Authorization": f"Bearer {api_key}",
             "Content-Type": "application/json",
         }
 
@@ -83,6 +75,12 @@ class ITIBedrockChat(BaseChatModel):
             json=payload,
             timeout=self.timeout,
         )
+
+        if response.status_code != 200:
+            print(f"❌ Server returned status {response.status_code}")
+            print(f"📋 Response body: {response.text}")
+            response.raise_for_status()  # raises with status code in message
+
         response.raise_for_status()
 
         response_json = response.json()
@@ -97,41 +95,3 @@ class ITIBedrockChat(BaseChatModel):
         return ChatResult(
             generations=[ChatGeneration(message=AIMessage(content=ai_text))]
         )
-
-
-def get_llm(temperature: float = 0.3) -> BaseChatModel:
-    """Build a fresh chat client pointed at the ITI Bedrock proxy.
-
-    temperature=0.3 for agent reasoning (supervisor / sub-agents).
-    temperature=0 is used by the InBody extraction pipeline, where
-    deterministic reads matter more than variety.
-    """
-    return ITIBedrockChat(temperature=temperature)
-
-
-# def get_llm(temperature: float = 0.3) -> ChatOpenAI:
-#     """Build a fresh ChatOpenAI client using the direct OpenAI key."""
-#     return ChatOpenAI(
-#         model=OPENAI_MODEL,
-#         api_key=OPENAI_API_KEY,
-#         temperature=temperature,
-#         timeout=60,
-#         max_retries=2
-#     )
-
-# def get_llm(temperature: float = 0.3) -> ChatOpenAI:
-#     """Build a fresh ChatOpenAI client pointed at the Azure deployment.
-
-#     temperature=0.3 for agent reasoning (supervisor / sub-agents).
-#     temperature=0 is used by the InBody extraction pipeline, where
-#     deterministic reads matter more than variety.
-#     """
-#     return ChatOpenAI(
-#         model=AZURE_OPENAI_DEPLOYMENT_NAME,
-#         base_url=AZURE_OPENAI_ENDPOINT,
-#         api_key=AZURE_OPENAI_API_KEY,
-#         temperature=temperature,
-#         timeout=60,
-#         max_retries=2,
-#         stream_usage=True,
-#     )
