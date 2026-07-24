@@ -15,7 +15,7 @@ import re
 from difflib import SequenceMatcher
 from typing import Optional
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 
 from auth.dependencies import get_current_user
@@ -58,6 +58,64 @@ class ExerciseMedia(BaseModel):
     image_url: Optional[str] = None
     gif_url: Optional[str] = None
     attribution: Optional[str] = None
+
+
+class ExerciseListItem(BaseModel):
+    name: str
+    target_muscle: Optional[str] = None
+    equipment: Optional[str] = None
+    image_url: Optional[str] = None
+    gif_url: Optional[str] = None
+
+
+class ExerciseListResponse(BaseModel):
+    exercises: list[ExerciseListItem]
+    total: int
+    page: int
+    page_size: int
+
+
+@router.get("/exercises", response_model=ExerciseListResponse)
+async def list_exercises(
+    q: Optional[str] = None,
+    muscle: Optional[str] = None,
+    page: int = Query(0, ge=0),
+    page_size: int = Query(30, ge=1),
+    user: dict = Depends(get_current_user),
+):
+    # Cap page_size at 100 to prevent excessive memory usage
+    page_size = min(page_size, 100)
+
+    query: dict = {"gif_path": {"$ne": None}}
+    if muscle:
+        query["target_muscle"] = muscle
+    if q:
+        query["name"] = {"$regex": re.escape(q), "$options": "i"}
+
+    projection = {"name": 1, "target_muscle": 1, "equipment": 1, "image_path": 1, "gif_path": 1}
+    total = get_db().exercises.count_documents(query)
+    docs = list(
+        get_db().exercises.find(query, projection)
+        .sort("name", 1)
+        .skip(page * page_size)
+        .limit(page_size)
+    )
+
+    return ExerciseListResponse(
+        exercises=[
+            ExerciseListItem(
+                name=d["name"],
+                target_muscle=d.get("target_muscle"),
+                equipment=d.get("equipment"),
+                image_url=f"{MEDIA_URL_BASE}/{d['image_path']}" if d.get("image_path") else None,
+                gif_url=f"{MEDIA_URL_BASE}/{d['gif_path']}" if d.get("gif_path") else None,
+            )
+            for d in docs
+        ],
+        total=total,
+        page=page,
+        page_size=page_size,
+    )
 
 
 @router.get("/exercises/lookup", response_model=ExerciseMedia)
