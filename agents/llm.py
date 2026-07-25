@@ -29,29 +29,6 @@ from config import (
     OPENROUTER_MODEL
 )
 
-def get_llm(temperature: float = 0.3) -> ChatOpenAI:
-    """Build a fresh ChatOpenAI client using the direct OpenAI key.
-
-    max_retries=6 (not the langchain-openai default of 2): a full plan
-    generation dispatches many sequential/occasionally-concurrent sub-agent
-    calls against a single org-wide TPM quota, and the accumulating
-    conversation context per turn means later muscle groups (chest onward)
-    can legitimately brush the ceiling even on a normal run — observed live
-    via scripts/debug_full_pipeline.py: openai.RateLimitError 429 with
-    "try again in 797ms" exhausting 2 retries and killing the whole run.
-    The 429 clears in well under a second each time; the fix is riding out
-    the burst, not backing off for longer.
-    """
-    return ChatOpenAI(
-        model=OPENROUTER_MODEL,
-        api_key=OPENROUTER_API_KEY,
-        base_url="https://openrouter.ai/api/v1",
-        temperature=temperature,
-        timeout=60,
-        max_retries=6,
-    )
-
-
 # def get_llm(temperature: float = 0.3) -> ChatOpenAI:
 #     """Build a fresh ChatOpenAI client using the direct OpenAI key.
 
@@ -66,12 +43,35 @@ def get_llm(temperature: float = 0.3) -> ChatOpenAI:
 #     the burst, not backing off for longer.
 #     """
 #     return ChatOpenAI(
-#         model=OPENAI_MODEL,
-#         api_key=OPENAI_API_KEY,
+#         model=OPENROUTER_MODEL,
+#         api_key=OPENROUTER_API_KEY,
+#         base_url="https://openrouter.ai/api/v1",
 #         temperature=temperature,
 #         timeout=60,
 #         max_retries=6,
 #     )
+
+
+def get_llm(temperature: float = 0.3) -> ChatOpenAI:
+    """Build a fresh ChatOpenAI client using the direct OpenAI key.
+
+    max_retries=2: a full plan
+    generation dispatches many sequential/occasionally-concurrent sub-agent
+    calls against a single org-wide TPM quota, and the accumulating
+    conversation context per turn means later muscle groups (chest onward)
+    can legitimately brush the ceiling even on a normal run — observed live
+    via scripts/debug_full_pipeline.py: openai.RateLimitError 429 with
+    "try again in 797ms" exhausting 2 retries and killing the whole run.
+    The 429 clears in well under a second each time; the fix is riding out
+    the burst, not backing off for longer.
+    """
+    return ChatOpenAI(
+        model=OPENAI_MODEL,
+        api_key=OPENAI_API_KEY,
+        temperature=temperature,
+        timeout=60,
+        max_retries=2,
+    )
 
 # def get_llm(temperature: float = 0.3) -> ChatOpenAI:
 #     """Build a fresh ChatOpenAI client pointed at the Azure deployment.
