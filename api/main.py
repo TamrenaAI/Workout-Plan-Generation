@@ -26,7 +26,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from api.routes import corrective, health, plan, progress, workouts
+from api.routes import corrective, exercises, health, plan, progress, workouts
 from config import EXERCISE_MEDIA_DIR
 from tools.mongo import ensure_indexes
 
@@ -56,6 +56,7 @@ app.include_router(plan.router, tags=["plan"])
 app.include_router(progress.router, tags=["progress"])
 app.include_router(workouts.router, tags=["workouts"])
 app.include_router(corrective.router, tags=["corrective"])
+app.include_router(exercises.router, tags=["exercises"])
 
 # Serves the exercise GIFs/thumbnails imported by
 # database/exercises_dataset/import.py — gif_url/image_url in
