@@ -300,9 +300,16 @@ def to_cm(value: float, unit: str) -> float:
     """
     if unit == "cm":
         return value
-    feet = int(value)
-    inches = round((value - feet) * 100)
-    return feet * 30.48 + inches * 2.54
+    elif unit == "ft_in":
+        feet = int(value)
+        inches = round((value - feet) * 100)
+        if not (0 <= inches <= 11):
+            raise ValueError(
+                f"Invalid ft_in height encoding {value!r}: fractional part must encode 0-11 inches (feet.MM format)."
+            )
+        return feet * 30.48 + inches * 2.54
+    else:
+        raise ValueError(f"Unknown height unit: {unit!r}")
 
 
 def compute_flags(r: InBodyRawExtraction) -> InBodyFlags:
