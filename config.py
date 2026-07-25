@@ -42,20 +42,14 @@ OPENAI_MODEL = os.getenv("OPENAI_MODEL")
 SBG_API_KEY = os.getenv("SBG_API_KEY")
 
 # ── Auth ──────────────────────────────────────────────────────────────
-GOOGLE_OAUTH_CLIENT_ID = os.getenv("GOOGLE_OAUTH_CLIENT_ID")
+# This service no longer owns user identity — Google Sign-In verification,
+# JWT issuance, and the `users` collection all moved to a separate BFF repo
+# (see docs/superpowers/specs/2026-07-25-bff-auth-handoff-design.md).
+# JWT_SECRET here MUST match that repo's value exactly: this service only
+# verifies tokens signed with it, it no longer mints them.
 JWT_SECRET = os.getenv("JWT_SECRET")
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRE_MINUTES = 60 * 24 * 30  # 30 days — mobile session, not a web cookie
-
-# Enables POST /auth/dev-login, which mints a real session JWT for a fixed
-# test account with NO Google verification — lets the mobile app be tested
-# end-to-end (web preview, Expo Go, screens past login) without a native
-# Google Sign-In build. Defaults to disabled (the route 404s, not just
-# rejects — so it doesn't even confirm it exists) and must be explicitly
-# opted into per-environment. NEVER set this true anywhere but a local dev
-# machine — it lets anyone with network access to this server sign in as
-# that test account with no credential at all.
-ALLOW_DEV_LOGIN = os.getenv("ALLOW_DEV_LOGIN", "false").lower() == "true"
 
 
 def load_prompt(name: str) -> str:
