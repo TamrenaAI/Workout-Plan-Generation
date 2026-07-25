@@ -2,9 +2,12 @@
 Shared LLM client factory.
 
 All agents (supervisor, exercise-recommender, plan-assembler) and the InBody
-VLM pipeline go through the same get_llm() factory. Currently wired to the
-ITI Bedrock proxy (see ITIBedrockChat below, adapted from the reference
-implementation in the repo-root llm.py) instead of Azure/OpenAI directly.
+VLM pipeline go through the same get_llm() factory, currently wired to the
+direct OpenAI API. ITIBedrockChat (below, adapted from the reference
+implementation in the repo-root llm.py) is text-only and doesn't support
+with_structured_output, so it can't serve tools/inbody.py's vision +
+structured-output extraction — kept here commented out, not deleted, in
+case a text-only agent path wants it later.
 """
 
 from typing import Any, List, Optional
@@ -21,103 +24,30 @@ from config import (
     AZURE_OPENAI_ENDPOINT,
     AZURE_OPENAI_API_VERSION,
     OPENAI_API_KEY,
-    OPENAI_MODEL,
-    SBG_API_KEY,
+    OPENAI_MODEL
 )
 
 
-class ITIBedrockChat(BaseChatModel):
-    """LangChain-compatible chat model that calls the ITI Bedrock proxy."""
+def get_llm(temperature: float = 0.3) -> ChatOpenAI:
+    """Build a fresh ChatOpenAI client using the direct OpenAI key.
 
-    # TODO: set the model id to call manually.
-    model_id: str = "openai.gpt-oss-120b-1:0"
-    base_url: str = "http://apiaccess.iti.net.eg/api/v1"
-    timeout: int = 60
-    temperature: float = 0.3
-
-    @property
-    def _llm_type(self) -> str:
-        return "iti_bedrock_chat"
-
-    def _generate(
-        self,
-        messages: List[BaseMessage],
-        stop: Optional[List[str]] = None,
-        run_manager: Optional[Any] = None,
-        **kwargs: Any,
-    ) -> ChatResult:
-        system_prompt = "You are a helpful assistant."
-        formatted_messages: list[dict] = []
-
-        for msg in messages:
-            if isinstance(msg, SystemMessage):
-                system_prompt = msg.content
-            elif isinstance(msg, HumanMessage):
-                formatted_messages.append({"role": "user", "content": msg.content})
-            elif isinstance(msg, AIMessage):
-                formatted_messages.append({"role": "assistant", "content": msg.content})
-
-        # Guard: the proxy returns 502 on empty message lists
-        if not formatted_messages:
-            formatted_messages.append({"role": "user", "content": "Hello"})
-
-        payload = {
-            "model_id": self.model_id,
-            "messages": formatted_messages,
-            "system_prompt": system_prompt,
-            "max_tokens": kwargs.get("max_tokens", 8192),
-            "temperature": kwargs.get("temperature", self.temperature),
-        }
-
-        if not SBG_API_KEY:
-            raise ValueError("SBG_API_KEY is not set. Please add it to your .env file.")
-
-        headers = {
-            "Authorization": f"Bearer {SBG_API_KEY}",
-            "Content-Type": "application/json",
-        }
-
-        response = requests.post(
-            f"{self.base_url}/student/chat",
-            headers=headers,
-            json=payload,
-            timeout=self.timeout,
-        )
-        response.raise_for_status()
-
-        response_json = response.json()
-        ai_text = (
-            response_json.get("output_text")   # ITI Bedrock proxy primary key
-            or response_json.get("text")
-            or response_json.get("response")
-            or response_json.get("message")
-            or str(response_json)
-        )
-
-        return ChatResult(
-            generations=[ChatGeneration(message=AIMessage(content=ai_text))]
-        )
-
-
-def get_llm(temperature: float = 0.3) -> BaseChatModel:
-    """Build a fresh chat client pointed at the ITI Bedrock proxy.
-
-    temperature=0.3 for agent reasoning (supervisor / sub-agents).
-    temperature=0 is used by the InBody extraction pipeline, where
-    deterministic reads matter more than variety.
+    max_retries=6 (not the langchain-openai default of 2): a full plan
+    generation dispatches many sequential/occasionally-concurrent sub-agent
+    calls against a single org-wide TPM quota, and the accumulating
+    conversation context per turn means later muscle groups (chest onward)
+    can legitimately brush the ceiling even on a normal run — observed live
+    via scripts/debug_full_pipeline.py: openai.RateLimitError 429 with
+    "try again in 797ms" exhausting 2 retries and killing the whole run.
+    The 429 clears in well under a second each time; the fix is riding out
+    the burst, not backing off for longer.
     """
-    return ITIBedrockChat(temperature=temperature)
-
-
-# def get_llm(temperature: float = 0.3) -> ChatOpenAI:
-#     """Build a fresh ChatOpenAI client using the direct OpenAI key."""
-#     return ChatOpenAI(
-#         model=OPENAI_MODEL,
-#         api_key=OPENAI_API_KEY,
-#         temperature=temperature,
-#         timeout=60,
-#         max_retries=2
-#     )
+    return ChatOpenAI(
+        model=OPENAI_MODEL,
+        api_key=OPENAI_API_KEY,
+        temperature=temperature,
+        timeout=60,
+        max_retries=6,
+    )
 
 # def get_llm(temperature: float = 0.3) -> ChatOpenAI:
 #     """Build a fresh ChatOpenAI client pointed at the Azure deployment.
@@ -135,3 +65,13 @@ def get_llm(temperature: float = 0.3) -> BaseChatModel:
 #         max_retries=2,
 #         stream_usage=True,
 #     )
+
+
+if __name__ == "__main__":
+    # Manual smoke test: `python agents/llm.py` — confirms the configured
+    # LLM backend is reachable and responds to an ordinary question.
+    llm = get_llm()
+    question = "What is the capital of France?"
+    response = llm.invoke([HumanMessage(content=question)])
+    print(f"Q: {question}")
+    print(f"A: {response.content}")
