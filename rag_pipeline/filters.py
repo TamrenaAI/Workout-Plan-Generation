@@ -74,7 +74,7 @@ class GoalFilterBuilder(
                     key="metadata.goals",
                     match=MatchAny(
                         any=[
-                            query_filter.goals,
+                            *query_filter.goals,
                             "all"
                         ]
                         
@@ -123,7 +123,7 @@ class PrinciplesFilterBuilder(
                     key="metadata.goals",
                     match=MatchAny(
                         any=[
-                            query_filter.goals,
+                            *query_filter.goals,
                             "all"
                         ]
                     ),

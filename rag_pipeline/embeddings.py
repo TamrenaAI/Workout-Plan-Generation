@@ -11,14 +11,10 @@ from qdrant_client.models import (
 
 def load_dense_model()-> SentenceTransformer:
     return SentenceTransformer(
-        str(DENSE_DIR)
+        str(DENSE_DIR),
+        device="cpu"
     )
 
-
-def load_reranker() -> CrossEncoder:
-    return CrossEncoder(
-        str(RERANKER_DIR)
-    )
 
 def load_sparse_model() -> SparseTextEmbedding:
 
