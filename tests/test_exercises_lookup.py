@@ -72,3 +72,9 @@ def test_lookup_exercise_includes_instructions_and_attribution():
     body = resp.json()
     assert body["instructions"] == "Hinge at hips, pull bar to torso."
     assert body["attribution"] == "Example Source"
+
+
+def test_lookup_exercise_requires_authentication():
+    app.dependency_overrides.pop(get_current_user, None)
+    resp = client.get("/exercises/lookup", params={"name": "anything"})
+    assert resp.status_code in (401, 403)

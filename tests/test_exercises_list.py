@@ -100,3 +100,9 @@ def test_list_exercises_second_page_returns_different_results():
     names0 = {e["name"] for e in page0["exercises"]}
     names1 = {e["name"] for e in page1["exercises"]}
     assert names0.isdisjoint(names1)
+
+
+def test_list_exercises_requires_authentication():
+    app.dependency_overrides.pop(get_current_user, None)
+    resp = client.get("/exercises")
+    assert resp.status_code in (401, 403)
