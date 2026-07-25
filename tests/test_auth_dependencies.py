@@ -42,3 +42,10 @@ def test_resolve_user_rejects_invalid_token():
     with pytest.raises(HTTPException) as exc_info:
         dependencies._resolve_user("not-a-real-token")
     assert exc_info.value.status_code == 401
+
+
+def test_resolve_user_rejects_a_token_whose_sub_is_not_an_objectid():
+    token = tokens.create_access_token(user_id="not-an-objectid")
+    with pytest.raises(HTTPException) as exc_info:
+        dependencies._resolve_user(token)
+    assert exc_info.value.status_code == 401

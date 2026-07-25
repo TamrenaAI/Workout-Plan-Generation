@@ -13,6 +13,8 @@ user still exist" check (that's the BFF's concern now).
 
 from typing import Optional
 
+from bson import ObjectId
+from bson.errors import InvalidId
 from fastapi import Depends, HTTPException, Query
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
@@ -27,6 +29,11 @@ def _resolve_user(raw_token: str) -> dict:
         user_id = decode_access_token(raw_token)
     except InvalidSessionToken as exc:
         raise HTTPException(401, f"Invalid or expired session: {exc}") from exc
+
+    try:
+        ObjectId(user_id)
+    except InvalidId as exc:
+        raise HTTPException(401, "Token subject is not a valid user id.") from exc
 
     return {"id": user_id}
 

@@ -11,14 +11,16 @@ the normal pipeline only produces after several agent calls:
     created_at at least 30 days in the past (see auth/ownership.py's
     _REVIEW_ELIGIBLE_AFTER_DAYS, tested in tests/test_review_eligibility.py).
 
-This script creates both at once: one user, one session backdated 31 days
-and marked ready, with a plan.md written in the same DAY MAP + muscle-group
+This service no longer owns user identity (see
+docs/superpowers/specs/2026-07-25-bff-auth-handoff-design.md), so this
+script does not create or persist a user record — it generates a bare
+ObjectId to use as the user_id and creates a session backdated 31 days and
+marked ready, with a plan.md written in the same DAY MAP + muscle-group
 + Weekly Schedule format the real pipeline produces (see
 sessions/6f3c6194-c99e-4a3d-bbcc-6d8296103fff/plan.md for reference).
 
 Usage:
     python scripts/seed_test_session.py
-    python scripts/seed_test_session.py --sub my-test-user
 """
 
 import argparse
@@ -106,7 +108,7 @@ _WEEKLY_SCHEDULE = """### Day 1 — Monday: Full Body Focus with Chest Emphasis
 | 3 | Romanian Deadlift | 3×10-12 | 90s | 7 |"""
 
 
-def seed(sub: str) -> str:
+def seed() -> str:
     # See tests/test_corrective.py's _make_user for why this no longer
     # calls into auth.models — this service doesn't own `users` anymore.
     user_id = str(ObjectId())
@@ -145,10 +147,9 @@ def seed(sub: str) -> str:
 
 def main():
     parser = argparse.ArgumentParser(description="Seed a ready-to-test plan session with a real workout routine.")
-    parser.add_argument("--sub", default="seed-test-user", help="Google sub id for the test user (default: seed-test-user)")
-    args = parser.parse_args()
+    parser.parse_args()
 
-    session_id, user_id = seed(args.sub)
+    session_id, user_id = seed()
     token = create_access_token(user_id=user_id)
 
     print("Seeded session ready for testing.\n")

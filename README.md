@@ -77,8 +77,6 @@ pipeline/
                                  whether it needs the Plan Adjuster agent dispatched at all
 
 auth/
-  models.py                  ← users table (SQLite, same data/tamreena.db) + get_or_create_user_by_google
-  google_oauth.py             ← verifies Google ID tokens from the mobile app's native sign-in
   tokens.py                   ← issues/verifies this backend's own session JWTs
   dependencies.py              ← get_current_user — FastAPI dependency protecting a route
   ownership.py                 ← plan_sessions table: which user owns which generated-plan session_id
@@ -94,7 +92,6 @@ See docs/CODE_MAP.md for the layer diagram and the checklist for adding a new ag
 api/
   main.py                    ← FastAPI app
   routes/health.py            ← GET /health
-  routes/auth.py               ← POST /auth/google, GET /auth/me, POST /auth/dev-login (see below)
   routes/plan.py               ← POST /validate-image, POST /generate-plan (requires login),
                                   GET /generate-plan/stream/{id} (ownership-checked),
                                   GET /sessions (current user's past sessions),
@@ -131,16 +128,6 @@ mobile/ has moved to its own repo: https://github.com/TamrenaAI/mobile
 (git history preserved via `git subtree split`). See that repo's README
 for the app's source-tree breakdown, auth setup (Google Sign-In native
 module, dev-client build requirements), and web-preview instructions.
-
-**Backend note:** `POST /auth/dev-login` (in `api/routes/auth.py`) mints
-a session for a fixed test account (`dev@tamreena.local`) with no
-credential, for use by any client that can't complete real Google
-Sign-In (e.g. a client running against this backend without a full
-OAuth setup). Disabled by default — returns a plain 404, not even
-confirming it exists — unless the server operator sets
-`ALLOW_DEV_LOGIN=true` in `.env`. **Never set that true anywhere but a
-local dev machine** — it lets anyone with network access to that server
-sign in with nothing.
 
 ## Why a shared markdown file instead of a database
 

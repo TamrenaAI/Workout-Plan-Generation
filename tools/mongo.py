@@ -30,9 +30,6 @@ def ensure_indexes() -> None:
     """Idempotent — call once at app startup (see api/main.py)."""
     db = get_db()
 
-    db.users.create_index("google_sub", unique=True)
-    db.users.create_index("email", unique=True)
-
     db.plan_sessions.create_index([("user_id", ASCENDING), ("created_at", -1)])
 
     db.exercises.create_index([("primary_muscle", ASCENDING), ("movement_type", ASCENDING)])
