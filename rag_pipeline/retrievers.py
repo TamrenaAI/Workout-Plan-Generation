@@ -6,7 +6,7 @@ from qdrant_client.models import (
 )
 from sentence_transformers import SentenceTransformer, CrossEncoder
 from fastembed import SparseTextEmbedding
-from qdrant import hybrid_search
+from .qdrant import hybrid_search
 from .metadata import BaseMetadataExtractor
 from .filters import BaseFilterBuilder
 from .rerankers import BaseReranker
@@ -108,9 +108,11 @@ class RerankingRetriever(BaseRetriever):
         self,
         retriever: BaseRetriever,
         reranker: BaseReranker,
+        top_k: int = 3,
     ):
         self.retriever = retriever
         self.reranker = reranker
+        self.top_k = top_k
 
     def retrieve(
         self,
@@ -119,9 +121,11 @@ class RerankingRetriever(BaseRetriever):
 
         chunks = self.retriever.retrieve(query=query)
 
-        return self.reranker.rerank(
+        reranked_chunks = self.reranker.rerank(
             query=query,
             chunks=chunks,
         )
+
+        return reranked_chunks[: self.top_k]
 
 

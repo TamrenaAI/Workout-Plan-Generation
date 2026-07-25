@@ -1,4 +1,4 @@
-from qdrant import QdrantClient
+from qdrant_client import QdrantClient
 from .models import CollectionName
 from sentence_transformers import SentenceTransformer, CrossEncoder
 from fastembed import SparseTextEmbedding
@@ -65,6 +65,7 @@ def create_filtered_retriever(
 def create_reranking_retriever(
     retriever: BaseRetriever,
     reranker: BaseReranker,
+    top_k: int = 3,
 ) -> RerankingRetriever:
     """
     Create a retriever that reranks retrieved chunks.
@@ -73,6 +74,7 @@ def create_reranking_retriever(
     return RerankingRetriever(
         retriever=retriever,
         reranker=reranker,
+        top_k=top_k,
     )
 
 
@@ -80,16 +82,14 @@ def create_rag(
     retriever: BaseRetriever,
     llm: BaseChatModel,
     prompt: ChatPromptTemplate,
-    context_top_k: int = 5,
-) -> BaseRAG:
+) -> RAG:
     """
     Create a RAG pipeline.
     """
 
-    return BaseRAG(
+    return RAG(
         retriever=retriever,
         llm=llm,
         prompt=prompt,
-        context_top_k=context_top_k,
     )
 
