@@ -1,6 +1,14 @@
 """
 FastAPI dependency that protects a route behind a valid session token.
 Usage: `def route(user: dict = Depends(get_current_user)): ...`
+
+This service no longer owns user identity (see
+docs/superpowers/specs/2026-07-25-bff-auth-handoff-design.md) — a separate
+BFF repo verifies Google Sign-In, issues the JWT, and owns the `users`
+collection. This dependency only verifies the token's signature/expiry
+(against the same shared JWT_SECRET the BFF signs with) and trusts the
+`sub` claim as the user_id directly — no local Mongo lookup, no "does this
+user still exist" check (that's the BFF's concern now).
 """
 
 from typing import Optional
@@ -8,7 +16,6 @@ from typing import Optional
 from fastapi import Depends, HTTPException, Query
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 
-from auth.models import get_user_by_id
 from auth.tokens import InvalidSessionToken, decode_access_token
 
 _bearer_scheme = HTTPBearer()
@@ -21,10 +28,7 @@ def _resolve_user(raw_token: str) -> dict:
     except InvalidSessionToken as exc:
         raise HTTPException(401, f"Invalid or expired session: {exc}") from exc
 
-    user = get_user_by_id(user_id)
-    if user is None:
-        raise HTTPException(401, "User no longer exists.")
-    return user
+    return {"id": user_id}
 
 
 def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(_bearer_scheme)) -> dict:
