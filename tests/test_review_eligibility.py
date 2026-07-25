@@ -15,7 +15,7 @@ import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from auth import models as auth_models
+from bson import ObjectId
 from auth import ownership
 from tools.mongo import get_db
 
@@ -27,7 +27,13 @@ _SAMPLE_INTAKE = {
 
 
 def _make_user(sub: str) -> dict:
-    return auth_models.get_or_create_user_by_google(sub=sub, email=f"{sub}@example.com", name=sub, picture_url=None)
+    # This service no longer owns `users` (see
+    # docs/superpowers/specs/2026-07-25-bff-auth-handoff-design.md) — a
+    # fresh ObjectId is all any test needs, since every route here only
+    # ever reads the id. `sub` is kept as a parameter purely so call sites
+    # stay readable (e.g. `_make_user("cv-owner")`); it's not used for
+    # deduplication anymore, each call already produces a distinct id.
+    return {"id": str(ObjectId())}
 
 
 def _backdate_and_ready(session_id: str, days: int):

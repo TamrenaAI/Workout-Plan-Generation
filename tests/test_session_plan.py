@@ -13,7 +13,7 @@ from fastapi.testclient import TestClient
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from auth import models as auth_models
+from bson import ObjectId
 from auth import ownership
 from auth import tokens
 from tools import memory as tools_memory
@@ -26,7 +26,13 @@ def _isolated_state(tmp_path, monkeypatch):
 
 
 def _make_user(sub: str) -> dict:
-    return auth_models.get_or_create_user_by_google(sub=sub, email=f"{sub}@example.com", name=sub, picture_url=None)
+    # This service no longer owns `users` (see
+    # docs/superpowers/specs/2026-07-25-bff-auth-handoff-design.md) — a
+    # fresh ObjectId is all any test needs, since every route here only
+    # ever reads the id. `sub` is kept as a parameter purely so call sites
+    # stay readable (e.g. `_make_user("cv-owner")`); it's not used for
+    # deduplication anymore, each call already produces a distinct id.
+    return {"id": str(ObjectId())}
 
 
 def test_returns_404_for_unowned_session():
