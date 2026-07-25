@@ -26,7 +26,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from api.routes import auth, corrective, health, plan, progress, workouts
+from api.routes import corrective, health, plan, progress, workouts
 from config import EXERCISE_MEDIA_DIR
 from tools.mongo import ensure_indexes
 
@@ -52,7 +52,6 @@ app.add_middleware(
 )
 
 app.include_router(health.router, tags=["health"])
-app.include_router(auth.router, tags=["auth"])
 app.include_router(plan.router, tags=["plan"])
 app.include_router(progress.router, tags=["progress"])
 app.include_router(workouts.router, tags=["workouts"])

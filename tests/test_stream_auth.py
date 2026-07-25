@@ -14,30 +14,27 @@ import sys
 
 import pytest
 from fastapi.testclient import TestClient
+from bson import ObjectId
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from api.routes import auth as auth_routes
 from auth import tokens
 
 
 @pytest.fixture(autouse=True)
-def _isolated_state(monkeypatch):
+def _fixed_secret(monkeypatch):
     monkeypatch.setattr(tokens, "JWT_SECRET", "test-secret-do-not-use-in-real-envs")
-    monkeypatch.setattr(auth_routes, "ALLOW_DEV_LOGIN", True)
 
 
-def _dev_token(client: TestClient) -> str:
-    r = client.post("/auth/dev-login")
-    assert r.status_code == 200
-    return r.json()["access_token"]
+def _dev_token() -> str:
+    return tokens.create_access_token(user_id=str(ObjectId()))
 
 
 def test_stream_accepts_token_via_authorization_header():
     import api.main as m
 
     client = TestClient(m.app)
-    token = _dev_token(client)
+    token = _dev_token()
 
     r = client.get(
         "/generate-plan/stream/does-not-exist",
@@ -51,7 +48,7 @@ def test_stream_accepts_token_via_query_param():
     import api.main as m
 
     client = TestClient(m.app)
-    token = _dev_token(client)
+    token = _dev_token()
 
     r = client.get(f"/generate-plan/stream/does-not-exist?token={token}")
     assert r.status_code == 404
@@ -79,7 +76,7 @@ def test_header_takes_precedence_when_both_present_and_query_is_invalid():
     import api.main as m
 
     client = TestClient(m.app)
-    token = _dev_token(client)
+    token = _dev_token()
 
     r = client.get(
         "/generate-plan/stream/does-not-exist?token=garbage",
