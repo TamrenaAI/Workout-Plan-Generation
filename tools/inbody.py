@@ -56,6 +56,8 @@ class InBodyRawExtraction(BaseModel):
     # ── Core composition ────────────────────────────────────────────────
     weight: float
     weight_unit: Literal["kg", "lb"]
+    height: Optional[float] = None
+    height_unit: Optional[Literal["cm", "ft_in"]] = None
     skeletal_muscle_mass: float
     smm_unit: Literal["kg", "lb"]
     body_fat_percent: float                     # PBF — always a plain % number
@@ -237,6 +239,15 @@ Found in the "Research Parameters" section, labeled "Basal Metabolic Rate".
 This section is often on the RIGHT side of the scan.
 Present on 270S, 570, and 770 — check the Research Parameters section before returning null.
 
+── height ──────────────────────────────────────────────────────────────────────
+Found in the identity/header area near the top of the scan, alongside gender/age,
+usually labeled "Height". Extract the numeric value and unit exactly as printed.
+Most InBody scans print height in cm (e.g. "163.0cm" → height=163.0, height_unit="cm").
+If a scan instead prints feet/inches (e.g. 5'9"), encode it as feet.MM where MM is
+the two-digit inch count: 5'9" → height=5.09, height_unit="ft_in". 6'0" → height=6.00,
+height_unit="ft_in".
+If height is not visible or not printed on this model → return null for both fields.
+
 ── Other field locations ────────────────────────────────────────────────────────
 - inbody_model   → top of the scan in brackets, e.g. "[InBody270S]" → extract "270S"
 - skeletal_muscle_mass / smm_unit → "Muscle-Fat Analysis" section, "SMM" row
@@ -276,6 +287,29 @@ def extract_inbody(image_bytes: bytes, content_type: str) -> InBodyRawExtraction
 def to_kg(value: float, unit: str) -> float:
     """Normalize any segmental value to kg."""
     return value * 0.453592 if unit == "lb" else value
+
+
+def to_cm(value: float, unit: str) -> float:
+    """Normalize a height value to centimeters.
+
+    unit == "ft_in" encodes feet.MM, where MM is the two-digit inch count
+    (00-11) — e.g. 5.09 means 5 feet 9 inches, 5.11 means 5 feet 11 inches,
+    6.00 means exactly 6 feet. A single decimal digit (e.g. 5.9) is
+    ambiguous between "5 feet 9 inches" and "5.9 tenths of a foot", so this
+    encoding always requires the two-digit form.
+    """
+    if unit == "cm":
+        return value
+    elif unit == "ft_in":
+        feet = int(value)
+        inches = round((value - feet) * 100)
+        if not (0 <= inches <= 11):
+            raise ValueError(
+                f"Invalid ft_in height encoding {value!r}: fractional part must encode 0-11 inches (feet.MM format)."
+            )
+        return feet * 30.48 + inches * 2.54
+    else:
+        raise ValueError(f"Unknown height unit: {unit!r}")
 
 
 def compute_flags(r: InBodyRawExtraction) -> InBodyFlags:
@@ -370,6 +404,8 @@ def format_inbody_result(result: InBodyResult) -> str:
     if r.age is not None:
         lines.append(f"Age                  : {r.age}")
     lines.append(f"Weight               : {r.weight} {r.weight_unit}")
+    if r.height is not None:
+        lines.append(f"Height               : {r.height} {r.height_unit}")
 
     lines += [
         f"Skeletal Muscle Mass : {r.skeletal_muscle_mass} {r.smm_unit}",
