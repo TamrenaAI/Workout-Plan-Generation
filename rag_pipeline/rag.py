@@ -34,8 +34,8 @@ class RAG(BaseRAG):
     ) -> str:
 
         return "\n\n".join(
-            chunk.text
-            for chunk in chunks
+            f"[Passage {i+1}]\n{chunk.text}"
+            for i, chunk in enumerate(chunks)
         )
 
     def invoke(
