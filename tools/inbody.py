@@ -133,8 +133,15 @@ def check_image_quality(image_bytes: bytes) -> dict:
             "blur_score": blur_score,
             "brightness": brightness,
         }
+    # 0.02 originally rejected a genuinely valid, cleanly-lit InBody printout
+    # scan (samples/inbody2.jfif — dark_pixel_ratio 0.0101): a clean document
+    # scan's dark-pixel share is naturally much lower than a phone photo of a
+    # printout under room lighting, since most of the sheet is white/light-gray
+    # table fill rather than solid dark background. 0.005 still catches a
+    # truly blown-out/blank capture (dark_pixel_ratio near 0) without
+    # false-rejecting legitimate low-contrast scans.
     dark_pixel_ratio = float((gray < 80).mean())
-    if dark_pixel_ratio < 0.02:
+    if dark_pixel_ratio < 0.005:
         return {
             "pass": False,
             "issue": "Image is overexposed — no text is visible. Move away from direct light.",
