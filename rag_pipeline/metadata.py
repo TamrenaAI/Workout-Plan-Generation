@@ -5,6 +5,16 @@ from langchain_core.language_models.chat_models import BaseChatModel
 from .prompts import PRINCIPLES_METADATA_PROMPT, GOAL_METADATA_PROMPT
 from pathlib import Path
 from .storage import chunk_exists, load_chunk, save_chunk
+from abc import ABC, abstractmethod
+from typing import Generic, TypeVar
+from .models import GoalQueryFilter, PrinciplesQueryFilter
+from .prompts import GOAL_QUERY_FILTER_PROMPT, PRINCIPLES_QUERY_FILTER_PROMPT
+
+
+
+T = TypeVar("T")
+
+
 
 def should_retry(error: Exception) -> bool:
     error_msg = str(error).lower()
@@ -20,7 +30,6 @@ def should_retry(error: Exception) -> bool:
             "time out",
         )
     )
-
 
 
 async def generate_metadata_async(chunk: Chunk, llm: BaseChatModel) -> Chunk:
@@ -118,3 +127,84 @@ async def generate_metadata_with_save_async(
         return updated_chunk
     
 
+class BaseMetadataExtractor(ABC, Generic[T]):
+
+    @abstractmethod
+    def extract(
+        self,
+        query: str,
+    ) -> T:
+        """
+        Extract metadata from a user query.
+        """
+        pass
+
+
+
+class GoalMetadataExtractor(
+    BaseMetadataExtractor[GoalQueryFilter]
+):
+
+    def __init__(
+        self,
+        llm: BaseChatModel,
+    ):
+        self.chain = (
+            GOAL_QUERY_FILTER_PROMPT
+            | llm.with_structured_output(GoalQueryFilter)
+        )
+
+        self._cache: dict[str, GoalQueryFilter] = {}
+
+    def extract(
+        self,
+        query: str,
+    ) -> GoalQueryFilter:
+
+        if query in self._cache:
+            return self._cache[query]
+
+        metadata = self.chain.invoke(
+            {
+                "query": query,
+            }
+        )
+
+        self._cache[query] = metadata
+
+        return metadata
+
+class PrinciplesMetadataExtractor(
+    BaseMetadataExtractor[PrinciplesQueryFilter]
+):
+
+    def __init__(
+        self,
+        llm: BaseChatModel,
+    ):
+        self.chain = (
+            PRINCIPLES_QUERY_FILTER_PROMPT
+            | llm.with_structured_output(PrinciplesQueryFilter)
+        )
+
+        self._cache: dict[str, PrinciplesQueryFilter] = {}
+
+    def extract(
+        self,
+        query: str,
+    ) -> PrinciplesQueryFilter:
+
+        if query in self._cache:
+            return self._cache[query]
+
+        metadata = self.chain.invoke(
+            {
+                "query": query,
+            }
+        )
+
+        self._cache[query] = metadata
+
+        return metadata
+
+    

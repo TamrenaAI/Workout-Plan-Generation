@@ -7,9 +7,8 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 ASSETS_DIR = PROJECT_ROOT / "assets"
 MODELS_DIR = ASSETS_DIR / "models"
 FASTEMBED_DIR = MODELS_DIR / "fastembed"
-DENSE_DIR = MODELS_DIR / "bge-m3"
-RERANKER_DIR = MODELS_DIR / "bge-reranker-v2-m3"
-
+DENSE_DIR = MODELS_DIR / "all-MiniLM-L6-v2"
+RERANKER_DIR = MODELS_DIR / "jina-reranker-v1-tiny-en"
 RAG_DATA_DIR = PROJECT_ROOT / "rag_data"
 
 BOOKS_DIR = RAG_DATA_DIR / "books"

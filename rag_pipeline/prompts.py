@@ -149,3 +149,123 @@ Chunk:
 )
 
 
+
+GOAL_QUERY_FILTER_PROMPT = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            """
+You are an expert in exercise science.
+
+Your task is to extract structured retrieval filters from a user's query.
+
+The output will be used to filter a vector database before retrieval.
+
+Guidelines:
+
+1. Understand the semantic meaning of the query, not just the exact words.
+
+2. Infer metadata when it is strongly implied by the user's intent.
+
+3. Never guess. If you are not confident about a field, leave it empty.
+
+4. Only extract metadata that is useful for retrieval.
+
+5. Do not force every field to be populated.
+
+6. Do not infer metadata solely from common associations.
+   For example, "bench press" does not automatically imply "chest" unless the query is actually about training the chest.
+
+7. Use "all" only when the user explicitly refers to everyone or to general recommendations.
+
+8. Ignore conversational text that does not affect retrieval.
+
+9. Return only the structured output.
+            """,
+        ),
+        (
+            "human",
+            """
+User Query:
+
+{query}
+            """,
+        ),
+    ]
+)
+
+
+PRINCIPLES_QUERY_FILTER_PROMPT = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            """
+You are an expert in exercise science and strength training.
+
+Extract structured retrieval filters from the user's query.
+
+The filters will be used to retrieve relevant exercise science principles
+from a vector database.
+
+Rules:
+
+1. Understand the intent of the query, not only exact words.
+
+2. Extract only metadata that is strongly implied by the query.
+
+3. Never guess. Leave fields empty when uncertain.
+
+4. Do not force every field to be populated.
+
+5. Extract:
+- topic: the main exercise science concept being asked about.
+- planner_stage: the workout planning stage this knowledge supports.
+- goals: training goal if clearly mentioned (hypertrophy, strength, fat_loss).
+- applies_to: who this principle applies to.
+- knowledge_type: whether the query asks for a definition, principle,
+  recommendation, warning, or protocol.
+
+6. Use "all" only when the query explicitly refers to general cases.
+
+7. Ignore conversational text that does not affect retrieval.
+
+8. Return only the structured output.
+            """,
+        ),
+        (
+            "human",
+            """
+User Query:
+
+{query}
+            """,
+        ),
+    ]
+)
+
+
+RAG_PROMPT = ChatPromptTemplate.from_messages(
+    [
+        (
+            "system",
+            """
+You are an expert in exercise science.
+
+Answer ONLY using the provided context.
+
+If the context does not contain the answer, say you don't know.
+
+Do not invent information.
+
+Context:
+{context}
+""",
+        ),
+        (
+            "human",
+            "{query}",
+        ),
+    ]
+)
+
+

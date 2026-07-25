@@ -112,6 +112,7 @@ def main():
     )
 
     dense_model = load_dense_model()
+    dense_size = dense_model.get_embedding_dimension()
 
     sparse_model = load_sparse_model()
 
@@ -119,7 +120,9 @@ def main():
 
     create_collections(
         client=client,
-        collections=COLLECTIONS)
+        collections=COLLECTIONS,
+        desnse_size=dense_size,
+        recreate=False)
 
     ingest_chunks(
         chunks=chunks,

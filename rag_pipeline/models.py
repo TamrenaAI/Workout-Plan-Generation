@@ -189,3 +189,35 @@ class ChunkingConfig(BaseModel):
 
 
 
+class ScoredChunk(Chunk):
+    score: float
+
+
+class PrinciplesQueryFilter(BaseModel):
+
+    topic: list[PrinciplesTopic]| None = None
+
+    planner_stage: list[PlannerStage] | None = None
+
+    goals: list[Goal] | None = None
+
+    applies_to: list[AppliesTo] | None = None
+
+    knowledge_type: list[KnowledgeType ] | None = None
+
+
+class GoalQueryFilter(BaseModel):
+
+    muscle: list[Muscle] | None = None
+
+    topic: list[GoalTopic ] | None = None
+
+    experience_level: ExperienceLevel | None = None
+
+    goals: list[Goal ] | None = None
+
+
+class RAGResponse(BaseModel):
+    answer: str
+    chunks: list[ScoredChunk]
+

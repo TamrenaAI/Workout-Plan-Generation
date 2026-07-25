@@ -5,12 +5,19 @@ from qdrant_client.models import (
     Distance,
     PointStruct,
     SparseVector,
+    Prefetch,
+    FusionQuery,
+    Fusion,
+    Filter,
 )
 
 import uuid
 
-from .models import CollectionName, Chunk
+from .models import Chunk
 from .paths import QDRANT_DIR
+from sentence_transformers import SentenceTransformer, CrossEncoder
+from fastembed import SparseTextEmbedding
+from .embeddings import embed_sparse_query, embed_dense_query
 
 
 def create_qdrant_client() -> QdrantClient:
@@ -22,40 +29,36 @@ def create_qdrant_client() -> QdrantClient:
     return qdrant
 
 
-
 def create_collections(
     client: QdrantClient,
     collections: list[str],
+    desnse_size: int,
+    recreate: bool = False
 ) -> None:
 
-    existing = {
-        c.name
-        for c in client.get_collections().collections
-    }
+    
 
     for collection in collections:
+        if recreate and client.collection_exists(collection):
+            client.delete_collection(collection_name=collection)
+            print(f"Deleted old {collection}")
 
-        if collection in existing:
+        if not client.collection_exists(collection):
+            client.create_collection(
+                collection_name=collection,
+                vectors_config={
+                    "dense": VectorParams(
+                        size=desnse_size,
+                        distance=Distance.COSINE,
+                    ),
+                },
+                sparse_vectors_config={
+                    "sparse": SparseVectorParams(),
+                },
+            )
+            print(f"Created {collection}")
+        else:
             print(f"{collection} already exists.")
-            continue
-
-        client.create_collection(
-            collection_name=collection,
-
-            vectors_config={
-                "dense": VectorParams(
-                    size=1024,
-                    distance=Distance.COSINE,
-                ),
-            },
-
-            sparse_vectors_config={
-                "sparse": SparseVectorParams(),
-            },
-        )
-
-        print(f"Created {collection}")
-
 
 
 def build_points(
@@ -108,5 +111,53 @@ def upsert_batch(
         collection_name=collection_name,
         points=points,
         wait=True,
+    )
+
+
+
+def hybrid_search(
+    client: QdrantClient,
+    collection_name: str,
+    query: str,
+    dense_model: SentenceTransformer,
+    sparse_model: SparseTextEmbedding,
+    top_k: int = 10,
+    query_filter: Filter | None = None,
+):
+
+    dense_vector = embed_dense_query(
+        query=query,
+        model=dense_model,
+    )
+
+    sparse_vector = embed_sparse_query(
+        query=query,
+        model=sparse_model,
+    )
+
+    return client.query_points(
+        collection_name=collection_name,
+
+        prefetch=[
+            Prefetch(
+                using="dense",
+                query=dense_vector,
+                limit=top_k,
+            ),
+            Prefetch(
+                using="sparse",
+                query=sparse_vector,
+                limit=top_k,
+            ),
+        ],
+
+        query=FusionQuery(
+            fusion=Fusion.RRF,
+        ),
+
+        query_filter=query_filter,
+
+        limit=top_k,
+        with_payload=True,
     )
 

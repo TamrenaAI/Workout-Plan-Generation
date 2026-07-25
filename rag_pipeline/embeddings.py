@@ -5,7 +5,9 @@ from fastembed import SparseTextEmbedding
 from .models import Chunk
 import numpy as np
 from rag_pipeline.paths import FASTEMBED_DIR, DENSE_DIR, RERANKER_DIR
-
+from qdrant_client.models import (
+    SparseVector,
+)
 
 def load_dense_model()-> SentenceTransformer:
     return SentenceTransformer(
@@ -64,8 +66,28 @@ def embed_sparse_batch(
     )
 
 
+def embed_dense_query(
+    query: str,
+    model: SentenceTransformer,
+) -> list[float]:
+
+    return model.encode(
+        query,
+        normalize_embeddings=True,
+        convert_to_numpy=True,
+    ).tolist()
 
 
+def embed_sparse_query(
+    query: str,
+    model: SparseTextEmbedding,
+) -> SparseVector:
 
+    sparse = list(
+        model.embed([query])
+    )[0]
 
-
+    return SparseVector(
+        indices=sparse.indices.tolist(),
+        values=sparse.values.tolist(),
+    )
