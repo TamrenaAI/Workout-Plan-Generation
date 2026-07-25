@@ -77,17 +77,26 @@ function closeStream() {
   }
 }
 
-// This frontend has no real login flow — /auth/dev-login mints a session for
-// a fixed test account (only available when the server has ALLOW_DEV_LOGIN=true).
+// This frontend has no real login flow. /auth/dev-login used to mint a session
+// for a fixed test account, but auth ownership moved to a separate BFF repo
+// (see docs/superpowers/specs/2026-07-25-bff-auth-handoff-design.md) and this
+// endpoint no longer exists here — dev-login's replacement isn't built on the
+// BFF yet either, so for now a token is seeded manually into localStorage
+// (window.tamrena.authToken = '...' won't survive a reload; localStorage does).
 // Cached on window.tamrena so a page that generates more than once doesn't
-// re-login every time.
+// re-read localStorage every time.
+const DEV_TOKEN_STORAGE_KEY = 'tamrena_dev_token';
+
 async function ensureAuthToken() {
   if (window.tamrena.authToken) return window.tamrena.authToken;
-  const res = await fetch('/auth/dev-login', { method: 'POST' });
-  if (!res.ok) throw new Error(`Dev login failed (${res.status}) — is ALLOW_DEV_LOGIN=true set on the server?`);
-  const data = await res.json();
-  window.tamrena.authToken = data.access_token;
-  return window.tamrena.authToken;
+  const stored = localStorage.getItem(DEV_TOKEN_STORAGE_KEY);
+  if (stored) {
+    window.tamrena.authToken = stored;
+    return stored;
+  }
+  throw new Error(
+    `No auth token found. Seed one in devtools: localStorage.setItem('${DEV_TOKEN_STORAGE_KEY}', '<token>')`
+  );
 }
 
 // Kicks off generation, then opens a real-time SSE connection to watch the

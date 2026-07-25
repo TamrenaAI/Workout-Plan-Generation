@@ -51,6 +51,9 @@ JWT_SECRET = os.getenv("JWT_SECRET")
 JWT_ALGORITHM = "HS256"
 JWT_EXPIRE_MINUTES = 60 * 24 * 30  # 30 days — mobile session, not a web cookie
 
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL")
+
 
 def load_prompt(name: str) -> str:
     """Read a prompt file from prompts/ by name (without .md extension)."""

@@ -1,0 +1,276 @@
+Timestamp (UTC+03:00)
+	
+Message
+	
+Container
+
+Timestamp (UTC+03:00)
+	
+Message
+	
+Container
+
+July 25, 2026, 10:38
+ERROR: Traceback (most recent call last):
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/starlette/routing.py", line 638, in lifespan
+workout-agent
+July 25, 2026, 10:38
+async with self.lifespan_context(app) as maybe_state:
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/contextlib.py", line 210, in __aenter__
+workout-agent
+July 25, 2026, 10:38
+return await anext(self.gen)
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/fastapi/routing.py", line 233, in merged_lifespan
+workout-agent
+July 25, 2026, 10:38
+async with original_context(app) as maybe_original_state:
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/contextlib.py", line 210, in __aenter__
+workout-agent
+July 25, 2026, 10:38
+return await anext(self.gen)
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/fastapi/routing.py", line 233, in merged_lifespan
+workout-agent
+July 25, 2026, 10:38
+async with original_context(app) as maybe_original_state:
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/contextlib.py", line 210, in __aenter__
+workout-agent
+July 25, 2026, 10:38
+return await anext(self.gen)
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/fastapi/routing.py", line 233, in merged_lifespan
+workout-agent
+July 25, 2026, 10:38
+async with original_context(app) as maybe_original_state:
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/contextlib.py", line 210, in __aenter__
+workout-agent
+July 25, 2026, 10:38
+return await anext(self.gen)
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/fastapi/routing.py", line 233, in merged_lifespan
+workout-agent
+July 25, 2026, 10:38
+async with original_context(app) as maybe_original_state:
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/contextlib.py", line 210, in __aenter__
+workout-agent
+July 25, 2026, 10:38
+return await anext(self.gen)
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/fastapi/routing.py", line 233, in merged_lifespan
+workout-agent
+July 25, 2026, 10:38
+async with original_context(app) as maybe_original_state:
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/contextlib.py", line 210, in __aenter__
+workout-agent
+July 25, 2026, 10:38
+return await anext(self.gen)
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/fastapi/routing.py", line 233, in merged_lifespan
+workout-agent
+July 25, 2026, 10:38
+async with original_context(app) as maybe_original_state:
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/contextlib.py", line 210, in __aenter__
+workout-agent
+July 25, 2026, 10:38
+return await anext(self.gen)
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/app/api/main.py", line 36, in lifespan
+workout-agent
+July 25, 2026, 10:38
+ensure_indexes()
+workout-agent
+July 25, 2026, 10:38
+File "/app/tools/mongo.py", line 33, in ensure_indexes
+workout-agent
+July 25, 2026, 10:38
+db.users.create_index("google_sub", unique=True)
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/pymongo/synchronous/collection.py", line 2391, in create_index
+workout-agent
+July 25, 2026, 10:38
+return (self._create_indexes([index], session, **cmd_options))[0]
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/pymongo/_csot.py", line 125, in csot_wrapper
+workout-agent
+July 25, 2026, 10:38
+return func(self, *args, **kwargs)
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/pymongo/synchronous/collection.py", line 2273, in _create_indexes
+workout-agent
+July 25, 2026, 10:38
+return self.database.client._retryable_write(False, inner, session, _Op.CREATE_INDEXES)
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/pymongo/synchronous/mongo_client.py", line 2113, in _retryable_write
+workout-agent
+July 25, 2026, 10:38
+return self._retry_with_session(retryable, func, s, bulk, operation, operation_id)
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/pymongo/synchronous/mongo_client.py", line 1986, in _retry_with_session
+workout-agent
+July 25, 2026, 10:38
+return self._retry_internal(
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/pymongo/_csot.py", line 125, in csot_wrapper
+workout-agent
+July 25, 2026, 10:38
+return func(self, *args, **kwargs)
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/pymongo/synchronous/mongo_client.py", line 2038, in _retry_internal
+workout-agent
+July 25, 2026, 10:38
+).run()
+workout-agent
+July 25, 2026, 10:38
+^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/pymongo/synchronous/mongo_client.py", line 2811, in run
+workout-agent
+July 25, 2026, 10:38
+res = self._read() if self._is_read else self._write()
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/pymongo/synchronous/mongo_client.py", line 2992, in _write
+workout-agent
+July 25, 2026, 10:38
+self._server = self._get_server()
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/pymongo/synchronous/mongo_client.py", line 2975, in _get_server
+workout-agent
+July 25, 2026, 10:38
+return self._client._select_server(
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/pymongo/synchronous/mongo_client.py", line 1851, in _select_server
+workout-agent
+July 25, 2026, 10:38
+server = topology.select_server(
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/pymongo/synchronous/topology.py", line 428, in select_server
+workout-agent
+July 25, 2026, 10:38
+server = self._select_server(
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/pymongo/synchronous/topology.py", line 402, in _select_server
+workout-agent
+July 25, 2026, 10:38
+servers = self.select_servers(
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/pymongo/synchronous/topology.py", line 298, in select_servers
+workout-agent
+July 25, 2026, 10:38
+server_descriptions = self._select_servers_loop(
+workout-agent
+July 25, 2026, 10:38
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+workout-agent
+July 25, 2026, 10:38
+File "/usr/local/lib/python3.11/site-packages/pymongo/synchronous/topology.py", line 359, in _select_servers_loop
+workout-agent
+July 25, 2026, 10:38
+raise ServerSelectionTimeoutError(
+workout-agent
+July 25, 2026, 10:38
+pymongo.errors.ServerSelectionTimeoutError: localhost:27017: [Errno 111] Connection refused (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms), Timeout: 30s, Topology Description: <TopologyDescription id: 6a6467bf0ba3b3504407e0bd, topology_type: Unknown, servers: [<ServerDescription ('localhost', 27017) server_type: Unknown, rtt: None, error=AutoReconnect('localhost:27017: [Errno 111] Connection refused (configured timeouts: socketTimeoutMS: 20000.0ms, connectTimeoutMS: 20000.0ms)')>]>
+workout-agent
+July 25, 2026, 10:38
+ERROR: Application startup failed. Exiting.
+workout-agent
+July 25, 2026, 10:37
+INFO: Started server process [1]
+workout-agent
+July 25, 2026, 10:37
+INFO: Waiting for application startup.
+workout-agent
