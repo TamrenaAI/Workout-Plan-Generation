@@ -24,10 +24,8 @@ class RAG(BaseRAG):
         retriever: BaseRetriever,
         llm: BaseChatModel,
         prompt: ChatPromptTemplate,
-        context_top_k: int = 10,
     ):
         self.retriever = retriever
-        self.context_top_k = context_top_k
         self.chain = prompt | llm
 
     def _build_context(
@@ -49,9 +47,8 @@ class RAG(BaseRAG):
             query=query,
         )
 
-        selected_chunks = chunks[: self.context_top_k]
 
-        context = self._build_context(selected_chunks)
+        context = self._build_context(chunks)
 
         response = self.chain.invoke(
             {
@@ -62,6 +59,6 @@ class RAG(BaseRAG):
 
         return RAGResponse(
             answer=response.content,
-            chunks=selected_chunks,
+            chunks=chunks,
         )
 

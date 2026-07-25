@@ -82,16 +82,14 @@ def create_rag(
     retriever: BaseRetriever,
     llm: BaseChatModel,
     prompt: ChatPromptTemplate,
-    context_top_k: int = 5,
-) -> BaseRAG:
+) -> RAG:
     """
     Create a RAG pipeline.
     """
 
-    return BaseRAG(
+    return RAG(
         retriever=retriever,
         llm=llm,
         prompt=prompt,
-        context_top_k=context_top_k,
     )
 
