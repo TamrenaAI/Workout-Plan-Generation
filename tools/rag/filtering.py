@@ -61,7 +61,7 @@ class GoalFilterBuilder(BaseFilterBuilder[GoalQueryFilter]):
             must.append(
                 FieldCondition(
                     key="metadata.goals",
-                    match=MatchAny(any=query_filter.goals),
+                    match=MatchAny(any=[*query_filter.goals, "all"]),
                 )
             )
 
@@ -92,7 +92,7 @@ class PrinciplesFilterBuilder(BaseFilterBuilder[PrinciplesQueryFilter]):
             must.append(
                 FieldCondition(
                     key="metadata.goals",
-                    match=MatchAny(any=query_filter.goals),
+                    match=MatchAny(any=[*query_filter.goals, "all"]),
                 )
             )
 

@@ -22,7 +22,7 @@ PlannerStage = Literal[
     "progression", "recovery",
 ]
 
-PrinciplesGoal = Literal["hypertrophy", "strength", "fat_loss", "endurance"]
+PrinciplesGoal = Literal["all", "hypertrophy", "strength", "fat_loss", "endurance"]
 
 AppliesTo = Literal["all", "hypertrophy", "strength", "fat_loss"]
 
@@ -44,7 +44,7 @@ GoalTopic = Literal[
 
 ExperienceLevel = Literal["all", "beginner", "intermediate", "advanced"]
 
-TrainingGoal = Literal["hypertrophy", "strength", "fat_loss"]
+TrainingGoal = Literal["all", "hypertrophy", "strength", "fat_loss"]
 
 
 class PrinciplesMetadata(BaseModel):

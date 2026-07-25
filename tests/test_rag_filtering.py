@@ -7,7 +7,7 @@ from tools.rag.filtering import GoalFilterBuilder, PrinciplesFilterBuilder
 from tools.rag.models import GoalQueryFilter, PrinciplesQueryFilter
 
 
-def test_goal_filter_builder_includes_all_sentinel_for_muscle_and_experience():
+def test_goal_filter_builder_includes_all_sentinel_for_muscle_experience_and_goals():
     query_filter = GoalQueryFilter(
         muscle=["chest"], experience_level="beginner", goals=["hypertrophy"],
     )
@@ -16,7 +16,11 @@ def test_goal_filter_builder_includes_all_sentinel_for_muscle_and_experience():
     conditions = {c.key: c.match.any for c in built.must}
     assert set(conditions["metadata.muscle"]) == {"chest", "all"}
     assert set(conditions["metadata.experience_level"]) == {"beginner", "all"}
-    assert conditions["metadata.goals"] == ["hypertrophy"]
+    # "all" must be included here too — real ingested data has goals=["all"]
+    # on a majority of principles/strength docs (see tools/rag/models.py's
+    # PrinciplesGoal/TrainingGoal Literal fix), so a goal-filtered search
+    # that didn't also match "all" would silently exclude most of them.
+    assert set(conditions["metadata.goals"]) == {"hypertrophy", "all"}
     assert "metadata.topic" not in conditions
 
 
