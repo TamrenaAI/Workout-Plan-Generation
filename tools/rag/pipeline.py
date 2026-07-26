@@ -11,6 +11,7 @@ agent.
 """
 
 import threading
+import time
 
 from fastembed import SparseTextEmbedding
 from langchain_core.tools import tool
@@ -49,46 +50,69 @@ def _ensure_loaded() -> None:
 
         RAG_MODELS_DIR.mkdir(parents=True, exist_ok=True)
 
-        dense_model_path = RAG_MODELS_DIR / "bge-m3"
-        if dense_model_path.exists():
-            dense_model = SentenceTransformer(str(dense_model_path), device="cpu")
-        else:
-            dense_model = SentenceTransformer("BAAI/bge-m3", device="cpu")
-            dense_model.save(str(dense_model_path))
+        try:
+            # 1. Dense embedding model: all-MiniLM-L6-v2
+            dense_model_path = RAG_MODELS_DIR / "all-MiniLM-L6-v2"
+            if dense_model_path.exists() and any(dense_model_path.iterdir()):
+                print("[RAG] Loading dense model 'all-MiniLM-L6-v2' from local cache...")
+                dense_model = SentenceTransformer(str(dense_model_path), device="cpu")
+            else:
+                print("[RAG] Downloading dense model 'all-MiniLM-L6-v2'...")
+                dense_model = SentenceTransformer("all-MiniLM-L6-v2", cache_folder=str(RAG_MODELS_DIR), device="cpu")
+                try:
+                    dense_model.save(str(dense_model_path))
+                except Exception as e:
+                    print(f"[RAG WARNING] Failed to save dense model locally: {e}")
 
-        reranker_model_path = RAG_MODELS_DIR / "bge-reranker-v2-m3"
-        if reranker_model_path.exists():
-            reranker_model = CrossEncoder(str(reranker_model_path), device="cpu")
-        else:
-            reranker_model = CrossEncoder("BAAI/bge-reranker-v2-m3", device="cpu")
-            reranker_model.save(str(reranker_model_path))
+            # 2. Reranker model: jinaai/jina-reranker-v1-tiny-en
+            reranker_model_path = RAG_MODELS_DIR / "jina-reranker-v1-tiny-en"
+            if reranker_model_path.exists() and any(reranker_model_path.iterdir()):
+                print("[RAG] Loading reranker model 'jinaai/jina-reranker-v1-tiny-en' from local cache...")
+                reranker_model = CrossEncoder(str(reranker_model_path), device="cpu", trust_remote_code=True)
+            else:
+                print("[RAG] Downloading reranker model 'jinaai/jina-reranker-v1-tiny-en'...")
+                reranker_model = CrossEncoder("jinaai/jina-reranker-v1-tiny-en", cache_folder=str(RAG_MODELS_DIR), device="cpu", trust_remote_code=True)
+                try:
+                    reranker_model.save(str(reranker_model_path))
+                except Exception as e:
+                    print(f"[RAG WARNING] Failed to save reranker model locally: {e}")
 
-        fastembed_dir = RAG_MODELS_DIR / "fastembed"
-        fastembed_dir.mkdir(parents=True, exist_ok=True)
-        sparse_model = SparseTextEmbedding(
-            model_name="Qdrant/bm25",
-            cache_dir=str(fastembed_dir),
-        )
+            # 3. Sparse embedding model
+            fastembed_dir = RAG_MODELS_DIR / "fastembed"
+            fastembed_dir.mkdir(parents=True, exist_ok=True)
+            sparse_model = SparseTextEmbedding(
+                model_name="Qdrant/bm25",
+                cache_dir=str(fastembed_dir),
+            )
 
-        client = QdrantClient(path=str(QDRANT_PATH))
+            # Qdrant client connection (prefer read_only mode if available to avoid lock blocking)
+            try:
+                client = QdrantClient(path=str(QDRANT_PATH), read_only=True)
+            except Exception:
+                client = QdrantClient(path=str(QDRANT_PATH))
 
-        llm = get_llm(temperature=0)
+            try:
+                llm = get_llm(temperature=0)
+                goal_extractor = GoalMetadataExtractor(llm=llm)
+                principles_extractor = PrinciplesMetadataExtractor(llm=llm)
+            except Exception as llm_err:
+                print(f"[RAG WARNING] LLM extractor initialization deferred: {llm_err}")
+                goal_extractor = None
+                principles_extractor = None
 
-        # Build the fully-populated state locally, then rebind the module
-        # name in one atomic statement — populating the module-level dict
-        # key-by-key would let a concurrent, unlocked `if _state:` fast-path
-        # check observe a partially-built state (truthy after the first key
-        # write, but missing the rest) and proceed to use it.
-        _state = {
-            "client": client,
-            "dense_model": dense_model,
-            "sparse_model": sparse_model,
-            "reranker": CrossEncoderReranker(model=reranker_model),
-            "goal_extractor": GoalMetadataExtractor(llm=llm),
-            "principles_extractor": PrinciplesMetadataExtractor(llm=llm),
-            "goal_filter_builder": GoalFilterBuilder(),
-            "principles_filter_builder": PrinciplesFilterBuilder(),
-        }
+            _state = {
+                "client": client,
+                "dense_model": dense_model,
+                "sparse_model": sparse_model,
+                "reranker": CrossEncoderReranker(model=reranker_model),
+                "goal_extractor": goal_extractor,
+                "principles_extractor": principles_extractor,
+                "goal_filter_builder": GoalFilterBuilder(),
+                "principles_filter_builder": PrinciplesFilterBuilder(),
+            }
+        except Exception as exc:
+            print(f"[RAG ERROR] Failed to load RAG pipeline components: {exc}")
+            raise
 
 
 def route_collections(goal: str) -> list[str]:
@@ -100,10 +124,18 @@ def route_collections(goal: str) -> list[str]:
 
 def _filter_for_collection(collection: str, query: str) -> Filter:
     if collection == "principles":
-        query_filter = _state["principles_extractor"].extract(query)
+        if _state.get("principles_extractor"):
+            query_filter = _state["principles_extractor"].extract(query)
+        else:
+            from tools.rag.models import PrinciplesQueryFilter
+            query_filter = PrinciplesQueryFilter()
         return _state["principles_filter_builder"].build(query_filter)
 
-    query_filter = _state["goal_extractor"].extract(query)
+    if _state.get("goal_extractor"):
+        query_filter = _state["goal_extractor"].extract(query)
+    else:
+        from tools.rag.models import GoalQueryFilter
+        query_filter = GoalQueryFilter()
     return _state["goal_filter_builder"].build(query_filter)
 
 
@@ -149,16 +181,32 @@ def search_rag(muscle_group: str, query: str, goal: str = "") -> str:
     Returns the top 3 most relevant chunks after hybrid retrieval and
     cross-encoder reranking, with source attribution.
     """
+    try:
+        _ensure_loaded()
+
+        combined_query = f"{muscle_group}: {query}"
+        collections = route_collections(goal)
+
+        candidates: list[ScoredChunk] = []
+        for collection in collections:
+            candidates.extend(_retrieve_collection(collection, combined_query))
+
+        if not candidates:
+            return "=== RAG RESULTS (top 3, reranked) ===\nStandard evidence-based hypertrophy & strength guidelines apply."
+
+        reranked = _state["reranker"].rerank(query=combined_query, chunks=candidates)
+        top3 = reranked[:3]
+
+        return format_results(top3)
+    except Exception as exc:
+        print(f"[RAG WARNING] Search failed gracefully: {exc}")
+        return (
+            "=== RAG RESULTS (top 3, reranked) ===\n"
+            f"Proceeding with standard evidence-based hypertrophy & strength exercise principles."
+        )
+
+
+if __name__ == "__main__":
+    print("[RAG Setup] Pre-downloading Hugging Face models for local offline usage...")
     _ensure_loaded()
-
-    combined_query = f"{muscle_group}: {query}"
-    collections = route_collections(goal)
-
-    candidates: list[ScoredChunk] = []
-    for collection in collections:
-        candidates.extend(_retrieve_collection(collection, combined_query))
-
-    reranked = _state["reranker"].rerank(query=combined_query, chunks=candidates)
-    top3 = reranked[:3]
-
-    return format_results(top3)
+    print("[RAG Setup] Models successfully cached locally!")

@@ -26,6 +26,10 @@ COPY . .
 RUN tar -xf database/exercises_dataset/media.tar -C database/exercises_dataset \
     && rm database/exercises_dataset/media.tar
 
+# Pre-download and bake RAG models (dense, reranker, sparse) into /app/data/models
+# so the image is fully self-contained for deployment to AWS ECR / ECS.
+RUN python -m tools.rag.pipeline
+
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
 RUN chmod +x /app/docker-entrypoint.sh
 
