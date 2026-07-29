@@ -63,6 +63,24 @@ def test_pending_when_no_schedule_written_yet():
     assert body["plan"] is None
 
 
+def test_failed_when_pipeline_errored():
+    import api.main as m
+
+    owner = _make_user("owner4")
+    session_id = "s4"
+    ownership.create_session(session_id, user_id=owner["id"], goal="hypertrophy")
+    ownership.update_session_status(session_id, "failed", error="Supervisor pipeline crashed")
+
+    client = TestClient(m.app)
+    token = tokens.create_access_token(user_id=owner["id"])
+    r = client.get(f"/sessions/{session_id}/plan", headers={"Authorization": f"Bearer {token}"})
+    assert r.status_code == 200
+    body = r.json()
+    assert body["status"] == "failed"
+    assert body["error"] == "Supervisor pipeline crashed"
+    assert body["plan"] is None
+
+
 def test_ready_when_schedule_has_been_written():
     import api.main as m
 

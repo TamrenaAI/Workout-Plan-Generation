@@ -60,14 +60,31 @@ SUPPORTED_CONTENT_TYPES = {
     "application/pdf": "application/pdf",
 }
 
+# Browsers have no built-in MIME mapping for some extensions InBody scans
+# commonly show up in (.jfif in particular — Windows' own screenshot/save
+# tools produce it) and report `application/octet-stream` instead, which
+# isn't in SUPPORTED_CONTENT_TYPES. Fall back to sniffing the filename
+# extension in that case rather than trusting the browser-reported type alone.
+EXTENSION_CONTENT_TYPES = {
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".jfif": "image/jpeg",
+    ".png": "image/png",
+    ".pdf": "application/pdf",
+}
+
 
 async def _read_as_image(file: UploadFile) -> tuple[bytes, str]:
     """Reads an uploaded file and normalizes PDFs to a PNG image. Raises HTTPException on
     an unsupported content type."""
     raw_content_type = file.content_type or ""
-    if raw_content_type not in SUPPORTED_CONTENT_TYPES:
-        raise HTTPException(415, f"Unsupported file type: {raw_content_type}")
-    content_type = SUPPORTED_CONTENT_TYPES[raw_content_type]
+    if raw_content_type in SUPPORTED_CONTENT_TYPES:
+        content_type = SUPPORTED_CONTENT_TYPES[raw_content_type]
+    else:
+        suffix = os.path.splitext(file.filename or "")[1].lower()
+        content_type = EXTENSION_CONTENT_TYPES.get(suffix)
+        if content_type is None:
+            raise HTTPException(415, f"Unsupported file type: {raw_content_type}")
 
     file_bytes = await file.read()
     if content_type == "application/pdf":
@@ -255,8 +272,9 @@ async def list_my_sessions(user: dict = Depends(get_current_user)):
 
 
 class SessionPlanResponse(BaseModel):
-    status: Literal["ready", "pending"]
+    status: Literal["ready", "pending", "failed"]
     plan: Optional[str] = None
+    error: Optional[str] = None
 
 
 @router.get("/sessions/{session_id}/plan", response_model=SessionPlanResponse)
@@ -267,20 +285,24 @@ async def get_session_plan(session_id: str, user: dict = Depends(get_current_use
     Supervisor's own free-text reply (tools/memory.py's read_weekly_schedule,
     the last '## Weekly Schedule' section the Plan Assembler actually wrote).
 
-    Known gap: "pending" covers both "still generating" and "generation
-    failed before the Assembler wrote a schedule" — plan.md records neither
-    a start marker nor a failure marker today, only successful writes, so
-    this endpoint can't yet tell those two apart. Live progress (the SSE
-    stream) is the only place failure is currently surfaced, and only to a
-    client connected at the moment it happens.
+    Checks the session's persisted status (auth/ownership.py's plan_sessions
+    doc, set by _run_pipeline's except clause) before falling back to
+    "pending" — previously this endpoint had no way to distinguish "still
+    generating" from "generation already failed", so a run that failed
+    without an SSE client connected at that exact moment looked stuck
+    forever with no way to see why.
     """
     if not user_owns_session(session_id, user["id"]):
         raise HTTPException(404, "Unknown session_id.")
 
     schedule = read_weekly_schedule(session_id)
-    if schedule is None:
-        return SessionPlanResponse(status="pending", plan=None)
-    return SessionPlanResponse(status="ready", plan=schedule)
+    if schedule is not None:
+        return SessionPlanResponse(status="ready", plan=schedule)
+
+    session = get_session(session_id)
+    if session is not None and session.get("status") == "failed":
+        return SessionPlanResponse(status="failed", error=session.get("error"))
+    return SessionPlanResponse(status="pending", plan=None)
 
 
 def _format_inbody_comparison(comparison: Optional[dict]) -> str:
