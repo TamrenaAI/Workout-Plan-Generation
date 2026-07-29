@@ -22,7 +22,12 @@ DAY_HEADING = re.compile(r"^###\s+Day\s+(\d+)\b")
 
 
 def parse_day_map(content: str) -> dict:
-    """Day number -> {"budget": int, "muscles": [str,...], "zone": str}."""
+    """Extract Day N metadata from plan header (budget, muscle groups, intensity zone).
+
+    Shared so both enforce_volume_budget (plan_finalize.py) and the read-only
+    JSON parser parse day prescriptions identically instead of drifting.
+    Returns: {day_num: {"budget": int, "muscles": [str,...], "zone": str}}
+    """
     day_map = {}
     for line in content.splitlines():
         match = _DAY_MAP_LINE.match(line.strip())
@@ -35,7 +40,13 @@ def parse_day_map(content: str) -> dict:
 
 
 def parse_group_ordinals(content: str, muscle: str, zone: str) -> dict:
-    """Last '## {muscle} - {zone}' section -> {exercise_name_lower: ordinal}."""
+    """Map exercise names to their ordinals within a muscle-zone section.
+
+    Shared so both enforce_volume_budget (plan_finalize.py) and the read-only
+    JSON parser identify which exercises are primary (ordinal 1) vs auxiliary
+    using the same logic, ensuring consistent priority rules across tools.
+    Returns: {exercise_name_lower: ordinal}
+    """
     heading = f"## {muscle} - {zone}"
     idx = content.rfind(heading)
     if idx == -1:
@@ -55,6 +66,14 @@ def parse_group_ordinals(content: str, muscle: str, zone: str) -> dict:
 
 
 def extract_sets_reps(cell: str) -> "tuple[int, str] | None":
+    """Parse sets and reps from a table cell, handling malformed separators.
+
+    Shared so both enforce_volume_budget (plan_finalize.py) and the read-only
+    JSON parser tolerate real-world formatting issues (stray bytes, missing
+    separators) the same way instead of silently failing on identical inputs.
+    Handles: "4×12", "4x12", "4\x7f12" (stray byte), "4?12", "58" (collapsed).
+    Returns: (sets: int, reps: str) or None if unparseable.
+    """
     match = _SETS_X_REPS.search(cell)
     if match:
         return int(match.group(1)), match.group(2)
@@ -68,6 +87,13 @@ def extract_sets_reps(cell: str) -> "tuple[int, str] | None":
 
 
 def split_row(line: str) -> list:
+    """Split a pipe-delimited markdown table row into cells.
+
+    Shared so both enforce_volume_budget (plan_finalize.py) and the read-only
+    JSON parser parse the same markdown table format the same way, handling
+    leading/trailing pipe characters consistently.
+    Returns: list of trimmed cell contents.
+    """
     cells = [c.strip() for c in line.split("|")]
     if cells and cells[0] == "":
         cells.pop(0)
