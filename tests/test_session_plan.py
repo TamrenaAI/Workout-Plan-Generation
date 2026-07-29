@@ -147,6 +147,102 @@ Evidence: compound presses prioritized.
     assert swapped["adjustment_reason"] == "Reported shoulder pain on Cable Fly"
 
 
+def test_swap_badges_are_scoped_per_day_not_leaked_across_days():
+    """Regression test for a review finding: the replacements lookup used to be
+    keyed by exercise name alone, session-wide. If two different days each had
+    an adjustment whose new_exercise_name collided (as below — "Machine Chest
+    Press" swapped in on both Day 1 and Day 2), a flat dict would silently keep
+    only the last-inserted entry and badge the OTHER day's exercise with the
+    wrong replaced_from/adjustment_reason. Also exercises the case-insensitive
+    exercise-name matching path (adjustment's new_exercise_name is stored in a
+    different case than the schedule table's exercise name)."""
+    import api.main as m
+    from auth import ownership
+    from tools import memory as tools_memory
+
+    owner = _make_user("owner7")
+    session_id = "s7"
+    ownership.create_session(session_id, user_id=owner["id"], goal="hypertrophy")
+
+    full_plan = """
+
+## User Profile + Plan Header
+Day 1 - hard: muscles [chest] | max_sets: 10 | intensity: hard
+Day 2 - hard: muscles [chest] | max_sets: 10 | intensity: hard
+
+---
+
+## chest - hard
+1. Flat Barbell Bench Press 4x8 | Rest 2-3 min | RPE 8
+   -> heavy compound pressing.
+2. Cable Fly 3x12 | Rest 90s | RPE 7
+   -> isolation.
+3. Incline Dumbbell Press 4x10 | Rest 2 min | RPE 8
+   -> upper chest emphasis.
+
+Evidence: compound presses prioritized.
+
+---
+
+## Weekly Schedule
+### Day 1 -- Monday: Push (Chest) - Hard Session
+**Warm-up:** Dynamic shoulder circles.
+
+| # | Exercise | Sets x Reps | Rest | RPE |
+|---|----------|-------------|------|-----|
+| 1 | Flat Barbell Bench Press | 4x8 | 2-3 min | 8 |
+| 2 | Machine Chest Press | 3x12 | 90s | 7 |
+
+**Coaching notes:** Focus on controlled eccentrics.
+
+### Day 2 -- Thursday: Push (Chest) - Hard Session
+**Warm-up:** Dynamic shoulder circles.
+
+| # | Exercise | Sets x Reps | Rest | RPE |
+|---|----------|-------------|------|-----|
+| 1 | Machine Chest Press | 4x10 | 2 min | 8 |
+
+**Coaching notes:** Focus on controlled eccentrics.
+"""
+    session_dir = os.path.join(tools_memory.SESSION_DIR, session_id)
+    os.makedirs(session_dir, exist_ok=True)
+    with open(os.path.join(session_dir, "plan.md"), "w", encoding="utf-8") as f:
+        f.write(full_plan)
+
+    now = __import__("datetime").datetime.now(__import__("datetime").timezone.utc)
+    tools_memory.get_db().plan_adjustments.insert_many([
+        {
+            "session_id": session_id, "day_label": "Day 1 -- Monday: Push (Chest) - Hard Session",
+            "exercise_name": "Cable Fly", "new_exercise_name": "MACHINE CHEST PRESS",
+            "sets": None, "reps": None, "rpe": None,
+            "reason": "Day 1 reason: shoulder pain on Cable Fly",
+            "created_at": now,
+        },
+        {
+            "session_id": session_id, "day_label": "Day 2 -- Thursday: Push (Chest) - Hard Session",
+            "exercise_name": "Incline Dumbbell Press", "new_exercise_name": "Machine Chest Press",
+            "sets": None, "reps": None, "rpe": None,
+            "reason": "Day 2 reason: wrist discomfort on Incline Dumbbell Press",
+            "created_at": now,
+        },
+    ])
+
+    client = TestClient(m.app)
+    token = tokens.create_access_token(user_id=owner["id"])
+    r = client.get(f"/sessions/{session_id}/plan", headers={"Authorization": f"Bearer {token}"})
+    assert r.status_code == 200
+    body = r.json()
+    days_by_number = {d["day_number"]: d for d in body["days"]}
+
+    day1_swapped = {e["name"]: e for e in days_by_number[1]["exercises"]}["Machine Chest Press"]
+    assert day1_swapped["replaced_from"] == "Cable Fly"
+    assert day1_swapped["adjustment_reason"] == "Day 1 reason: shoulder pain on Cable Fly"
+
+    day2_swapped = {e["name"]: e for e in days_by_number[2]["exercises"]}["Machine Chest Press"]
+    assert day2_swapped["replaced_from"] == "Incline Dumbbell Press"
+    assert day2_swapped["adjustment_reason"] == "Day 2 reason: wrist discomfort on Incline Dumbbell Press"
+
+
 def test_pending_response_has_no_days():
     import api.main as m
 

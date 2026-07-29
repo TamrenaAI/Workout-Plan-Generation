@@ -361,6 +361,7 @@ def read_all_exercise_adjustments(session_id: str) -> list[dict]:
     docs = get_db().plan_adjustments.find({"session_id": session_id}).sort("created_at", 1)
     return [
         {
+            "day_label": d.get("day_label"),
             "exercise_name": d["exercise_name"],
             "new_exercise_name": d.get("new_exercise_name"),
             "reason": d["reason"],

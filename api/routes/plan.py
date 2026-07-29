@@ -302,14 +302,23 @@ async def get_session_plan(session_id: str, user: dict = Depends(get_current_use
         full_content = read_full_plan(session_id) or schedule
         days = parse_weekly_schedule(full_content)
 
-        replacements = {
-            adj["new_exercise_name"].strip().lower(): adj
-            for adj in read_all_exercise_adjustments(session_id)
-            if adj.get("new_exercise_name")
-        }
+        # Keyed by (day_label, lowercased exercise name) — NOT by exercise
+        # name alone. Two different days can each get an adjustment whose
+        # new_exercise_name collides (e.g. "Machine Chest Press" swapped in
+        # on both Day 1 and Day 3); a flat name-only dict would silently
+        # keep only the last-inserted entry and badge exercises with the
+        # wrong day's replaced_from/adjustment_reason.
+        replacements: dict[str, dict[str, dict]] = {}
+        for adj in read_all_exercise_adjustments(session_id):
+            if not adj.get("new_exercise_name"):
+                continue
+            day_bucket = replacements.setdefault(adj.get("day_label"), {})
+            day_bucket[adj["new_exercise_name"].strip().lower()] = adj
+
         for day in days:
+            day_bucket = replacements.get(day.label, {})
             for exercise in day.exercises:
-                match = replacements.get(exercise.name.strip().lower())
+                match = day_bucket.get(exercise.name.strip().lower())
                 if match:
                     exercise.replaced_from = match["exercise_name"]
                     exercise.adjustment_reason = match["reason"]
