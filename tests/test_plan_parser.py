@@ -162,3 +162,50 @@ def test_malformed_sets_reps_cell_still_parses_row_with_none_sets_reps():
     assert bench.sets is None
     assert bench.reps is None
     assert bench.rest == "2-3 min"
+
+
+def test_trailing_plan_adjustment_section_is_not_absorbed_into_last_day():
+    """Regression test for a review finding: parse_weekly_schedule only
+    stopped the schedule section at '### Weekly Volume Summary' or
+    '### Recovery Notes' — but agents/plan_adjuster.py (a separate,
+    pre-existing agent) appends a trailing '## Plan Adjustment — {day_label}'
+    section to the END of plan.md after every feedback-driven swap. Since
+    that '## ' heading wasn't recognized as a terminator, its prose got
+    absorbed into the LAST day's block — and if that appended section
+    contains a line starting with '|' (plausible prose formatting, e.g. a
+    markdown table), it was misparsed as extra/phantom exercise rows on
+    that day.
+    """
+    single_day_plan = """
+
+## User Profile + Plan Header
+Day 1 - hard: muscles [chest] | max_sets: 10 | intensity: hard
+
+---
+
+## chest - hard
+1. Flat Barbell Bench Press 4x8 | Rest 2-3 min | RPE 8
+   -> heavy compound pressing.
+
+Evidence: compound presses prioritized.
+
+---
+
+## Weekly Schedule
+### Day 1 -- Monday: Push (Chest) - Hard Session
+**Warm-up:** Dynamic shoulder circles.
+
+| # | Exercise | Sets x Reps | Rest | RPE |
+|---|----------|-------------|------|-----|
+| 1 | Flat Barbell Bench Press | 4x8 | 2-3 min | 8 |
+
+**Coaching notes:** Focus on controlled eccentrics.
+
+## Plan Adjustment — Day 1 -- Monday: Push (Chest) - Hard Session
+Swapped Cable Fly -> Machine Chest Press due to reported shoulder pain.
+
+| 1 | Phantom Row | 99x99 | 0s | 0 |
+"""
+    days = parse_weekly_schedule(single_day_plan)
+    assert len(days) == 1
+    assert [e.name for e in days[0].exercises] == ["Flat Barbell Bench Press"]

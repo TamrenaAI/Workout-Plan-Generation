@@ -160,7 +160,23 @@ def parse_weekly_schedule(full_plan_content: str) -> "list[ParsedDay]":
     lines = full_plan_content[schedule_idx:].splitlines()
     tail_marker_idx = None
     for i, line in enumerate(lines):
-        if line.strip().startswith("### Weekly Volume Summary") or line.strip().startswith("### Recovery Notes"):
+        if i == 0:
+            # Line 0 is the '## Weekly Schedule' heading itself — don't treat
+            # it as its own tail marker.
+            continue
+        stripped = line.strip()
+        if (
+            stripped.startswith("### Weekly Volume Summary")
+            or stripped.startswith("### Recovery Notes")
+            or stripped.startswith("## ")
+        ):
+            # A bare '## ' heading (not just the two known '###' tail
+            # markers above) also ends the schedule section — e.g.
+            # agents/plan_adjuster.py appends a trailing
+            # '## Plan Adjustment — {day_label}' section to plan.md after
+            # every feedback-driven swap, and its prose (which may contain
+            # lines starting with '|') must never be absorbed into the last
+            # day's exercise table.
             tail_marker_idx = i
             break
     day_lines_all = lines[1:tail_marker_idx] if tail_marker_idx is not None else lines[1:]

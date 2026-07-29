@@ -243,6 +243,75 @@ Evidence: compound presses prioritized.
     assert day2_swapped["adjustment_reason"] == "Day 2 reason: wrist discomfort on Incline Dumbbell Press"
 
 
+def test_swap_badge_matches_via_day_prefix_when_day_label_format_drifts():
+    """Regression test for a review finding: day_label on a plan_adjustments
+    doc is whatever the LLM-driven Plan Adjuster agent passed to
+    record_exercise_adjustment — its exact format isn't constrained to match
+    ParsedDay.label byte-for-byte. Here the adjustment is recorded with the
+    short "Day 1" instead of the full "Day 1 -- Monday: ..." label; the
+    lookup must still find it via the shared "Day N" prefix instead of
+    silently failing to badge a real swap."""
+    import api.main as m
+    from auth import ownership
+    from tools import memory as tools_memory
+
+    owner = _make_user("owner8")
+    session_id = "s8"
+    ownership.create_session(session_id, user_id=owner["id"], goal="hypertrophy")
+
+    full_plan = """
+
+## User Profile + Plan Header
+Day 1 - hard: muscles [chest] | max_sets: 10 | intensity: hard
+
+---
+
+## chest - hard
+1. Flat Barbell Bench Press 4x8 | Rest 2-3 min | RPE 8
+   -> heavy compound pressing.
+2. Cable Fly 3x12 | Rest 90s | RPE 7
+   -> isolation.
+
+Evidence: compound presses prioritized.
+
+---
+
+## Weekly Schedule
+### Day 1 -- Monday: Push (Chest) - Hard Session
+**Warm-up:** Dynamic shoulder circles.
+
+| # | Exercise | Sets x Reps | Rest | RPE |
+|---|----------|-------------|------|-----|
+| 1 | Flat Barbell Bench Press | 4x8 | 2-3 min | 8 |
+| 2 | Machine Chest Press | 3x12 | 90s | 7 |
+
+**Coaching notes:** Focus on controlled eccentrics.
+"""
+    session_dir = os.path.join(tools_memory.SESSION_DIR, session_id)
+    os.makedirs(session_dir, exist_ok=True)
+    with open(os.path.join(session_dir, "plan.md"), "w", encoding="utf-8") as f:
+        f.write(full_plan)
+
+    tools_memory.get_db().plan_adjustments.insert_one({
+        "session_id": session_id, "day_label": "Day 1",
+        "exercise_name": "Cable Fly", "new_exercise_name": "Machine Chest Press",
+        "sets": None, "reps": None, "rpe": None,
+        "reason": "Reported shoulder pain on Cable Fly",
+        "created_at": __import__("datetime").datetime.now(__import__("datetime").timezone.utc),
+    })
+
+    client = TestClient(m.app)
+    token = tokens.create_access_token(user_id=owner["id"])
+    r = client.get(f"/sessions/{session_id}/plan", headers={"Authorization": f"Bearer {token}"})
+    assert r.status_code == 200
+    body = r.json()
+    day1 = body["days"][0]
+    exercises_by_name = {e["name"]: e for e in day1["exercises"]}
+    swapped = exercises_by_name["Machine Chest Press"]
+    assert swapped["replaced_from"] == "Cable Fly"
+    assert swapped["adjustment_reason"] == "Reported shoulder pain on Cable Fly"
+
+
 def test_pending_response_has_no_days():
     import api.main as m
 

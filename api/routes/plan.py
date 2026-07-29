@@ -53,6 +53,10 @@ router = APIRouter()
 
 VALID_EXPERIENCE = {"beginner", "intermediate", "advanced"}
 DURATION_PATTERN = re.compile(r"^\d{2,3}min$")
+# Leading "Day N" token, used as a fallback key when matching plan_adjustments
+# docs (whose day_label format isn't constrained to match ParsedDay.label
+# byte-for-byte) to parsed schedule days. See get_session_plan.
+_DAY_PREFIX = re.compile(r"^Day\s+\d+", re.IGNORECASE)
 SUPPORTED_CONTENT_TYPES = {
     "image/jpeg": "image/jpeg",
     "image/jpg": "image/jpeg",
@@ -293,6 +297,14 @@ async def get_session_plan(session_id: str, user: dict = Depends(get_current_use
     generating" from "generation already failed", so a run that failed
     without an SSE client connected at that exact moment looked stuck
     forever with no way to see why.
+
+    The response also includes structured `days` (parsed via
+    pipeline.plan_parser.parse_weekly_schedule), with any AI-driven exercise
+    swap annotated on the affected ParsedExercise via replaced_from/
+    adjustment_reason, sourced from the plan_adjustments collection
+    (tools.memory.read_all_exercise_adjustments) and matched to the parsed
+    schedule by day + exercise name (see the "Day N" prefix fallback below
+    for why an exact day_label match alone isn't sufficient).
     """
     if not user_owns_session(session_id, user["id"]):
         raise HTTPException(404, "Unknown session_id.")
@@ -308,17 +320,37 @@ async def get_session_plan(session_id: str, user: dict = Depends(get_current_use
         # on both Day 1 and Day 3); a flat name-only dict would silently
         # keep only the last-inserted entry and badge exercises with the
         # wrong day's replaced_from/adjustment_reason.
+        #
+        # day_label as stored on the adjustment doc is whatever the LLM-
+        # driven Plan Adjuster agent passed to record_exercise_adjustment —
+        # nothing constrains it to match ParsedDay.label byte-for-byte (the
+        # agent could plausibly write just "Day 1" instead of the full
+        # "Day 1 -- Monday: ..." label). So adjustments are ALSO bucketed
+        # under their leading "Day N" token, used as a fallback below when
+        # the exact label doesn't have a match.
         replacements: dict[str, dict[str, dict]] = {}
+        replacements_by_day_prefix: dict[str, dict[str, dict]] = {}
         for adj in read_all_exercise_adjustments(session_id):
             if not adj.get("new_exercise_name"):
                 continue
-            day_bucket = replacements.setdefault(adj.get("day_label"), {})
-            day_bucket[adj["new_exercise_name"].strip().lower()] = adj
+            day_label = adj.get("day_label") or ""
+            name_key = adj["new_exercise_name"].strip().lower()
+            replacements.setdefault(day_label, {})[name_key] = adj
+
+            prefix_match = _DAY_PREFIX.match(day_label.strip())
+            if prefix_match:
+                prefix_key = prefix_match.group(0).strip().lower()
+                replacements_by_day_prefix.setdefault(prefix_key, {})[name_key] = adj
 
         for day in days:
             day_bucket = replacements.get(day.label, {})
+            day_prefix_match = _DAY_PREFIX.match(day.label.strip())
+            day_prefix_key = day_prefix_match.group(0).strip().lower() if day_prefix_match else None
+            prefix_bucket = replacements_by_day_prefix.get(day_prefix_key, {}) if day_prefix_key else {}
+
             for exercise in day.exercises:
-                match = day_bucket.get(exercise.name.strip().lower())
+                name_key = exercise.name.strip().lower()
+                match = day_bucket.get(name_key) or prefix_bucket.get(name_key)
                 if match:
                     exercise.replaced_from = match["exercise_name"]
                     exercise.adjustment_reason = match["reason"]
