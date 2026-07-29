@@ -44,9 +44,10 @@ from config import SESSION_DIR
 from pipeline.inbody_history import compare_latest_two, record_scan
 from pipeline.monthly_progress import build_monthly_summary, record_progress_report
 from pipeline.plan_finalize import enforce_volume_budget
+from pipeline.plan_parser import ParsedDay, parse_weekly_schedule
 from services import live_progress
 from tools.inbody import check_image_quality, format_inbody_result, pdf_to_image_bytes, run_inbody_pipeline_from_bytes, validate_inbody_scan
-from tools.memory import read_progress_report, read_weekly_schedule
+from tools.memory import read_all_exercise_adjustments, read_full_plan, read_progress_report, read_weekly_schedule
 
 router = APIRouter()
 
@@ -275,6 +276,7 @@ class SessionPlanResponse(BaseModel):
     status: Literal["ready", "pending", "failed"]
     plan: Optional[str] = None
     error: Optional[str] = None
+    days: Optional[list[ParsedDay]] = None
 
 
 @router.get("/sessions/{session_id}/plan", response_model=SessionPlanResponse)
@@ -297,7 +299,22 @@ async def get_session_plan(session_id: str, user: dict = Depends(get_current_use
 
     schedule = read_weekly_schedule(session_id)
     if schedule is not None:
-        return SessionPlanResponse(status="ready", plan=schedule)
+        full_content = read_full_plan(session_id) or schedule
+        days = parse_weekly_schedule(full_content)
+
+        replacements = {
+            adj["new_exercise_name"].strip().lower(): adj
+            for adj in read_all_exercise_adjustments(session_id)
+            if adj.get("new_exercise_name")
+        }
+        for day in days:
+            for exercise in day.exercises:
+                match = replacements.get(exercise.name.strip().lower())
+                if match:
+                    exercise.replaced_from = match["exercise_name"]
+                    exercise.adjustment_reason = match["reason"]
+
+        return SessionPlanResponse(status="ready", plan=schedule, days=days)
 
     session = get_session(session_id)
     if session is not None and session.get("status") == "failed":

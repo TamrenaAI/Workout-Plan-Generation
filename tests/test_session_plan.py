@@ -81,6 +81,85 @@ def test_failed_when_pipeline_errored():
     assert body["plan"] is None
 
 
+def test_ready_response_includes_parsed_days_and_swap_badge():
+    import api.main as m
+    from auth import ownership
+    from tools import memory as tools_memory
+
+    owner = _make_user("owner5")
+    session_id = "s5"
+    ownership.create_session(session_id, user_id=owner["id"], goal="hypertrophy")
+
+    full_plan = """
+
+## User Profile + Plan Header
+Day 1 - hard: muscles [chest] | max_sets: 10 | intensity: hard
+
+---
+
+## chest - hard
+1. Flat Barbell Bench Press 4x8 | Rest 2-3 min | RPE 8
+   -> heavy compound pressing.
+2. Cable Fly 3x12 | Rest 90s | RPE 7
+   -> isolation.
+
+Evidence: compound presses prioritized.
+
+---
+
+## Weekly Schedule
+### Day 1 -- Monday: Push (Chest) - Hard Session
+**Warm-up:** Dynamic shoulder circles.
+
+| # | Exercise | Sets x Reps | Rest | RPE |
+|---|----------|-------------|------|-----|
+| 1 | Flat Barbell Bench Press | 4x8 | 2-3 min | 8 |
+| 2 | Machine Chest Press | 3x12 | 90s | 7 |
+
+**Coaching notes:** Focus on controlled eccentrics.
+"""
+    session_dir = os.path.join(tools_memory.SESSION_DIR, session_id)
+    os.makedirs(session_dir, exist_ok=True)
+    with open(os.path.join(session_dir, "plan.md"), "w", encoding="utf-8") as f:
+        f.write(full_plan)
+
+    tools_memory.get_db().plan_adjustments.insert_one({
+        "session_id": session_id, "day_label": "Day 1 -- Monday: Push (Chest) - Hard Session",
+        "exercise_name": "Cable Fly", "new_exercise_name": "Machine Chest Press",
+        "sets": None, "reps": None, "rpe": None,
+        "reason": "Reported shoulder pain on Cable Fly",
+        "created_at": __import__("datetime").datetime.now(__import__("datetime").timezone.utc),
+    })
+
+    client = TestClient(m.app)
+    token = tokens.create_access_token(user_id=owner["id"])
+    r = client.get(f"/sessions/{session_id}/plan", headers={"Authorization": f"Bearer {token}"})
+    assert r.status_code == 200
+    body = r.json()
+    assert body["status"] == "ready"
+    assert body["days"] is not None
+    day1 = body["days"][0]
+    assert day1["day_number"] == 1
+    exercises_by_name = {e["name"]: e for e in day1["exercises"]}
+    assert exercises_by_name["Flat Barbell Bench Press"]["replaced_from"] is None
+    swapped = exercises_by_name["Machine Chest Press"]
+    assert swapped["replaced_from"] == "Cable Fly"
+    assert swapped["adjustment_reason"] == "Reported shoulder pain on Cable Fly"
+
+
+def test_pending_response_has_no_days():
+    import api.main as m
+
+    owner = _make_user("owner6")
+    ownership.create_session("s6", user_id=owner["id"], goal="hypertrophy")
+
+    client = TestClient(m.app)
+    token = tokens.create_access_token(user_id=owner["id"])
+    r = client.get("/sessions/s6/plan", headers={"Authorization": f"Bearer {token}"})
+    assert r.status_code == 200
+    assert r.json()["days"] is None
+
+
 def test_ready_when_schedule_has_been_written():
     import api.main as m
 
