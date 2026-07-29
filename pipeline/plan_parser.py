@@ -104,6 +104,12 @@ def split_row(line: str) -> list:
 
 
 class ParsedExercise(BaseModel):
+    """One exercise row parsed from a weekly-schedule table.
+
+    Fields replaced_from and adjustment_reason are populated by the API route
+    (not by parse_weekly_schedule itself) when the AI-driven swap detector
+    identifies an exercise substitution.
+    """
     name: str
     sets: "int | None" = None
     reps: "str | None" = None
@@ -115,6 +121,11 @@ class ParsedExercise(BaseModel):
 
 
 class ParsedDay(BaseModel):
+    """One training day parsed from a '### Day N' schedule section.
+
+    Used by GET /sessions/{id}/plan to return structured schedule data
+    instead of relying on a client-side mock disconnected from the real plan.
+    """
     day_number: int
     label: str
     target_focus: str
