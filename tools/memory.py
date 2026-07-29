@@ -104,6 +104,19 @@ def read_weekly_schedule(session_id: str) -> str | None:
     return section
 
 
+def read_full_plan(session_id: str) -> "str | None":
+    """The raw plan.md content, unlike read_weekly_schedule which returns
+    only the last schedule section. pipeline.plan_parser.parse_weekly_schedule
+    needs the DAY MAP and per-muscle-group exercise lists that live earlier
+    in the file, outside the schedule section itself. Returns None if the
+    plan file doesn't exist yet."""
+    path = _plan_path(session_id)
+    if not os.path.exists(path):
+        return None
+    with open(path, "r", encoding="utf-8") as f:
+        return f.read()
+
+
 def read_progress_report(session_id: str) -> "str | None":
     """Reads the '## Progress Report' section the Progress Analyst wrote via
     write_plan_memory into the NEW session's plan.md (see
@@ -331,6 +344,25 @@ def read_exercise_adjustments(session_id: str, day_label: str, since: "datetime"
             "sets": d.get("sets"),
             "reps": d.get("reps"),
             "rpe": d.get("rpe"),
+            "reason": d["reason"],
+        }
+        for d in docs
+    ]
+
+
+def read_all_exercise_adjustments(session_id: str) -> list[dict]:
+    """Every structured adjustment ever recorded for this session, oldest
+    first (so a later re-swap of the same exercise wins when matching by
+    name in GET /sessions/{id}/plan) — unlike read_exercise_adjustments,
+    not scoped to one day_label or one invocation's `since` window. Lets
+    the plan-table endpoint show "AI Replaced" on whatever exercise is
+    CURRENTLY in the plan, persisted across page reloads instead of only
+    right after the feedback call that triggered the swap."""
+    docs = get_db().plan_adjustments.find({"session_id": session_id}).sort("created_at", 1)
+    return [
+        {
+            "exercise_name": d["exercise_name"],
+            "new_exercise_name": d.get("new_exercise_name"),
             "reason": d["reason"],
         }
         for d in docs
