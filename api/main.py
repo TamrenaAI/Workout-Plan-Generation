@@ -19,29 +19,34 @@ controls whether browser JS can read a response, never whether a request
 is authorized — a page with no valid token gets 401 regardless of origin.
 """
 
-from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from api.routes import corrective, exercises, health, plan, progress, workouts
+from api.routes import (
+    auth,
+    coach,
+    corrective,
+    exercises,
+    feedback,
+    health,
+    inbody,
+    nutrition,
+    plan,
+    progress,
+    reports,
+    telemetry,
+    workout,
+    workouts,
+)
 from config import EXERCISE_MEDIA_DIR
-from tools.mongo import ensure_indexes
-
-
-@asynccontextmanager
-async def lifespan(_app: FastAPI):
-    ensure_indexes()
-    yield
-
 
 app = FastAPI(
     title="Tamreena AI",
     description="Personalised workout plan generation via multi-agent pipeline",
     version="1.0.0",
-    lifespan=lifespan,
 )
 
 app.add_middleware(
@@ -52,11 +57,19 @@ app.add_middleware(
 )
 
 app.include_router(health.router, tags=["health"])
+app.include_router(auth.router, tags=["auth"])
 app.include_router(plan.router, tags=["plan"])
 app.include_router(progress.router, tags=["progress"])
 app.include_router(workouts.router, tags=["workouts"])
 app.include_router(corrective.router, tags=["corrective"])
 app.include_router(exercises.router, tags=["exercises"])
+app.include_router(inbody.router, tags=["inbody"])
+app.include_router(workout.router, tags=["workout"])
+app.include_router(nutrition.router, tags=["nutrition"])
+app.include_router(telemetry.router, tags=["telemetry"])
+app.include_router(feedback.router, tags=["feedback"])
+app.include_router(reports.router, tags=["reports"])
+app.include_router(coach.router, tags=["coach"])
 
 # Serves the exercise GIFs/thumbnails imported by
 # database/exercises_dataset/import.py — gif_url/image_url in

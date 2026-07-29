@@ -1,13 +1,13 @@
 """
 Turns an extracted query filter into a Qdrant Filter, and (see the
 extractor classes added below) turns a raw query into that extracted
-filter via an LLM structured-output call.
+filter via fast keyword heuristics or LLM fallback.
 
 GoalFilterBuilder / GoalQueryFilter cover the hypertrophy/strength
 collections (GoalNamespaceMetadata: muscle, topic, experience_level,
 goals). PrinciplesFilterBuilder / PrinciplesQueryFilter cover the
 principles collection (PrinciplesMetadata: topic, planner_stage, goals,
-applies_to, knowledge_type) — a different schema, so a separate builder.
+applies_to, knowledge_type).
 """
 
 from abc import ABC, abstractmethod
@@ -21,6 +21,12 @@ from config import load_prompt
 from tools.rag.models import GoalQueryFilter, PrinciplesQueryFilter
 
 T = TypeVar("T")
+
+VALID_MUSCLES = [
+    "chest", "back", "shoulders", "biceps", "triceps", "forearms",
+    "quads", "hamstrings", "glutes", "calves", "abs"
+]
+VALID_GOALS = ["hypertrophy", "strength", "fat_loss", "endurance"]
 
 
 class BaseFilterBuilder(ABC, Generic[T]):
@@ -138,9 +144,29 @@ class GoalMetadataExtractor(BaseMetadataExtractor[GoalQueryFilter]):
         if query in self._cache:
             return self._cache[query]
 
-        metadata = self.chain.invoke({"query": query})
-        self._cache[query] = metadata
-        return metadata
+        q_lower = query.lower()
+        matched_muscles = [m for m in VALID_MUSCLES if m in q_lower]
+        matched_goals = [g for g in VALID_GOALS if g in q_lower]
+
+        if matched_muscles or matched_goals:
+            result = GoalQueryFilter(
+                muscle=matched_muscles if matched_muscles else None,
+                goals=matched_goals if matched_goals else None,
+            )
+            self._cache[query] = result
+            return result
+
+        try:
+            metadata = self.chain.invoke({"query": query})
+            if metadata:
+                self._cache[query] = metadata
+                return metadata
+        except Exception as err:
+            print(f"[RAG WARNING] Goal metadata extraction failed: {err}")
+
+        default_filter = GoalQueryFilter()
+        self._cache[query] = default_filter
+        return default_filter
 
 
 PRINCIPLES_QUERY_FILTER_PROMPT = ChatPromptTemplate.from_messages(
@@ -160,6 +186,25 @@ class PrinciplesMetadataExtractor(BaseMetadataExtractor[PrinciplesQueryFilter]):
         if query in self._cache:
             return self._cache[query]
 
-        metadata = self.chain.invoke({"query": query})
-        self._cache[query] = metadata
-        return metadata
+        q_lower = query.lower()
+        matched_goals = [g for g in VALID_GOALS if g in q_lower]
+
+        if matched_goals:
+            result = PrinciplesQueryFilter(
+                goals=matched_goals,
+                applies_to=matched_goals,
+            )
+            self._cache[query] = result
+            return result
+
+        try:
+            metadata = self.chain.invoke({"query": query})
+            if metadata:
+                self._cache[query] = metadata
+                return metadata
+        except Exception as err:
+            print(f"[RAG WARNING] Principles metadata extraction failed: {err}")
+
+        default_filter = PrinciplesQueryFilter()
+        self._cache[query] = default_filter
+        return default_filter

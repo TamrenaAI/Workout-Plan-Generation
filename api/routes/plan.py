@@ -44,14 +44,19 @@ from config import SESSION_DIR
 from pipeline.inbody_history import compare_latest_two, record_scan
 from pipeline.monthly_progress import build_monthly_summary, record_progress_report
 from pipeline.plan_finalize import enforce_volume_budget
+from pipeline.plan_parser import ParsedDay, parse_weekly_schedule
 from services import live_progress
 from tools.inbody import check_image_quality, format_inbody_result, pdf_to_image_bytes, run_inbody_pipeline_from_bytes, validate_inbody_scan
-from tools.memory import read_progress_report, read_weekly_schedule
+from tools.memory import read_all_exercise_adjustments, read_full_plan, read_progress_report, read_weekly_schedule
 
 router = APIRouter()
 
 VALID_EXPERIENCE = {"beginner", "intermediate", "advanced"}
 DURATION_PATTERN = re.compile(r"^\d{2,3}min$")
+# Leading "Day N" token, used as a fallback key when matching plan_adjustments
+# docs (whose day_label format isn't constrained to match ParsedDay.label
+# byte-for-byte) to parsed schedule days. See get_session_plan.
+_DAY_PREFIX = re.compile(r"^Day\s+\d+", re.IGNORECASE)
 SUPPORTED_CONTENT_TYPES = {
     "image/jpeg": "image/jpeg",
     "image/jpg": "image/jpeg",
@@ -60,14 +65,31 @@ SUPPORTED_CONTENT_TYPES = {
     "application/pdf": "application/pdf",
 }
 
+# Browsers have no built-in MIME mapping for some extensions InBody scans
+# commonly show up in (.jfif in particular — Windows' own screenshot/save
+# tools produce it) and report `application/octet-stream` instead, which
+# isn't in SUPPORTED_CONTENT_TYPES. Fall back to sniffing the filename
+# extension in that case rather than trusting the browser-reported type alone.
+EXTENSION_CONTENT_TYPES = {
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".jfif": "image/jpeg",
+    ".png": "image/png",
+    ".pdf": "application/pdf",
+}
+
 
 async def _read_as_image(file: UploadFile) -> tuple[bytes, str]:
     """Reads an uploaded file and normalizes PDFs to a PNG image. Raises HTTPException on
     an unsupported content type."""
     raw_content_type = file.content_type or ""
-    if raw_content_type not in SUPPORTED_CONTENT_TYPES:
-        raise HTTPException(415, f"Unsupported file type: {raw_content_type}")
-    content_type = SUPPORTED_CONTENT_TYPES[raw_content_type]
+    if raw_content_type in SUPPORTED_CONTENT_TYPES:
+        content_type = SUPPORTED_CONTENT_TYPES[raw_content_type]
+    else:
+        suffix = os.path.splitext(file.filename or "")[1].lower()
+        content_type = EXTENSION_CONTENT_TYPES.get(suffix)
+        if content_type is None:
+            raise HTTPException(415, f"Unsupported file type: {raw_content_type}")
 
     file_bytes = await file.read()
     if content_type == "application/pdf":
@@ -255,8 +277,10 @@ async def list_my_sessions(user: dict = Depends(get_current_user)):
 
 
 class SessionPlanResponse(BaseModel):
-    status: Literal["ready", "pending"]
+    status: Literal["ready", "pending", "failed"]
     plan: Optional[str] = None
+    error: Optional[str] = None
+    days: Optional[list[ParsedDay]] = None
 
 
 @router.get("/sessions/{session_id}/plan", response_model=SessionPlanResponse)
@@ -267,20 +291,96 @@ async def get_session_plan(session_id: str, user: dict = Depends(get_current_use
     Supervisor's own free-text reply (tools/memory.py's read_weekly_schedule,
     the last '## Weekly Schedule' section the Plan Assembler actually wrote).
 
-    Known gap: "pending" covers both "still generating" and "generation
-    failed before the Assembler wrote a schedule" — plan.md records neither
-    a start marker nor a failure marker today, only successful writes, so
-    this endpoint can't yet tell those two apart. Live progress (the SSE
-    stream) is the only place failure is currently surfaced, and only to a
-    client connected at the moment it happens.
+    Checks the session's persisted status (auth/ownership.py's plan_sessions
+    doc, set by _run_pipeline's except clause) before falling back to
+    "pending" — previously this endpoint had no way to distinguish "still
+    generating" from "generation already failed", so a run that failed
+    without an SSE client connected at that exact moment looked stuck
+    forever with no way to see why.
+
+    The response also includes structured `days` (parsed via
+    pipeline.plan_parser.parse_weekly_schedule), with any AI-driven exercise
+    adjustment applied to the affected ParsedExercise, sourced from the
+    plan_adjustments collection (tools.memory.read_all_exercise_adjustments)
+    and matched to the parsed schedule by day + exercise name (see the
+    "Day N" prefix fallback below for why an exact day_label match alone
+    isn't sufficient).
+
+    Adjustments are matched by their ORIGINAL exercise_name, not
+    new_exercise_name — prompts/plan_adjuster.md deliberately never rewrites
+    the Weekly Schedule table itself ("do not ask to overwrite the original
+    muscle-group section"; record_exercise_adjustment's own docstring says
+    it "is the structured record the frontend uses to update what's
+    actually shown"), so the schedule text this endpoint parses always
+    still has the pre-adjustment name. The substitution therefore happens
+    here: when a parsed exercise's current name matches some adjustment's
+    original exercise_name, its displayed name/sets/reps/rpe are replaced
+    with the adjustment's new values before the response is built.
     """
     if not user_owns_session(session_id, user["id"]):
         raise HTTPException(404, "Unknown session_id.")
 
     schedule = read_weekly_schedule(session_id)
-    if schedule is None:
-        return SessionPlanResponse(status="pending", plan=None)
-    return SessionPlanResponse(status="ready", plan=schedule)
+    if schedule is not None:
+        full_content = read_full_plan(session_id) or schedule
+        days = parse_weekly_schedule(full_content)
+
+        # Keyed by (day_label, lowercased ORIGINAL exercise name) — NOT by
+        # new_exercise_name (see docstring above) and NOT by exercise name
+        # alone. Two different days can each have an adjustment for an
+        # exercise of the same original name (e.g. "Cable Fly" flagged on
+        # both Day 1 and Day 3); a flat name-only dict would silently keep
+        # only the last-inserted entry and adjust the wrong day's exercise.
+        #
+        # day_label as stored on the adjustment doc is whatever the LLM-
+        # driven Plan Adjuster agent passed to record_exercise_adjustment —
+        # nothing constrains it to match ParsedDay.label byte-for-byte (the
+        # agent could plausibly write just "Day 1" instead of the full
+        # "Day 1 -- Monday: ..." label). So adjustments are ALSO bucketed
+        # under their leading "Day N" token, used as a fallback below when
+        # the exact label doesn't have a match.
+        adjustments: dict[str, dict[str, dict]] = {}
+        adjustments_by_day_prefix: dict[str, dict[str, dict]] = {}
+        for adj in read_all_exercise_adjustments(session_id):
+            day_label = adj.get("day_label") or ""
+            name_key = adj["exercise_name"].strip().lower()
+            adjustments.setdefault(day_label, {})[name_key] = adj
+
+            prefix_match = _DAY_PREFIX.match(day_label.strip())
+            if prefix_match:
+                prefix_key = prefix_match.group(0).strip().lower()
+                adjustments_by_day_prefix.setdefault(prefix_key, {})[name_key] = adj
+
+        for day in days:
+            day_bucket = adjustments.get(day.label, {})
+            day_prefix_match = _DAY_PREFIX.match(day.label.strip())
+            day_prefix_key = day_prefix_match.group(0).strip().lower() if day_prefix_match else None
+            prefix_bucket = adjustments_by_day_prefix.get(day_prefix_key, {}) if day_prefix_key else {}
+
+            for exercise in day.exercises:
+                name_key = exercise.name.strip().lower()
+                match = day_bucket.get(name_key) or prefix_bucket.get(name_key)
+                if not match:
+                    continue
+
+                original_name = exercise.name
+                if match.get("new_exercise_name"):
+                    exercise.name = match["new_exercise_name"]
+                    exercise.replaced_from = original_name
+                if match.get("sets") is not None:
+                    exercise.sets = match["sets"]
+                if match.get("reps") is not None:
+                    exercise.reps = match["reps"]
+                if match.get("rpe") is not None:
+                    exercise.rpe = str(match["rpe"])
+                exercise.adjustment_reason = match["reason"]
+
+        return SessionPlanResponse(status="ready", plan=schedule, days=days)
+
+    session = get_session(session_id)
+    if session is not None and session.get("status") == "failed":
+        return SessionPlanResponse(status="failed", error=session.get("error"))
+    return SessionPlanResponse(status="pending", plan=None)
 
 
 def _format_inbody_comparison(comparison: Optional[dict]) -> str:
