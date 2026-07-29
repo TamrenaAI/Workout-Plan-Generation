@@ -43,82 +43,24 @@ hitting the budget exactly.
 
 import re
 
+from pipeline.plan_parser import (
+    DAY_HEADING as _DAY_HEADING,
+    extract_sets_reps as _extract_sets_reps,
+    parse_day_map as _parse_day_map,
+    parse_group_ordinals as _parse_group_ordinals,
+    split_row as _split_row,
+)
 from tools.memory import _plan_path, find_last_schedule_marker, write_plan_memory
 
-_SETS_X_REPS = re.compile(r"(\d+)\s*[×xX]\s*(\d+(?:-\d+)?)")
-_SETS_UNKNOWN_SEP = re.compile(r"^(\d)\D+(\d+(?:-\d+)?)$")  # malformed "4\x7f12" -> sets=4, reps=12
-_SETS_CONCAT = re.compile(r"^(\d)(\d+(?:-\d+)?)$")  # malformed "58" -> sets=5, reps=8
-
-_DAY_MAP_LINE = re.compile(
-    r"^Day\s+(\d+)\s*-.*?muscles\s*\[([^\]]+)\]\s*\|\s*max_sets:\s*(\d+)\s*\|\s*intensity:\s*(\S+)",
-    re.IGNORECASE,
-)
 _GROUP_HEADING = re.compile(r"^##\s+(\S+)\s*-\s*(\S+)\s*$")
-_NUMBERED_EXERCISE = re.compile(r"^(\d+)\.\s+(.+?)\s+\d+\s*[×xX]\s*\d+")
-_DAY_HEADING = re.compile(r"^###\s+Day\s+(\d+)\b")
 _VOLUME_ROW = re.compile(r"^\|\s*([A-Za-z_]+)\s*\|\s*(\d+)\s*\|\s*([\d]+-[\d]+|\S+)\s*\|\s*(\S+)\s*\|$")
 
 MIN_SETS_FLOOR = 2
 
 
-def _parse_day_map(content: str) -> dict:
-    """Day number -> {"budget": int, "muscles": [str,...], "zone": str}."""
-    day_map = {}
-    for line in content.splitlines():
-        match = _DAY_MAP_LINE.match(line.strip())
-        if not match:
-            continue
-        day_num, muscles_raw, budget, zone = match.groups()
-        muscles = [m.strip() for m in muscles_raw.split(",") if m.strip()]
-        day_map[int(day_num)] = {"budget": int(budget), "muscles": muscles, "zone": zone}
-    return day_map
-
-
-def _parse_group_ordinals(content: str, muscle: str, zone: str) -> dict:
-    """Last '## {muscle} - {zone}' section -> {exercise_name_lower: ordinal}."""
-    heading = f"## {muscle} - {zone}"
-    idx = content.rfind(heading)
-    if idx == -1:
-        return {}
-    section = content[idx:]
-    end = section.find("\n---")
-    if end != -1:
-        section = section[:end]
-
-    ordinals = {}
-    for line in section.splitlines():
-        match = _NUMBERED_EXERCISE.match(line.strip())
-        if match:
-            ordinal, name = match.groups()
-            ordinals[name.strip().lower()] = int(ordinal)
-    return ordinals
-
-
-def _extract_sets_reps(cell: str) -> "tuple[int, str] | None":
-    match = _SETS_X_REPS.search(cell)
-    if match:
-        return int(match.group(1)), match.group(2)
-    match = _SETS_UNKNOWN_SEP.match(cell.strip())
-    if match:
-        return int(match.group(1)), match.group(2)
-    match = _SETS_CONCAT.match(cell.strip())
-    if match:
-        return int(match.group(1)), match.group(2)
-    return None
-
-
 def _extract_sets(cell: str) -> "int | None":
     result = _extract_sets_reps(cell)
     return result[0] if result else None
-
-
-def _split_row(line: str) -> list:
-    cells = [c.strip() for c in line.split("|")]
-    if cells and cells[0] == "":
-        cells.pop(0)
-    if cells and cells[-1] == "":
-        cells.pop()
-    return cells
 
 
 def _parse_target_range(cell: str) -> "tuple[int, int] | None":
