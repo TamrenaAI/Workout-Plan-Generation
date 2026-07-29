@@ -300,11 +300,22 @@ async def get_session_plan(session_id: str, user: dict = Depends(get_current_use
 
     The response also includes structured `days` (parsed via
     pipeline.plan_parser.parse_weekly_schedule), with any AI-driven exercise
-    swap annotated on the affected ParsedExercise via replaced_from/
-    adjustment_reason, sourced from the plan_adjustments collection
-    (tools.memory.read_all_exercise_adjustments) and matched to the parsed
-    schedule by day + exercise name (see the "Day N" prefix fallback below
-    for why an exact day_label match alone isn't sufficient).
+    adjustment applied to the affected ParsedExercise, sourced from the
+    plan_adjustments collection (tools.memory.read_all_exercise_adjustments)
+    and matched to the parsed schedule by day + exercise name (see the
+    "Day N" prefix fallback below for why an exact day_label match alone
+    isn't sufficient).
+
+    Adjustments are matched by their ORIGINAL exercise_name, not
+    new_exercise_name — prompts/plan_adjuster.md deliberately never rewrites
+    the Weekly Schedule table itself ("do not ask to overwrite the original
+    muscle-group section"; record_exercise_adjustment's own docstring says
+    it "is the structured record the frontend uses to update what's
+    actually shown"), so the schedule text this endpoint parses always
+    still has the pre-adjustment name. The substitution therefore happens
+    here: when a parsed exercise's current name matches some adjustment's
+    original exercise_name, its displayed name/sets/reps/rpe are replaced
+    with the adjustment's new values before the response is built.
     """
     if not user_owns_session(session_id, user["id"]):
         raise HTTPException(404, "Unknown session_id.")
@@ -314,12 +325,12 @@ async def get_session_plan(session_id: str, user: dict = Depends(get_current_use
         full_content = read_full_plan(session_id) or schedule
         days = parse_weekly_schedule(full_content)
 
-        # Keyed by (day_label, lowercased exercise name) — NOT by exercise
-        # name alone. Two different days can each get an adjustment whose
-        # new_exercise_name collides (e.g. "Machine Chest Press" swapped in
-        # on both Day 1 and Day 3); a flat name-only dict would silently
-        # keep only the last-inserted entry and badge exercises with the
-        # wrong day's replaced_from/adjustment_reason.
+        # Keyed by (day_label, lowercased ORIGINAL exercise name) — NOT by
+        # new_exercise_name (see docstring above) and NOT by exercise name
+        # alone. Two different days can each have an adjustment for an
+        # exercise of the same original name (e.g. "Cable Fly" flagged on
+        # both Day 1 and Day 3); a flat name-only dict would silently keep
+        # only the last-inserted entry and adjust the wrong day's exercise.
         #
         # day_label as stored on the adjustment doc is whatever the LLM-
         # driven Plan Adjuster agent passed to record_exercise_adjustment —
@@ -328,32 +339,41 @@ async def get_session_plan(session_id: str, user: dict = Depends(get_current_use
         # "Day 1 -- Monday: ..." label). So adjustments are ALSO bucketed
         # under their leading "Day N" token, used as a fallback below when
         # the exact label doesn't have a match.
-        replacements: dict[str, dict[str, dict]] = {}
-        replacements_by_day_prefix: dict[str, dict[str, dict]] = {}
+        adjustments: dict[str, dict[str, dict]] = {}
+        adjustments_by_day_prefix: dict[str, dict[str, dict]] = {}
         for adj in read_all_exercise_adjustments(session_id):
-            if not adj.get("new_exercise_name"):
-                continue
             day_label = adj.get("day_label") or ""
-            name_key = adj["new_exercise_name"].strip().lower()
-            replacements.setdefault(day_label, {})[name_key] = adj
+            name_key = adj["exercise_name"].strip().lower()
+            adjustments.setdefault(day_label, {})[name_key] = adj
 
             prefix_match = _DAY_PREFIX.match(day_label.strip())
             if prefix_match:
                 prefix_key = prefix_match.group(0).strip().lower()
-                replacements_by_day_prefix.setdefault(prefix_key, {})[name_key] = adj
+                adjustments_by_day_prefix.setdefault(prefix_key, {})[name_key] = adj
 
         for day in days:
-            day_bucket = replacements.get(day.label, {})
+            day_bucket = adjustments.get(day.label, {})
             day_prefix_match = _DAY_PREFIX.match(day.label.strip())
             day_prefix_key = day_prefix_match.group(0).strip().lower() if day_prefix_match else None
-            prefix_bucket = replacements_by_day_prefix.get(day_prefix_key, {}) if day_prefix_key else {}
+            prefix_bucket = adjustments_by_day_prefix.get(day_prefix_key, {}) if day_prefix_key else {}
 
             for exercise in day.exercises:
                 name_key = exercise.name.strip().lower()
                 match = day_bucket.get(name_key) or prefix_bucket.get(name_key)
-                if match:
-                    exercise.replaced_from = match["exercise_name"]
-                    exercise.adjustment_reason = match["reason"]
+                if not match:
+                    continue
+
+                original_name = exercise.name
+                if match.get("new_exercise_name"):
+                    exercise.name = match["new_exercise_name"]
+                    exercise.replaced_from = original_name
+                if match.get("sets") is not None:
+                    exercise.sets = match["sets"]
+                if match.get("reps") is not None:
+                    exercise.reps = match["reps"]
+                if match.get("rpe") is not None:
+                    exercise.rpe = str(match["rpe"])
+                exercise.adjustment_reason = match["reason"]
 
         return SessionPlanResponse(status="ready", plan=schedule, days=days)
 

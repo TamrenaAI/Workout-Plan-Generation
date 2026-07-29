@@ -114,7 +114,7 @@ Evidence: compound presses prioritized.
 | # | Exercise | Sets x Reps | Rest | RPE |
 |---|----------|-------------|------|-----|
 | 1 | Flat Barbell Bench Press | 4x8 | 2-3 min | 8 |
-| 2 | Machine Chest Press | 3x12 | 90s | 7 |
+| 2 | Cable Fly | 3x12 | 90s | 7 |
 
 **Coaching notes:** Focus on controlled eccentrics.
 """
@@ -123,6 +123,11 @@ Evidence: compound presses prioritized.
     with open(os.path.join(session_dir, "plan.md"), "w", encoding="utf-8") as f:
         f.write(full_plan)
 
+    # The Weekly Schedule table above still says "Cable Fly" — the Plan
+    # Adjuster deliberately never rewrites it (prompts/plan_adjuster.md:
+    # "do not ask to overwrite the original muscle-group section"). The
+    # structured adjustment record below is what get_session_plan uses to
+    # substitute the displayed exercise.
     tools_memory.get_db().plan_adjustments.insert_one({
         "session_id": session_id, "day_label": "Day 1 -- Monday: Push (Chest) - Hard Session",
         "exercise_name": "Cable Fly", "new_exercise_name": "Machine Chest Press",
@@ -142,20 +147,23 @@ Evidence: compound presses prioritized.
     assert day1["day_number"] == 1
     exercises_by_name = {e["name"]: e for e in day1["exercises"]}
     assert exercises_by_name["Flat Barbell Bench Press"]["replaced_from"] is None
+    assert "Cable Fly" not in exercises_by_name
     swapped = exercises_by_name["Machine Chest Press"]
     assert swapped["replaced_from"] == "Cable Fly"
     assert swapped["adjustment_reason"] == "Reported shoulder pain on Cable Fly"
 
 
 def test_swap_badges_are_scoped_per_day_not_leaked_across_days():
-    """Regression test for a review finding: the replacements lookup used to be
+    """Regression test for a review finding: the adjustments lookup used to be
     keyed by exercise name alone, session-wide. If two different days each had
-    an adjustment whose new_exercise_name collided (as below — "Machine Chest
-    Press" swapped in on both Day 1 and Day 2), a flat dict would silently keep
-    only the last-inserted entry and badge the OTHER day's exercise with the
-    wrong replaced_from/adjustment_reason. Also exercises the case-insensitive
-    exercise-name matching path (adjustment's new_exercise_name is stored in a
-    different case than the schedule table's exercise name)."""
+    an adjustment whose ORIGINAL exercise_name collided, a flat dict would
+    silently keep only the last-inserted entry and adjust the OTHER day's
+    exercise with the wrong replaced_from/adjustment_reason. Here Day 1 and
+    Day 2 each swap a different original exercise into the same new exercise
+    ("Machine Chest Press"), proving each day's adjustment is applied to its
+    own exercise independently. Also exercises the case-insensitive
+    exercise-name matching path (Day 1's adjustment stores its ORIGINAL
+    exercise_name in a different case than the schedule table)."""
     import api.main as m
     from auth import ownership
     from tools import memory as tools_memory
@@ -191,7 +199,7 @@ Evidence: compound presses prioritized.
 | # | Exercise | Sets x Reps | Rest | RPE |
 |---|----------|-------------|------|-----|
 | 1 | Flat Barbell Bench Press | 4x8 | 2-3 min | 8 |
-| 2 | Machine Chest Press | 3x12 | 90s | 7 |
+| 2 | Cable Fly | 3x12 | 90s | 7 |
 
 **Coaching notes:** Focus on controlled eccentrics.
 
@@ -200,7 +208,7 @@ Evidence: compound presses prioritized.
 
 | # | Exercise | Sets x Reps | Rest | RPE |
 |---|----------|-------------|------|-----|
-| 1 | Machine Chest Press | 4x10 | 2 min | 8 |
+| 1 | Incline Dumbbell Press | 4x10 | 2 min | 8 |
 
 **Coaching notes:** Focus on controlled eccentrics.
 """
@@ -213,7 +221,7 @@ Evidence: compound presses prioritized.
     tools_memory.get_db().plan_adjustments.insert_many([
         {
             "session_id": session_id, "day_label": "Day 1 -- Monday: Push (Chest) - Hard Session",
-            "exercise_name": "Cable Fly", "new_exercise_name": "MACHINE CHEST PRESS",
+            "exercise_name": "CABLE FLY", "new_exercise_name": "Machine Chest Press",
             "sets": None, "reps": None, "rpe": None,
             "reason": "Day 1 reason: shoulder pain on Cable Fly",
             "created_at": now,
@@ -283,7 +291,7 @@ Evidence: compound presses prioritized.
 | # | Exercise | Sets x Reps | Rest | RPE |
 |---|----------|-------------|------|-----|
 | 1 | Flat Barbell Bench Press | 4x8 | 2-3 min | 8 |
-| 2 | Machine Chest Press | 3x12 | 90s | 7 |
+| 2 | Cable Fly | 3x12 | 90s | 7 |
 
 **Coaching notes:** Focus on controlled eccentrics.
 """
@@ -310,6 +318,71 @@ Evidence: compound presses prioritized.
     swapped = exercises_by_name["Machine Chest Press"]
     assert swapped["replaced_from"] == "Cable Fly"
     assert swapped["adjustment_reason"] == "Reported shoulder pain on Cable Fly"
+
+
+def test_volume_only_adjustment_updates_sets_reps_rpe_without_replaced_from():
+    """A too_hard/too_easy adjustment (prompts/plan_adjuster.md) never sets
+    new_exercise_name — only sets/reps/rpe change, the exercise itself stays.
+    The response must reflect the new sets/reps/rpe and carry the reason,
+    but must NOT set replaced_from (nothing was renamed)."""
+    import api.main as m
+    from auth import ownership
+    from tools import memory as tools_memory
+
+    owner = _make_user("owner9")
+    session_id = "s9"
+    ownership.create_session(session_id, user_id=owner["id"], goal="hypertrophy")
+
+    full_plan = """
+
+## User Profile + Plan Header
+Day 1 - hard: muscles [chest] | max_sets: 10 | intensity: hard
+
+---
+
+## chest - hard
+1. Flat Barbell Bench Press 4x8 | Rest 2-3 min | RPE 8
+   -> heavy compound pressing.
+
+Evidence: compound presses prioritized.
+
+---
+
+## Weekly Schedule
+### Day 1 -- Monday: Push (Chest) - Hard Session
+**Warm-up:** Dynamic shoulder circles.
+
+| # | Exercise | Sets x Reps | Rest | RPE |
+|---|----------|-------------|------|-----|
+| 1 | Flat Barbell Bench Press | 4x8 | 2-3 min | 8 |
+
+**Coaching notes:** Focus on controlled eccentrics.
+"""
+    session_dir = os.path.join(tools_memory.SESSION_DIR, session_id)
+    os.makedirs(session_dir, exist_ok=True)
+    with open(os.path.join(session_dir, "plan.md"), "w", encoding="utf-8") as f:
+        f.write(full_plan)
+
+    tools_memory.get_db().plan_adjustments.insert_one({
+        "session_id": session_id, "day_label": "Day 1 -- Monday: Push (Chest) - Hard Session",
+        "exercise_name": "Flat Barbell Bench Press", "new_exercise_name": None,
+        "sets": 3, "reps": None, "rpe": 7,
+        "reason": "Too easy at 4 sets, dropped a set and RPE target",
+        "created_at": __import__("datetime").datetime.now(__import__("datetime").timezone.utc),
+    })
+
+    client = TestClient(m.app)
+    token = tokens.create_access_token(user_id=owner["id"])
+    r = client.get(f"/sessions/{session_id}/plan", headers={"Authorization": f"Bearer {token}"})
+    assert r.status_code == 200
+    body = r.json()
+    exercise = body["days"][0]["exercises"][0]
+    assert exercise["name"] == "Flat Barbell Bench Press"
+    assert exercise["replaced_from"] is None
+    assert exercise["sets"] == 3
+    assert exercise["reps"] == "8"
+    assert exercise["rpe"] == "7"
+    assert exercise["adjustment_reason"] == "Too easy at 4 sets, dropped a set and RPE target"
 
 
 def test_pending_response_has_no_days():

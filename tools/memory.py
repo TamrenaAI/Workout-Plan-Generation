@@ -364,6 +364,9 @@ def read_all_exercise_adjustments(session_id: str) -> list[dict]:
             "day_label": d.get("day_label"),
             "exercise_name": d["exercise_name"],
             "new_exercise_name": d.get("new_exercise_name"),
+            "sets": d.get("sets"),
+            "reps": d.get("reps"),
+            "rpe": d.get("rpe"),
             "reason": d["reason"],
         }
         for d in docs
