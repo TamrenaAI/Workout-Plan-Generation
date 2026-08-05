@@ -1,69 +1,57 @@
 """
-Module 7: AI Fitness Coach Assistant
-Conversational RAG interface providing interactive guidance grounded in user workout history, InBody trends, and movement science.
+Coach Assistant -- conversational chat grounded in the user's own workout
+and nutrition plans. Replaces the earlier keyword-matching stub (part of
+the mock "Module 1-7" demo layer under services/) with a real agent call.
+
+Chat history is stored per-user in MongoDB (coach_messages) rather than
+in-process memory -- the previous stub's in-memory _history_db didn't
+survive a restart and wouldn't work across multiple backend instances.
 """
 
-from typing import Dict, Any, List, Optional
 from datetime import datetime, timezone
-from api.schemas.integration_schemas import CoachQueryPayload, CoachResponsePayload
-from services.workout_engine import workout_engine
-from services.telemetry_engine import telemetry_engine
+
+from agents.coach import build_coach_agent
+from tools.mongo import get_db
+
+__all__ = ["process_coach_message", "get_db"]
+
+_HISTORY_LIMIT = 20
 
 
-class CoachAssistantEngine:
-    def __init__(self):
-        self._history_db: Dict[str, List[Dict[str, Any]]] = {}
-
-    def process_query(self, payload: CoachQueryPayload) -> CoachResponsePayload:
-        """Processes user questions using biomechanical knowledge and personal performance context."""
-        user_id = payload.user_id
-        query = payload.message.lower()
-
-        sources = []
-        if "squat" in query or "knee" in query:
-            sources.append("Qdrant Collection: exercise-library (squat mechanics & knee valgus cues)")
-            reply = (
-                "Regarding your squat execution: Our computer vision telemetry noted minor knee valgus "
-                "on your 7th and 8th reps during heavy sets. Try focusing on 'screwing your feet into the ground' "
-                "to engage your glute medius and keep your knees tracking in line with your toes."
-            )
-        elif "pain" in query or "back" in query or "injury" in query:
-            sources.append("Qdrant Collection: user-workout-logs (pain flags & daily feedback history)")
-            reply = (
-                "I see you previously flagged lower-back tightness during barbell squats. Our safety engine "
-                "has temporarily substituted heavy barbell squats with goblet squats and added lower-back "
-                "mobility protocols. Always stop any set if you feel a sharp pinch!"
-            )
-        elif "protein" in query or "diet" in query or "macro" in query or "calories" in query:
-            sources.append("Qdrant Collection: nutrition-knowledge (high-protein meal structures)")
-            reply = (
-                "Based on your InBody scan metrics and hypertrophy goal, your target daily protein is 180g. "
-                "Distribute this across 3 main meals (~50g per meal) and a post-workout protein shake to optimize "
-                "muscle protein synthesis."
-            )
-        else:
-            sources.append("Qdrant Collections: exercise-library, user-workout-logs")
-            reply = (
-                f"Thank you for reaching out! Based on your active training profile and progress logs, "
-                f"consistency and proper form auto-regulation are your primary keys to success. Let me know if you need specific guidance on your workout or nutrition plan!"
-            )
-
-        response = CoachResponsePayload(
-            user_id=user_id,
-            response=reply,
-            cited_sources=sources,
-            timestamp=datetime.now(timezone.utc)
-        )
-
-        if user_id not in self._history_db:
-            self._history_db[user_id] = []
-        self._history_db[user_id].append({
-            "query": payload.message,
-            "response": reply,
-            "timestamp": datetime.now(timezone.utc).isoformat()
-        })
-
-        return response
+def _load_recent_messages(user_id: str) -> list[dict]:
+    """Oldest-first, capped at the most recent _HISTORY_LIMIT turns.
+    Loads all messages for the user, sorts by created_at ascending (oldest first),
+    then skips to the most recent _HISTORY_LIMIT messages."""
+    all_docs = list(
+        get_db()
+        .coach_messages.find({"user_id": user_id})
+        .sort("created_at", 1)
+    )
+    # Keep only the most recent _HISTORY_LIMIT messages, maintaining order
+    recent_docs = all_docs[-_HISTORY_LIMIT:] if len(all_docs) > _HISTORY_LIMIT else all_docs
+    return [{"role": d["role"], "content": d["content"]} for d in recent_docs]
 
 
-coach_assistant_engine = CoachAssistantEngine()
+def _save_message(user_id: str, role: str, content: str) -> None:
+    get_db().coach_messages.insert_one({
+        "user_id": user_id,
+        "role": role,
+        "content": content,
+        "created_at": datetime.now(timezone.utc),
+    })
+
+
+async def process_coach_message(
+    user_id: str, message: str, nutrition_plan_snapshot: str | None
+) -> str:
+    history = _load_recent_messages(user_id)
+    agent = build_coach_agent(user_id, nutrition_plan_snapshot)
+    result = await agent.ainvoke(
+        {"messages": history + [{"role": "user", "content": message}]},
+        config={"recursion_limit": 50},
+    )
+    reply = result["messages"][-1].content
+
+    _save_message(user_id, "user", message)
+    _save_message(user_id, "assistant", reply)
+    return reply
