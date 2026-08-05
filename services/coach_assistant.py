@@ -19,17 +19,18 @@ _HISTORY_LIMIT = 20
 
 
 def _load_recent_messages(user_id: str) -> list[dict]:
-    """Oldest-first, capped at the most recent _HISTORY_LIMIT turns.
-    Loads all messages for the user, sorts by created_at ascending (oldest first),
-    then skips to the most recent _HISTORY_LIMIT messages."""
-    all_docs = list(
+    """Oldest-first, capped at the most recent _HISTORY_LIMIT turns --
+    sorts descending to get the N most recent Mongo documents, then
+    reverses back to chronological order for the agent's messages list."""
+    docs = list(
         get_db()
         .coach_messages.find({"user_id": user_id})
-        .sort("created_at", 1)
+        .sort("created_at", -1)
+        .limit(_HISTORY_LIMIT)
     )
-    # Keep only the most recent _HISTORY_LIMIT messages, maintaining order
-    recent_docs = all_docs[-_HISTORY_LIMIT:] if len(all_docs) > _HISTORY_LIMIT else all_docs
-    return [{"role": d["role"], "content": d["content"]} for d in recent_docs]
+    # Sort by created_at ascending to restore chronological order
+    docs.sort(key=lambda d: d["created_at"])
+    return [{"role": d["role"], "content": d["content"]} for d in docs]
 
 
 def _save_message(user_id: str, role: str, content: str) -> None:
