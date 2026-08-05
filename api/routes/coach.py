@@ -1,20 +1,36 @@
 """
-FastAPI Router for Module 7: AI Fitness Coach Assistant
-Conversational RAG interface grounded in the user's workout history and biometric progression.
+FastAPI router for the coach chatbot -- conversational Q&A grounded in the
+user's own workout and nutrition plans (see agents/coach.py,
+services/coach_assistant.py). nutrition_plan_snapshot is supplied by the
+tamreena-web BFF, which owns the mapping from user_id to the user's last
+nutrition run_id; this service has no way to look that up itself (see
+docs/superpowers/specs/2026-08-05-nutrition-workout-coach-chatbot-design.md).
 """
 
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
 
-from api.schemas.integration_schemas import CoachQueryPayload, CoachResponsePayload
-from services.coach_assistant import coach_assistant_engine
+from auth.dependencies import get_current_user
+from services.coach_assistant import process_coach_message
 
 router = APIRouter(prefix="/coach", tags=["coach"])
 
 
-@router.post("/chat", response_model=CoachResponsePayload)
-async def coach_chat(payload: CoachQueryPayload):
-    """Answers user questions grounded in training history, InBody trends, and movement science."""
+class CoachChatRequest(BaseModel):
+    message: str
+    nutrition_plan_snapshot: str | None = None
+
+
+class CoachChatResponse(BaseModel):
+    response: str
+
+
+@router.post("/chat", response_model=CoachChatResponse)
+async def coach_chat(body: CoachChatRequest, user: dict = Depends(get_current_user)):
     try:
-        return coach_assistant_engine.process_query(payload)
+        reply = await process_coach_message(
+            user["id"], body.message, body.nutrition_plan_snapshot
+        )
     except Exception as exc:
         raise HTTPException(status_code=500, detail=f"Coach assistant failed to respond: {str(exc)}")
+    return CoachChatResponse(response=reply)
