@@ -13,12 +13,12 @@ from datetime import datetime, timezone
 from agents.coach import build_coach_agent
 from tools.mongo import get_db
 
-__all__ = ["process_coach_message", "get_db"]
+__all__ = ["process_coach_message", "get_db", "load_recent_messages"]
 
 _HISTORY_LIMIT = 20
 
 
-def _load_recent_messages(user_id: str) -> list[dict]:
+def load_recent_messages(user_id: str) -> list[dict]:
     """Oldest-first, capped at the most recent _HISTORY_LIMIT turns --
     sorts descending to get the N most recent Mongo documents, then
     reverses back to chronological order for the agent's messages list."""
@@ -45,7 +45,7 @@ def _save_message(user_id: str, role: str, content: str) -> None:
 async def process_coach_message(
     user_id: str, message: str, nutrition_plan_snapshot: str | None
 ) -> str:
-    history = _load_recent_messages(user_id)
+    history = load_recent_messages(user_id)
     agent = build_coach_agent(user_id, nutrition_plan_snapshot)
     result = await agent.ainvoke(
         {"messages": history + [{"role": "user", "content": message}]},

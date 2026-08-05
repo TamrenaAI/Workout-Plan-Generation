@@ -13,7 +13,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from auth.dependencies import get_current_user
-from services.coach_assistant import process_coach_message
+from services.coach_assistant import load_recent_messages, process_coach_message
 
 logger = logging.getLogger(__name__)
 
@@ -29,6 +29,15 @@ class CoachChatResponse(BaseModel):
     response: str
 
 
+class CoachMessage(BaseModel):
+    role: str
+    content: str
+
+
+class CoachHistoryResponse(BaseModel):
+    messages: list[CoachMessage]
+
+
 @router.post("/chat", response_model=CoachChatResponse)
 async def coach_chat(body: CoachChatRequest, user: dict = Depends(get_current_user)):
     try:
@@ -39,3 +48,9 @@ async def coach_chat(body: CoachChatRequest, user: dict = Depends(get_current_us
         logger.exception("Coach assistant failed to respond")
         raise HTTPException(status_code=500, detail="Coach assistant failed to respond.")
     return CoachChatResponse(response=reply)
+
+
+@router.get("/history", response_model=CoachHistoryResponse)
+async def coach_history(user: dict = Depends(get_current_user)):
+    messages = load_recent_messages(user["id"])
+    return CoachHistoryResponse(messages=[CoachMessage(**m) for m in messages])

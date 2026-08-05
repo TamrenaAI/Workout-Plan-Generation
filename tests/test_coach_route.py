@@ -74,3 +74,48 @@ def test_coach_chat_returns_500_when_agent_fails(monkeypatch):
 
     resp = client.post("/coach/chat", json={"message": "hello"})
     assert resp.status_code == 500
+
+
+def test_coach_history_requires_authentication():
+    app.dependency_overrides.pop(get_current_user, None)
+    resp = client.get("/coach/history")
+    assert resp.status_code in (401, 403)
+
+
+def test_coach_history_returns_empty_list_for_new_user():
+    resp = client.get("/coach/history")
+    assert resp.status_code == 200
+    assert resp.json() == {"messages": []}
+
+
+def test_coach_history_returns_stored_messages_in_order():
+    from datetime import datetime, timedelta, timezone
+    from services.coach_assistant import get_db
+
+    now = datetime.now(timezone.utc)
+    get_db().coach_messages.insert_many([
+        {"user_id": "test-user-id", "role": "user", "content": "first question", "created_at": now},
+        {"user_id": "test-user-id", "role": "assistant", "content": "first reply", "created_at": now + timedelta(seconds=1)},
+    ])
+
+    resp = client.get("/coach/history")
+    assert resp.status_code == 200
+    assert resp.json() == {
+        "messages": [
+            {"role": "user", "content": "first question"},
+            {"role": "assistant", "content": "first reply"},
+        ]
+    }
+
+
+def test_coach_history_is_scoped_to_the_authenticated_user():
+    from datetime import datetime, timezone
+    from services.coach_assistant import get_db
+
+    get_db().coach_messages.insert_one(
+        {"user_id": "someone-else", "role": "user", "content": "not yours", "created_at": datetime.now(timezone.utc)}
+    )
+
+    resp = client.get("/coach/history")
+    assert resp.status_code == 200
+    assert resp.json() == {"messages": []}
