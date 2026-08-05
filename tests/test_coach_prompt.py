@@ -24,3 +24,8 @@ def test_prompt_instructs_no_tool_calls_for_unrelated_questions():
 def test_prompt_forbids_inventing_numbers_not_from_a_tool():
     text = load_prompt("coach")
     assert "Never state a specific number" in text
+
+
+def test_prompt_distinguishes_temporarily_unavailable_nutrition_plan():
+    text = load_prompt("coach")
+    assert "(nutrition plan temporarily unavailable)" in text

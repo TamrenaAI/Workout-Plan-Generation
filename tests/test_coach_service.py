@@ -6,6 +6,7 @@ tests/conftest.py's autouse mongo_db fixture)."""
 import asyncio
 import os
 import sys
+from datetime import datetime, timedelta, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -84,3 +85,35 @@ def test_process_coach_message_is_scoped_per_user(monkeypatch):
     a_messages = list(coach_assistant.get_db().coach_messages.find({"user_id": user_a}))
     assert len(a_messages) == 2
     assert all(m["user_id"] == user_a for m in a_messages)
+
+
+def test_process_coach_message_caps_history_at_20_most_recent_in_order(monkeypatch):
+    fake_agent = _FakeAgent("noted")
+    monkeypatch.setattr(coach_assistant, "build_coach_agent", lambda user_id, snapshot: fake_agent)
+
+    user_id = _uid()
+    base_time = datetime.now(timezone.utc)
+    docs = []
+    for i in range(25):
+        role = "user" if i % 2 == 0 else "assistant"
+        docs.append({
+            "user_id": user_id,
+            "role": role,
+            "content": f"message {i}",
+            "created_at": base_time + timedelta(seconds=i),
+        })
+    coach_assistant.get_db().coach_messages.insert_many(docs)
+
+    asyncio.run(coach_assistant.process_coach_message(user_id, "new question", None))
+
+    sent_messages = fake_agent.last_messages
+    # 20 most recent prior messages + the new user turn
+    assert len(sent_messages) == 21
+
+    history_sent = sent_messages[:-1]
+    assert len(history_sent) == 20
+    # The 20 most recent of the 25 inserted are messages 5..24 (chronological order)
+    assert history_sent[0] == {"role": "assistant", "content": "message 5"}
+    assert history_sent[-1] == {"role": "user", "content": "message 24"}
+
+    assert sent_messages[-1] == {"role": "user", "content": "new question"}

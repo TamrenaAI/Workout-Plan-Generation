@@ -7,11 +7,15 @@ nutrition run_id; this service has no way to look that up itself (see
 docs/superpowers/specs/2026-08-05-nutrition-workout-coach-chatbot-design.md).
 """
 
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from auth.dependencies import get_current_user
 from services.coach_assistant import process_coach_message
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/coach", tags=["coach"])
 
@@ -31,6 +35,7 @@ async def coach_chat(body: CoachChatRequest, user: dict = Depends(get_current_us
         reply = await process_coach_message(
             user["id"], body.message, body.nutrition_plan_snapshot
         )
-    except Exception as exc:
-        raise HTTPException(status_code=500, detail=f"Coach assistant failed to respond: {str(exc)}")
+    except Exception:
+        logger.exception("Coach assistant failed to respond")
+        raise HTTPException(status_code=500, detail="Coach assistant failed to respond.")
     return CoachChatResponse(response=reply)
