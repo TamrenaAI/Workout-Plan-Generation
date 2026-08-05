@@ -25,11 +25,12 @@ def load_recent_messages(user_id: str) -> list[dict]:
     docs = list(
         get_db()
         .coach_messages.find({"user_id": user_id})
-        .sort("created_at", -1)
+        .sort([("created_at", -1), ("_id", -1)])
         .limit(_HISTORY_LIMIT)
     )
-    # Sort by created_at ascending to restore chronological order
-    docs.sort(key=lambda d: d["created_at"])
+    # Sort ascending to restore chronological order; _id breaks any
+    # created_at tie (millisecond precision) using insertion order.
+    docs.sort(key=lambda d: (d["created_at"], d["_id"]))
     return [{"role": d["role"], "content": d["content"]} for d in docs]
 
 

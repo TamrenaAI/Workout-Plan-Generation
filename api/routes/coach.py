@@ -52,5 +52,9 @@ async def coach_chat(body: CoachChatRequest, user: dict = Depends(get_current_us
 
 @router.get("/history", response_model=CoachHistoryResponse)
 async def coach_history(user: dict = Depends(get_current_user)):
-    messages = load_recent_messages(user["id"])
+    try:
+        messages = load_recent_messages(user["id"])
+    except Exception:
+        logger.exception("Failed to load coach history")
+        raise HTTPException(status_code=500, detail="Failed to load coach history.")
     return CoachHistoryResponse(messages=[CoachMessage(**m) for m in messages])
