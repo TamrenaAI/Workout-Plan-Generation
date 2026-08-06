@@ -15,6 +15,7 @@ from typing import Optional
 
 from bson import ObjectId
 
+from tools.dynamo import get_inbody_scans_table
 from tools.mongo import get_db
 
 
@@ -86,13 +87,29 @@ def _subjective_flags(old_session_id: str) -> dict:
 
 
 def _inbody_delta(old_session_id: str, new_session_id: str) -> Optional[dict]:
-    old_doc = get_db().inbody_scans.find_one({"session_id": old_session_id})
-    new_doc = get_db().inbody_scans.find_one({"session_id": new_session_id})
-    if not old_doc or not new_doc:
+    old_resp = get_inbody_scans_table().query(
+        IndexName="session-index",
+        KeyConditionExpression="session_id = :sid",
+        ExpressionAttributeValues={":sid": old_session_id},
+        Limit=1,
+    )
+    new_resp = get_inbody_scans_table().query(
+        IndexName="session-index",
+        KeyConditionExpression="session_id = :sid",
+        ExpressionAttributeValues={":sid": new_session_id},
+        Limit=1,
+    )
+    if not old_resp["Items"] or not new_resp["Items"]:
         return None
+    old_doc, new_doc = old_resp["Items"][0], new_resp["Items"][0]
+    # DynamoDB's Number type always deserializes to Decimal — convert back
+    # to float so this returns the same numeric type the Mongo-backed
+    # version did (and round() below rounds a float, not a Decimal).
+    old_smm, new_smm = float(old_doc["skeletal_muscle_mass_kg"]), float(new_doc["skeletal_muscle_mass_kg"])
+    old_bf, new_bf = float(old_doc["body_fat_percent"]), float(new_doc["body_fat_percent"])
     return {
-        "skeletal_muscle_mass_kg": round(new_doc["skeletal_muscle_mass_kg"] - old_doc["skeletal_muscle_mass_kg"], 2),
-        "body_fat_percent": round(new_doc["body_fat_percent"] - old_doc["body_fat_percent"], 2),
+        "skeletal_muscle_mass_kg": round(new_smm - old_smm, 2),
+        "body_fat_percent": round(new_bf - old_bf, 2),
         "arm_asymmetry_resolved": bool(old_doc["arm_asymmetry"]) and not bool(new_doc["arm_asymmetry"]),
         "leg_asymmetry_resolved": bool(old_doc["leg_asymmetry"]) and not bool(new_doc["leg_asymmetry"]),
         "trunk_underdeveloped_resolved": bool(old_doc["trunk_underdeveloped"]) and not bool(new_doc["trunk_underdeveloped"]),

@@ -10,9 +10,9 @@ fixture (autouse).
 
 import os
 import sys
+import uuid
 
 import pytest
-from bson import ObjectId
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -21,7 +21,7 @@ from tools.inbody import InBodyFlags, InBodyRawExtraction, InBodyResult, Segment
 
 
 def _uid() -> str:
-    return str(ObjectId())
+    return str(uuid.uuid4())
 
 
 def _make_result(smm_kg: float, body_fat_percent: float, arm_asymmetry: bool = False) -> InBodyResult:

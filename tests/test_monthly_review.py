@@ -175,11 +175,7 @@ def _make_inbody_result() -> InBodyResult:
 def test_monthly_review_marks_session_failed_on_summary_error(monkeypatch):
     import api.routes.plan as plan_route
 
-    # This route calls pipeline.inbody_history.record_scan before failing,
-    # which still writes to Mongo's inbody_scans collection and coerces
-    # user_id via bson.ObjectId (that collection isn't ported to DynamoDB
-    # until Task 4) — so this owner id has to stay ObjectId-shaped until then.
-    owner = {"id": str(ObjectId())}
+    owner = _make_user("mr-owner6")
     ownership.create_session("mr-s6", owner["id"], "hypertrophy", intake=_SAMPLE_INTAKE)
     _backdate_and_ready("mr-s6", days=31)
 
