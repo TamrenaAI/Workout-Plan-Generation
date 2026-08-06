@@ -5,14 +5,16 @@ Does not exercise agents/plan_adjuster.py itself — that requires a live
 LLM call, same scoping as the rest of this test suite.
 
 Mongo access is mongomock'd per-test — see tests/conftest.py's mongo_db
-fixture (autouse). plan.md/feedback.json-style session files still live
-under SESSION_DIR (unaffected by this migration — only feedback storage
-moved to Mongo), hence the SESSION_DIR monkeypatch below.
+fixture (autouse). workout_feedback itself now lives in DynamoDB (see
+tools/dynamo.py's get_workout_feedback_table) — plan.md/feedback.json-style
+session files still live under SESSION_DIR (unaffected by this migration),
+hence the SESSION_DIR monkeypatch below.
 """
 
 import json
 import os
 import sys
+import uuid
 from datetime import datetime, timedelta, timezone
 
 import pytest
@@ -20,7 +22,6 @@ from fastapi.testclient import TestClient
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from bson import ObjectId
 from auth import ownership
 from auth import tokens
 from auth.tokens import create_access_token
@@ -37,11 +38,11 @@ def _isolated_state(tmp_path, monkeypatch):
 def _make_user(sub: str) -> dict:
     # This service no longer owns `users` (see
     # docs/superpowers/specs/2026-07-25-bff-auth-handoff-design.md) — a
-    # fresh ObjectId is all any test needs, since every route here only
+    # fresh uuid is all any test needs, since every route here only
     # ever reads the id. `sub` is kept as a parameter purely so call sites
     # stay readable (e.g. `_make_user("cv-owner")`); it's not used for
     # deduplication anymore, each call already produces a distinct id.
-    return {"id": str(ObjectId())}
+    return {"id": str(uuid.uuid4())}
 
 
 def test_needs_adjustment_false_when_everything_just_right():

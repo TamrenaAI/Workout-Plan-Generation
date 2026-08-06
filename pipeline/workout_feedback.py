@@ -2,7 +2,7 @@
 Post-workout feedback — recorded by the API route right after a user
 submits it (POST /workouts/{session_id}/feedback), not by any agent.
 
-MongoDB `workout_feedback` collection: one document per submission (not
+DynamoDB `workout_feedback_submissions` table: one item per submission (not
 one growing array per session) — this is what makes cross-session training
 history actually queryable (e.g. "this user's last 30 days of feedback")
 without loading and filtering client-side.
@@ -16,11 +16,10 @@ already established by pipeline/plan_finalize.py importing from
 tools/memory.py).
 """
 
+import uuid
 from datetime import datetime, timezone
 
-from bson import ObjectId
-
-from tools.mongo import get_db
+from tools.dynamo import get_workout_feedback_table
 
 
 def needs_adjustment(exercises: list[dict]) -> bool:
@@ -31,11 +30,12 @@ def needs_adjustment(exercises: list[dict]) -> bool:
 
 
 def record_feedback(user_id: str, session_id: str, day_label: str, exercises: list[dict], adjustment_triggered: bool) -> None:
-    get_db().workout_feedback.insert_one({
-        "user_id": ObjectId(user_id),
+    get_workout_feedback_table().put_item(Item={
+        "feedback_id": str(uuid.uuid4()),
+        "user_id": user_id,
         "session_id": session_id,
         "day_label": day_label,
         "exercises": exercises,
         "adjustment_triggered": adjustment_triggered,
-        "submitted_at": datetime.now(timezone.utc),
+        "submitted_at": datetime.now(timezone.utc).isoformat(),
     })

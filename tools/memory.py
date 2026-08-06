@@ -22,6 +22,7 @@ from datetime import datetime, timezone
 from langchain_core.tools import tool
 
 from config import SESSION_DIR
+from tools.dynamo import get_workout_feedback_table
 from tools.mongo import get_db
 
 # Guards progress.json's read-modify-write cycle. deepagents can execute
@@ -381,13 +382,19 @@ def read_workout_feedback(session_id: str) -> str:
     rather than in pipeline/workout_feedback.py per this repo's tools/ vs pipeline/ rule
     (writing is a pipeline concern, reading is a tool concern; tools/ must not import from
     pipeline/ — see this file's module docstring)."""
-    docs = get_db().workout_feedback.find({"session_id": session_id}).sort("submitted_at", 1)
+    resp = get_workout_feedback_table().query(
+        IndexName="session-index",
+        KeyConditionExpression="session_id = :sid",
+        ExpressionAttributeValues={":sid": session_id},
+        ScanIndexForward=True,
+    )
+    docs = resp["Items"]
     submissions = [
         {
             "day_label": d["day_label"],
             "exercises": d["exercises"],
             "adjustment_triggered": d["adjustment_triggered"],
-            "submitted_at": d["submitted_at"].isoformat(),
+            "submitted_at": d["submitted_at"],
         }
         for d in docs
     ]

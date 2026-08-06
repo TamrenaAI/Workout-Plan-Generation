@@ -15,12 +15,18 @@ from typing import Optional
 
 from bson import ObjectId
 
-from tools.dynamo import get_inbody_scans_table
+from tools.dynamo import get_inbody_scans_table, get_workout_feedback_table
 from tools.mongo import get_db
 
 
 def _adherence(old_session_id: str, days_per_week: int, old_created_at: datetime) -> dict:
-    submitted = get_db().workout_feedback.count_documents({"session_id": old_session_id})
+    resp = get_workout_feedback_table().query(
+        IndexName="session-index",
+        KeyConditionExpression="session_id = :sid",
+        ExpressionAttributeValues={":sid": old_session_id},
+        Select="COUNT",
+    )
+    submitted = resp["Count"]
     weeks_elapsed = max((datetime.now(timezone.utc) - old_created_at).days / 7, 1e-9)
     expected = round(days_per_week * weeks_elapsed)
     rate = round(min(submitted / expected, 1.0), 3) if expected > 0 else None
@@ -69,9 +75,13 @@ def _rep_quality(old_session_id: str) -> dict:
 
 
 def _subjective_flags(old_session_id: str) -> dict:
-    docs = list(get_db().workout_feedback.find({"session_id": old_session_id}))
+    resp = get_workout_feedback_table().query(
+        IndexName="session-index",
+        KeyConditionExpression="session_id = :sid",
+        ExpressionAttributeValues={":sid": old_session_id},
+    )
     counts: dict[str, dict] = {}
-    for d in docs:
+    for d in resp["Items"]:
         for ex in d.get("exercises", []):
             name = ex.get("name")
             if not name:
