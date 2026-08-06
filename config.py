@@ -30,6 +30,20 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
 MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "tamreena")
 
+# ── DynamoDB ──────────────────────────────────────────────────────────
+# Region/table-naming convention matches tamreena-web/backend/app/config.py
+# (workout_users, workout_live_sessions) — this service's own 8 tables,
+# one per former Mongo collection.
+AWS_REGION = os.getenv("AWS_REGION", "eu-north-1")
+PLAN_SESSIONS_TABLE_NAME = os.getenv("PLAN_SESSIONS_TABLE_NAME", "workout_plan_sessions")
+EXERCISES_TABLE_NAME = os.getenv("EXERCISES_TABLE_NAME", "workout_exercises")
+INBODY_SCANS_TABLE_NAME = os.getenv("INBODY_SCANS_TABLE_NAME", "workout_inbody_scans")
+WORKOUT_FEEDBACK_TABLE_NAME = os.getenv("WORKOUT_FEEDBACK_TABLE_NAME", "workout_feedback_submissions")
+CORRECTIVE_RESULTS_TABLE_NAME = os.getenv("CORRECTIVE_RESULTS_TABLE_NAME", "workout_corrective_results")
+PROGRESS_REPORTS_TABLE_NAME = os.getenv("PROGRESS_REPORTS_TABLE_NAME", "workout_progress_reports")
+PLAN_ADJUSTMENTS_TABLE_NAME = os.getenv("PLAN_ADJUSTMENTS_TABLE_NAME", "workout_plan_adjustments")
+COACH_MESSAGES_TABLE_NAME = os.getenv("COACH_MESSAGES_TABLE_NAME", "workout_coach_messages")
+
 # ── Azure OpenAI (only external LLM API) ─────────────────────────────
 AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
 AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")

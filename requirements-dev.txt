@@ -6,3 +6,4 @@ ipywidgets
 pandas
 openpyxl
 mongomock
+moto[dynamodb]

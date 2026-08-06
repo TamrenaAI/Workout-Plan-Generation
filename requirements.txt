@@ -9,6 +9,9 @@ fastapi
 uvicorn[standard]
 python-multipart
 
+# ── AWS ────────────────────────────────────────────────────────
+boto3
+
 # ── InBody VLM pipeline ───────────────────────────────────────
 opencv-python
 pymupdf
