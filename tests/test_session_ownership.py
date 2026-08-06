@@ -11,8 +11,8 @@ fixture (autouse).
 
 import os
 import sys
+import uuid
 
-from bson import ObjectId
 from fastapi.testclient import TestClient
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -21,7 +21,7 @@ from auth import ownership
 
 
 def _uid() -> str:
-    return str(ObjectId())
+    return str(uuid.uuid4())
 
 
 def test_owner_can_be_verified():

@@ -14,9 +14,9 @@ DB-lookup behavior were still present, every test below would fail with
 
 import os
 import sys
+import uuid
 
 import pytest
-from bson import ObjectId
 from fastapi import HTTPException
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -30,7 +30,7 @@ def _fixed_secret(monkeypatch):
 
 
 def test_resolve_user_returns_id_from_token_with_no_matching_db_record():
-    user_id = str(ObjectId())
+    user_id = str(uuid.uuid4())
     token = tokens.create_access_token(user_id=user_id)
 
     result = dependencies._resolve_user(token)
@@ -44,8 +44,12 @@ def test_resolve_user_rejects_invalid_token():
     assert exc_info.value.status_code == 401
 
 
-def test_resolve_user_rejects_a_token_whose_sub_is_not_an_objectid():
+def test_resolve_user_accepts_any_non_empty_sub_as_user_id():
+    # This service no longer validates the JWT `sub` claim's shape (e.g. as
+    # a Mongo ObjectId) — the BFF issues opaque string/uuid user ids, and
+    # any non-empty sub is a valid user id now.
     token = tokens.create_access_token(user_id="not-an-objectid")
-    with pytest.raises(HTTPException) as exc_info:
-        dependencies._resolve_user(token)
-    assert exc_info.value.status_code == 401
+
+    result = dependencies._resolve_user(token)
+
+    assert result == {"id": "not-an-objectid"}

@@ -5,12 +5,14 @@ without invoking the InBody VLM pipeline or any LLM agent, matching this
 suite's existing convention (see tests/test_workout_feedback.py's module
 docstring) of never exercising real LLM calls in tests.
 
-Mongo access is mongomock'd per-test — see tests/conftest.py's mongo_db
-fixture (autouse).
+Mongo access is mongomock'd per-test for other collections — see
+tests/conftest.py's mongo_db fixture (autouse). plan_sessions is on
+DynamoDB (moto'd per-test — see tests/conftest.py's dynamo_tables fixture).
 """
 
 import os
 import sys
+import uuid
 from datetime import datetime, timedelta, timezone
 
 import pytest
@@ -23,7 +25,7 @@ from auth import ownership
 from auth import tokens
 from pipeline import monthly_progress
 from tools.inbody import InBodyFlags, InBodyRawExtraction, InBodyResult, SegmentalReading
-from tools.mongo import get_db
+from tools.dynamo import get_plan_sessions_table
 
 _SAMPLE_INTAKE = {
     "goal": "hypertrophy", "days_per_week": 4, "experience": "beginner",
@@ -42,17 +44,22 @@ def _isolated_state(tmp_path, monkeypatch):
 def _make_user(sub: str) -> dict:
     # This service no longer owns `users` (see
     # docs/superpowers/specs/2026-07-25-bff-auth-handoff-design.md) — a
-    # fresh ObjectId is all any test needs, since every route here only
+    # fresh uuid4 is all any test needs, since every route here only
     # ever reads the id. `sub` is kept as a parameter purely so call sites
     # stay readable (e.g. `_make_user("cv-owner")`); it's not used for
     # deduplication anymore, each call already produces a distinct id.
-    return {"id": str(ObjectId())}
+    return {"id": str(uuid.uuid4())}
 
 
 def _backdate_and_ready(session_id: str, days: int):
-    get_db().plan_sessions.update_one(
-        {"_id": session_id},
-        {"$set": {"status": "ready", "created_at": datetime.now(timezone.utc) - timedelta(days=days)}},
+    get_plan_sessions_table().update_item(
+        Key={"session_id": session_id},
+        UpdateExpression="SET #s = :status, created_at = :created_at",
+        ExpressionAttributeNames={"#s": "status"},
+        ExpressionAttributeValues={
+            ":status": "ready",
+            ":created_at": (datetime.now(timezone.utc) - timedelta(days=days)).isoformat(),
+        },
     )
 
 
@@ -168,7 +175,11 @@ def _make_inbody_result() -> InBodyResult:
 def test_monthly_review_marks_session_failed_on_summary_error(monkeypatch):
     import api.routes.plan as plan_route
 
-    owner = _make_user("mr-owner6")
+    # This route calls pipeline.inbody_history.record_scan before failing,
+    # which still writes to Mongo's inbody_scans collection and coerces
+    # user_id via bson.ObjectId (that collection isn't ported to DynamoDB
+    # until Task 4) — so this owner id has to stay ObjectId-shaped until then.
+    owner = {"id": str(ObjectId())}
     ownership.create_session("mr-s6", owner["id"], "hypertrophy", intake=_SAMPLE_INTAKE)
     _backdate_and_ready("mr-s6", days=31)
 
@@ -186,7 +197,12 @@ def test_monthly_review_marks_session_failed_on_summary_error(monkeypatch):
     r = _post_review(client, "mr-s6", token)
     assert r.status_code == 500
 
-    new_sessions = list(get_db().plan_sessions.find({"previous_session_id": "mr-s6"}))
+    resp = get_plan_sessions_table().query(
+        IndexName="previous-session-index",
+        KeyConditionExpression="previous_session_id = :sid",
+        ExpressionAttributeValues={":sid": "mr-s6"},
+    )
+    new_sessions = resp["Items"]
     assert len(new_sessions) == 1
     doc = new_sessions[0]
     assert doc["status"] == "failed"
@@ -223,7 +239,11 @@ def test_get_report_404_when_no_report_yet():
 def test_get_report_returns_stored_report():
     import api.main as m
 
-    owner = _make_user("rep-owner3")
+    # monthly_progress.record_progress_report still writes to Mongo's
+    # progress_reports collection and coerces user_id via bson.ObjectId
+    # (that collection isn't ported to DynamoDB until Task 6) — so this
+    # owner id has to stay ObjectId-shaped until then.
+    owner = {"id": str(ObjectId())}
     ownership.create_session("rep-old", owner["id"], "hypertrophy", intake=_SAMPLE_INTAKE)
     ownership.create_session("rep-new", owner["id"], "hypertrophy", intake=_SAMPLE_INTAKE, previous_session_id="rep-old")
     monthly_progress.record_progress_report(owner["id"], "rep-old", "rep-new", {"adherence": {}}, "Solid month.")

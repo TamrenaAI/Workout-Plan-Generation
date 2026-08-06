@@ -3,21 +3,21 @@ Tests for monthly-review eligibility computation (auth/ownership.py):
 a session becomes eligible 30 days after creation, only once its plan has
 finished generating, and only until a review has already been created for it.
 
-Mongo access is mongomock'd per-test — see tests/conftest.py's mongo_db
+DynamoDB access is moto'd per-test — see tests/conftest.py's dynamo_tables
 fixture (autouse).
 """
 
 import os
 import sys
+import uuid
 from datetime import datetime, timedelta, timezone
 
 import pytest
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from bson import ObjectId
 from auth import ownership
-from tools.mongo import get_db
+from tools.dynamo import get_plan_sessions_table
 
 _SAMPLE_INTAKE = {
     "goal": "hypertrophy", "days_per_week": 4, "experience": "beginner",
@@ -29,17 +29,22 @@ _SAMPLE_INTAKE = {
 def _make_user(sub: str) -> dict:
     # This service no longer owns `users` (see
     # docs/superpowers/specs/2026-07-25-bff-auth-handoff-design.md) — a
-    # fresh ObjectId is all any test needs, since every route here only
+    # fresh uuid4 is all any test needs, since every route here only
     # ever reads the id. `sub` is kept as a parameter purely so call sites
     # stay readable (e.g. `_make_user("cv-owner")`); it's not used for
     # deduplication anymore, each call already produces a distinct id.
-    return {"id": str(ObjectId())}
+    return {"id": str(uuid.uuid4())}
 
 
 def _backdate_and_ready(session_id: str, days: int):
-    get_db().plan_sessions.update_one(
-        {"_id": session_id},
-        {"$set": {"status": "ready", "created_at": datetime.now(timezone.utc) - timedelta(days=days)}},
+    get_plan_sessions_table().update_item(
+        Key={"session_id": session_id},
+        UpdateExpression="SET #s = :status, created_at = :created_at",
+        ExpressionAttributeNames={"#s": "status"},
+        ExpressionAttributeValues={
+            ":status": "ready",
+            ":created_at": (datetime.now(timezone.utc) - timedelta(days=days)).isoformat(),
+        },
     )
 
 
@@ -73,8 +78,12 @@ def test_session_eligible_after_30_days_and_ready():
 def test_session_not_eligible_if_still_generating():
     owner = _make_user("elig-3")
     ownership.create_session("s3", owner["id"], "hypertrophy", intake=_SAMPLE_INTAKE)
-    get_db().plan_sessions.update_one(
-        {"_id": "s3"}, {"$set": {"created_at": datetime.now(timezone.utc) - timedelta(days=31)}},
+    get_plan_sessions_table().update_item(
+        Key={"session_id": "s3"},
+        UpdateExpression="SET created_at = :created_at",
+        ExpressionAttributeValues={
+            ":created_at": (datetime.now(timezone.utc) - timedelta(days=31)).isoformat(),
+        },
     )
     # status is left at "generating" — never marked ready
 

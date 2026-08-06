@@ -22,6 +22,7 @@ from pipeline import monthly_progress, workout_feedback
 from pipeline.inbody_history import record_scan
 from tools.inbody import InBodyFlags, InBodyRawExtraction, InBodyResult, SegmentalReading
 from tools.mongo import get_db
+from tools.dynamo import get_plan_sessions_table
 
 
 def _uid() -> str:
@@ -204,9 +205,13 @@ def test_build_monthly_summary_accepts_get_session_created_at():
     owner_id = _uid()
     old_session_id = "old-real-flow"
     ownership.create_session(old_session_id, owner_id, "hypertrophy")
-    get_db().plan_sessions.update_one(
-        {"_id": old_session_id},
-        {"$set": {"created_at": datetime.now(timezone.utc) - timedelta(days=28)}},
+    # plan_sessions now lives in DynamoDB (see auth/ownership.py), not Mongo.
+    get_plan_sessions_table().update_item(
+        Key={"session_id": old_session_id},
+        UpdateExpression="SET created_at = :created_at",
+        ExpressionAttributeValues={
+            ":created_at": (datetime.now(timezone.utc) - timedelta(days=28)).isoformat(),
+        },
     )
 
     old_session = ownership.get_session(old_session_id)
