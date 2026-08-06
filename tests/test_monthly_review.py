@@ -5,8 +5,7 @@ without invoking the InBody VLM pipeline or any LLM agent, matching this
 suite's existing convention (see tests/test_workout_feedback.py's module
 docstring) of never exercising real LLM calls in tests.
 
-Mongo access is mongomock'd per-test for other collections — see
-tests/conftest.py's mongo_db fixture (autouse). plan_sessions is on
+plan_sessions, corrective_results, and progress_reports all live on
 DynamoDB (moto'd per-test — see tests/conftest.py's dynamo_tables fixture).
 """
 
@@ -20,7 +19,6 @@ from fastapi.testclient import TestClient
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from bson import ObjectId
 from auth import ownership
 from auth import tokens
 from pipeline import monthly_progress
@@ -235,11 +233,7 @@ def test_get_report_404_when_no_report_yet():
 def test_get_report_returns_stored_report():
     import api.main as m
 
-    # monthly_progress.record_progress_report still writes to Mongo's
-    # progress_reports collection and coerces user_id via bson.ObjectId
-    # (that collection isn't ported to DynamoDB until Task 6) — so this
-    # owner id has to stay ObjectId-shaped until then.
-    owner = {"id": str(ObjectId())}
+    owner = _make_user("rep-owner3")
     ownership.create_session("rep-old", owner["id"], "hypertrophy", intake=_SAMPLE_INTAKE)
     ownership.create_session("rep-new", owner["id"], "hypertrophy", intake=_SAMPLE_INTAKE, previous_session_id="rep-old")
     monthly_progress.record_progress_report(owner["id"], "rep-old", "rep-new", {"adherence": {}}, "Solid month.")

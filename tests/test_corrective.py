@@ -3,12 +3,13 @@ Tests for api/routes/corrective.py — ingestion of the CV correction
 system's native per-exercise JSON export (see Hack_Squat_20260723_000913.json,
 repo root, for a real sample this schema is modeled on).
 
-Mongo access is mongomock'd per-test — see tests/conftest.py's mongo_db
-fixture (autouse).
+corrective_results lives in DynamoDB (moto'd per-test — see
+tests/conftest.py's dynamo_tables fixture).
 """
 
 import os
 import sys
+import uuid
 from datetime import datetime
 
 import pytest
@@ -16,20 +17,19 @@ from fastapi.testclient import TestClient
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from bson import ObjectId
 from auth import ownership
 from auth.tokens import create_access_token
-from tools.mongo import get_db
+from tools.dynamo import get_corrective_results_table
 
 
 def _make_user(sub: str) -> dict:
     # This service no longer owns `users` (see
     # docs/superpowers/specs/2026-07-25-bff-auth-handoff-design.md) — a
-    # fresh ObjectId is all any test needs, since every route here only
+    # fresh uuid4 is all any test needs, since every route here only
     # ever reads the id. `sub` is kept as a parameter purely so call sites
     # stay readable (e.g. `_make_user("cv-owner")`); it's not used for
     # deduplication anymore, each call already produces a distinct id.
-    return {"id": str(ObjectId())}
+    return {"id": str(uuid.uuid4())}
 
 
 def _cv_payload(**overrides) -> dict:
@@ -91,27 +91,28 @@ def test_corrective_endpoint_accepts_real_cv_json_shape_and_stores_it():
     assert r.status_code == 200
     assert r.json() == {"recorded": 1}
 
-    doc = get_db().corrective_results.find_one({"session_id": session_id})
-    assert doc is not None
+    resp = get_corrective_results_table().query(
+        IndexName="session-index",
+        KeyConditionExpression="session_id = :sid",
+        ExpressionAttributeValues={":sid": session_id},
+    )
+    items = resp["Items"]
+    assert len(items) == 1
+    doc = items[0]
     assert doc["exercise_name"] == "Hack Squat"
     assert doc["total_reps"] == 4
     assert doc["good_reps"] == 2
     assert doc["bad_reps"] == 2
-    assert doc["accuracy"] == 50.0
-    assert doc["score"] == 85.0
+    assert float(doc["accuracy"]) == 50.0
+    assert float(doc["score"]) == 85.0
     assert doc["common_errors"] == {"knee_unlocked": 3}
     assert doc["most_common_error"] == "knee_unlocked"
-    assert doc["average_rep_duration"] == 3.47
-    assert doc["fastest_rep"] == 2.68
-    assert doc["slowest_rep"] == 4.2
-    assert doc["total_workout_duration"] == 24.72
+    assert float(doc["average_rep_duration"]) == 3.47
+    assert float(doc["fastest_rep"]) == 2.68
+    assert float(doc["slowest_rep"]) == 4.2
+    assert float(doc["total_workout_duration"]) == 24.72
     expected = datetime.fromisoformat("2026-07-22T21:09:13.970653+00:00")
-    actual = doc["recorded_at"]
-    # Strip timezone for comparison (mongomock may strip timezone info)
-    if expected.tzinfo is not None:
-        expected = expected.replace(tzinfo=None)
-    if actual.tzinfo is not None:
-        actual = actual.replace(tzinfo=None)
+    actual = datetime.fromisoformat(doc["recorded_at"])
     assert abs((actual - expected).total_seconds()) < 0.001
 
 

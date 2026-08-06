@@ -4,16 +4,18 @@ month's corrective_results (CV rep-tracking, external repo), workout_feedback,
 and paired InBody scans into the structured summary consumed by
 agents/progress_analyst.py, plus the progress_reports read/write pair.
 
-Mongo access is mongomock'd per-test — see tests/conftest.py's mongo_db
-fixture (autouse).
+corrective_results, workout_feedback, inbody_scans, plan_sessions, and
+progress_reports all live in DynamoDB (moto'd per-test — see
+tests/conftest.py's dynamo_tables fixture).
 """
 
 import os
 import sys
+import uuid
 from datetime import datetime, timedelta, timezone
+from decimal import Decimal
 
 import pytest
-from bson import ObjectId
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -21,12 +23,11 @@ from auth import ownership
 from pipeline import monthly_progress, workout_feedback
 from pipeline.inbody_history import record_scan
 from tools.inbody import InBodyFlags, InBodyRawExtraction, InBodyResult, SegmentalReading
-from tools.mongo import get_db
-from tools.dynamo import get_plan_sessions_table
+from tools.dynamo import get_corrective_results_table, get_plan_sessions_table
 
 
 def _uid() -> str:
-    return str(ObjectId())
+    return str(uuid.uuid4())
 
 
 def _make_inbody_result(smm_kg: float, body_fat_percent: float, arm_asymmetry: bool = False) -> InBodyResult:
@@ -45,23 +46,24 @@ def _make_inbody_result(smm_kg: float, body_fat_percent: float, arm_asymmetry: b
 
 def _insert_corrective_result(session_id, user_id, exercise_name, good, bad, score=85.0, common_errors=None):
     total = good + bad
-    get_db().corrective_results.insert_one({
-        "user_id": ObjectId(user_id),
+    get_corrective_results_table().put_item(Item={
+        "result_id": str(uuid.uuid4()),
+        "user_id": user_id,
         "session_id": session_id,
         "exercise_name": exercise_name,
         "total_reps": total,
         "good_reps": good,
         "bad_reps": bad,
-        "accuracy": (good / total * 100) if total else 0.0,
-        "score": score,
+        "accuracy": Decimal(str((good / total * 100) if total else 0.0)),
+        "score": Decimal(str(score)),
         "common_errors": common_errors or {},
-        "average_rep_duration": 3.0,
-        "fastest_rep": 2.5,
-        "slowest_rep": 4.0,
-        "total_workout_duration": total * 3.0,
+        "average_rep_duration": Decimal("3.0"),
+        "fastest_rep": Decimal("2.5"),
+        "slowest_rep": Decimal("4.0"),
+        "total_workout_duration": Decimal(str(total * 3.0)),
         "most_common_error": next(iter(common_errors), None) if common_errors else None,
-        "recorded_at": datetime.now(timezone.utc),
-        "received_at": datetime.now(timezone.utc),
+        "recorded_at": datetime.now(timezone.utc).isoformat(),
+        "received_at": datetime.now(timezone.utc).isoformat(),
     })
 
 

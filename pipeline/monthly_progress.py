@@ -10,13 +10,17 @@ one document per monthly review (old_session_id, new_session_id, the summary
 below, and the agent's narrative).
 """
 
+import uuid
 from datetime import datetime, timezone
+from decimal import Decimal
 from typing import Optional
 
-from bson import ObjectId
-
-from tools.dynamo import get_inbody_scans_table, get_workout_feedback_table
-from tools.mongo import get_db
+from tools.dynamo import (
+    get_corrective_results_table,
+    get_inbody_scans_table,
+    get_progress_reports_table,
+    get_workout_feedback_table,
+)
 
 
 def _adherence(old_session_id: str, days_per_week: int, old_created_at: datetime) -> dict:
@@ -34,7 +38,20 @@ def _adherence(old_session_id: str, days_per_week: int, old_created_at: datetime
 
 
 def _rep_quality(old_session_id: str) -> dict:
-    docs = list(get_db().corrective_results.find({"session_id": old_session_id}))
+    resp = get_corrective_results_table().query(
+        IndexName="session-index",
+        KeyConditionExpression="session_id = :sid",
+        ExpressionAttributeValues={":sid": old_session_id},
+    )
+    # DynamoDB's Number type always deserializes to Decimal — convert good_reps/
+    # bad_reps to int and score to float so downstream arithmetic (sums, ratios,
+    # averages) and the returned dict match the plain int/float shapes the
+    # Mongo-backed version produced (Decimal arithmetic/JSON-serialization
+    # would otherwise leak through or blow up).
+    docs = [
+        {**d, "good_reps": int(d["good_reps"]), "bad_reps": int(d["bad_reps"]), "score": float(d["score"])}
+        for d in resp["Items"]
+    ]
     if not docs:
         return {"total_reps": 0, "good_reps": 0, "bad_reps": 0, "accuracy": None,
                 "avg_score": None, "per_exercise": {}, "top_form_errors": []}
@@ -52,7 +69,7 @@ def _rep_quality(old_session_id: str) -> dict:
         ex["bad"] += d["bad_reps"]
         scores_by_exercise.setdefault(d["exercise_name"], []).append(d["score"])
         for error_type, count in d.get("common_errors", {}).items():
-            error_counts[error_type] = error_counts.get(error_type, 0) + count
+            error_counts[error_type] = error_counts.get(error_type, 0) + int(count)
 
     for name, ex in per_exercise.items():
         ex_total = ex["good"] + ex["bad"]
@@ -135,25 +152,49 @@ def build_monthly_summary(old_session_id: str, new_session_id: str, days_per_wee
     }
 
 
+def _floats_to_decimal(value):
+    """summary is a nested dict/list blob (build_monthly_summary's output)
+    with real float fields scattered throughout (adherence_rate, rep_quality's
+    accuracy/avg_score, inbody_delta's deltas, ...). boto3 rejects native
+    floats anywhere in a put_item Item, including nested — recurse and
+    convert via str() (not Decimal(float)) to avoid binary floating-point
+    noise, same as the module-level float/Decimal note elsewhere."""
+    if isinstance(value, float):
+        return Decimal(str(value))
+    if isinstance(value, dict):
+        return {k: _floats_to_decimal(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [_floats_to_decimal(v) for v in value]
+    return value
+
+
 def record_progress_report(user_id: str, old_session_id: str, new_session_id: str, summary: dict, narrative: str) -> None:
-    get_db().progress_reports.insert_one({
-        "user_id": ObjectId(user_id),
+    get_progress_reports_table().put_item(Item={
+        "report_id": str(uuid.uuid4()),
+        "user_id": user_id,
         "old_session_id": old_session_id,
         "new_session_id": new_session_id,
-        "summary": summary,
+        "summary": _floats_to_decimal(summary),
         "narrative": narrative,
-        "created_at": datetime.now(timezone.utc),
+        "created_at": datetime.now(timezone.utc).isoformat(),
     })
 
 
 def get_progress_report(new_session_id: str) -> Optional[dict]:
-    doc = get_db().progress_reports.find_one({"new_session_id": new_session_id})
-    if not doc:
+    resp = get_progress_reports_table().query(
+        IndexName="new-session-index",
+        KeyConditionExpression="new_session_id = :sid",
+        ExpressionAttributeValues={":sid": new_session_id},
+        Limit=1,
+    )
+    items = resp["Items"]
+    if not items:
         return None
+    doc = items[0]
     return {
         "old_session_id": doc["old_session_id"],
         "new_session_id": doc["new_session_id"],
         "summary": doc["summary"],
         "narrative": doc["narrative"],
-        "created_at": doc["created_at"],
+        "created_at": datetime.fromisoformat(doc["created_at"]),
     }

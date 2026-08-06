@@ -16,18 +16,26 @@ gives exercises a stable id to reference (a separate, later workout-plan
 restructure).
 """
 
+import uuid
 from datetime import datetime, timezone
+from decimal import Decimal
 from typing import Optional
 
-from bson import ObjectId
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from auth.dependencies import get_current_user
 from auth.ownership import user_owns_session
-from tools.mongo import get_db
+from tools.dynamo import get_corrective_results_table
 
 router = APIRouter()
+
+
+def _dec(value):
+    """DynamoDB's Number type has no native float support — boto3 rejects
+    plain floats on put_item and always hands back Decimal on read. Convert
+    via str() (not Decimal(float)) to avoid binary floating-point noise."""
+    return Decimal(str(value)) if isinstance(value, float) else value
 
 
 class CVSummary(BaseModel):
@@ -75,23 +83,24 @@ async def submit_corrective_result(
     if s.good_reps + s.bad_reps > s.total_reps:
         raise HTTPException(422, f"good_reps + bad_reps exceeds total_reps for '{body.exercise.name}'.")
 
-    get_db().corrective_results.insert_one({
-        "user_id": ObjectId(user["id"]),
+    get_corrective_results_table().put_item(Item={
+        "result_id": str(uuid.uuid4()),
+        "user_id": user["id"],
         "session_id": session_id,
         "exercise_name": body.exercise.name,
         "total_reps": s.total_reps,
         "good_reps": s.good_reps,
         "bad_reps": s.bad_reps,
-        "accuracy": s.accuracy,
-        "score": s.score,
+        "accuracy": _dec(s.accuracy),
+        "score": _dec(s.score),
         "common_errors": s.common_errors,
-        "average_rep_duration": s.average_rep_duration,
-        "fastest_rep": s.fastest_rep,
-        "slowest_rep": s.slowest_rep,
-        "total_workout_duration": s.total_workout_duration,
+        "average_rep_duration": _dec(s.average_rep_duration),
+        "fastest_rep": _dec(s.fastest_rep),
+        "slowest_rep": _dec(s.slowest_rep),
+        "total_workout_duration": _dec(s.total_workout_duration),
         "most_common_error": s.most_common_error,
-        "recorded_at": body.session.recorded_at,
-        "received_at": datetime.now(timezone.utc),
+        "recorded_at": body.session.recorded_at.isoformat(),
+        "received_at": datetime.now(timezone.utc).isoformat(),
     })
 
     return CorrectiveResultResponse(recorded=1)
