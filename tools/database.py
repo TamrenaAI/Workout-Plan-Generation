@@ -1,41 +1,29 @@
 """
-Exercise database — MongoDB `exercises` collection (per
+Exercise database — DynamoDB `workout_exercises` table (per
 tamrena_architecture_2.md Section 8). `search_exercise_db` is the only
 contract the agents depend on — its filter shape and return format are
-unchanged from the SQLite version, only the backing store moved.
+unchanged, only the backing store moved.
 """
 
 from typing import Optional
 
-from bson import ObjectId
-from bson.errors import InvalidId
 from langchain_core.tools import tool
 
-from tools.mongo import get_db
+from tools.dynamo import get_exercises_table
 
 
 def get_exercise_by_id(exercise_id: str) -> Optional[dict]:
-    try:
-        oid = ObjectId(exercise_id)
-    except InvalidId:
-        return None
-    doc = get_db().exercises.find_one({"_id": oid})
+    resp = get_exercises_table().get_item(Key={"exercise_id": exercise_id})
+    doc = resp.get("Item")
     if not doc:
         return None
-    doc["id"] = str(doc.pop("_id"))
+    doc["id"] = doc["exercise_id"]
     return doc
 
 
-# Per-movement-type cap on a single "all" query — some muscle groups have
-# 150-330 exercises total (e.g. arms, legs, chest), and dumping every one as
-# text into a sub-agent's tool result reliably overruns its ability to
-# reason over the output in one step, which manifests as the agent stalling
-# / retrying without ever completing (see agents/supervisor.py's raised
-# recursion_limit). Capping per movement_type (rather than one flat cap on
-# the combined list) keeps compound/isolation/unilateral all represented
-# instead of one category crowding out the others.
 RESULTS_PER_MOVEMENT_TYPE = 6
-PROJECTION = {"name": 1, "equipment": 1, "difficulty": 1, "movement_type": 1, "contraindications": 1}
+PROJECTION_EXPR = "#nm, equipment, difficulty, movement_type, contraindications"
+PROJECTION_NAMES = {"#nm": "name"}
 
 
 @tool
@@ -49,19 +37,29 @@ def search_exercise_db(
     movement_type: compound | isolation | unilateral | all
     exclude_contraindication: body part to avoid (e.g. 'knee_pain')
     """
+    table = get_exercises_table()
     if movement_type == "all":
-        # Untyped docs (movement_type absent/null) are stretches/mobility
-        # drills, not prescribable strength exercises — only surfaced when a
-        # specific movement_type is requested that happens to match them.
         docs = []
         for mt in ("compound", "isolation", "unilateral"):
-            docs.extend(list(get_db().exercises.find(
-                {"primary_muscle": muscle_group, "movement_type": mt}, PROJECTION,
-            ).limit(RESULTS_PER_MOVEMENT_TYPE)))
+            resp = table.query(
+                IndexName="muscle-index",
+                KeyConditionExpression="primary_muscle = :m AND movement_type = :mt",
+                ExpressionAttributeValues={":m": muscle_group, ":mt": mt},
+                ProjectionExpression=PROJECTION_EXPR,
+                ExpressionAttributeNames=PROJECTION_NAMES,
+                Limit=RESULTS_PER_MOVEMENT_TYPE,
+            )
+            docs.extend(resp["Items"])
     else:
-        docs = list(get_db().exercises.find(
-            {"primary_muscle": muscle_group, "movement_type": movement_type}, PROJECTION,
-        ).limit(RESULTS_PER_MOVEMENT_TYPE * 3))
+        resp = table.query(
+            IndexName="muscle-index",
+            KeyConditionExpression="primary_muscle = :m AND movement_type = :mt",
+            ExpressionAttributeValues={":m": muscle_group, ":mt": movement_type},
+            ProjectionExpression=PROJECTION_EXPR,
+            ExpressionAttributeNames=PROJECTION_NAMES,
+            Limit=RESULTS_PER_MOVEMENT_TYPE * 3,
+        )
+        docs = resp["Items"]
 
     if exclude_contraindication:
         docs = [d for d in docs if not (d.get("contraindications") and exclude_contraindication in d["contraindications"])]

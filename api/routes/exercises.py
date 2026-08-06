@@ -19,7 +19,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 
 from auth.dependencies import get_current_user
-from tools.mongo import get_db
+from tools.dynamo import get_exercises_table
 
 router = APIRouter()
 
@@ -75,6 +75,16 @@ class ExerciseListResponse(BaseModel):
     page_size: int
 
 
+def _scan_all(table, **kwargs) -> list[dict]:
+    items: list[dict] = []
+    resp = table.scan(**kwargs)
+    items.extend(resp["Items"])
+    while "LastEvaluatedKey" in resp:
+        resp = table.scan(ExclusiveStartKey=resp["LastEvaluatedKey"], **kwargs)
+        items.extend(resp["Items"])
+    return items
+
+
 @router.get("/exercises", response_model=ExerciseListResponse)
 async def list_exercises(
     q: Optional[str] = None,
@@ -86,20 +96,16 @@ async def list_exercises(
     # Cap page_size at 100 to prevent excessive memory usage
     page_size = min(page_size, 100)
 
-    query: dict = {"gif_path": {"$ne": None}}
+    docs = [d for d in _scan_all(get_exercises_table()) if d.get("gif_path")]
     if muscle:
-        query["target_muscle"] = muscle
+        docs = [d for d in docs if d.get("target_muscle") == muscle]
     if q:
-        query["name"] = {"$regex": re.escape(q), "$options": "i"}
+        needle = q.lower()
+        docs = [d for d in docs if needle in d["name"].lower()]
 
-    projection = {"name": 1, "target_muscle": 1, "equipment": 1, "image_path": 1, "gif_path": 1}
-    total = get_db().exercises.count_documents(query)
-    docs = list(
-        get_db().exercises.find(query, projection)
-        .sort("name", 1)
-        .skip(page * page_size)
-        .limit(page_size)
-    )
+    docs.sort(key=lambda d: d["name"])
+    total = len(docs)
+    page_docs = docs[page * page_size: page * page_size + page_size]
 
     return ExerciseListResponse(
         exercises=[
@@ -110,7 +116,7 @@ async def list_exercises(
                 image_url=f"{MEDIA_URL_BASE}/{d['image_path']}" if d.get("image_path") else None,
                 gif_url=f"{MEDIA_URL_BASE}/{d['gif_path']}" if d.get("gif_path") else None,
             )
-            for d in docs
+            for d in page_docs
         ],
         total=total,
         page=page,
@@ -120,10 +126,7 @@ async def list_exercises(
 
 @router.get("/exercises/lookup", response_model=ExerciseMedia)
 async def lookup_exercise(name: str, user: dict = Depends(get_current_user)):
-    docs = list(get_db().exercises.find(
-        {"gif_path": {"$ne": None}},
-        {"name": 1, "target_muscle": 1, "equipment": 1, "instructions": 1, "image_path": 1, "gif_path": 1, "attribution": 1},
-    ))
+    docs = [d for d in _scan_all(get_exercises_table()) if d.get("gif_path")]
 
     if not docs:
         raise HTTPException(404, f"No matching exercise found for '{name}'.")

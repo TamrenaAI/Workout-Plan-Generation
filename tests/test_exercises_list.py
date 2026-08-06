@@ -1,9 +1,11 @@
+import uuid
+
 import pytest
 from fastapi.testclient import TestClient
 
 from api.main import app
 from auth.dependencies import get_current_user
-from tools.mongo import get_db
+from tools.dynamo import get_exercises_table
 
 client = TestClient(app)
 
@@ -20,6 +22,7 @@ def override_auth():
 
 def _make_doc(name, target_muscle, gif_path="gifs/test.gif"):
     return {
+        "exercise_id": str(uuid.uuid4()),
         "name": name,
         "target_muscle": target_muscle,
         "equipment": "barbell",
@@ -28,9 +31,15 @@ def _make_doc(name, target_muscle, gif_path="gifs/test.gif"):
     }
 
 
+def _put_all(docs):
+    table = get_exercises_table()
+    for doc in docs:
+        table.put_item(Item=doc)
+
+
 def test_list_exercises_default_pagination():
     docs = [_make_doc(f"exercise {i:03d}", "biceps") for i in range(35)]
-    get_db().exercises.insert_many(docs)
+    _put_all(docs)
 
     resp = client.get("/exercises")
     assert resp.status_code == 200
@@ -50,7 +59,7 @@ def test_list_exercises_default_pagination():
 
 
 def test_list_exercises_filters_by_muscle():
-    get_db().exercises.insert_many([
+    _put_all([
         _make_doc("barbell curl", "biceps"),
         _make_doc("hammer curl", "biceps"),
         _make_doc("leg press", "quads"),
@@ -66,7 +75,7 @@ def test_list_exercises_filters_by_muscle():
 
 
 def test_list_exercises_search_matches_name_case_insensitively():
-    get_db().exercises.insert_many([
+    _put_all([
         _make_doc("barbell curl", "biceps"),
         _make_doc("hammer curl", "biceps"),
         _make_doc("leg press", "quads"),
@@ -83,7 +92,7 @@ def test_list_exercises_search_matches_name_case_insensitively():
 
 def test_list_exercises_page_size_is_capped_at_100():
     docs = [_make_doc(f"exercise {i:03d}", "biceps") for i in range(150)]
-    get_db().exercises.insert_many(docs)
+    _put_all(docs)
 
     resp = client.get("/exercises", params={"page_size": 500})
     assert resp.status_code == 200
@@ -93,7 +102,7 @@ def test_list_exercises_page_size_is_capped_at_100():
 
 def test_list_exercises_second_page_returns_different_results():
     docs = [_make_doc(f"exercise {i:03d}", "biceps") for i in range(20)]
-    get_db().exercises.insert_many(docs)
+    _put_all(docs)
 
     page0 = client.get("/exercises", params={"page": 0, "page_size": 10}).json()
     page1 = client.get("/exercises", params={"page": 1, "page_size": 10}).json()
