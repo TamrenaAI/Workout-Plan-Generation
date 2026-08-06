@@ -7,6 +7,8 @@ way to fetch a "current plan" outside of that one-time stream).
 
 import os
 import sys
+import uuid
+from datetime import datetime, timezone
 
 import pytest
 from fastapi.testclient import TestClient
@@ -17,6 +19,7 @@ from bson import ObjectId
 from auth import ownership
 from auth import tokens
 from tools import memory as tools_memory
+from tools.dynamo import get_plan_adjustments_table
 
 
 @pytest.fixture(autouse=True)
@@ -128,12 +131,15 @@ Evidence: compound presses prioritized.
     # "do not ask to overwrite the original muscle-group section"). The
     # structured adjustment record below is what get_session_plan uses to
     # substitute the displayed exercise.
-    tools_memory.get_db().plan_adjustments.insert_one({
-        "session_id": session_id, "day_label": "Day 1 -- Monday: Push (Chest) - Hard Session",
+    day_label = "Day 1 -- Monday: Push (Chest) - Hard Session"
+    get_plan_adjustments_table().put_item(Item={
+        "adjustment_id": str(uuid.uuid4()),
+        "session_day_key": f"{session_id}#{day_label}",
+        "session_id": session_id, "day_label": day_label,
         "exercise_name": "Cable Fly", "new_exercise_name": "Machine Chest Press",
         "sets": None, "reps": None, "rpe": None,
         "reason": "Reported shoulder pain on Cable Fly",
-        "created_at": __import__("datetime").datetime.now(__import__("datetime").timezone.utc),
+        "created_at": datetime.now(timezone.utc).isoformat(),
     })
 
     client = TestClient(m.app)
@@ -217,23 +223,28 @@ Evidence: compound presses prioritized.
     with open(os.path.join(session_dir, "plan.md"), "w", encoding="utf-8") as f:
         f.write(full_plan)
 
-    now = __import__("datetime").datetime.now(__import__("datetime").timezone.utc)
-    tools_memory.get_db().plan_adjustments.insert_many([
-        {
-            "session_id": session_id, "day_label": "Day 1 -- Monday: Push (Chest) - Hard Session",
-            "exercise_name": "CABLE FLY", "new_exercise_name": "Machine Chest Press",
-            "sets": None, "reps": None, "rpe": None,
-            "reason": "Day 1 reason: shoulder pain on Cable Fly",
-            "created_at": now,
-        },
-        {
-            "session_id": session_id, "day_label": "Day 2 -- Thursday: Push (Chest) - Hard Session",
-            "exercise_name": "Incline Dumbbell Press", "new_exercise_name": "Machine Chest Press",
-            "sets": None, "reps": None, "rpe": None,
-            "reason": "Day 2 reason: wrist discomfort on Incline Dumbbell Press",
-            "created_at": now,
-        },
-    ])
+    now = datetime.now(timezone.utc).isoformat()
+    day1_label = "Day 1 -- Monday: Push (Chest) - Hard Session"
+    day2_label = "Day 2 -- Thursday: Push (Chest) - Hard Session"
+    table = get_plan_adjustments_table()
+    table.put_item(Item={
+        "adjustment_id": str(uuid.uuid4()),
+        "session_day_key": f"{session_id}#{day1_label}",
+        "session_id": session_id, "day_label": day1_label,
+        "exercise_name": "CABLE FLY", "new_exercise_name": "Machine Chest Press",
+        "sets": None, "reps": None, "rpe": None,
+        "reason": "Day 1 reason: shoulder pain on Cable Fly",
+        "created_at": now,
+    })
+    table.put_item(Item={
+        "adjustment_id": str(uuid.uuid4()),
+        "session_day_key": f"{session_id}#{day2_label}",
+        "session_id": session_id, "day_label": day2_label,
+        "exercise_name": "Incline Dumbbell Press", "new_exercise_name": "Machine Chest Press",
+        "sets": None, "reps": None, "rpe": None,
+        "reason": "Day 2 reason: wrist discomfort on Incline Dumbbell Press",
+        "created_at": now,
+    })
 
     client = TestClient(m.app)
     token = tokens.create_access_token(user_id=owner["id"])
@@ -300,12 +311,14 @@ Evidence: compound presses prioritized.
     with open(os.path.join(session_dir, "plan.md"), "w", encoding="utf-8") as f:
         f.write(full_plan)
 
-    tools_memory.get_db().plan_adjustments.insert_one({
+    get_plan_adjustments_table().put_item(Item={
+        "adjustment_id": str(uuid.uuid4()),
+        "session_day_key": f"{session_id}#Day 1",
         "session_id": session_id, "day_label": "Day 1",
         "exercise_name": "Cable Fly", "new_exercise_name": "Machine Chest Press",
         "sets": None, "reps": None, "rpe": None,
         "reason": "Reported shoulder pain on Cable Fly",
-        "created_at": __import__("datetime").datetime.now(__import__("datetime").timezone.utc),
+        "created_at": datetime.now(timezone.utc).isoformat(),
     })
 
     client = TestClient(m.app)
@@ -363,12 +376,15 @@ Evidence: compound presses prioritized.
     with open(os.path.join(session_dir, "plan.md"), "w", encoding="utf-8") as f:
         f.write(full_plan)
 
-    tools_memory.get_db().plan_adjustments.insert_one({
-        "session_id": session_id, "day_label": "Day 1 -- Monday: Push (Chest) - Hard Session",
+    day_label = "Day 1 -- Monday: Push (Chest) - Hard Session"
+    get_plan_adjustments_table().put_item(Item={
+        "adjustment_id": str(uuid.uuid4()),
+        "session_day_key": f"{session_id}#{day_label}",
+        "session_id": session_id, "day_label": day_label,
         "exercise_name": "Flat Barbell Bench Press", "new_exercise_name": None,
         "sets": 3, "reps": None, "rpe": 7,
         "reason": "Too easy at 4 sets, dropped a set and RPE target",
-        "created_at": __import__("datetime").datetime.now(__import__("datetime").timezone.utc),
+        "created_at": datetime.now(timezone.utc).isoformat(),
     })
 
     client = TestClient(m.app)

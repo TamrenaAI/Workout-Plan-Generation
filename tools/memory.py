@@ -17,13 +17,13 @@ import json
 import os
 import re
 import threading
+import uuid
 from datetime import datetime, timezone
 
 from langchain_core.tools import tool
 
 from config import SESSION_DIR
-from tools.dynamo import get_workout_feedback_table
-from tools.mongo import get_db
+from tools.dynamo import get_plan_adjustments_table, get_workout_feedback_table
 
 # Guards progress.json's read-modify-write cycle. deepagents can execute
 # multiple task() dispatches concurrently (a ThreadPoolExecutor within this
@@ -314,7 +314,9 @@ def record_exercise_adjustment(
         others None.
     reason: one sentence, referencing the specific feedback that triggered this adjustment.
     """
-    get_db().plan_adjustments.insert_one({
+    get_plan_adjustments_table().put_item(Item={
+        "adjustment_id": str(uuid.uuid4()),
+        "session_day_key": f"{session_id}#{day_label}",
         "session_id": session_id,
         "day_label": day_label,
         "exercise_name": exercise_name,
@@ -323,9 +325,17 @@ def record_exercise_adjustment(
         "reps": reps,
         "rpe": rpe,
         "reason": reason,
-        "created_at": datetime.now(timezone.utc),
+        "created_at": datetime.now(timezone.utc).isoformat(),
     })
     return f"Recorded structured adjustment for: {exercise_name}"
+
+
+def _decimal_to_int(value):
+    """DynamoDB's Number type always deserializes to Decimal — sets/rpe are
+    plain ints on write (see record_exercise_adjustment) and callers (e.g.
+    api/routes/plan.py) expect plain ints back, same convention as
+    pipeline/monthly_progress.py's Decimal->int/float conversions."""
+    return int(value) if value is not None else None
 
 
 def read_exercise_adjustments(session_id: str, day_label: str, since: "datetime") -> list[dict]:
@@ -333,21 +343,25 @@ def read_exercise_adjustments(session_id: str, day_label: str, since: "datetime"
     Adjuster finishes, to fetch the structured adjustments it just recorded via
     record_exercise_adjustment. `since` scopes the query to this invocation's run so an
     earlier adjustment for the same day_label isn't returned again."""
-    docs = get_db().plan_adjustments.find({
-        "session_id": session_id,
-        "day_label": day_label,
-        "created_at": {"$gte": since},
-    }).sort("created_at", 1)
+    resp = get_plan_adjustments_table().query(
+        IndexName="session-day-index",
+        KeyConditionExpression="session_day_key = :key AND created_at >= :since",
+        ExpressionAttributeValues={
+            ":key": f"{session_id}#{day_label}",
+            ":since": since.isoformat(),
+        },
+        ScanIndexForward=True,
+    )
     return [
         {
             "exercise_name": d["exercise_name"],
             "new_exercise_name": d.get("new_exercise_name"),
-            "sets": d.get("sets"),
+            "sets": _decimal_to_int(d.get("sets")),
             "reps": d.get("reps"),
-            "rpe": d.get("rpe"),
+            "rpe": _decimal_to_int(d.get("rpe")),
             "reason": d["reason"],
         }
-        for d in docs
+        for d in resp["Items"]
     ]
 
 
@@ -358,19 +372,37 @@ def read_all_exercise_adjustments(session_id: str) -> list[dict]:
     not scoped to one day_label or one invocation's `since` window. Lets
     the plan-table endpoint show "AI Replaced" on whatever exercise is
     CURRENTLY in the plan, persisted across page reloads instead of only
-    right after the feedback call that triggered the swap."""
-    docs = get_db().plan_adjustments.find({"session_id": session_id}).sort("created_at", 1)
+    right after the feedback call that triggered the swap.
+
+    No GSI covers "all adjustments for a session" — the session-day index
+    is keyed on session_id#day_label, and querying it would require
+    already knowing every day_label in advance. Falls back to a filtered
+    scan; acceptable given this query's low frequency (page load, not hot
+    path)."""
+    resp = get_plan_adjustments_table().scan(
+        FilterExpression="session_id = :sid",
+        ExpressionAttributeValues={":sid": session_id},
+    )
+    items = resp["Items"]
+    while "LastEvaluatedKey" in resp:
+        resp = get_plan_adjustments_table().scan(
+            FilterExpression="session_id = :sid",
+            ExpressionAttributeValues={":sid": session_id},
+            ExclusiveStartKey=resp["LastEvaluatedKey"],
+        )
+        items.extend(resp["Items"])
+    items.sort(key=lambda d: d["created_at"])
     return [
         {
             "day_label": d.get("day_label"),
             "exercise_name": d["exercise_name"],
             "new_exercise_name": d.get("new_exercise_name"),
-            "sets": d.get("sets"),
+            "sets": _decimal_to_int(d.get("sets")),
             "reps": d.get("reps"),
-            "rpe": d.get("rpe"),
+            "rpe": _decimal_to_int(d.get("rpe")),
             "reason": d["reason"],
         }
-        for d in docs
+        for d in items
     ]
 
 
