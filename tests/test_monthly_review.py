@@ -245,3 +245,72 @@ def test_get_report_returns_stored_report():
     body = r.json()
     assert body["narrative"] == "Solid month."
     assert body["old_session_id"] == "rep-old"
+
+
+def test_record_progress_report_survives_nested_floats():
+    """Regression test for the TypeError: Float types are not supported bug
+    that record_progress_report's _floats_to_decimal() helper fixes. summary
+    here is shaped like build_monthly_summary's real output, with real
+    Python floats nested at every level _floats_to_decimal has to recurse
+    into: top-level (adherence_rate), one level deep (rep_quality.accuracy/
+    avg_score), two levels deep (rep_quality.per_exercise's dict-of-dicts),
+    and inbody_delta's deltas. put_item must not raise, and the round-tripped
+    value must come back as a native float (not a Decimal) because this test
+    goes through the real GET /progress/{id}/report endpoint, whose JSON
+    response encoding is what actually converts Decimal back to float —
+    calling get_progress_report() directly would still hand back Decimals
+    straight from boto3's DynamoDB resource, which wouldn't exercise that
+    conversion at all."""
+    import api.main as m
+
+    owner = _make_user("rep-owner4")
+    ownership.create_session("rep-old2", owner["id"], "hypertrophy", intake=_SAMPLE_INTAKE)
+    ownership.create_session("rep-new2", owner["id"], "hypertrophy", intake=_SAMPLE_INTAKE, previous_session_id="rep-old2")
+
+    summary = {
+        "adherence": {"sessions_submitted": 8, "sessions_expected": 12, "adherence_rate": 0.6667},
+        "rep_quality": {
+            "total_reps": 120, "good_reps": 100, "bad_reps": 20,
+            "accuracy": 0.8333, "avg_score": 87.25,
+            "per_exercise": {
+                "Squat": {"good": 60, "bad": 10, "accuracy": 0.8571, "avg_score": 88.5},
+                "Bench Press": {"good": 40, "bad": 10, "accuracy": 0.8, "avg_score": 85.0},
+            },
+            "top_form_errors": [{"error_type": "knee_valgus", "count": 3}],
+        },
+        "subjective_flags": {"Squat": {"too_hard": 1, "too_easy": 0, "pain": 0}},
+        "inbody_delta": {
+            "skeletal_muscle_mass_kg": 1.5, "body_fat_percent": -1.5,
+            "arm_asymmetry_resolved": True, "leg_asymmetry_resolved": False,
+            "trunk_underdeveloped_resolved": False,
+        },
+    }
+
+    # (1) & (2): must not raise TypeError: Float types are not supported.
+    monthly_progress.record_progress_report(owner["id"], "rep-old2", "rep-new2", summary, "Great month overall.")
+
+    client = TestClient(m.app)
+    token = tokens.create_access_token(user_id=owner["id"])
+    r = client.get("/progress/rep-new2/report", headers={"Authorization": f"Bearer {token}"})
+    assert r.status_code == 200
+    body = r.json()
+
+    got_summary = body["summary"]
+    assert got_summary == summary
+    # Confirm specific nested floats round-tripped as native floats, not Decimals.
+    assert got_summary["adherence"]["adherence_rate"] == pytest.approx(0.6667)
+    assert isinstance(got_summary["adherence"]["adherence_rate"], float)
+    assert got_summary["rep_quality"]["avg_score"] == pytest.approx(87.25)
+    assert isinstance(got_summary["rep_quality"]["avg_score"], float)
+    assert got_summary["rep_quality"]["per_exercise"]["Squat"]["avg_score"] == pytest.approx(88.5)
+    assert isinstance(got_summary["rep_quality"]["per_exercise"]["Squat"]["avg_score"], float)
+    assert got_summary["inbody_delta"]["skeletal_muscle_mass_kg"] == pytest.approx(1.5)
+    assert isinstance(got_summary["inbody_delta"]["skeletal_muscle_mass_kg"], float)
+
+    # Also confirm record_progress_report's direct write path (get_progress_report,
+    # not the API) round-trips without raising, per the reviewer's requested check —
+    # values here come back as Decimal (boto3's native DynamoDB numeric type), which
+    # is why the float-typing assertions above go through the API's JSON encoding.
+    direct = monthly_progress.get_progress_report("rep-new2")
+    assert direct is not None
+    assert float(direct["summary"]["rep_quality"]["avg_score"]) == pytest.approx(87.25)
