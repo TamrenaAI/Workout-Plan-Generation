@@ -2,12 +2,21 @@
 GET /health — liveness + readiness probe.
 
 Checks the dependencies this stage of the system actually has: a real
-DynamoDB round-trip (list_tables), the Azure OpenAI configuration, and
-that the RAG Qdrant data is present on disk. The Azure OpenAI and RAG
-checks don't trigger a real Qdrant connection or load the
-embedding/reranker models — tools/rag/pipeline.py lazily loads those on
-first real search_rag() call, not on every health probe, so those only
-check that config/the directory is present (not a live call).
+DynamoDB round-trip (a describe_table call against a single known table),
+the Azure OpenAI configuration, and that the RAG Qdrant data is present on
+disk. The Azure OpenAI and RAG checks don't trigger a real Qdrant
+connection or load the embedding/reranker models — tools/rag/pipeline.py
+lazily loads those on first real search_rag() call, not on every health
+probe, so those only check that config/the directory is present (not a
+live call).
+
+The DynamoDB check intentionally uses a single-table describe_table (via
+get_exercises_table().table_status, which triggers a lazy .load() under
+the boto3 resource API) rather than an account-wide list_tables call —
+a least-privilege production task role scoped to GetItem/PutItem/Query/
+DescribeTable on the app's named tables would not grant dynamodb:ListTables,
+which would make an account-wide check falsely report unhealthy in
+production even though real reads/writes work fine.
 """
 
 from datetime import datetime, timezone
@@ -16,7 +25,7 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
 from config import AZURE_OPENAI_API_KEY, AZURE_OPENAI_DEPLOYMENT_NAME, AZURE_OPENAI_ENDPOINT, QDRANT_PATH
-from tools.dynamo import get_resource
+from tools.dynamo import get_exercises_table
 
 router = APIRouter()
 
@@ -26,9 +35,10 @@ async def health_check():
     results = {}
     overall = "healthy"
 
-    # DynamoDB
+    # DynamoDB — single-table describe_table (see module docstring for why
+    # this isn't an account-wide list_tables call).
     try:
-        get_resource().meta.client.list_tables(Limit=1)
+        get_exercises_table().table_status
         results["dynamodb"] = "healthy"
     except Exception as e:
         results["dynamodb"] = f"unhealthy: {e}"

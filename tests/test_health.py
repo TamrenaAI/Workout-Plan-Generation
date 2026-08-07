@@ -22,7 +22,7 @@ def test_health_reports_unhealthy_when_dynamodb_unreachable(monkeypatch):
     def _boom():
         raise RuntimeError("could not connect")
 
-    monkeypatch.setattr(health, "get_resource", _boom)
+    monkeypatch.setattr(health, "get_exercises_table", _boom)
     resp = client.get("/health")
     body = resp.json()
     assert resp.status_code == 503
