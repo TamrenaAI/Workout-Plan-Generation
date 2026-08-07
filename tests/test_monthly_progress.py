@@ -226,3 +226,44 @@ def test_build_monthly_summary_accepts_get_session_created_at():
     )
     rate = summary["adherence"]["adherence_rate"]
     assert isinstance(rate, (int, float))
+
+
+def test_build_monthly_summary_accepts_get_session_intake_days_per_week():
+    """Regression test for the Decimal-leak bug: intake is stored verbatim by
+    auth/ownership.create_session and boto3 always deserializes DynamoDB's
+    Number type as Decimal, including nested inside the `intake` map. Before
+    auth/ownership.py's _serialize converted intake back to native types,
+    `days_per_week` read back here would be a Decimal, and _adherence's
+    `days_per_week * weeks_elapsed` (weeks_elapsed is a float) raised
+    TypeError: unsupported operand type(s) for *: 'decimal.Decimal' and
+    'float'. This test goes through the real create_session -> get_session
+    round trip (not a hand-built Decimal) and then straight into
+    build_monthly_summary, exactly like api/routes/plan.py's same_goal=true
+    monthly-review path does."""
+    owner_id = _uid()
+    old_session_id = "old-decimal-flow"
+    ownership.create_session(
+        old_session_id, owner_id, "hypertrophy",
+        intake={"days_per_week": 3, "age": 30, "experience": "beginner"},
+    )
+    get_plan_sessions_table().update_item(
+        Key={"session_id": old_session_id},
+        UpdateExpression="SET created_at = :created_at",
+        ExpressionAttributeValues={
+            ":created_at": (datetime.now(timezone.utc) - timedelta(days=28)).isoformat(),
+        },
+    )
+
+    old_session = ownership.get_session(old_session_id)
+    days_per_week = old_session["intake"]["days_per_week"]
+    assert isinstance(days_per_week, int)  # sanity: this is the round-tripped value
+
+    # Must not raise TypeError — this is the actual crash the reviewer flagged.
+    summary = monthly_progress.build_monthly_summary(
+        old_session_id=old_session_id,
+        new_session_id="new-decimal-flow",
+        days_per_week=days_per_week,
+        old_created_at=old_session["created_at"],
+    )
+    # 28 days elapsed -> 4 weeks -> 12 expected sessions at 3/week
+    assert summary["adherence"]["sessions_expected"] == 12

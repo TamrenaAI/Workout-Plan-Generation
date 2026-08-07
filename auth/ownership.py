@@ -10,6 +10,7 @@ bson/ObjectId involved.
 """
 
 from datetime import datetime, timezone
+from decimal import Decimal
 from typing import Optional
 
 from tools.dynamo import get_plan_sessions_table
@@ -90,6 +91,23 @@ def _has_review(session_id: str) -> bool:
     return resp["Count"] > 0
 
 
+def _decimals_to_native(value):
+    """DynamoDB's Number type always deserializes to Decimal, including for
+    values nested inside a map attribute like `intake` (days_per_week, age,
+    ...). Recurse and convert back to plain int/float so callers (e.g.
+    pipeline/monthly_progress.py's _adherence, which does
+    `days_per_week * weeks_elapsed`) never have to deal with Decimal
+    arithmetic — mirror image of _floats_to_decimal in
+    pipeline/monthly_progress.py, which does the reverse conversion on write."""
+    if isinstance(value, Decimal):
+        return int(value) if value == value.to_integral_value() else float(value)
+    if isinstance(value, dict):
+        return {k: _decimals_to_native(v) for k, v in value.items()}
+    if isinstance(value, list):
+        return [_decimals_to_native(v) for v in value]
+    return value
+
+
 def _serialize(doc: dict, already_reviewed: bool) -> dict:
     created_at = datetime.fromisoformat(doc["created_at"])
 
@@ -104,7 +122,7 @@ def _serialize(doc: dict, already_reviewed: bool) -> dict:
         "status": doc.get("status"),
         "error": doc.get("error"),
         "created_at": created_at,
-        "intake": doc.get("intake"),
+        "intake": _decimals_to_native(doc.get("intake")),
         "previous_session_id": doc.get("previous_session_id"),
         "eligible_for_review": eligible,
     }

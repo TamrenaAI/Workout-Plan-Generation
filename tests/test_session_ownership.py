@@ -12,6 +12,7 @@ dynamo_tables fixture (autouse).
 import os
 import sys
 import uuid
+from decimal import Decimal
 
 from fastapi.testclient import TestClient
 
@@ -61,6 +62,41 @@ def test_session_status_defaults_to_generating_and_can_be_updated():
     session = ownership.get_session(session_id)
     assert session["status"] == "failed"
     assert session["error"] == "boom"
+
+
+def test_get_session_intake_ints_are_not_decimal():
+    """Regression test: boto3 always deserializes DynamoDB's Number type as
+    Decimal, including for values nested inside a map attribute like
+    `intake` (days_per_week, age, ...). If get_session() ever hands back a
+    Decimal here, api/routes/plan.py's monthly-review same_goal=true path
+    passes it straight into pipeline/monthly_progress.py::_adherence, where
+    `days_per_week * weeks_elapsed` (a float) raises TypeError. Asserting
+    equality alone (Decimal(3) == 3) would NOT catch a regression here —
+    the type itself must be checked."""
+    session_id = _uid()
+    intake = {"days_per_week": 3, "age": 30, "experience": "beginner"}
+    ownership.create_session(session_id, user_id=_uid(), goal="hypertrophy", intake=intake)
+
+    session = ownership.get_session(session_id)
+    assert session["intake"]["days_per_week"] == 3
+    assert isinstance(session["intake"]["days_per_week"], int)
+    assert not isinstance(session["intake"]["days_per_week"], Decimal)
+    assert isinstance(session["intake"]["age"], int)
+    assert not isinstance(session["intake"]["age"], Decimal)
+
+
+def test_list_sessions_for_user_intake_ints_are_not_decimal():
+    """Same regression as above, via list_sessions_for_user's read path
+    (used by GET /sessions), which builds its own _serialize call separate
+    from get_session's."""
+    user_id = _uid()
+    ownership.create_session("s-intake-list", user_id=user_id, goal="hypertrophy",
+                              intake={"days_per_week": 5, "age": 22})
+
+    sessions = ownership.list_sessions_for_user(user_id)
+    assert len(sessions) == 1
+    assert isinstance(sessions[0]["intake"]["days_per_week"], int)
+    assert not isinstance(sessions[0]["intake"]["days_per_week"], Decimal)
 
 
 def test_sessions_endpoint_requires_auth():
