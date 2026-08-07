@@ -23,7 +23,15 @@ from config import (
 
 
 @pytest.fixture(autouse=True)
-def dynamo_tables():
+def dynamo_tables(monkeypatch):
+    # Standard moto hardening: stub fake credentials so that if mock_aws()
+    # ever fails to intercept a call for some reason, boto3 has no real
+    # ambient credentials (e.g. a developer's ~/.aws/credentials) to fall
+    # back to and reach the actual AWS account with.
+    monkeypatch.setenv("AWS_ACCESS_KEY_ID", "testing")
+    monkeypatch.setenv("AWS_SECRET_ACCESS_KEY", "testing")
+    monkeypatch.setenv("AWS_SESSION_TOKEN", "testing")
+
     with mock_aws():
         dynamo_module._resource = None
         resource = boto3.resource("dynamodb", region_name=AWS_REGION)
@@ -166,19 +174,13 @@ def dynamo_tables():
 
         resource.create_table(
             TableName=PROGRESS_REPORTS_TABLE_NAME,
-            KeySchema=[{"AttributeName": "report_id", "KeyType": "HASH"}],
+            KeySchema=[{"AttributeName": "new_session_id", "KeyType": "HASH"}],
             AttributeDefinitions=[
-                {"AttributeName": "report_id", "AttributeType": "S"},
                 {"AttributeName": "new_session_id", "AttributeType": "S"},
                 {"AttributeName": "user_id", "AttributeType": "S"},
                 {"AttributeName": "created_at", "AttributeType": "S"},
             ],
             GlobalSecondaryIndexes=[
-                {
-                    "IndexName": "new-session-index",
-                    "KeySchema": [{"AttributeName": "new_session_id", "KeyType": "HASH"}],
-                    "Projection": {"ProjectionType": "ALL"},
-                },
                 {
                     "IndexName": "user-index",
                     "KeySchema": [

@@ -10,7 +10,7 @@ all decided individually, then adapted over time from real workout
 feedback and monthly progress reviews.
 
 Built end-to-end: LLM agent orchestration, retrieval-augmented generation,
-computer-vision-based document parsing, a FastAPI backend, MongoDB
+computer-vision-based document parsing, a FastAPI backend, DynamoDB
 persistence, JWT auth, a Docker/AWS deployment pipeline, and a test suite —
 all in a single production-structured codebase.
 
@@ -97,7 +97,7 @@ free-form agent prose to track state was unreliable.
 | Retrieval-augmented generation | Qdrant (hybrid dense + BM25 sparse search, RRF fusion), sentence-transformers, cross-encoder reranking |
 | Computer vision | OpenCV, PyMuPDF, VLM-based structured extraction |
 | Backend API | FastAPI, Uvicorn, Server-Sent Events for live streaming |
-| Database | MongoDB (`pymongo`) |
+| Database | DynamoDB (`boto3`), region `eu-north-1`, tables named `workout_<name>` |
 | Auth | JWT (HS256), FastAPI dependency-based route protection |
 | Frontend | Vanilla JS/CSS SPA (hash router, no build step) |
 | Testing | Pytest (unit + integration coverage across agents, pipeline, RAG, and auth) |
@@ -115,7 +115,7 @@ agents/                  LLM agent definitions (supervisor, exercise recommender
                           plan assembler, plan adjuster, progress analyst) + streaming
 prompts/                 System prompts driving each agent's behavior
 tools/                   LangChain tools agents call at runtime (RAG search, exercise DB,
-                          InBody vision pipeline, session memory, Mongo access)
+                          InBody vision pipeline, session memory, DynamoDB access)
 pipeline/                Deterministic, non-agent post-processing (volume-budget
                           enforcement, plan parsing, feedback recording, progress aggregation)
 rag_pipeline/            Offline RAG ingestion, chunking, evaluation, and experimentation toolkit
@@ -132,7 +132,7 @@ scripts/                 CLI utilities for running and inspecting pipeline sessi
 
 ```bash
 pip install -r requirements.txt
-cp .env.example .env      # fill in Azure OpenAI credentials, Mongo URI, JWT secret
+cp .env.example .env      # fill in Azure OpenAI credentials, AWS credentials, JWT secret
 
 python main.py             # starts the API + frontend at http://localhost:8001
 ```

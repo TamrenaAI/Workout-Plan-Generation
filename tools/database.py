@@ -21,6 +21,14 @@ def get_exercise_by_id(exercise_id: str) -> Optional[dict]:
     return doc
 
 
+# Per-movement-type cap on a single "all" query — some muscle groups have
+# 150-330 exercises total (e.g. arms, legs, chest), and dumping every one as
+# text into a sub-agent's tool result reliably overruns its ability to
+# reason over the output in one step, which manifests as the agent stalling
+# / retrying without ever completing (see agents/supervisor.py's raised
+# recursion_limit). Capping per movement_type (rather than one flat cap on
+# the combined list) keeps compound/isolation/unilateral all represented
+# instead of one category crowding out the others.
 RESULTS_PER_MOVEMENT_TYPE = 6
 PROJECTION_EXPR = "#nm, equipment, difficulty, movement_type, contraindications"
 PROJECTION_NAMES = {"#nm": "name"}

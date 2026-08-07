@@ -19,10 +19,7 @@ from config import (
     WORKOUT_FEEDBACK_TABLE_NAME,
 )
 
-client = boto3.client("dynamodb", region_name=AWS_REGION)
-
-
-def _create_if_missing(**kwargs) -> None:
+def _create_if_missing(client, **kwargs) -> None:
     name = kwargs["TableName"]
     try:
         client.describe_table(TableName=name)
@@ -36,7 +33,12 @@ def _create_if_missing(**kwargs) -> None:
 
 
 def main() -> None:
+    # Constructed here (not at module scope) so importing this module never
+    # attempts AWS credential resolution as a side effect.
+    client = boto3.client("dynamodb", region_name=AWS_REGION)
+
     _create_if_missing(
+        client,
         TableName=PLAN_SESSIONS_TABLE_NAME,
         KeySchema=[{"AttributeName": "session_id", "KeyType": "HASH"}],
         AttributeDefinitions=[
@@ -63,6 +65,7 @@ def main() -> None:
     )
 
     _create_if_missing(
+        client,
         TableName=EXERCISES_TABLE_NAME,
         KeySchema=[{"AttributeName": "exercise_id", "KeyType": "HASH"}],
         AttributeDefinitions=[
@@ -83,6 +86,7 @@ def main() -> None:
     )
 
     _create_if_missing(
+        client,
         TableName=INBODY_SCANS_TABLE_NAME,
         KeySchema=[{"AttributeName": "scan_id", "KeyType": "HASH"}],
         AttributeDefinitions=[
@@ -109,6 +113,7 @@ def main() -> None:
     )
 
     _create_if_missing(
+        client,
         TableName=WORKOUT_FEEDBACK_TABLE_NAME,
         KeySchema=[{"AttributeName": "feedback_id", "KeyType": "HASH"}],
         AttributeDefinitions=[
@@ -138,6 +143,7 @@ def main() -> None:
     )
 
     _create_if_missing(
+        client,
         TableName=CORRECTIVE_RESULTS_TABLE_NAME,
         KeySchema=[{"AttributeName": "result_id", "KeyType": "HASH"}],
         AttributeDefinitions=[
@@ -167,21 +173,22 @@ def main() -> None:
         ],
     )
 
+    # new_session_id is the primary key (not a generated report_id) so the
+    # table itself enforces one report per monthly review — mirrors the old
+    # Mongo `db.progress_reports.create_index("new_session_id", unique=True)`.
+    # A random report_id + non-unique GSI let a retried/double-submitted
+    # review silently create a second report and made get_progress_report's
+    # GSI query (Limit=1) return an arbitrary one of the two.
     _create_if_missing(
+        client,
         TableName=PROGRESS_REPORTS_TABLE_NAME,
-        KeySchema=[{"AttributeName": "report_id", "KeyType": "HASH"}],
+        KeySchema=[{"AttributeName": "new_session_id", "KeyType": "HASH"}],
         AttributeDefinitions=[
-            {"AttributeName": "report_id", "AttributeType": "S"},
             {"AttributeName": "new_session_id", "AttributeType": "S"},
             {"AttributeName": "user_id", "AttributeType": "S"},
             {"AttributeName": "created_at", "AttributeType": "S"},
         ],
         GlobalSecondaryIndexes=[
-            {
-                "IndexName": "new-session-index",
-                "KeySchema": [{"AttributeName": "new_session_id", "KeyType": "HASH"}],
-                "Projection": {"ProjectionType": "ALL"},
-            },
             {
                 "IndexName": "user-index",
                 "KeySchema": [
@@ -194,6 +201,7 @@ def main() -> None:
     )
 
     _create_if_missing(
+        client,
         TableName=PLAN_ADJUSTMENTS_TABLE_NAME,
         KeySchema=[{"AttributeName": "adjustment_id", "KeyType": "HASH"}],
         AttributeDefinitions=[
@@ -214,6 +222,7 @@ def main() -> None:
     )
 
     _create_if_missing(
+        client,
         TableName=COACH_MESSAGES_TABLE_NAME,
         KeySchema=[{"AttributeName": "message_id", "KeyType": "HASH"}],
         AttributeDefinitions=[

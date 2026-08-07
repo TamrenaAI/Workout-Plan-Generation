@@ -196,6 +196,30 @@ def test_get_progress_report_none_when_not_found():
     assert monthly_progress.get_progress_report("never-reviewed") is None
 
 
+def test_record_progress_report_is_unique_per_new_session_id():
+    """Regression test: the old Mongo index enforced one report per
+    new_session_id (db.progress_reports.create_index("new_session_id",
+    unique=True)). The DynamoDB table's primary key is now new_session_id
+    itself (see pipeline/monthly_progress.py::record_progress_report), so a
+    retried/double-submitted monthly review overwrites the same item
+    instead of creating a second, non-deterministically-returned report."""
+    user_id = _uid()
+    monthly_progress.record_progress_report(user_id, "old-dup", "new-dup", {"a": 1}, "First narrative.")
+    monthly_progress.record_progress_report(user_id, "old-dup", "new-dup", {"a": 2}, "Second narrative (retry).")
+
+    report = monthly_progress.get_progress_report("new-dup")
+    assert report is not None
+    assert report["narrative"] == "Second narrative (retry)."
+    assert report["summary"] == {"a": 2}
+
+    # Only one item should exist for this new_session_id — a Scan confirms
+    # there's no leftover first item under a different report_id.
+    from tools.dynamo import get_progress_reports_table
+    items = get_progress_reports_table().scan()["Items"]
+    matching = [i for i in items if i["new_session_id"] == "new-dup"]
+    assert len(matching) == 1
+
+
 # --- end-to-end regression: get_session's created_at flowing into build_monthly_summary ---
 
 def test_build_monthly_summary_accepts_get_session_created_at():

@@ -169,11 +169,17 @@ def _floats_to_decimal(value):
 
 
 def record_progress_report(user_id: str, old_session_id: str, new_session_id: str, summary: dict, narrative: str) -> None:
+    # new_session_id is the table's primary key (one report per monthly
+    # review, matching the old Mongo unique index on new_session_id) — a
+    # retried/double-submitted review overwrites the same item instead of
+    # silently creating a second, non-deterministically-returned report.
+    # report_id is kept as a separate opaque id since other code/consumers
+    # may still expect a stable per-report identifier distinct from the key.
     get_progress_reports_table().put_item(Item={
+        "new_session_id": new_session_id,
         "report_id": str(uuid.uuid4()),
         "user_id": user_id,
         "old_session_id": old_session_id,
-        "new_session_id": new_session_id,
         "summary": _floats_to_decimal(summary),
         "narrative": narrative,
         "created_at": datetime.now(timezone.utc).isoformat(),
@@ -181,16 +187,10 @@ def record_progress_report(user_id: str, old_session_id: str, new_session_id: st
 
 
 def get_progress_report(new_session_id: str) -> Optional[dict]:
-    resp = get_progress_reports_table().query(
-        IndexName="new-session-index",
-        KeyConditionExpression="new_session_id = :sid",
-        ExpressionAttributeValues={":sid": new_session_id},
-        Limit=1,
-    )
-    items = resp["Items"]
-    if not items:
+    resp = get_progress_reports_table().get_item(Key={"new_session_id": new_session_id})
+    doc = resp.get("Item")
+    if not doc:
         return None
-    doc = items[0]
     return {
         "old_session_id": doc["old_session_id"],
         "new_session_id": doc["new_session_id"],
