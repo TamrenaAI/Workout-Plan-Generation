@@ -1,22 +1,22 @@
 """Tests for services/coach_assistant.py. The agent itself is mocked (a
 fake object with an ainvoke coroutine) -- no live LLM call, same scoping
-as the rest of this test suite. Mongo access is mongomock'd per-test (see
-tests/conftest.py's autouse mongo_db fixture)."""
+as the rest of this test suite. DynamoDB access is moto-mocked per-test (see
+tests/conftest.py's autouse dynamo_tables fixture)."""
 
 import asyncio
 import os
 import sys
+import uuid
 from datetime import datetime, timedelta, timezone
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from bson import ObjectId
-
 import services.coach_assistant as coach_assistant
+from tools.dynamo import get_coach_messages_table
 
 
 def _uid() -> str:
-    return str(ObjectId())
+    return str(uuid.uuid4())
 
 
 class _FakeMessage:
@@ -44,9 +44,12 @@ def test_process_coach_message_persists_both_turns_and_returns_reply(monkeypatch
     )
 
     assert reply == "Your squat volume looks fine this week."
-    saved = list(
-        coach_assistant.get_db().coach_messages.find({"user_id": user_id}).sort("created_at", 1)
+    resp = get_coach_messages_table().query(
+        IndexName="user-index",
+        KeyConditionExpression="user_id = :uid",
+        ExpressionAttributeValues={":uid": user_id},
     )
+    saved = sorted(resp["Items"], key=lambda d: (d["created_at"], d["message_id"]))
     assert [d["role"] for d in saved] == ["user", "assistant"]
     assert saved[0]["content"] == "how's my squat volume?"
     assert saved[1]["content"] == "Your squat volume looks fine this week."
@@ -82,7 +85,12 @@ def test_process_coach_message_is_scoped_per_user(monkeypatch):
     asyncio.run(coach_assistant.process_coach_message(user_a, "user a's question", None))
     asyncio.run(coach_assistant.process_coach_message(user_b, "user b's question", None))
 
-    a_messages = list(coach_assistant.get_db().coach_messages.find({"user_id": user_a}))
+    resp = get_coach_messages_table().query(
+        IndexName="user-index",
+        KeyConditionExpression="user_id = :uid",
+        ExpressionAttributeValues={":uid": user_a},
+    )
+    a_messages = resp["Items"]
     assert len(a_messages) == 2
     assert all(m["user_id"] == user_a for m in a_messages)
 
@@ -93,16 +101,16 @@ def test_process_coach_message_caps_history_at_20_most_recent_in_order(monkeypat
 
     user_id = _uid()
     base_time = datetime.now(timezone.utc)
-    docs = []
+    table = get_coach_messages_table()
     for i in range(25):
         role = "user" if i % 2 == 0 else "assistant"
-        docs.append({
+        table.put_item(Item={
+            "message_id": str(uuid.uuid4()),
             "user_id": user_id,
             "role": role,
             "content": f"message {i}",
-            "created_at": base_time + timedelta(seconds=i),
+            "created_at": (base_time + timedelta(seconds=i)).isoformat(),
         })
-    coach_assistant.get_db().coach_messages.insert_many(docs)
 
     asyncio.run(coach_assistant.process_coach_message(user_id, "new question", None))
 

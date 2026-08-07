@@ -89,14 +89,26 @@ def test_coach_history_returns_empty_list_for_new_user():
 
 
 def test_coach_history_returns_stored_messages_in_order():
+    import uuid
     from datetime import datetime, timedelta, timezone
-    from services.coach_assistant import get_db
+    from tools.dynamo import get_coach_messages_table
 
+    table = get_coach_messages_table()
     now = datetime.now(timezone.utc)
-    get_db().coach_messages.insert_many([
-        {"user_id": "test-user-id", "role": "user", "content": "first question", "created_at": now},
-        {"user_id": "test-user-id", "role": "assistant", "content": "first reply", "created_at": now + timedelta(seconds=1)},
-    ])
+    table.put_item(Item={
+        "message_id": str(uuid.uuid4()),
+        "user_id": "test-user-id",
+        "role": "user",
+        "content": "first question",
+        "created_at": now.isoformat(),
+    })
+    table.put_item(Item={
+        "message_id": str(uuid.uuid4()),
+        "user_id": "test-user-id",
+        "role": "assistant",
+        "content": "first reply",
+        "created_at": (now + timedelta(seconds=1)).isoformat(),
+    })
 
     resp = client.get("/coach/history")
     assert resp.status_code == 200
@@ -109,12 +121,18 @@ def test_coach_history_returns_stored_messages_in_order():
 
 
 def test_coach_history_is_scoped_to_the_authenticated_user():
+    import uuid
     from datetime import datetime, timezone
-    from services.coach_assistant import get_db
+    from tools.dynamo import get_coach_messages_table
 
-    get_db().coach_messages.insert_one(
-        {"user_id": "someone-else", "role": "user", "content": "not yours", "created_at": datetime.now(timezone.utc)}
-    )
+    table = get_coach_messages_table()
+    table.put_item(Item={
+        "message_id": str(uuid.uuid4()),
+        "user_id": "someone-else",
+        "role": "user",
+        "content": "not yours",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    })
 
     resp = client.get("/coach/history")
     assert resp.status_code == 200
