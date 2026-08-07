@@ -2,54 +2,66 @@
 Coach Agent -- a standalone agent (not a Supervisor sub-agent) invoked
 directly by api/routes/coach.py on every chat turn. See prompts/coach.md.
 
-Unlike other agents in this repo (e.g. agents/plan_adjuster.py's static
-PLAN_ADJUSTER_TOOLS list), this agent's tools are built fresh per request
-by build_coach_tools() rather than defined as a module-level list: the
-tools must be closed over a server-verified user_id and a BFF-supplied
-nutrition snapshot rather than accepting them as LLM-controllable
-arguments, so the model can never select whose data gets read -- the same
-reasoning behind auth/ownership.py's user_owns_session check elsewhere in
-this codebase.
+Uses ITIBedrockChat (agents/llm.py::get_coach_llm), the same model the
+nutrition service's agents use. That proxy has no tool-calling support
+(no `tools` field in its request payload, and its LangChain wrapper does
+not implement bind_tools) -- deepagents' create_deep_agent requires
+bind_tools and raises NotImplementedError against it. Both of this agent's
+"tools" (workout history, nutrition snapshot) are cheap and deterministic
+-- there is no benefit to letting the model decide whether to call them --
+so both are always fetched and injected into the system prompt instead of
+routed through a tool-calling loop.
 """
 
-from langchain_core.tools import tool
-from deepagents import create_deep_agent
+from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
 
-from agents.llm import get_llm
+from agents.llm import get_coach_llm
 from auth.ownership import list_sessions_for_user
 from config import load_prompt
 from tools.memory import read_weekly_schedule
 
-
-def build_coach_tools(user_id: str, nutrition_snapshot: str | None):
-    @tool
-    def get_workout_history() -> str:
-        """Returns the user's most recent workout plan (weekly schedule), or
-        a message saying none exists yet. Call this for any question about
-        training, exercises, sets/reps, or the workout split."""
-        sessions = list_sessions_for_user(user_id)
-        ready = next((s for s in sessions if s["status"] == "ready"), None)
-        if ready is None:
-            return "(no workout plan yet)"
-        schedule = read_weekly_schedule(ready["session_id"])
-        return schedule or "(no workout plan yet)"
-
-    @tool
-    def get_nutrition_plan() -> str:
-        """Returns the user's most recently generated nutrition plan
-        (macros, calories, meals), or a message saying none exists yet.
-        Call this for any question about food, diet, meals, macros, or
-        calories."""
-        return nutrition_snapshot or "(no nutrition plan yet)"
-
-    return [get_workout_history, get_nutrition_plan]
+_NO_WORKOUT_PLAN = "(no workout plan yet)"
+_NO_NUTRITION_PLAN = "(no nutrition plan yet)"
 
 
-def build_coach_agent(user_id: str, nutrition_snapshot: str | None = None):
-    graph = create_deep_agent(
-        model=get_llm(temperature=0.4),
-        tools=build_coach_tools(user_id, nutrition_snapshot),
-        system_prompt=load_prompt("coach"),
-        name="tamreena-coach",
+def _get_workout_history(user_id: str) -> str:
+    sessions = list_sessions_for_user(user_id)
+    ready = next((s for s in sessions if s["status"] == "ready"), None)
+    if ready is None:
+        return _NO_WORKOUT_PLAN
+    schedule = read_weekly_schedule(ready["session_id"])
+    return schedule or _NO_WORKOUT_PLAN
+
+
+def _build_system_prompt(user_id: str, nutrition_snapshot: str | None) -> str:
+    workout_history = _get_workout_history(user_id)
+    nutrition_plan = nutrition_snapshot or _NO_NUTRITION_PLAN
+    return (
+        f"{load_prompt('coach')}\n\n"
+        f"## User's Current Workout Plan\n{workout_history}\n\n"
+        f"## User's Current Nutrition Plan\n{nutrition_plan}"
     )
-    return graph
+
+
+def build_coach_messages(
+    user_id: str, history: list[dict], message: str, nutrition_snapshot: str | None = None
+) -> list[BaseMessage]:
+    """Builds the full message list for one chat turn: system prompt (with
+    workout/nutrition context already injected) + prior turns + the new
+    user message."""
+    messages: list[BaseMessage] = [SystemMessage(content=_build_system_prompt(user_id, nutrition_snapshot))]
+    for turn in history:
+        if turn["role"] == "user":
+            messages.append(HumanMessage(content=turn["content"]))
+        else:
+            messages.append(AIMessage(content=turn["content"]))
+    messages.append(HumanMessage(content=message))
+    return messages
+
+
+async def run_coach_turn(
+    user_id: str, history: list[dict], message: str, nutrition_snapshot: str | None = None
+) -> str:
+    messages = build_coach_messages(user_id, history, message, nutrition_snapshot)
+    reply = await get_coach_llm(temperature=0.4).ainvoke(messages)
+    return reply.content

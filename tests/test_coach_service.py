@@ -1,7 +1,7 @@
-"""Tests for services/coach_assistant.py. The agent itself is mocked (a
-fake object with an ainvoke coroutine) -- no live LLM call, same scoping
-as the rest of this test suite. DynamoDB access is moto-mocked per-test (see
-tests/conftest.py's autouse dynamo_tables fixture)."""
+"""Tests for services/coach_assistant.py. run_coach_turn is mocked (a fake
+coroutine) -- no live LLM call, same scoping as the rest of this test
+suite. DynamoDB access is moto-mocked per-test (see tests/conftest.py's
+autouse dynamo_tables fixture)."""
 
 import asyncio
 import os
@@ -19,24 +19,11 @@ def _uid() -> str:
     return str(uuid.uuid4())
 
 
-class _FakeMessage:
-    def __init__(self, content):
-        self.content = content
-
-
-class _FakeAgent:
-    def __init__(self, reply: str):
-        self._reply = reply
-        self.last_messages = None
-
-    async def ainvoke(self, payload, config=None):
-        self.last_messages = payload["messages"]
-        return {"messages": [_FakeMessage(self._reply)]}
-
-
 def test_process_coach_message_persists_both_turns_and_returns_reply(monkeypatch):
-    fake_agent = _FakeAgent("Your squat volume looks fine this week.")
-    monkeypatch.setattr(coach_assistant, "build_coach_agent", lambda user_id, snapshot: fake_agent)
+    async def _fake_run_coach_turn(user_id, history, message, nutrition_snapshot=None):
+        return "Your squat volume looks fine this week."
+
+    monkeypatch.setattr(coach_assistant, "run_coach_turn", _fake_run_coach_turn)
 
     user_id = _uid()
     reply = asyncio.run(
@@ -57,29 +44,31 @@ def test_process_coach_message_persists_both_turns_and_returns_reply(monkeypatch
 
 def test_process_coach_message_includes_prior_turns_in_the_next_call(monkeypatch):
     replies = iter(["first reply", "second reply"])
-    agents_built = []
+    calls = []
 
-    def _build(user_id, snapshot):
-        agent = _FakeAgent(next(replies))
-        agents_built.append(agent)
-        return agent
+    async def _fake_run_coach_turn(user_id, history, message, nutrition_snapshot=None):
+        calls.append({"user_id": user_id, "history": history, "message": message})
+        return next(replies)
 
-    monkeypatch.setattr(coach_assistant, "build_coach_agent", _build)
+    monkeypatch.setattr(coach_assistant, "run_coach_turn", _fake_run_coach_turn)
 
     user_id = _uid()
     asyncio.run(coach_assistant.process_coach_message(user_id, "first question", None))
     asyncio.run(coach_assistant.process_coach_message(user_id, "second question", None))
 
-    second_call_messages = agents_built[1].last_messages
-    assert second_call_messages[0] == {"role": "user", "content": "first question"}
-    assert second_call_messages[1] == {"role": "assistant", "content": "first reply"}
-    assert second_call_messages[2] == {"role": "user", "content": "second question"}
+    second_call = calls[1]
+    assert second_call["history"] == [
+        {"role": "user", "content": "first question"},
+        {"role": "assistant", "content": "first reply"},
+    ]
+    assert second_call["message"] == "second question"
 
 
 def test_process_coach_message_is_scoped_per_user(monkeypatch):
-    monkeypatch.setattr(
-        coach_assistant, "build_coach_agent", lambda user_id, snapshot: _FakeAgent("reply")
-    )
+    async def _fake_run_coach_turn(user_id, history, message, nutrition_snapshot=None):
+        return "reply"
+
+    monkeypatch.setattr(coach_assistant, "run_coach_turn", _fake_run_coach_turn)
 
     user_a, user_b = _uid(), _uid()
     asyncio.run(coach_assistant.process_coach_message(user_a, "user a's question", None))
@@ -96,8 +85,13 @@ def test_process_coach_message_is_scoped_per_user(monkeypatch):
 
 
 def test_process_coach_message_caps_history_at_20_most_recent_in_order(monkeypatch):
-    fake_agent = _FakeAgent("noted")
-    monkeypatch.setattr(coach_assistant, "build_coach_agent", lambda user_id, snapshot: fake_agent)
+    calls = []
+
+    async def _fake_run_coach_turn(user_id, history, message, nutrition_snapshot=None):
+        calls.append(history)
+        return "noted"
+
+    monkeypatch.setattr(coach_assistant, "run_coach_turn", _fake_run_coach_turn)
 
     user_id = _uid()
     base_time = datetime.now(timezone.utc)
@@ -114,14 +108,10 @@ def test_process_coach_message_caps_history_at_20_most_recent_in_order(monkeypat
 
     asyncio.run(coach_assistant.process_coach_message(user_id, "new question", None))
 
-    sent_messages = fake_agent.last_messages
-    # 20 most recent prior messages + the new user turn
-    assert len(sent_messages) == 21
-
-    history_sent = sent_messages[:-1]
+    # 20 most recent prior messages passed as history (the new question is a
+    # separate argument to run_coach_turn, not part of history)
+    history_sent = calls[0]
     assert len(history_sent) == 20
     # The 20 most recent of the 25 inserted are messages 5..24 (chronological order)
     assert history_sent[0] == {"role": "assistant", "content": "message 5"}
     assert history_sent[-1] == {"role": "user", "content": "message 24"}
-
-    assert sent_messages[-1] == {"role": "user", "content": "new question"}

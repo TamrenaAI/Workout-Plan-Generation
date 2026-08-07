@@ -48,8 +48,9 @@ AZURE_OPENAI_API_VERSION = os.getenv("AZURE_OPENAI_API_VERSION")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL")
 
-# ── ITI Bedrock proxy (alternate LLM path, see llm.py's ITIBedrockChat) ──
+# ── ITI Bedrock proxy (alternate LLM path, see agents/llm.py's ITIBedrockChat) ──
 SBG_API_KEY = os.getenv("SBG_API_KEY")
+SBG_MODEL_ID = os.getenv("SBG_MODEL_ID", "us.meta.llama3-3-70b-instruct-v1:0")
 
 # ── Auth ──────────────────────────────────────────────────────────────
 # This service no longer owns user identity — Google Sign-In verification,

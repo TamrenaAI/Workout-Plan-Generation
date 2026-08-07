@@ -7,7 +7,7 @@ and nutrition plans. Chat history is stored per-user in DynamoDB
 import uuid
 from datetime import datetime, timezone
 
-from agents.coach import build_coach_agent
+from agents.coach import run_coach_turn
 from tools.dynamo import get_coach_messages_table
 
 __all__ = ["process_coach_message", "get_coach_messages_table", "load_recent_messages"]
@@ -43,12 +43,7 @@ async def process_coach_message(
     user_id: str, message: str, nutrition_plan_snapshot: str | None
 ) -> str:
     history = load_recent_messages(user_id)
-    agent = build_coach_agent(user_id, nutrition_plan_snapshot)
-    result = await agent.ainvoke(
-        {"messages": history + [{"role": "user", "content": message}]},
-        config={"recursion_limit": 50},
-    )
-    reply = result["messages"][-1].content
+    reply = await run_coach_turn(user_id, history, message, nutrition_plan_snapshot)
 
     _save_message(user_id, "user", message)
     _save_message(user_id, "assistant", reply)
