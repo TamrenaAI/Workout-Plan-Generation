@@ -25,9 +25,6 @@ langsmith
 google-auth
 pyjwt
 
-# ── Database ──────────────────────────────────────────────────
-pymongo
-
 # Dev/notebook-only extras (ipykernel, ipywidgets, ...) are in
 # requirements-dev.txt, not here.
 

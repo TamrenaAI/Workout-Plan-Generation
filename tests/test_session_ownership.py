@@ -5,8 +5,8 @@ users can't read each other's generated plans (session_ids are UUIDs, not
 secrets, so ownership has to be checked server-side, not assumed from
 knowing the id).
 
-Mongo access is mongomock'd per-test — see tests/conftest.py's mongo_db
-fixture (autouse).
+DynamoDB access is moto-mocked per-test — see tests/conftest.py's
+dynamo_tables fixture (autouse).
 """
 
 import os

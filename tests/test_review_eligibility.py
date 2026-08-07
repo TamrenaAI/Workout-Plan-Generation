@@ -113,11 +113,11 @@ def test_get_session_reports_eligibility_same_as_list():
 
 def test_get_session_created_at_is_timezone_aware():
     # Regression test: _serialize used to return doc["created_at"] (the raw,
-    # possibly-naive Mongo value) instead of the normalized tz-aware local
-    # variable it computed for the eligibility check. Real PyMongo/mongomock
-    # (not constructed with tz_aware=True) return naive datetimes, so any
-    # caller doing `datetime.now(timezone.utc) - get_session(...)["created_at"]`
-    # (e.g. pipeline/monthly_progress.py's _adherence) would raise TypeError.
+    # possibly-naive value) instead of the normalized tz-aware local
+    # variable it computed for the eligibility check. A naive datetime
+    # here would make any caller doing
+    # `datetime.now(timezone.utc) - get_session(...)["created_at"]`
+    # (e.g. pipeline/monthly_progress.py's _adherence) raise TypeError.
     owner = _make_user("elig-6")
     ownership.create_session("s6", owner["id"], "hypertrophy", intake=_SAMPLE_INTAKE)
 

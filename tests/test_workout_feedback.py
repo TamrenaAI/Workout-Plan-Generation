@@ -4,9 +4,9 @@ whether an adjustment is needed) and the read side in tools/memory.py.
 Does not exercise agents/plan_adjuster.py itself — that requires a live
 LLM call, same scoping as the rest of this test suite.
 
-Mongo access is mongomock'd per-test — see tests/conftest.py's mongo_db
-fixture (autouse). workout_feedback itself now lives in DynamoDB (see
-tools/dynamo.py's get_workout_feedback_table) — plan.md/feedback.json-style
+DynamoDB access is moto-mocked per-test — see tests/conftest.py's
+dynamo_tables fixture (autouse). workout_feedback itself lives in DynamoDB
+(see tools/dynamo.py's get_workout_feedback_table) — plan.md/feedback.json-style
 session files still live under SESSION_DIR (unaffected by this migration),
 hence the SESSION_DIR monkeypatch below.
 """

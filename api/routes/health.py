@@ -1,13 +1,13 @@
 """
 GET /health — liveness + readiness probe.
 
-Checks the dependencies this stage of the system actually has: SQLite, the
-Azure OpenAI configuration, and that the RAG Qdrant data is present on
-disk. None of these trigger a real Qdrant connection or load the
+Checks the dependencies this stage of the system actually has: a real
+DynamoDB round-trip (list_tables), the Azure OpenAI configuration, and
+that the RAG Qdrant data is present on disk. The Azure OpenAI and RAG
+checks don't trigger a real Qdrant connection or load the
 embedding/reranker models — tools/rag/pipeline.py lazily loads those on
-first real search_rag() call, not on every health probe, so this only
-checks that the directory exists (same "config present, not a live call"
-spirit as the Azure OpenAI check below).
+first real search_rag() call, not on every health probe, so those only
+check that config/the directory is present (not a live call).
 """
 
 from datetime import datetime, timezone
@@ -16,7 +16,7 @@ from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
 from config import AZURE_OPENAI_API_KEY, AZURE_OPENAI_DEPLOYMENT_NAME, AZURE_OPENAI_ENDPOINT, QDRANT_PATH
-from tools.mongo import get_client
+from tools.dynamo import get_resource
 
 router = APIRouter()
 
@@ -26,12 +26,12 @@ async def health_check():
     results = {}
     overall = "healthy"
 
-    # MongoDB
+    # DynamoDB
     try:
-        get_client().admin.command("ping")
-        results["mongodb"] = "healthy"
+        get_resource().meta.client.list_tables(Limit=1)
+        results["dynamodb"] = "healthy"
     except Exception as e:
-        results["mongodb"] = f"unhealthy: {e}"
+        results["dynamodb"] = f"unhealthy: {e}"
         overall = "unhealthy"
 
     # Azure OpenAI configuration (env vars present — not a live call on every health check)

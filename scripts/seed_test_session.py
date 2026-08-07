@@ -13,8 +13,8 @@ the normal pipeline only produces after several agent calls:
 
 This service no longer owns user identity (see
 docs/superpowers/specs/2026-07-25-bff-auth-handoff-design.md), so this
-script does not create or persist a user record — it generates a bare
-ObjectId to use as the user_id and creates a session backdated 31 days and
+script does not create or persist a user record — it generates a random
+uuid4 to use as the user_id and creates a session backdated 31 days and
 marked ready, with a plan.md written in the same DAY MAP + muscle-group
 + Weekly Schedule format the real pipeline produces (see
 sessions/6f3c6194-c99e-4a3d-bbcc-6d8296103fff/plan.md for reference).
@@ -25,16 +25,16 @@ Usage:
 
 import argparse
 import sys
+import uuid
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
-from bson import ObjectId
 from auth import ownership
 from auth.tokens import create_access_token
+from tools.dynamo import get_plan_sessions_table
 from tools.memory import write_plan_memory
-from tools.mongo import get_db
 
 _INTAKE = {
     "goal": "hypertrophy", "days_per_week": 3, "experience": "intermediate",
@@ -111,9 +111,8 @@ _WEEKLY_SCHEDULE = """### Day 1 — Monday: Full Body Focus with Chest Emphasis
 def seed() -> str:
     # See tests/test_corrective.py's _make_user for why this no longer
     # calls into auth.models — this service doesn't own `users` anymore.
-    user_id = str(ObjectId())
+    user_id = str(uuid.uuid4())
 
-    import uuid
     session_id = str(uuid.uuid4())
 
     ownership.create_session(session_id, user_id, "hypertrophy", intake=_INTAKE)
@@ -137,9 +136,15 @@ def seed() -> str:
 
     # Backdate + mark ready so this session is immediately eligible for a
     # monthly review (>= 30 days old, status ready — see auth/ownership.py).
-    get_db().plan_sessions.update_one(
-        {"_id": session_id},
-        {"$set": {"status": "ready", "created_at": datetime.now(timezone.utc) - timedelta(days=31)}},
+    # auth.ownership.update_session_status() doesn't expose backdating
+    # created_at, so this dev script updates the item directly — matching
+    # the UpdateExpression pattern in auth/ownership.py::update_session_status.
+    backdated = (datetime.now(timezone.utc) - timedelta(days=31)).isoformat()
+    get_plan_sessions_table().update_item(
+        Key={"session_id": session_id},
+        UpdateExpression="SET #s = :status, created_at = :created_at",
+        ExpressionAttributeNames={"#s": "status"},
+        ExpressionAttributeValues={":status": "ready", ":created_at": backdated},
     )
 
     return session_id, user_id

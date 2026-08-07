@@ -2,7 +2,8 @@
 Automated Integration Tests for Tamrena-AI Microservices Integration (srs2.md)
 """
 
-from bson import ObjectId
+import uuid
+
 from fastapi.testclient import TestClient
 from api.main import app
 from auth.tokens import create_access_token
@@ -192,7 +193,7 @@ def test_monthly_report_aggregator():
 
 def test_coach_assistant_chat(monkeypatch):
     # Create a valid token for the test user
-    user_id = str(ObjectId())
+    user_id = str(uuid.uuid4())
     token = create_access_token(user_id)
     headers = {"Authorization": f"Bearer {token}"}
 

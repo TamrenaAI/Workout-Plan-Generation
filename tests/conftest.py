@@ -1,17 +1,14 @@
 """
-Shared pytest fixtures. `mongo_db` and `dynamo_tables` (both autouse) give
-every test isolated in-memory Mongo and DynamoDB instances via mongomock
-and moto, so no test ever touches the real databases this app connects to
-in dev/prod.
+Shared pytest fixtures. `dynamo_tables` (autouse) gives every test an
+isolated in-memory DynamoDB instance via moto, so no test ever touches the
+real database this app connects to in dev/prod.
 """
 
 import boto3
-import mongomock
 import pytest
 from moto import mock_aws
 
 import tools.dynamo as dynamo_module
-import tools.mongo as mongo_module
 from config import (
     AWS_REGION,
     COACH_MESSAGES_TABLE_NAME,
@@ -23,13 +20,6 @@ from config import (
     PROGRESS_REPORTS_TABLE_NAME,
     WORKOUT_FEEDBACK_TABLE_NAME,
 )
-
-
-@pytest.fixture(autouse=True)
-def mongo_db(monkeypatch):
-    client = mongomock.MongoClient()
-    monkeypatch.setattr(mongo_module, "_client", client)
-    yield client
 
 
 @pytest.fixture(autouse=True)

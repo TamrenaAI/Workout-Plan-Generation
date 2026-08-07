@@ -9,11 +9,11 @@ doesn't depend on a developer's local secret being configured.
 
 import os
 import sys
+import uuid
 from datetime import datetime, timedelta, timezone
 
 import jwt
 import pytest
-from bson import ObjectId
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -27,13 +27,13 @@ def _fixed_secret(monkeypatch):
 
 
 def test_round_trip_returns_same_user_id():
-    user_id = str(ObjectId())
+    user_id = str(uuid.uuid4())
     token = tokens.create_access_token(user_id=user_id)
     assert tokens.decode_access_token(token) == user_id
 
 
 def test_tampered_token_is_rejected():
-    token = tokens.create_access_token(user_id=str(ObjectId()))
+    token = tokens.create_access_token(user_id=str(uuid.uuid4()))
     # Flip a character in the payload segment (not the very last character
     # of the signature) — the last base64 character before padding can
     # encode as few as 2 meaningful bits depending on byte-length

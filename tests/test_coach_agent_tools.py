@@ -1,9 +1,10 @@
 """Tests for agents/coach.py's tool closures. Never exercises
 build_coach_agent()/the LLM itself -- same scoping as the rest of this
-test suite (see tests/test_workout_feedback.py's docstring). Mongo access
-is mongomock'd per-test (tests/conftest.py's autouse mongo_db fixture);
-plan.md files are written directly under the real config.SESSION_DIR using
-fresh uuid4 session ids, same approach as tests/test_memory_plan_reads.py."""
+test suite (see tests/test_workout_feedback.py's docstring). DynamoDB
+access is moto-mocked per-test (tests/conftest.py's autouse dynamo_tables
+fixture); plan.md files are written directly under the real
+config.SESSION_DIR using fresh uuid4 session ids, same approach as
+tests/test_memory_plan_reads.py."""
 
 import os
 import sys
@@ -11,15 +12,13 @@ import uuid
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
-from bson import ObjectId
-
 from agents.coach import build_coach_tools
 from auth import ownership
 from config import SESSION_DIR
 
 
 def _uid() -> str:
-    return str(ObjectId())
+    return str(uuid.uuid4())
 
 
 def _make_ready_session(user_id: str, schedule_content: str) -> str:

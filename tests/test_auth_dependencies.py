@@ -4,12 +4,12 @@ Tests for auth/dependencies.py's get_current_user / get_current_user_for_stream.
 Since the BFF handoff (docs/superpowers/specs/2026-07-25-bff-auth-handoff-design.md),
 this service no longer owns user identity — it only verifies the JWT
 (signed with a secret shared with the BFF) and trusts the `sub` claim as
-the user_id. There is no local Mongo `users` lookup anymore: a token for a
+the user_id. There is no local `users` lookup anymore: a token for a
 user_id that was never written to this service's database must still
-resolve successfully (proven implicitly here too — conftest.py's `mongo_db`
-fixture gives every test a fresh, empty mongomock client, so if the old
-DB-lookup behavior were still present, every test below would fail with
-"User no longer exists" instead of passing).
+resolve successfully (proven implicitly here too — conftest.py's
+`dynamo_tables` fixture gives every test a fresh, empty set of DynamoDB
+tables, so if the old DB-lookup behavior were still present, every test
+below would fail with "User no longer exists" instead of passing).
 """
 
 import os

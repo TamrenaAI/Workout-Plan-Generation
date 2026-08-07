@@ -19,7 +19,6 @@ controls whether browser JS can read a response, never whether a request
 is authorized — a page with no valid token gets 401 regardless of origin.
 """
 
-import logging
 from contextlib import asynccontextmanager
 from pathlib import Path
 
@@ -44,29 +43,10 @@ from api.routes import (
     workouts,
 )
 from config import EXERCISE_MEDIA_DIR
-from tools.mongo import ensure_indexes
-
-logger = logging.getLogger(__name__)
 
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI):
-    # Best-effort, not a hard startup gate: a prior version of this call
-    # crashed the whole app on boot (pymongo.errors.ServerSelectionTimeoutError,
-    # see logs_deployment_aws.txt) when MONGO_URI was misconfigured in that
-    # environment. docker-compose now waits on Mongo's own healthcheck before
-    # starting this service (see docker-compose.yml's depends_on/condition),
-    # so the local cold-start race that originally motivated removing this
-    # call is already handled there. This still can't rule out a genuinely
-    # misconfigured MONGO_URI in a given deployment, so a failure here is
-    # logged and swallowed rather than taking down /health and every other
-    # route along with it — every index this creates is a performance
-    # optimization (COLLSCAN vs indexed lookup), not a correctness
-    # requirement, so serving degraded is better than not serving at all.
-    try:
-        ensure_indexes()
-    except Exception:
-        logger.exception("ensure_indexes() failed at startup — continuing without it")
     yield
 
 

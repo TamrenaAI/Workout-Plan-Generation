@@ -1,9 +1,8 @@
 """
 Shared DynamoDB client — one boto3 resource, reused across every table
-(mirrors tools/mongo.py's single-MongoClient pattern, and
-tamreena-web/backend/app/db.py's get_resource()). Each get_*_table()
-accessor is a thin Table() wrapper so call sites never construct table
-names themselves.
+(mirrors tamreena-web/backend/app/db.py's get_resource()). Each
+get_*_table() accessor is a thin Table() wrapper so call sites never
+construct table names themselves.
 """
 
 from typing import Optional

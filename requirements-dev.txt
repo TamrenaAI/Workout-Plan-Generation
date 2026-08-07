@@ -5,5 +5,4 @@ ipykernel
 ipywidgets
 pandas
 openpyxl
-mongomock
 moto[dynamodb]

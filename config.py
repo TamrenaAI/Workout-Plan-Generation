@@ -26,10 +26,6 @@ EXERCISE_MEDIA_DIR = BASE_DIR / "database" / "exercises_dataset" / "media"
 SESSION_DIR.mkdir(parents=True, exist_ok=True)
 DATA_DIR.mkdir(parents=True, exist_ok=True)
 
-# ── MongoDB ───────────────────────────────────────────────────────────
-MONGO_URI = os.getenv("MONGO_URI", "mongodb://localhost:27017")
-MONGO_DB_NAME = os.getenv("MONGO_DB_NAME", "tamreena")
-
 # ── DynamoDB ──────────────────────────────────────────────────────────
 # Region/table-naming convention matches tamreena-web/backend/app/config.py
 # (workout_users, workout_live_sessions) — this service's own 8 tables,

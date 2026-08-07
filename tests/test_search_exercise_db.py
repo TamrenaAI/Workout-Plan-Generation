@@ -7,22 +7,32 @@ looping instead of completing). These tests lock in the per-movement-type
 cap and the exclusion of untyped (stretch/mobility) docs from "all" queries.
 """
 
+import uuid
+
 from tools.database import search_exercise_db
-from tools.mongo import get_db
+from tools.dynamo import get_exercises_table
 
 
 def _insert_chest_exercises(count_by_type):
-    db = get_db()
+    # movement_type is a GSI range key (String) — DynamoDB rejects a NULL
+    # value there, so "untyped" (stretch/mobility) docs are seeded WITHOUT
+    # the attribute at all. An item missing a GSI key attribute simply
+    # isn't projected into that index, which is exactly the real-world
+    # shape search_exercise_db's "all" query relies on to exclude them.
+    table = get_exercises_table()
     i = 0
     for movement_type, count in count_by_type.items():
         for _ in range(count):
-            db.exercises.insert_one({
+            item = {
+                "exercise_id": str(uuid.uuid4()),
                 "name": f"chest exercise {i}",
                 "primary_muscle": "chest",
-                "movement_type": movement_type,
                 "equipment": "barbell",
                 "difficulty": "intermediate",
-            })
+            }
+            if movement_type is not None:
+                item["movement_type"] = movement_type
+            table.put_item(Item=item)
             i += 1
 
 

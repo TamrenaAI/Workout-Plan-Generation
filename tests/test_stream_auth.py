@@ -11,10 +11,10 @@ doesn't exist — that 404 only happens after auth succeeds).
 
 import os
 import sys
+import uuid
 
 import pytest
 from fastapi.testclient import TestClient
-from bson import ObjectId
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -27,7 +27,7 @@ def _fixed_secret(monkeypatch):
 
 
 def _dev_token() -> str:
-    return tokens.create_access_token(user_id=str(ObjectId()))
+    return tokens.create_access_token(user_id=str(uuid.uuid4()))
 
 
 def test_stream_accepts_token_via_authorization_header():

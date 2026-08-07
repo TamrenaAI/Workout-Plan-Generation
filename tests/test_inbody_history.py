@@ -4,8 +4,8 @@ comparing the two most recent ones (the mobile Progress tab's data source,
 and the Supervisor's prompt-enrichment source — see api/routes/plan.py's
 _format_inbody_comparison).
 
-Mongo access is mongomock'd per-test — see tests/conftest.py's mongo_db
-fixture (autouse).
+DynamoDB access is moto-mocked per-test — see tests/conftest.py's
+dynamo_tables fixture (autouse).
 """
 
 import os
