@@ -89,9 +89,12 @@ def test_tool_message_round_trips_through_build_payload():
     payload, _ = llm._build_payload(messages, tools=[{"type": "function", "function": {"name": "get_weather"}}])
 
     roles = [m["role"] for m in payload["messages"]]
-    assert roles == ["user", "assistant", "user"]
+    # Trailing entry is the anti-drift reminder appended whenever tools are
+    # bound (see _build_payload) — not part of the original conversation.
+    assert roles == ["user", "assistant", "user", "user"]
     assert "Sunny in Cairo" in payload["messages"][2]["content"]
     assert "tool_calls" in payload["messages"][1]["content"]
+    assert "Reminder" in payload["messages"][3]["content"]
 
 
 def test_create_react_agent_builds_without_bind_tools_error():

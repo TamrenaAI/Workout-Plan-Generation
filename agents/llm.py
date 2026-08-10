@@ -283,6 +283,19 @@ class ITIBedrockChat(BaseChatModel):
             # its request payload) — tool schemas are prompt-injected instead,
             # and the response is parsed for the JSON envelope below
             # (_parse_tool_calls) rather than a native tool_calls field.
+            #
+            # Observed failure mode without the anti-drift paragraph below:
+            # the model correctly emits a tool_calls JSON for its first turn,
+            # then — once a tool RESULT is fed back — drifts into plain-text
+            # "thinking out loud" instead of continuing with the next
+            # required tool call. That plain text has no tool_calls, so
+            # LangGraph's ReAct loop reads it as a legitimate final answer
+            # and ends the run early (no exception, no error — just a
+            # silently truncated multi-step task). The instruction is
+            # repeated at the END of the message list (not just once in the
+            # system prompt) because a long domain system prompt otherwise
+            # buries it and recency matters more than position for this
+            # model's instruction-following.
             system_prompt = (
                 f"{system_prompt}\n\n"
                 "You have access to the following tools:\n"
@@ -291,7 +304,22 @@ class ITIBedrockChat(BaseChatModel):
                 '(no markdown fences, no extra text): '
                 '{"tool_calls": [{"name": "<tool_name>", "arguments": {<args as an object>}}]}\n'
                 "To give a final answer instead of calling a tool, respond with plain text, "
-                "not JSON."
+                "not JSON.\n\n"
+                "IMPORTANT: once you start a multi-step task, do not stop to explain your "
+                "reasoning in plain text between steps — after a tool result comes back, "
+                "immediately continue with the next required tool call in the exact JSON "
+                "format above. Only respond with plain text when the ENTIRE task is fully "
+                "complete and no further tool calls are needed."
+            )
+            formatted_messages.append(
+                {
+                    "role": "user",
+                    "content": (
+                        "Reminder: if this task isn't fully complete yet, respond with ONLY "
+                        'the {"tool_calls": [...]} JSON now — do not explain your reasoning '
+                        "first. Plain text is only for a fully finished task."
+                    ),
+                }
             )
 
         payload = {
