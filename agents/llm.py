@@ -11,14 +11,17 @@ import json
 import random
 import re
 import time
-from typing import Any, Dict, List, Optional, Union
+import uuid
+from typing import Any, Dict, List, Optional, Sequence, Union
 
 import requests
 from langchain_core.language_models.chat_models import BaseChatModel
-from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage
+from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage, ToolMessage
 from langchain_core.outputs import ChatGeneration, ChatResult
 from langchain_core.prompt_values import PromptValue
 from langchain_core.runnables import Runnable, RunnableConfig
+from langchain_core.tools import BaseTool
+from langchain_core.utils.function_calling import convert_to_openai_tool
 from pydantic import BaseModel
 
 from config import SBG_API_KEY, SBG_MODEL_ID
@@ -70,6 +73,35 @@ def _clean_and_parse_json(text: str) -> Any:
         return json.loads(fixed)
     except json.JSONDecodeError as exc:
         raise ValueError(f"Could not parse LLM output as JSON: {text}") from exc
+
+
+def _parse_tool_calls(ai_text: str) -> Optional[List[Dict[str, Any]]]:
+    """Detects the `{"tool_calls": [...]}` envelope the model is instructed to
+    emit (see _build_payload's tool-instructions block) and converts it into
+    LangChain's ToolCall dict shape. Returns None for a plain-text final
+    answer (including text that merely fails to parse as JSON) so callers can
+    tell "no tool call" apart from "malformed tool call"."""
+    try:
+        data = _clean_and_parse_json(ai_text)
+    except ValueError:
+        return None
+
+    if not isinstance(data, dict) or not isinstance(data.get("tool_calls"), list):
+        return None
+
+    calls: List[Dict[str, Any]] = []
+    for tc in data["tool_calls"]:
+        if isinstance(tc, dict) and isinstance(tc.get("name"), str):
+            args = tc.get("arguments", tc.get("args", {}))
+            calls.append(
+                {
+                    "name": tc["name"],
+                    "args": args if isinstance(args, dict) else {},
+                    "id": f"call_{uuid.uuid4().hex[:16]}",
+                    "type": "tool_call",
+                }
+            )
+    return calls or None
 
 
 def _validate_schema(data: Any, schema: Any) -> Any:
@@ -183,7 +215,7 @@ class ITIBedrockChat(BaseChatModel):
 
     model_id: str = SBG_MODEL_ID
     base_url: str = "http://apiaccess.iti.net.eg/api/v1"
-    timeout: int = 300
+    timeout: int = 3600
     temperature: float = 0.3
     max_retries: int = _MAX_RETRIES
 
@@ -217,11 +249,50 @@ class ITIBedrockChat(BaseChatModel):
                 else:
                     formatted_messages.append({"role": "user", "content": str(msg.content)})
             elif isinstance(msg, AIMessage):
-                content = msg.content if isinstance(msg.content, str) else str(msg.content)
+                if msg.tool_calls:
+                    # Re-serialize as the same tool_calls envelope the model
+                    # was instructed to emit, so a prior turn's tool call
+                    # round-trips back into the transcript in a shape the
+                    # model itself produced (and was told to expect).
+                    content = json.dumps(
+                        {
+                            "tool_calls": [
+                                {"name": tc["name"], "arguments": tc.get("args", {})}
+                                for tc in msg.tool_calls
+                            ]
+                        }
+                    )
+                else:
+                    content = msg.content if isinstance(msg.content, str) else str(msg.content)
                 formatted_messages.append({"role": "assistant", "content": content})
+            elif isinstance(msg, ToolMessage):
+                # The proxy has no "tool" role — fed back as a user turn
+                # reporting the result, same pattern LangChain uses for
+                # providers with no native tool-result message type.
+                result_text = msg.content if isinstance(msg.content, str) else str(msg.content)
+                formatted_messages.append(
+                    {"role": "user", "content": f"[Result of tool '{msg.name}']: {result_text}"}
+                )
 
         if not formatted_messages:
             formatted_messages.append({"role": "user", "content": "Hello"})
+
+        tools = kwargs.get("tools")
+        if tools:
+            # No native tool-calling in this proxy's API (no `tools` field in
+            # its request payload) — tool schemas are prompt-injected instead,
+            # and the response is parsed for the JSON envelope below
+            # (_parse_tool_calls) rather than a native tool_calls field.
+            system_prompt = (
+                f"{system_prompt}\n\n"
+                "You have access to the following tools:\n"
+                f"```json\n{json.dumps(tools, indent=2)}\n```\n"
+                "To call a tool, respond with ONLY this JSON and nothing else "
+                '(no markdown fences, no extra text): '
+                '{"tool_calls": [{"name": "<tool_name>", "arguments": {<args as an object>}}]}\n'
+                "To give a final answer instead of calling a tool, respond with plain text, "
+                "not JSON."
+            )
 
         payload = {
             "model_id": self.model_id,
@@ -246,6 +317,13 @@ class ITIBedrockChat(BaseChatModel):
             or str(response_json)
         )
 
+    @staticmethod
+    def _to_ai_message(ai_text: str, tools_bound: bool) -> AIMessage:
+        tool_calls = _parse_tool_calls(ai_text) if tools_bound else None
+        if tool_calls:
+            return AIMessage(content="", tool_calls=tool_calls)
+        return AIMessage(content=ai_text)
+
     def _generate(
         self,
         messages: List[BaseMessage],
@@ -256,6 +334,7 @@ class ITIBedrockChat(BaseChatModel):
         payload, headers = self._build_payload(messages, **kwargs)
         url = f"{self.base_url}/student/chat"
         last_exc: Optional[Exception] = None
+        tools_bound = bool(kwargs.get("tools"))
 
         for attempt in range(self.max_retries):
             try:
@@ -263,7 +342,8 @@ class ITIBedrockChat(BaseChatModel):
 
                 if response.status_code == 200:
                     ai_text = self._parse_response(response)
-                    return ChatResult(generations=[ChatGeneration(message=AIMessage(content=ai_text))])
+                    message = self._to_ai_message(ai_text, tools_bound)
+                    return ChatResult(generations=[ChatGeneration(message=message)])
 
                 if response.status_code in _RETRYABLE_STATUSES:
                     last_exc = requests.exceptions.HTTPError(
@@ -292,6 +372,7 @@ class ITIBedrockChat(BaseChatModel):
         payload, headers = self._build_payload(messages, **kwargs)
         url = f"{self.base_url}/student/chat"
         last_exc: Optional[Exception] = None
+        tools_bound = bool(kwargs.get("tools"))
 
         for attempt in range(self.max_retries):
             try:
@@ -303,7 +384,8 @@ class ITIBedrockChat(BaseChatModel):
 
                 if response.status_code == 200:
                     ai_text = self._parse_response(response)
-                    return ChatResult(generations=[ChatGeneration(message=AIMessage(content=ai_text))])
+                    message = self._to_ai_message(ai_text, tools_bound)
+                    return ChatResult(generations=[ChatGeneration(message=message)])
 
                 if response.status_code in _RETRYABLE_STATUSES:
                     last_exc = requests.exceptions.HTTPError(
@@ -332,17 +414,41 @@ class ITIBedrockChat(BaseChatModel):
         """Returns a Runnable that prompts for structured JSON and validates the response."""
         return _BedrockStructuredOutputRunnable(self, schema, include_raw=include_raw, **kwargs)
 
+    def bind_tools(
+        self,
+        tools: Sequence[Union[Dict[str, Any], type, "BaseTool", Any]],
+        *,
+        tool_choice: Optional[str] = None,
+        **kwargs: Any,
+    ) -> Runnable:
+        """Required by LangGraph's create_react_agent (used by deepagents'
+        create_deep_agent, which every agent in this repo is built with) —
+        without an override, BaseChatModel.bind_tools raises NotImplementedError,
+        which would make every agent fail to even build its graph.
+
+        The proxy has no native tool-calling API (no `tools` field in its
+        request payload — see the module-level ITIBedrockChat docstring), so
+        this doesn't bind tools the way OpenAI/Anthropic wrappers do. Instead
+        it prompt-injects the tool schemas (_build_payload, when `tools` is
+        present in the bound kwargs) and parses the response for a
+        `{"tool_calls": [...]}` JSON envelope (_parse_tool_calls) into the
+        same AIMessage.tool_calls shape LangGraph expects, so its ReAct loop
+        can't tell the difference from a model with real function-calling.
+        """
+        formatted_tools = [convert_to_openai_tool(t) for t in tools]
+        return self.bind(tools=formatted_tools, **kwargs)
+
 
 def get_llm(temperature: float = 0.3) -> ITIBedrockChat:
     """Build a fresh ITIBedrockChat client using the configured Bedrock key and model
     (matching Nutrition-Plan-Generation).
     """
     model_name = SBG_MODEL_ID or "us.meta.llama3-3-70b-instruct-v1:0"
-    return ITIBedrockChat(model_id=model_name, temperature=temperature, timeout=90)
+    return ITIBedrockChat(model_id=model_name, temperature=temperature, timeout=3600)
 
 
 def get_coach_llm(temperature: float = 0.4) -> ITIBedrockChat:
     """Build the Coach Agent's LLM client — ITI Bedrock."""
     model_name = SBG_MODEL_ID or "us.meta.llama3-3-70b-instruct-v1:0"
-    return ITIBedrockChat(model_id=model_name, temperature=temperature, timeout=90)
+    return ITIBedrockChat(model_id=model_name, temperature=temperature, timeout=3600)
 
