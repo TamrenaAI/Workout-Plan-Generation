@@ -322,12 +322,24 @@ class ITIBedrockChat(BaseChatModel):
                 }
             )
 
+        requested_temperature = kwargs.get("temperature", self.temperature)
+        # Lower temperature specifically for tool-call turns — the anti-drift
+        # instructions above help, but sampling variance at the default
+        # temperature still occasionally lets the model wander into prose
+        # instead of the required JSON envelope once a turn has enough
+        # accumulated tool-result context (observed most often several turns
+        # into a long ReAct loop, e.g. the Plan Assembler's final synthesis
+        # step). This doesn't affect content creativity — the actual
+        # exercise/plan content still comes from what's inside each tool
+        # call's arguments, not from whether a turn decides to call a tool.
+        effective_temperature = min(requested_temperature, 0.15) if tools else requested_temperature
+
         payload = {
             "model_id": self.model_id,
             "messages": formatted_messages,
             "system_prompt": system_prompt,
             "max_tokens": kwargs.get("max_tokens", 8192),
-            "temperature": kwargs.get("temperature", self.temperature),
+            "temperature": effective_temperature,
         }
 
         api_key = SBG_API_KEY or "dummy-key-for-build"
