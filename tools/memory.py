@@ -52,51 +52,57 @@ def _progress_path(session_id: str) -> str:
 # independently write a second, later copy of the same days under a
 # different self-chosen heading as part of its own step 5 "return the plan"
 # behavior (see sessions/dfd4454f-...: a full second copy under "## Full
-# Workout Plan", with the Weekly Volume Summary / Recovery Notes only
-# attached to that second copy). Recognizing both lets us find whichever one
-# the assembler actually finished on.
-_SCHEDULE_HEADINGS = ("## Weekly Schedule", "## Full Workout Plan")
+_SCHEDULE_HEADINGS = (
+    "## Weekly Schedule",
+    "## Full Workout Plan",
+    "## Workout Plan",
+    "## Training Schedule",
+    "## Routine Schedule",
+    "## Workout Routine",
+    "## Weekly Routine",
+    "## Training Protocol",
+)
 
 
 def find_last_schedule_marker(content: str) -> "tuple[int, str] | None":
     """Returns (index, heading) of whichever known schedule heading occurs
-    LAST in the file, or None if neither is present. Whichever heading was
-    written last is the assembler's actual final version — see
-    _SCHEDULE_HEADINGS."""
+    LAST in the file, or searches regex patterns / Day 1 markers."""
     best = None
     for heading in _SCHEDULE_HEADINGS:
-        idx = content.rfind(heading)
+        idx = content.lower().rfind(heading.lower())
         if idx != -1 and (best is None or idx > best[0]):
             best = (idx, heading)
+
+    if best is None:
+        # Check regex for markdown headings containing schedule/workout/training
+        matches = list(re.finditer(r"(?im)^#{1,4}\s*(?:weekly\s+schedule|full\s+workout\s+plan|workout\s+plan|training\s+plan|workout\s+schedule)", content))
+        if matches:
+            last_match = matches[-1]
+            best = (last_match.start(), last_match.group(0))
+
+    if best is None:
+        # Fallback: find leading "### Day 1" or "## Day 1"
+        matches = list(re.finditer(r"(?im)^#{2,4}\s*Day\s*1\b", content))
+        if matches:
+            last_match = matches[-1]
+            best = (last_match.start(), last_match.group(0))
+
     return best
 
 
 def read_weekly_schedule(session_id: str) -> str | None:
-    """Reads the LAST schedule section written to plan.md by the Plan
-    Assembler's write_plan_memory call — the deterministic, tool-written
-    source of truth for the assembled exercises.
-
-    Used as the text actually returned to the user instead of the
-    Supervisor's own free-text final chat reply: asking the model to
-    "synthesise and return" a long multi-table plan it already produced via
-    a tool call is a second, independent generation with no fidelity
-    guarantee, and it has been observed to summarize or drop exercise rows
-    that plan.md has intact. A retried/re-dispatched session can have more
-    than one schedule section (see mark_step_done's duplicate-dispatch guard,
-    and _SCHEDULE_HEADINGS above) — the last one written is the current,
-    authoritative plan, hence find_last_schedule_marker rather than find.
-
-    Returns None if the plan file doesn't exist yet or the Assembler hasn't
-    written a schedule yet (e.g. the pipeline failed before that step) —
-    callers should fall back to the Supervisor's own reply in that case.
-    """
     path = _plan_path(session_id)
     if not os.path.exists(path):
         return None
     with open(path, "r", encoding="utf-8") as f:
         content = f.read()
+    if not content.strip():
+        return None
     marker = find_last_schedule_marker(content)
     if marker is None:
+        # If content has any markdown table with exercise rows, return full content
+        if "|" in content and ("Day" in content or "Set" in content):
+            return content.strip()
         return None
     idx, _heading = marker
     section = content[idx:].rstrip()

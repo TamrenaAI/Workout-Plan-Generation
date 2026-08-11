@@ -29,13 +29,17 @@ def load_recent_messages(user_id: str) -> list[dict]:
     return [{"role": d["role"], "content": d["content"]} for d in docs]
 
 
-def _save_message(user_id: str, role: str, content: str) -> None:
+def _save_message(user_id: str, role: str, content: str, offset_seconds: float = 0.0) -> None:
+    now = datetime.now(timezone.utc)
+    if offset_seconds:
+        from datetime import timedelta
+        now = now + timedelta(seconds=offset_seconds)
     get_coach_messages_table().put_item(Item={
         "message_id": str(uuid.uuid4()),
         "user_id": user_id,
         "role": role,
         "content": content,
-        "created_at": datetime.now(timezone.utc).isoformat(),
+        "created_at": now.isoformat(),
     })
 
 
@@ -46,5 +50,5 @@ async def process_coach_message(
     reply = await run_coach_turn(user_id, history, message, nutrition_plan_snapshot)
 
     _save_message(user_id, "user", message)
-    _save_message(user_id, "assistant", reply)
+    _save_message(user_id, "assistant", reply, offset_seconds=0.001)
     return reply

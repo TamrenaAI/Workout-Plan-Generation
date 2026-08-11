@@ -1,4 +1,5 @@
 # ── LLM & Agent Framework ─────────────────────────────────────
+google-genai
 langchain-openai
 langchain
 deepagents

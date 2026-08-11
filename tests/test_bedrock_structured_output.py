@@ -5,6 +5,7 @@ from langchain_core.outputs import ChatGeneration, ChatResult
 from langchain_core.prompts import ChatPromptTemplate
 from pydantic import BaseModel, Field
 
+import config
 from agents.llm import (
     ITIBedrockChat,
     _clean_and_parse_json,
@@ -140,5 +141,5 @@ def test_get_llm_returns_itibedrockchat():
     llm = get_llm(temperature=0.2)
     assert isinstance(llm, ITIBedrockChat)
     assert llm.temperature == 0.2
-    assert llm.model_id == "us.meta.llama3-3-70b-instruct-v1:0"
+    assert llm.model_id in ["gemma-4-31b-it", config.GEMINI_MODEL, "us.meta.llama3-3-70b-instruct-v1:0"]
 

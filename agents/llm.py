@@ -2,19 +2,20 @@
 Shared LLM client factory.
 
 All agents (supervisor, exercise-recommender, plan-assembler, coach) and
-the InBody/RAG pipelines use the ITI Bedrock proxy API with the same models
-used by the nutrition plan service.
+the InBody/RAG pipelines use the Google GenAI / Gemini client configured via .env.
 """
 
 import asyncio
 import json
+import os
 import random
 import re
 import time
 import uuid
 from typing import Any, Dict, List, Optional, Sequence, Union
 
-import requests
+from google import genai
+from google.genai import types
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, SystemMessage, ToolMessage
 from langchain_core.outputs import ChatGeneration, ChatResult
@@ -24,13 +25,11 @@ from langchain_core.tools import BaseTool
 from langchain_core.utils.function_calling import convert_to_openai_tool
 from pydantic import BaseModel
 
-from config import SBG_API_KEY, SBG_MODEL_ID
+import config
 
-# HTTP status codes that warrant an automatic retry (mirrors the nutrition
-# service's app/core/llm.py::ITIBedrockChat — same proxy, same failure modes).
-_RETRYABLE_STATUSES: frozenset[int] = frozenset({429, 500, 502, 503, 504})
-_MAX_RETRIES: int = 5
-_BASE_BACKOFF_S: float = 1.0
+# Retry configuration for rate limiting / transient API issues
+_MAX_RETRIES: int = 8
+_BASE_BACKOFF_S: float = 1.5
 _MAX_BACKOFF_S: float = 30.0
 _JITTER_S: float = 0.5
 
@@ -38,6 +37,33 @@ _JITTER_S: float = 0.5
 def _backoff(attempt: int) -> float:
     wait = min(_BASE_BACKOFF_S * (2**attempt), _MAX_BACKOFF_S)
     return wait + random.uniform(0, _JITTER_S)
+
+
+def _is_rate_limit_error(exc: Exception) -> bool:
+    """Check if an exception is caused by Gemini/Google GenAI rate limiting (HTTP 429 / RESOURCE_EXHAUSTED)."""
+    exc_str = str(exc).lower()
+    code = getattr(exc, "code", None) or getattr(exc, "status_code", None)
+    if code == 429:
+        return True
+    indicators = [
+        "429",
+        "resource_exhausted",
+        "resource has been exhausted",
+        "quota exceeded",
+        "rate limit",
+        "too many requests",
+        "rate_limit_exceeded",
+        "exceeded your current quota",
+    ]
+    return any(ind in exc_str for ind in indicators)
+
+
+def _get_retry_wait_time(attempt: int, exc: Optional[Exception]) -> float:
+    """Determine wait duration: 62s for 15 RPM quota limit window reset, exponential backoff for others."""
+    if exc and _is_rate_limit_error(exc):
+        # 60s + 2-4s jitter to ensure 15 requests/minute quota bucket completely clears
+        return 62.0 + random.uniform(0.5, 3.0)
+    return _backoff(attempt)
 
 
 def _clean_and_parse_json(text: str) -> Any:
@@ -77,10 +103,7 @@ def _clean_and_parse_json(text: str) -> Any:
 
 def _parse_tool_calls(ai_text: str) -> Optional[List[Dict[str, Any]]]:
     """Detects the `{"tool_calls": [...]}` envelope the model is instructed to
-    emit (see _build_payload's tool-instructions block) and converts it into
-    LangChain's ToolCall dict shape. Returns None for a plain-text final
-    answer (including text that merely fails to parse as JSON) so callers can
-    tell "no tool call" apart from "malformed tool call"."""
+    emit and converts it into LangChain's ToolCall dict shape."""
     try:
         data = _clean_and_parse_json(ai_text)
     except ValueError:
@@ -167,10 +190,10 @@ def _inject_instructions(input_val: Any, instructions: str) -> list[BaseMessage]
     return out_msgs
 
 
-class _BedrockStructuredOutputRunnable(Runnable):
-    """Wraps ITIBedrockChat to provide structured output via prompt formatting and JSON parsing."""
+class _GoogleStructuredOutputRunnable(Runnable):
+    """Wraps GoogleGenAIChat to provide structured output via prompt formatting and JSON parsing."""
 
-    def __init__(self, llm: "ITIBedrockChat", schema: Any, include_raw: bool = False, **kwargs: Any):
+    def __init__(self, llm: "GoogleGenAIChat", schema: Any, include_raw: bool = False, **kwargs: Any):
         self.llm = llm
         self.schema = schema
         self.include_raw = include_raw
@@ -208,97 +231,38 @@ class _BedrockStructuredOutputRunnable(Runnable):
             raise
 
 
-class ITIBedrockChat(BaseChatModel):
-    """LangChain-compatible chat model that calls the ITI Bedrock proxy —
-    the same proxy/model the nutrition service's meal-composition agents use
-    (see Nutrition-Plan-Generation/app/core/llm.py)."""
+class GoogleGenAIChat(BaseChatModel):
+    """LangChain-compatible chat model that calls Google GenAI / Gemini."""
 
-    model_id: str = SBG_MODEL_ID
-    base_url: str = "http://apiaccess.iti.net.eg/api/v1"
-    timeout: int = 3600
+    model_name: str = "gemma-4-31b-it"
+    api_key: Optional[str] = None
     temperature: float = 0.3
     max_retries: int = _MAX_RETRIES
+    timeout: int = 3600
+
+    @property
+    def model_id(self) -> str:
+        return self.model_name
 
     @property
     def _llm_type(self) -> str:
-        return "iti_bedrock_chat"
+        return "google_genai_chat"
 
-    def _build_payload(self, messages: List[BaseMessage], **kwargs: Any) -> tuple[dict, dict]:
-        system_prompt = "You are a helpful assistant."
-        formatted_messages: list[dict] = []
+    def _get_client(self) -> genai.Client:
+        key = self.api_key or os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY") or config.GEMINI_API_KEY
+        if not key:
+            raise ValueError("GEMINI_API_KEY or GOOGLE_API_KEY is not set. Please add it to your .env file.")
+        return genai.Client(api_key=key)
 
-        for msg in messages:
-            if isinstance(msg, SystemMessage):
-                system_prompt = msg.content if isinstance(msg.content, str) else str(msg.content)
-            elif isinstance(msg, HumanMessage):
-                if isinstance(msg.content, str):
-                    formatted_messages.append({"role": "user", "content": msg.content})
-                elif isinstance(msg.content, list):
-                    text_parts = []
-                    for item in msg.content:
-                        if isinstance(item, dict):
-                            if item.get("type") == "text":
-                                text_parts.append(item.get("text", ""))
-                            elif item.get("type") == "image_url":
-                                text_parts.append("[Image attachment provided]")
-                            else:
-                                text_parts.append(str(item))
-                        else:
-                            text_parts.append(str(item))
-                    formatted_messages.append({"role": "user", "content": "\n".join(text_parts)})
-                else:
-                    formatted_messages.append({"role": "user", "content": str(msg.content)})
-            elif isinstance(msg, AIMessage):
-                if msg.tool_calls:
-                    # Re-serialize as the same tool_calls envelope the model
-                    # was instructed to emit, so a prior turn's tool call
-                    # round-trips back into the transcript in a shape the
-                    # model itself produced (and was told to expect).
-                    content = json.dumps(
-                        {
-                            "tool_calls": [
-                                {"name": tc["name"], "arguments": tc.get("args", {})}
-                                for tc in msg.tool_calls
-                            ]
-                        }
-                    )
-                else:
-                    content = msg.content if isinstance(msg.content, str) else str(msg.content)
-                formatted_messages.append({"role": "assistant", "content": content})
-            elif isinstance(msg, ToolMessage):
-                # The proxy has no "tool" role — fed back as a user turn
-                # reporting the result, same pattern LangChain uses for
-                # providers with no native tool-result message type.
-                result_text = msg.content if isinstance(msg.content, str) else str(msg.content)
-                formatted_messages.append(
-                    {"role": "user", "content": f"[Result of tool '{msg.name}']: {result_text}"}
-                )
-
-        if not formatted_messages:
-            formatted_messages.append({"role": "user", "content": "Hello"})
+    def _format_contents(self, messages: List[BaseMessage], **kwargs: Any) -> tuple[str, list[types.Content]]:
+        system_instruction = "You are a helpful fitness and workout assistant."
+        contents: list[types.Content] = []
 
         tools = kwargs.get("tools")
+        tool_instructions = ""
         if tools:
-            # No native tool-calling in this proxy's API (no `tools` field in
-            # its request payload) — tool schemas are prompt-injected instead,
-            # and the response is parsed for the JSON envelope below
-            # (_parse_tool_calls) rather than a native tool_calls field.
-            #
-            # Observed failure mode without the anti-drift paragraph below:
-            # the model correctly emits a tool_calls JSON for its first turn,
-            # then — once a tool RESULT is fed back — drifts into plain-text
-            # "thinking out loud" instead of continuing with the next
-            # required tool call. That plain text has no tool_calls, so
-            # LangGraph's ReAct loop reads it as a legitimate final answer
-            # and ends the run early (no exception, no error — just a
-            # silently truncated multi-step task). The instruction is
-            # repeated at the END of the message list (not just once in the
-            # system prompt) because a long domain system prompt otherwise
-            # buries it and recency matters more than position for this
-            # model's instruction-following.
-            system_prompt = (
-                f"{system_prompt}\n\n"
-                "You have access to the following tools:\n"
+            tool_instructions = (
+                "\n\nYou have access to the following tools:\n"
                 f"```json\n{json.dumps(tools, indent=2)}\n```\n"
                 "To call a tool, respond with ONLY this JSON and nothing else "
                 '(no markdown fences, no extra text): '
@@ -311,51 +275,75 @@ class ITIBedrockChat(BaseChatModel):
                 "format above. Only respond with plain text when the ENTIRE task is fully "
                 "complete and no further tool calls are needed."
             )
-            formatted_messages.append(
-                {
-                    "role": "user",
-                    "content": (
-                        "Reminder: if this task isn't fully complete yet, respond with ONLY "
-                        'the {"tool_calls": [...]} JSON now — do not explain your reasoning '
-                        "first. Plain text is only for a fully finished task."
-                    ),
-                }
+
+        for msg in messages:
+            if isinstance(msg, SystemMessage):
+                content_str = msg.content if isinstance(msg.content, str) else str(msg.content)
+                system_instruction = content_str
+            elif isinstance(msg, HumanMessage):
+                if isinstance(msg.content, str):
+                    text = msg.content
+                elif isinstance(msg.content, list):
+                    text = " ".join(
+                        part.get("text", "") if isinstance(part, dict) else str(part)
+                        for part in msg.content
+                    )
+                else:
+                    text = str(msg.content)
+                contents.append(types.Content(role="user", parts=[types.Part.from_text(text=text)]))
+            elif isinstance(msg, AIMessage):
+                if msg.tool_calls:
+                    content_str = json.dumps(
+                        {
+                            "tool_calls": [
+                                {"name": tc["name"], "arguments": tc.get("args", {})}
+                                for tc in msg.tool_calls
+                            ]
+                        }
+                    )
+                else:
+                    content_str = msg.content if isinstance(msg.content, str) else str(msg.content)
+                contents.append(types.Content(role="model", parts=[types.Part.from_text(text=content_str)]))
+            elif isinstance(msg, ToolMessage):
+                result_text = msg.content if isinstance(msg.content, str) else str(msg.content)
+                contents.append(
+                    types.Content(
+                        role="user",
+                        parts=[types.Part.from_text(text=f"[Result of tool '{msg.name}']: {result_text}")],
+                    )
+                )
+
+        if tool_instructions:
+            system_instruction += tool_instructions
+            contents.append(
+                types.Content(
+                    role="user",
+                    parts=[
+                        types.Part.from_text(
+                            text=(
+                                "Reminder: if this task isn't fully complete yet, respond with ONLY "
+                                'the {"tool_calls": [...]} JSON now — do not explain your reasoning '
+                                "first. Plain text is only for a fully finished task."
+                            )
+                        )
+                    ],
+                )
             )
 
-        requested_temperature = kwargs.get("temperature", self.temperature)
-        # Lower temperature specifically for tool-call turns — the anti-drift
-        # instructions above help, but sampling variance at the default
-        # temperature still occasionally lets the model wander into prose
-        # instead of the required JSON envelope once a turn has enough
-        # accumulated tool-result context (observed most often several turns
-        # into a long ReAct loop, e.g. the Plan Assembler's final synthesis
-        # step). This doesn't affect content creativity — the actual
-        # exercise/plan content still comes from what's inside each tool
-        # call's arguments, not from whether a turn decides to call a tool.
-        effective_temperature = min(requested_temperature, 0.15) if tools else requested_temperature
+        if not contents:
+            contents.append(types.Content(role="user", parts=[types.Part.from_text(text="Hello")]))
 
-        payload = {
-            "model_id": self.model_id,
-            "messages": formatted_messages,
-            "system_prompt": system_prompt,
-            "max_tokens": kwargs.get("max_tokens", 8192),
-            "temperature": effective_temperature,
-        }
+        return system_instruction, contents
 
-        api_key = SBG_API_KEY or "dummy-key-for-build"
-        headers = {"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"}
-        return payload, headers
-
-    @staticmethod
-    def _parse_response(response: requests.Response) -> str:
-        response_json = response.json()
-        return (
-            response_json.get("output_text")
-            or response_json.get("text")
-            or response_json.get("response")
-            or response_json.get("message")
-            or str(response_json)
-        )
+    def _build_payload(self, messages: List[BaseMessage], **kwargs: Any) -> tuple[dict, dict]:
+        """Convert messages to payload dictionary for inspection / compatibility."""
+        system_instruction, contents = self._format_contents(messages, **kwargs)
+        payload_messages = []
+        for c in contents:
+            role = "user" if c.role == "user" else "assistant"
+            part_text = " ".join(p.text for p in c.parts if getattr(p, "text", None))
+            payload_messages.append({"role": role, "content": part_text})
+        return {"messages": payload_messages, "system_prompt": system_instruction, "model_id": self.model_name}, {}
 
     @staticmethod
     def _to_ai_message(ai_text: str, tools_bound: bool) -> AIMessage:
@@ -371,36 +359,43 @@ class ITIBedrockChat(BaseChatModel):
         run_manager: Optional[Any] = None,
         **kwargs: Any,
     ) -> ChatResult:
-        payload, headers = self._build_payload(messages, **kwargs)
-        url = f"{self.base_url}/student/chat"
-        last_exc: Optional[Exception] = None
+        client = self._get_client()
+        system_instruction, contents = self._format_contents(messages, **kwargs)
         tools_bound = bool(kwargs.get("tools"))
+        temp = kwargs.get("temperature", self.temperature)
+        if tools_bound:
+            temp = min(temp, 0.15)
 
+        generate_config = types.GenerateContentConfig(
+            system_instruction=system_instruction,
+            temperature=temp,
+            max_output_tokens=kwargs.get("max_tokens", 8192),
+            stop_sequences=stop,
+        )
+
+        last_exc: Optional[Exception] = None
         for attempt in range(self.max_retries):
             try:
-                response = requests.post(url, headers=headers, json=payload, timeout=self.timeout)
-
-                if response.status_code == 200:
-                    ai_text = self._parse_response(response)
-                    message = self._to_ai_message(ai_text, tools_bound)
-                    return ChatResult(generations=[ChatGeneration(message=message)])
-
-                if response.status_code in _RETRYABLE_STATUSES:
-                    last_exc = requests.exceptions.HTTPError(
-                        f"{response.status_code} retryable error", response=response
-                    )
-                    if attempt < self.max_retries - 1:
-                        time.sleep(_backoff(attempt))
-                    continue
-
-                response.raise_for_status()
-
-            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as exc:
+                response = client.models.generate_content(
+                    model=self.model_name,
+                    contents=contents,
+                    config=generate_config,
+                )
+                ai_text = response.text or ""
+                message = self._to_ai_message(ai_text, tools_bound)
+                return ChatResult(generations=[ChatGeneration(message=message)])
+            except Exception as exc:
                 last_exc = exc
                 if attempt < self.max_retries - 1:
-                    time.sleep(_backoff(attempt))
+                    wait_seconds = _get_retry_wait_time(attempt, exc)
+                    if _is_rate_limit_error(exc):
+                        print(
+                            f"[GoogleGenAIChat] Gemini rate limit reached (15 RPM quota). "
+                            f"Waiting {wait_seconds:.1f}s for quota bucket reset before retry {attempt + 2}/{self.max_retries}..."
+                        )
+                    time.sleep(wait_seconds)
 
-        raise last_exc or RuntimeError("ITI Bedrock request failed with unknown error")
+        raise last_exc or RuntimeError(f"Google GenAI request failed after {self.max_retries} attempts")
 
     async def _agenerate(
         self,
@@ -409,40 +404,11 @@ class ITIBedrockChat(BaseChatModel):
         run_manager: Optional[Any] = None,
         **kwargs: Any,
     ) -> ChatResult:
-        payload, headers = self._build_payload(messages, **kwargs)
-        url = f"{self.base_url}/student/chat"
-        last_exc: Optional[Exception] = None
-        tools_bound = bool(kwargs.get("tools"))
-
-        for attempt in range(self.max_retries):
-            try:
-                loop = asyncio.get_running_loop()
-                response = await loop.run_in_executor(
-                    None,
-                    lambda: requests.post(url, headers=headers, json=payload, timeout=self.timeout),
-                )
-
-                if response.status_code == 200:
-                    ai_text = self._parse_response(response)
-                    message = self._to_ai_message(ai_text, tools_bound)
-                    return ChatResult(generations=[ChatGeneration(message=message)])
-
-                if response.status_code in _RETRYABLE_STATUSES:
-                    last_exc = requests.exceptions.HTTPError(
-                        f"{response.status_code} retryable error", response=response
-                    )
-                    if attempt < self.max_retries - 1:
-                        await asyncio.sleep(_backoff(attempt))
-                    continue
-
-                response.raise_for_status()
-
-            except (requests.exceptions.Timeout, requests.exceptions.ConnectionError) as exc:
-                last_exc = exc
-                if attempt < self.max_retries - 1:
-                    await asyncio.sleep(_backoff(attempt))
-
-        raise last_exc or RuntimeError("ITI Bedrock async request failed with unknown error")
+        loop = asyncio.get_running_loop()
+        return await loop.run_in_executor(
+            None,
+            lambda: self._generate(messages, stop=stop, run_manager=run_manager, **kwargs),
+        )
 
     def with_structured_output(
         self,
@@ -452,7 +418,7 @@ class ITIBedrockChat(BaseChatModel):
         **kwargs: Any,
     ) -> Runnable:
         """Returns a Runnable that prompts for structured JSON and validates the response."""
-        return _BedrockStructuredOutputRunnable(self, schema, include_raw=include_raw, **kwargs)
+        return _GoogleStructuredOutputRunnable(self, schema, include_raw=include_raw, **kwargs)
 
     def bind_tools(
         self,
@@ -461,34 +427,24 @@ class ITIBedrockChat(BaseChatModel):
         tool_choice: Optional[str] = None,
         **kwargs: Any,
     ) -> Runnable:
-        """Required by LangGraph's create_react_agent (used by deepagents'
-        create_deep_agent, which every agent in this repo is built with) —
-        without an override, BaseChatModel.bind_tools raises NotImplementedError,
-        which would make every agent fail to even build its graph.
-
-        The proxy has no native tool-calling API (no `tools` field in its
-        request payload — see the module-level ITIBedrockChat docstring), so
-        this doesn't bind tools the way OpenAI/Anthropic wrappers do. Instead
-        it prompt-injects the tool schemas (_build_payload, when `tools` is
-        present in the bound kwargs) and parses the response for a
-        `{"tool_calls": [...]}` JSON envelope (_parse_tool_calls) into the
-        same AIMessage.tool_calls shape LangGraph expects, so its ReAct loop
-        can't tell the difference from a model with real function-calling.
-        """
+        """Prompt-injects tool schemas and parses response tool calls for ReAct compatibility."""
         formatted_tools = [convert_to_openai_tool(t) for t in tools]
         return self.bind(tools=formatted_tools, **kwargs)
 
 
-def get_llm(temperature: float = 0.3) -> ITIBedrockChat:
-    """Build a fresh ITIBedrockChat client using the configured Bedrock key and model
-    (matching Nutrition-Plan-Generation).
-    """
-    model_name = SBG_MODEL_ID or "us.meta.llama3-3-70b-instruct-v1:0"
-    return ITIBedrockChat(model_id=model_name, temperature=temperature, timeout=3600)
+# Alias for backward compatibility across existing references/tests
+ITIBedrockChat = GoogleGenAIChat
 
 
-def get_coach_llm(temperature: float = 0.4) -> ITIBedrockChat:
-    """Build the Coach Agent's LLM client — ITI Bedrock."""
-    model_name = SBG_MODEL_ID or "us.meta.llama3-3-70b-instruct-v1:0"
-    return ITIBedrockChat(model_id=model_name, temperature=temperature, timeout=3600)
+def get_llm(temperature: float = 0.3) -> GoogleGenAIChat:
+    """Build a fresh GoogleGenAIChat client using the centrally configured model in .env."""
+    model_name = os.getenv("GEMINI_MODEL") or os.getenv("MODEL_NAME") or config.GEMINI_MODEL or "gemma-4-31b-it"
+    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY") or config.GEMINI_API_KEY
+    return GoogleGenAIChat(model_name=model_name, api_key=api_key, temperature=temperature)
 
+
+def get_coach_llm(temperature: float = 0.4) -> GoogleGenAIChat:
+    """Build the Coach Agent's LLM client using the centrally configured model in .env."""
+    model_name = os.getenv("GEMINI_MODEL") or os.getenv("MODEL_NAME") or config.GEMINI_MODEL or "gemma-4-31b-it"
+    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY") or config.GEMINI_API_KEY
+    return GoogleGenAIChat(model_name=model_name, api_key=api_key, temperature=temperature)

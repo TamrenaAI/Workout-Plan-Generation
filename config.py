@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent
 
-load_dotenv(dotenv_path=BASE_DIR / ".env", override=True)
+load_dotenv(dotenv_path=BASE_DIR / ".env", override=False)
 
 SESSION_DIR = BASE_DIR / "sessions"
 DATA_DIR = BASE_DIR / "data"
@@ -40,7 +40,13 @@ PROGRESS_REPORTS_TABLE_NAME = os.getenv("PROGRESS_REPORTS_TABLE_NAME", "workout_
 PLAN_ADJUSTMENTS_TABLE_NAME = os.getenv("PLAN_ADJUSTMENTS_TABLE_NAME", "workout_plan_adjustments")
 COACH_MESSAGES_TABLE_NAME = os.getenv("COACH_MESSAGES_TABLE_NAME", "workout_coach_messages")
 
-# ── Azure OpenAI (only external LLM API) ─────────────────────────────
+# ── Google GenAI / Gemini (Central LLM API) ─────────────────────────
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY") or os.getenv("GEMINI_API_KEY")
+GEMINI_MODEL = os.getenv("GEMINI_MODEL") or os.getenv("MODEL_NAME") or "gemma-4-31b-it"
+MODEL_NAME = GEMINI_MODEL
+
+# ── Azure OpenAI (legacy fallback) ───────────────────────────────────
 AZURE_OPENAI_API_KEY = os.getenv("AZURE_OPENAI_API_KEY")
 AZURE_OPENAI_ENDPOINT = os.getenv("AZURE_OPENAI_ENDPOINT")
 AZURE_OPENAI_DEPLOYMENT_NAME = os.getenv("AZURE_OPENAI_DEPLOYMENT_NAME")
@@ -48,7 +54,7 @@ AZURE_OPENAI_API_VERSION = os.getenv("AZURE_OPENAI_API_VERSION")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_MODEL = os.getenv("OPENAI_MODEL")
 
-# ── ITI Bedrock proxy (alternate LLM path, see agents/llm.py's ITIBedrockChat) ──
+# ── ITI Bedrock proxy (legacy fallback) ──────────────────────────────
 SBG_API_KEY = os.getenv("SBG_API_KEY")
 SBG_MODEL_ID = os.getenv("SBG_MODEL_ID", "us.meta.llama3-3-70b-instruct-v1:0")
 
@@ -65,8 +71,30 @@ JWT_EXPIRE_MINUTES = 60 * 24 * 30  # 30 days — mobile session, not a web cooki
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
 OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL")
 
+# ── LangSmith Tracing ────────────────────────────────────────────────
+LANGSMITH_TRACING = os.getenv("LANGSMITH_TRACING", "true")
+LANGSMITH_ENDPOINT = os.getenv("LANGSMITH_ENDPOINT", "https://api.smith.langchain.com")
+LANGSMITH_API_KEY = os.getenv("LANGSMITH_API_KEY", "")
+LANGSMITH_PROJECT = os.getenv("LANGSMITH_PROJECT", "tamrena")
+
+os.environ["LANGSMITH_TRACING"] = LANGSMITH_TRACING
+os.environ["LANGCHAIN_TRACING_V2"] = LANGSMITH_TRACING
+os.environ["LANGSMITH_ENDPOINT"] = LANGSMITH_ENDPOINT
+os.environ["LANGCHAIN_ENDPOINT"] = LANGSMITH_ENDPOINT
+if LANGSMITH_API_KEY:
+    os.environ["LANGSMITH_API_KEY"] = LANGSMITH_API_KEY
+    os.environ["LANGCHAIN_API_KEY"] = LANGSMITH_API_KEY
+os.environ["LANGSMITH_PROJECT"] = LANGSMITH_PROJECT
+os.environ["LANGCHAIN_PROJECT"] = LANGSMITH_PROJECT
+
+# ── Anthropic API Key ────────────────────────────────────────────────
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
+if ANTHROPIC_API_KEY:
+    os.environ["ANTHROPIC_API_KEY"] = ANTHROPIC_API_KEY
+
 
 def load_prompt(name: str) -> str:
     """Read a prompt file from prompts/ by name (without .md extension)."""
     path = PROMPTS_DIR / f"{name}.md"
     return path.read_text(encoding="utf-8")
+

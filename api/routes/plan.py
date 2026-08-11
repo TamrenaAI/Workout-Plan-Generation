@@ -131,12 +131,13 @@ async def _run_pipeline(session_id: str, user_message: str) -> None:
         # reliably do so — enforce it deterministically instead of trusting
         # the LLM's own edit.
         enforce_volume_budget(session_id)
-        # The Supervisor's own reply above is a free-text re-synthesis of the
-        # plan and isn't guaranteed to reproduce every exercise faithfully —
-        # prefer the schedule the Plan Assembler actually wrote to memory.
         schedule = read_weekly_schedule(session_id)
         if schedule:
             final_plan = schedule
+        elif final_plan:
+            from tools.memory import write_plan_memory
+            write_plan_memory.invoke({"session_id": session_id, "section_title": "Weekly Schedule", "content": final_plan})
+            schedule = final_plan
         update_session_status(session_id, "ready")
         await live_progress.publish_done(session_id, {
             "plan": final_plan,
@@ -378,8 +379,29 @@ async def get_session_plan(session_id: str, user: dict = Depends(get_current_use
         return SessionPlanResponse(status="ready", plan=schedule, days=days)
 
     session = get_session(session_id)
-    if session is not None and session.get("status") == "failed":
-        return SessionPlanResponse(status="failed", error=session.get("error"))
+    if session is not None:
+        if session.get("status") == "failed":
+            return SessionPlanResponse(status="failed", error=session.get("error"))
+        if session.get("status") == "ready":
+            return SessionPlanResponse(
+                status="failed",
+                error="Plan session data not found on disk. Please generate a new workout plan.",
+            )
+        created_at_val = session.get("created_at")
+        if created_at_val:
+            try:
+                if isinstance(created_at_val, datetime):
+                    created_dt = created_at_val
+                else:
+                    created_dt = datetime.fromisoformat(str(created_at_val))
+                if (datetime.now(timezone.utc) - created_dt).total_seconds() > 600:
+                    return SessionPlanResponse(
+                        status="failed",
+                        error="Plan generation timed out. Please generate a new workout plan.",
+                    )
+            except Exception:
+                pass
+
     return SessionPlanResponse(status="pending", plan=None)
 
 
